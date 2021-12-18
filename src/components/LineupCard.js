@@ -6,7 +6,8 @@ const LineupCard = ({ lineup }) => {
   return (
 		<div className="lineup-card">
   		<h2>Week {lineup.week}, {lineup.year}</h2>
-  		<hr/>
+      <p>Points: {lineup.points} </p>
+{/*  		<hr/>
   		<ul>
   			<li>QB: {lineup.qb ? <strong>{lineup.qb.name}</strong> : <em>[empty]</em>}</li>
         <li>RB: {lineup.rb1 ? <strong>{lineup.rb1.name}</strong> : <em>[empty]</em>}</li>
@@ -16,10 +17,10 @@ const LineupCard = ({ lineup }) => {
         <li>WR: {lineup.wr3 ? <strong>{lineup.wr3.name}</strong> : <em>[empty]</em>}</li>
         <li>TE: {lineup.te ? <strong>{lineup.te.name}</strong> : <em>[empty]</em>}</li>
         <li>FLEX: {lineup.flex ? <strong>{lineup.flex.name}</strong> : <em>[empty]</em>}</li>
-  		</ul>
+  		</ul>*/}
   		<hr/>
   		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
-        className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
+        className="view-lineup-btn">View Lineup<FaAngleRight/></Link>
   	</div>
   )
 }

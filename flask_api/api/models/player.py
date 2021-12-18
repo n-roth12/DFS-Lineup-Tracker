@@ -1,5 +1,5 @@
 from api import db, ma
-from .statline import StatLine, StatLineSchema
+# from .statline import StatLine, StatLineSchema
 
 class Player(db.Model):
 	__tablename__ = 'players'
@@ -19,7 +19,7 @@ class Player(db.Model):
 
 class PlayerSchema(ma.SQLAlchemySchema):
 	class Meta:
-		fields = ('id', 'name', 'position', 'team', 'stats')
+		fields = ('id', 'name', 'position', 'team')
 
-	stats = ma.Nested(StatLineSchema)
+	# stats = ma.Nested(StatLineSchema)
 

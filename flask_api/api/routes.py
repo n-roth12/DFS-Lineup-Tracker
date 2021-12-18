@@ -5,7 +5,7 @@ import requests
 from flask_cors import cross_origin
 from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
-from api.models.statline import StatLine, StatLineSchema
+# from api.models.statline import StatLine, StatLineSchema
 
 
 @app.route('/test', methods=['GET'])
@@ -158,8 +158,9 @@ def get_user(user_id):
 		response["id"] = l["id"]
 		response["week"] = l["week"]
 		response["year"] = l["year"]
+		response["points"] = l["points"]
 		for key, value in l.items():
-			if key != "id" and key != "week" and key != "year":
+			if key != "id" and key != "week" and key != "year" and key != "points":
 				if value is None:
 					response[key] = None
 				else:

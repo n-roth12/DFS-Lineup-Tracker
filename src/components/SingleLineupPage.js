@@ -8,21 +8,19 @@ import { FaAngleLeft } from 'react-icons/fa'
 function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()
   const [players, setPlayers] = useState([])
-  const [lineup, setLineup] = useState([])
-  const [lineupData, setLineupData] = useState({"week": lineupWeek, "year": lineupYear})
+  const [lineup, setLineup] = useState()
+  const [lineupData, setLineupData] = useState({})
   const [viewPlayers, setViewPlayers] = useState(false)
   const [editingPos, setEditingPos] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState("Loading")
   const [viewLineup, setViewLineup] = useState(true)
 
   // Get lineup and players on page load
   useEffect(() => {
-    setLoading(true)
-    getLineup()
+    setLoading("Loading Lineup Data...")
+    loadPage()
     setEditingPos(null)
     setViewPlayers(false)
-    // getLineupData()
-    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -33,6 +31,14 @@ function SingleLineupPage() {
   useEffect(() => {
     setViewPlayers(true)
   }, [editingPos])
+
+
+  const loadPage = async () => {
+    await getPlayers()
+    await getLineup()
+    await getLineupData()
+    setLoading(null)
+  }
 
 
   // Fetch Players
@@ -52,35 +58,31 @@ function SingleLineupPage() {
     if (playersFromServer) {
       setPlayers(playersFromServer)
     }
-    else {
-      setPlayers({})
-    }
   }
 
   // Fetch user lineup
   const getLineupData = async () => {
-    var temp = {...lineupData}
+    var temp = await {...lineupData}
     for (var key in lineup) {
       if (lineup[key] == null) {
         temp[`${key}`] = null
-      } else
+      } else 
       players.map((player) => {
-        if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" 
+        if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points'
           && lineup[`${key}`] == player.stats.id) {
             temp[`${key}`] = player
         }
       })
     }
-    setLineupData(temp)
-    setLoading(false)
+    await setLineupData(temp)
   }
 
   const getLineup = async () => {
     const res = await fetch(`/lineups/${lineupId}`)
     const lineupFromServer = await res.json()
-    await setLineup(lineupFromServer)
+    await setLineup({...lineupFromServer})
     // await loadLineup()
-    await getPlayers()
+    getPlayers()
   }
 
   const editLineup = async (pos) => {
@@ -129,7 +131,7 @@ function SingleLineupPage() {
   const extractIds = () => {
     var lineupIds = []
     for (const key in lineup) {
-      if (lineup[`${key}`] && key != 'id' && key != 'week' && key != 'year' && key != 'user_id') {
+      if (lineup[`${key}`] && key != 'id' && key != 'week' && key != 'year' && key != 'user_id' && key != 'points') {
         lineupIds.push(lineup[`${key}`])
       }
     }
@@ -140,7 +142,6 @@ function SingleLineupPage() {
   // are not of the same position as the one being edited
   const filterPlayers = (players) => {
     const ids = extractIds()
-    console.log(ids)
     const filteredPlayers = players.filter((player) => {
       const posWithoutNumbers = editingPos.replace(/[0-9]/g, '').toUpperCase()
       return (
@@ -173,8 +174,8 @@ function SingleLineupPage() {
           } 
           <a className="delete-lineup-btn text-center" 
             onClick={deleteLineup} href="/">Delete Lineup</a>
-          <a className="delete-lineup-btn-lineup-btn text-center" 
-            onClick={saveLineup} href="/">Save Lineup</a>
+          <button 
+            onClick={saveLineup} >Save Lineup</button>
         </div>
         <div className="col">
           { editingPos && 
@@ -189,7 +190,7 @@ function SingleLineupPage() {
     )
   } else {
     return ( 
-      <h1>Loading...</h1>
+      <h1>{loading}</h1>
     )
   }
 }

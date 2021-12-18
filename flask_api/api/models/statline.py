@@ -1,4 +1,5 @@
 from api import db, ma
+from .player import Player, PlayerSchema
 
 # Each set of game stats belongs to a specific player
 class StatLine(db.Model):
