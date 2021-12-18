@@ -8,7 +8,7 @@ const Players = ({ players, onAdd }) => {
       	<ul>
       		{players.map((player) => (
       			<Player
-      				player={player} onAdd={onAdd} />
+      				key={player.stats.id} player={player} onAdd={onAdd} />
       		))}
       	</ul>
       </div>

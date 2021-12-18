@@ -18,7 +18,8 @@ const LineupCard = ({ lineup }) => {
         <li>FLEX: {lineup.flex ? <strong>{lineup.flex.name}</strong> : <em>[empty]</em>}</li>
   		</ul>
   		<hr/>
-  		<Link to={`lineup/${lineup.id}`} className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
+  		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
+        className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
   	</div>
   )
 }

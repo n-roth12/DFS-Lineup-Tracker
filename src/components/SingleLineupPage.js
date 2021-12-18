@@ -6,7 +6,7 @@ import '../App.css';
 import { FaAngleLeft } from 'react-icons/fa'
 
 function SingleLineupPage() {
-  const { lineupId } = useParams()
+  const { lineupId, lineupWeek, lineupYear } = useParams()
   const [players, setPlayers] = useState([])
   const [lineup, setLineup] = useState([])
   const [lineupData, setLineupData] = useState([])
@@ -19,6 +19,7 @@ function SingleLineupPage() {
   useEffect(() => {
     setLoading(true)
     getLineup()
+    loadLineup()
     setEditingPos(null)
     setViewPlayers(false)
     loadLineup()
@@ -30,9 +31,10 @@ function SingleLineupPage() {
     setViewPlayers(true)
   }, [editingPos])
 
+
   // Fetch Players
   const fetchPlayers = async () => {
-    const res = await fetch(`https://ffbapi.herokuapp.com/api/v1/top?year=${lineup.year}&week=${lineup.week}`, {
+    const res = await fetch(`https://ffbapi.herokuapp.com/api/v1/top?year=${lineupYear}&week=${lineupWeek}`, {
       method: 'GET',
       headers: {
         'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E'
@@ -60,6 +62,7 @@ function SingleLineupPage() {
           && lineup[`${key}`] == player.stats.id) {
             var temp = lineupData
             temp[key] = player
+            console.log(temp)
             setLineupData(temp)
         }
       })
@@ -70,8 +73,7 @@ function SingleLineupPage() {
   const getLineup = async () => {
     const res = await fetch(`/lineups/${lineupId}`)
     const lineupFromServer = await res.json()
-    setLineup(lineupFromServer)
-    console.log(lineup)
+    await setLineup(lineupFromServer)
     await loadLineup()
     await getPlayers()
   }
@@ -91,7 +93,8 @@ function SingleLineupPage() {
       },
       body: JSON.stringify(data)
     })
-    getLineup()
+    await getLineup()
+    loadLineup()
   }
 
   const addToLineup = (id) => {
@@ -158,7 +161,7 @@ function SingleLineupPage() {
           <a href="/"><FaAngleLeft />Back to Lineups</a>
           { viewLineup &&  
             <>
-              <Lineup lineup={lineup} 
+              <Lineup lineup={lineupData} 
                 onDelete={deleteFromLineup} 
                 onAdd={editLineup}
                 editingPos={editingPos}

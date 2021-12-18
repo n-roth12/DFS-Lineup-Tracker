@@ -21,7 +21,7 @@ function App() {
           <Route path='/' element={
             <LineupsPage />
           } />
-          <Route path='/lineup/:lineupId' element={
+          <Route path='/lineup/:lineupId/:lineupWeek/:lineupYear' element={
             <SingleLineupPage />
           } />
         </Routes>
