@@ -9,7 +9,7 @@ function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()
   const [players, setPlayers] = useState([])
   const [lineup, setLineup] = useState([])
-  const [lineupData, setLineupData] = useState({})
+  const [lineupData, setLineupData] = useState({"week": lineupWeek, "year": lineupYear})
   const [viewPlayers, setViewPlayers] = useState(false)
   const [editingPos, setEditingPos] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -26,7 +26,6 @@ function SingleLineupPage() {
   }, [])
 
   useEffect(() => {
-    console.log('test')
     getLineupData()
   }, [lineup])
 
@@ -128,10 +127,10 @@ function SingleLineupPage() {
 
   // Extract IDs of players in lineup for filtering purposes
   const extractIds = () => {
-    const lineupIds = []
-    for (const pos in lineup) {
-      if (lineup[pos]) {
-        lineupIds.push(lineup[pos].id)
+    var lineupIds = []
+    for (const key in lineup) {
+      if (lineup[`${key}`] && key != 'id' && key != 'week' && key != 'year' && key != 'user_id') {
+        lineupIds.push(lineup[`${key}`])
       }
     }
     return lineupIds
@@ -141,11 +140,14 @@ function SingleLineupPage() {
   // are not of the same position as the one being edited
   const filterPlayers = (players) => {
     const ids = extractIds()
+    console.log(ids)
     const filteredPlayers = players.filter((player) => {
       const posWithoutNumbers = editingPos.replace(/[0-9]/g, '').toUpperCase()
-      return ((
-        (player.position == posWithoutNumbers) || ((posWithoutNumbers === 'FLEX') && ( 
-          (player.position === 'RB') || (player.position === 'WR') || (player.position === 'TE')))))
+      return (
+        ((player.position == posWithoutNumbers) || ((posWithoutNumbers === 'FLEX') && ( 
+          (player.position === 'RB') || (player.position === 'WR') || (player.position === 'TE'))))
+        && (!ids.includes(player.stats.id))
+        )
     })
     return filteredPlayers
   }
@@ -171,8 +173,8 @@ function SingleLineupPage() {
           } 
           <a className="delete-lineup-btn text-center" 
             onClick={deleteLineup} href="/">Delete Lineup</a>
-{/*          <a className="delete-lineup-btn-lineup-btn text-center" 
-            onClick={saveLineup} href="/">Save Lineup</a>*/}
+          <a className="delete-lineup-btn-lineup-btn text-center" 
+            onClick={saveLineup} href="/">Save Lineup</a>
         </div>
         <div className="col">
           { editingPos && 
