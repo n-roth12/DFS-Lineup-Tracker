@@ -8,12 +8,12 @@ const LineupPlayer = ({ player, position, onDelete }) => {
         <p><FaTimes style={{ color: "red", cursor: "pointer"}}
           onClick={() => onDelete(position)} /></p>
       </div>
-{/*      <div className="info">
+      <div className="info">
         <p>{player.position} ({player.stats.team})</p>
       </div>
       <div>
         <p>Points: {player.stats.fantasy_points} | Game: {player.stats.game}</p>
-      </div>*/}
+      </div>
     </div>
   )
 }

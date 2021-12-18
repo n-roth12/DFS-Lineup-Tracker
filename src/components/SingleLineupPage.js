@@ -9,7 +9,7 @@ function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()
   const [players, setPlayers] = useState([])
   const [lineup, setLineup] = useState([])
-  const [lineupData, setLineupData] = useState([])
+  const [lineupData, setLineupData] = useState({})
   const [viewPlayers, setViewPlayers] = useState(false)
   const [editingPos, setEditingPos] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -19,12 +19,16 @@ function SingleLineupPage() {
   useEffect(() => {
     setLoading(true)
     getLineup()
-    loadLineup()
     setEditingPos(null)
     setViewPlayers(false)
-    loadLineup()
+    // getLineupData()
     setLoading(false)
   }, [])
+
+  useEffect(() => {
+    console.log('test')
+    getLineupData()
+  }, [lineup])
 
   // Listens for change in position being edited
   useEffect(() => {
@@ -55,18 +59,20 @@ function SingleLineupPage() {
   }
 
   // Fetch user lineup
-  const loadLineup = async () => {
+  const getLineupData = async () => {
+    var temp = {...lineupData}
     for (var key in lineup) {
-      await players.map((player) => {
+      if (lineup[key] == null) {
+        temp[`${key}`] = null
+      } else
+      players.map((player) => {
         if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" 
           && lineup[`${key}`] == player.stats.id) {
-            var temp = lineupData
-            temp[key] = player
-            console.log(temp)
-            setLineupData(temp)
+            temp[`${key}`] = player
         }
       })
     }
+    setLineupData(temp)
     setLoading(false)
   }
 
@@ -74,7 +80,7 @@ function SingleLineupPage() {
     const res = await fetch(`/lineups/${lineupId}`)
     const lineupFromServer = await res.json()
     await setLineup(lineupFromServer)
-    await loadLineup()
+    // await loadLineup()
     await getPlayers()
   }
 
@@ -84,20 +90,12 @@ function SingleLineupPage() {
 
   // Remove a player from the users lineup
   const deleteFromLineup = async (position) => {
-    const data = {}
-    data[position] = null
-    await fetch(`/lineups/${lineupId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application.json'
-      },
-      body: JSON.stringify(data)
-    })
-    await getLineup()
-    loadLineup()
+    const temp = {...lineup}
+    temp[`${position}`] = null
+    setLineup(temp)
   }
 
-  const addToLineup = (id) => {
+  const addToLineup = async (id) => {
     addPlayerToLineup(id)
     setEditingPos(null)
   }
@@ -106,22 +104,25 @@ function SingleLineupPage() {
   // TODO: make it so that the I make a fetch call to ffbrestapi to retreive player data and load it in the app
   const addPlayerToLineup = async (id) => {
     if (editingPos) {
-      var data = {}
-      data[editingPos] = id
-      await fetch(`/lineups/${lineupId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application.json',
-        },
-        body: JSON.stringify(data)
-      })
+      var temp = {...lineup}
+      temp[editingPos] = id
+      setLineup(temp)
     }
-    getLineup()
   }
 
   const deleteLineup = async () => {
     await fetch(`http://localhost:3000/lineups/${lineupId}`, {
       method: 'DELETE',
+    })
+  }
+
+  const saveLineup = async () => {
+    await fetch(`/lineups/${lineupId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application.json',
+      },
+      body: JSON.stringify(lineup)
     })
   }
 
@@ -170,6 +171,8 @@ function SingleLineupPage() {
           } 
           <a className="delete-lineup-btn text-center" 
             onClick={deleteLineup} href="/">Delete Lineup</a>
+{/*          <a className="delete-lineup-btn-lineup-btn text-center" 
+            onClick={saveLineup} href="/">Save Lineup</a>*/}
         </div>
         <div className="col">
           { editingPos && 
