@@ -18,6 +18,13 @@ body {
   display: flex;
 }
 
+.ring {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .lineup-wrapper, .players-wrapper {
   margin: 20px;
 }
@@ -229,9 +236,7 @@ hr {
 
 h1 {
   text-align: center;
-  font-size: 15pt;
-  color: #ffffff;
-  background-color: #0d3d78;
+  font-size: 20pt;
   padding: 5px;
 }
 
