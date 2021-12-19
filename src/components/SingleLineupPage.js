@@ -169,7 +169,9 @@ function SingleLineupPage() {
                 onDelete={deleteFromLineup} 
                 onAdd={editLineup}
                 editingPos={editingPos}
-                cancelEdit={cancelEdit} />
+                cancelEdit={cancelEdit} 
+                lineupWeek={lineupWeek}
+                lineupYear={lineupYear}/>
             </>
           } 
           <a className="delete-lineup-btn text-center" 

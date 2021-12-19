@@ -64,6 +64,8 @@ body {
 }
 
 .info {
+  color: black;
+  font-size: 10pt;
   text-align: center;
 }
 

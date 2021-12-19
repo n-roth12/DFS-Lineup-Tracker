@@ -7,16 +7,18 @@ const LineupPlayer = ({ player, position, onDelete }) => {
 
   return (
     <div className="player">
-      <h3><span className="pos-label">{position}</span> {player.name}</h3>
+      <h3><span className="pos-label">{position}</span> {player.name} <span className="info">({player.stats.team})</span></h3>
       <div className="delete-btn">
         <p><FaTimes style={{ color: "red", cursor: "pointer"}}
           onClick={() => onDelete(position)} /></p>
       </div>
-      <div className="info">
-        <p>{player.position} ({player.stats.team})</p>
-      </div>
       <div>
-        <p>Points: {truncPoints} | Game: {player.stats.game}</p>
+        <p>
+          {player.stats.game} | {player.stats.rushing_touchdowns + player.stats.passing_touchdowns + player.stats.recieving_touchdowns} TD
+          | {player.stats.rushing_yards + player.stats.recieving_yards + player.stats.passing_yards} YRDS
+          |  <strong>{truncPoints} </strong> Points
+        </p>
+
       </div>
     </div>
   )

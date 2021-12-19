@@ -1,7 +1,7 @@
 import LineupPlayer from './LineupPlayer'
 import EmptyPlayer from './EmptyPlayer'
 
-const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit }) => {
+const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek }) => {
 
   const checkBeingEdited = (pos) => {
     return pos === editingPos
@@ -11,7 +11,7 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit }) => {
     <div className="lineup-wrapper">
       <div className="lineup">
         <h1>Your Lineup</h1>
-        <h2>{lineup.year}: Week {lineup.week}</h2>
+        <h2>{lineupYear}: Week {lineupWeek}</h2>
       	<ul>
           {lineup.qb ? <LineupPlayer player={lineup.qb} position={'qb'} onDelete={onDelete} /> 
             : <EmptyPlayer key={'qb'} position={'qb'} onAdd={onAdd} beingEdited={checkBeingEdited('qb')} cancelEdit={cancelEdit} />}
