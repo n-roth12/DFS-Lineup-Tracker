@@ -42,6 +42,11 @@ body {
   margin-right: auto;
 }
 
+.delete-lineup-link {
+  text-decoration: none;
+  color: #991728;
+}
+
 .lineup, .players {
   max-width: 500px;
   margin-left: auto;

@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom'
-import { FaAngleRight } from 'react-icons/fa'
+import { FaAngleRight, FaTimes } from 'react-icons/fa'
 
 
 const LineupCard = ({ lineup }) => {
+
+  const deleteLineup = async (id) => {
+    await fetch(`http://localhost:3000/lineups/${id}`, {
+      method: 'DELETE',
+    })
+  }
+
   return (
 		<div className="lineup-card">
   		<h2>Week {lineup.week}, {lineup.year}</h2>
@@ -21,6 +28,10 @@ const LineupCard = ({ lineup }) => {
   		<hr/>
   		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
         className="view-lineup-btn">View Lineup<FaAngleRight/></Link>
+      <hr />
+      <div>
+        <a className="delete-lineup-link" href="" onClick={() => deleteLineup(lineup.id)}>Delete Lineup<FaTimes/></a>
+      </div>
   	</div>
   )
 }
