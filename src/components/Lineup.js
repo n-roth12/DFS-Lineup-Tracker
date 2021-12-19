@@ -9,7 +9,6 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
 
   return (
     <div className="lineup">
-    	<ul>
         {lineup.qb ? <LineupPlayer player={lineup.qb} position={'qb'} onDelete={onDelete} /> 
           : <EmptyPlayer key={'qb'} position={'qb'} onAdd={onAdd} beingEdited={checkBeingEdited('qb')} cancelEdit={cancelEdit} />}
         {lineup.rb1 ? <LineupPlayer player={lineup.rb1} position={'rb1'} onDelete={onDelete} /> 
@@ -26,7 +25,6 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
           : <EmptyPlayer key={'te'} position={'te'} onAdd={onAdd} beingEdited={checkBeingEdited('te')} cancelEdit={cancelEdit} />}
         {lineup.flex ? <LineupPlayer player={lineup.flex} position={'flex'} onDelete={onDelete} /> 
           : <EmptyPlayer key={'flex'} position={'flex'} onAdd={onAdd} beingEdited={checkBeingEdited('flex')} cancelEdit={cancelEdit} />}
-    	</ul>
     </div>
   )
 }
