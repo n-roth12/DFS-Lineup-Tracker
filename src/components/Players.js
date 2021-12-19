@@ -1,13 +1,38 @@
 import Player from './Player'
+import { useState, useEffect } from 'react'
+import { FaTimes } from 'react-icons/fa'
 
 const Players = ({ players, onAdd}) => {
+
+  const [playerFilter, setPlayerFilter] = useState('')
+
+  const filterPlayers = (players) => {
+    const results =  players.filter((player) => {
+      return (playerFilter == "" || player.name.toLowerCase().startsWith(playerFilter.toLowerCase()))
+    })
+  }
+
   return (
-    <div className="players">
+    <>
+      <form className="player-search-form">
+        <div className="form-control">
+          <label>Search Players:</label>
+          <input type="text" placeholder="Search Players" value={playerFilter}
+            onChange={(e) => setPlayerFilter(e.target.value)} />
+          <FaTimes onClick={() => setPlayerFilter('')} />
+        </div>
+      </form>
+      <div className="players">
     		{players.map((player) => (
-    			<Player
-    				key={player.stats.id} player={player} onAdd={onAdd} />
+          <>
+            {(playerFilter == "" || player.name.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
+        			<Player
+        				key={player.stats.id} player={player} onAdd={onAdd} />
+            }
+          </>
     		))}
-    </div>
+      </div>
+    </>
   )
 }
 

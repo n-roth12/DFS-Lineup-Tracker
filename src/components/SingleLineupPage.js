@@ -4,7 +4,7 @@ import Players from './Players'
 import Lineup from './Lineup'
 import '../App.css';
 import { FaAngleLeft } from 'react-icons/fa'
-import { Ring } from 'react-awesome-spinners'
+import { Roller } from 'react-awesome-spinners'
 
 function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()
@@ -227,7 +227,7 @@ function SingleLineupPage() {
       <>
         <h1>{loading}</h1>
         <div className="ring">
-          <Ring />
+          <Roller />
         </div>
       </>
     )

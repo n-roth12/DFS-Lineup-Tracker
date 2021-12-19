@@ -86,7 +86,7 @@ body {
   display: flex;
   flex-direction: column;
   align-content: center;
-  height: 80vh;
+  max-height: 80vh;
   overflow: auto;
 }
 
