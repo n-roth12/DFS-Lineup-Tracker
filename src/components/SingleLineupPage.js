@@ -15,6 +15,7 @@ function SingleLineupPage() {
   const [loading, setLoading] = useState("Loading")
   const [viewLineup, setViewLineup] = useState(true)
   const [lineupScore, setLineupScore] = useState(0)
+  const [viewSaveLineup, setViewSaveLineup] = useState(false)
 
   // Get lineup and players on page load
   useEffect(() => {
@@ -110,12 +111,14 @@ function SingleLineupPage() {
   const deleteFromLineup = async (position) => {
     const temp = {...lineup}
     temp[`${position}`] = null
-    setLineup(temp)
+    await setLineup(temp)
+    setViewSaveLineup(true)
   }
 
   const addToLineup = async (id) => {
     addPlayerToLineup(id)
     setEditingPos(null)
+    setViewSaveLineup(true)
   }
 
   // TODO: make it so changes arent immediately applied to database, must press save first
@@ -136,6 +139,7 @@ function SingleLineupPage() {
 
   const saveLineup = async () => {
     setLoading('Saving Lineup')
+    setViewSaveLineup(false)
     var temp = {...lineup}
     temp.points = lineupScore
     await fetch(`/lineups/${lineupId}`, {
@@ -186,8 +190,10 @@ function SingleLineupPage() {
           <a href="/"><FaAngleLeft />Back to Lineups</a>
           <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
           <h2>Point Total: {lineupScore}</h2>
-          <button className="view-players-btn"
-            onClick={saveLineup} >Save Changes</button>
+          { viewSaveLineup && 
+            <button className="view-players-btn"
+              onClick={saveLineup}>Save Changes</button>
+          }
           { viewLineup &&  
             <>
               <Lineup lineup={lineupData} 
