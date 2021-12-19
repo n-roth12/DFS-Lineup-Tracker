@@ -109,11 +109,11 @@ input {
 
 .view-players-btn {
   background: None;
-  border: None;
   color: #0069ed;
   font-size: 12pt;
   padding: 5px;
   margin: 5px;
+  width: 100%;
 }
 
 .new-lineup-btn {

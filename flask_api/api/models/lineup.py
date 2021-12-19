@@ -15,7 +15,7 @@ class Lineup(db.Model):
 	wr3 = db.Column(db.Integer())
 	te = db.Column(db.Integer())
 	flex = db.Column(db.Integer())
-	points = db.Column(db.Integer())
+	points = db.Column(db.Float())
 
 	def __init__(self, user_id, week, year):
 		self.user_id = user_id

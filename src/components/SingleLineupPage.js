@@ -14,6 +14,7 @@ function SingleLineupPage() {
   const [editingPos, setEditingPos] = useState(null)
   const [loading, setLoading] = useState("Loading")
   const [viewLineup, setViewLineup] = useState(true)
+  const [lineupScore, setLineupScore] = useState(0)
 
   // Get lineup and players on page load
   useEffect(() => {
@@ -27,6 +28,10 @@ function SingleLineupPage() {
     getLineupData()
   }, [lineup])
 
+  useEffect(() => {
+    getLineupScore()
+  }, [lineupData])
+
   // Listens for change in position being edited
   useEffect(() => {
     setViewPlayers(true)
@@ -39,7 +44,6 @@ function SingleLineupPage() {
     await getLineupData()
     setLoading(null)
   }
-
 
   // Fetch Players
   const fetchPlayers = async () => {
@@ -63,18 +67,31 @@ function SingleLineupPage() {
   // Fetch user lineup
   const getLineupData = async () => {
     var temp = await {...lineupData}
+    var scoreSum = 0
     for (var key in lineup) {
       if (lineup[key] == null) {
         temp[`${key}`] = null
-      } else 
-      players.map((player) => {
-        if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points'
-          && lineup[`${key}`] == player.stats.id) {
-            temp[`${key}`] = player
-        }
-      })
+      } else {
+        players.map((player) => {
+          if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points' && key != 'fantasy_points'
+            && lineup[`${key}`] == player.stats.id) {
+              temp[`${key}`] = player
+          }
+        })
+      }
     }
     await setLineupData(temp)
+  }
+
+  const getLineupScore = () => {
+    var scoreSum = 0
+    Object.values(lineupData).map((player) => {
+      if (!(player == null || player.name == null)) {
+        scoreSum += player.stats.fantasy_points
+      }
+    })
+    const roundScore = Math.round((scoreSum + Number.EPSILON) * 100) / 100
+    setLineupScore(roundScore)
   }
 
   const getLineup = async () => {
@@ -118,13 +135,17 @@ function SingleLineupPage() {
   }
 
   const saveLineup = async () => {
+    setLoading('Saving Lineup')
+    var temp = {...lineup}
+    temp.points = lineupScore
     await fetch(`/lineups/${lineupId}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application.json',
       },
-      body: JSON.stringify(lineup)
+      body: JSON.stringify(temp)
     })
+    setLoading(null)
   }
 
   // Extract IDs of players in lineup for filtering purposes
@@ -163,6 +184,10 @@ function SingleLineupPage() {
       <div className="main row">
         <div className="col">
           <a href="/"><FaAngleLeft />Back to Lineups</a>
+          <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
+          <h2>Point Total: {lineupScore}</h2>
+          <button className="view-players-btn"
+            onClick={saveLineup} >Save Changes</button>
           { viewLineup &&  
             <>
               <Lineup lineup={lineupData} 
@@ -171,13 +196,12 @@ function SingleLineupPage() {
                 editingPos={editingPos}
                 cancelEdit={cancelEdit} 
                 lineupWeek={lineupWeek}
-                lineupYear={lineupYear}/>
+                lineupYear={lineupYear}
+                lineupScore={lineupScore}/>
             </>
           } 
           <a className="delete-lineup-btn text-center" 
             onClick={deleteLineup} href="/">Delete Lineup</a>
-          <button 
-            onClick={saveLineup} >Save Lineup</button>
         </div>
         <div className="col">
           { editingPos && 

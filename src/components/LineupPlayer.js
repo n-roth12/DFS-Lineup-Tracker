@@ -18,7 +18,6 @@ const LineupPlayer = ({ player, position, onDelete }) => {
           | {player.stats.rushing_yards + player.stats.recieving_yards + player.stats.passing_yards} YRDS
           |  <strong>{truncPoints} </strong> Points
         </p>
-
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import { FaAngleRight } from 'react-icons/fa'
 
 
 const LineupCard = ({ lineup }) => {
+  console.log(lineup)
   return (
 		<div className="lineup-card">
   		<h2>Week {lineup.week}, {lineup.year}</h2>
