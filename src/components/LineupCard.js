@@ -13,7 +13,7 @@ const LineupCard = ({ lineup }) => {
   return (
 		<div className="lineup-card">
   		<h2>Week {lineup.week}, {lineup.year}</h2>
-      <p>Points: {lineup.points} </p>
+      <h4>Points: {lineup.points} </h4>
 {/*  		<hr/>
   		<ul>
   			<li>QB: {lineup.qb ? <strong>{lineup.qb.name}</strong> : <em>[empty]</em>}</li>

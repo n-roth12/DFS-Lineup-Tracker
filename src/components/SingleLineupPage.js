@@ -188,7 +188,7 @@ function SingleLineupPage() {
     return (
       <div className="main row">
         <div className="col lineup-wrapper">
-          <a href="/"><FaAngleLeft />Back to Lineups</a>
+          <a className="back-btn" href="/"><FaAngleLeft />Back to Lineups</a>
           <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
           <h2>Point Total: {lineupScore}</h2>
           { viewSaveLineup && 
