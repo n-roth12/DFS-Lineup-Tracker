@@ -9,18 +9,35 @@ const LineupsPage = () => {
 	const [lineups, setLineups] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [showNewLineupForm, setShowNewLineupForm] = useState(false)
+	const [years, setYears] = useState([])
+	const [filteredYears, setFilteredYears] = useState(null)
   
   useEffect(() => {
   	getUserLineups(1)
   }, [])
 
+  useEffect(() => {
+  	getYears()
+  }, [lineups])
+
   const getUserLineups = async (user_id) => {
   	setLoading(true)
     const res = await fetch(`users/${user_id}`)
     const userLineups = await res.json()
-    setLineups(userLineups)
+    await setLineups(userLineups)
+    getYears()
     setLoading(false)
   }
+
+ 	const getYears = () => {
+ 		var temp = [...years]
+ 		lineups.map((lineup) => {
+ 			if (!(temp.includes(lineup.year))) {
+ 				temp.push(lineup.year)
+ 			}
+ 		})
+ 		setYears(temp)
+ 	}
 
   const createLineup = async (year, week) => {
  		var data = {}
@@ -47,12 +64,21 @@ const LineupsPage = () => {
 				  	onClick={() => setShowNewLineupForm(!showNewLineupForm)}
 				  	>{showNewLineupForm ? "Hide" : "Create New Lineup"}</button>
 				</div>
+				<div className="filter-btn-wrapper">
+					<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
+					{years.length > 0 && years.map((year) => 
+						<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
+							onClick={() => setFilteredYears(year)}>{year}</button>
+					)}
+				</div>
 		    <div className="lineups-wrapper">
-		    	{lineups.length > 0 ? lineups.map((lineup) => {
-		    		return <>
-			    		<LineupCard key={lineup.id} lineup={lineup} />
+		    	{lineups.length > 0 ? lineups.map((lineup) => 
+		    		<>
+		    			{(filteredYears == null || lineup.year == filteredYears) &&
+		    				<LineupCard key={lineup.id} lineup={lineup} />
+		    			}
 		    		</>
-		    	}) : <p>No lineups to show.</p>}
+		    	) : <p>No lineups to show.</p>}
 		    </div>
 		  </>
 	  )

@@ -10,12 +10,36 @@ html {
 }
 
 body {
-  background-color: #f5f9ff;
+  background-color: #f0f3f8;
   font-family: 'Nunito', sans-serif;
 }
 
 .main {
   display: flex;
+}
+
+.lineup-wrapper, .players-wrapper {
+  margin: 20px;
+}
+
+.filter-btn-active {
+  border: 1px solid #ffffff;
+  background-color: #0069ed;
+  color: #ffffff;
+  padding: 5px;
+}
+
+.filter-btn {
+  border: 1px solid #0069ed;
+  color: #0069ed;
+  background-color: #ffffff;
+  padding: 5px;
+}
+
+.filter-btn-wrapper {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .lineup, .players {
@@ -31,14 +55,17 @@ body {
   margin: 3px;
   text-transform: uppercase;
   font-size: 11pt;
+}
 
+.players-wrapper {
+  margin-top: 100px;
 }
 
 .players {
   display: flex;
   flex-direction: column;
   align-content: center;
-  height: 800px;
+  height: 80vh;
   overflow: auto;
 }
 
@@ -48,8 +75,6 @@ body {
   flex-direction: column;
   background-color: #ffffff;
   padding: 5px;
-/*  margin: 3px;
-  box-shadow: 0px 0px 3px 1px lightgray;*/
   border: 1px solid #d3d3d3;
   width: 400px;
 }

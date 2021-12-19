@@ -186,7 +186,7 @@ function SingleLineupPage() {
   if (!loading) { 
     return (
       <div className="main row">
-        <div className="col">
+        <div className="col lineup-wrapper">
           <a href="/"><FaAngleLeft />Back to Lineups</a>
           <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
           <h2>Point Total: {lineupScore}</h2>
@@ -209,9 +209,10 @@ function SingleLineupPage() {
           <a className="delete-lineup-btn text-center" 
             onClick={deleteLineup} href="/">Delete Lineup</a>
         </div>
-        <div className="col">
+        <div className="col players-wrapper">
           { editingPos && 
             <>
+              <h1>Available {editingPos !== null && editingPos.replace(/[0-9]/g, '').toUpperCase()}</h1>
               { players.length > 0 ? <Players 
                 players={filterPlayers(players)} 
                 onAdd={addToLineup} /> : 'No Players to show.' }
