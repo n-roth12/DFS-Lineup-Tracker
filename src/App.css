@@ -11,6 +11,7 @@ html {
 
 nav {
   height: 50px;
+  background-color: #202033;
 }
 
 body {
@@ -24,6 +25,10 @@ body {
 
 .hidden {
   display: None;
+}
+
+.form-control {
+  border: None;
 }
 
 .ring {
@@ -210,6 +215,7 @@ input {
 
 .form-control {
   display: flex;
+  justify-content:;
   margin: 5px;
 }
 

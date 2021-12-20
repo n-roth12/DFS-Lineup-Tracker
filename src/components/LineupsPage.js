@@ -26,7 +26,8 @@ const LineupsPage = () => {
     const userLineups = await res.json()
     await setLineups(userLineups)
     getYears()
-    setLoading(false)
+    await setLoading(false)
+    console.log(lineups)
   }
 
  	const getYears = () => {

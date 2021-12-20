@@ -113,7 +113,8 @@ def get_lineup(id):
 @app.route('/lineups', methods=['POST'])
 def create_lineup():
 	data = json.loads(request.data)
-	new_lineup = Lineup(user_id=data["user_id"], week=data["week"], year=data["year"])
+	new_lineup = Lineup(user_id=data["user_id"], week=data["week"], 
+		year=data["year"], bet=data["bet"], winnings=data["winnings"])
 	db.session.add(new_lineup)
 	db.session.commit()
 
@@ -130,9 +131,10 @@ def edit_lineup(id):
 	
 	data = json.loads(request.data)
 	lineup.update(data)
-	
 	db.session.commit()
-	return jsonify( )
+
+	return jsonify({ 'updated_lineup': LineupSchema().dump(lineup) })
+
 
 @app.route('/lineups/<id>', methods=['DELETE'])
 def delete_lineup(id):
@@ -142,7 +144,6 @@ def delete_lineup(id):
 	
 	db.session.delete(lineup)
 	db.session.commit()
-
 	return jsonify({ 'Message': 'Lineup successfully deleted!' })
 
 
@@ -151,8 +152,10 @@ def get_user(user_id):
 	user_lineups = db.session.query(Lineup) \
 		.filter(Lineup.user_id == user_id) \
 		.order_by(Lineup.year.desc(), Lineup.week.desc()).all()
+
 	if not len(user_lineups):
 		return jsonify({ 'Error': 'No lineups for specified user.' })
+
 	whole_response = []
 	for user_lineup in user_lineups:
 		l = LineupSchema().dump(user_lineup)
@@ -161,8 +164,11 @@ def get_user(user_id):
 		response["week"] = l["week"]
 		response["year"] = l["year"]
 		response["points"] = l["points"]
+		response["bet"] = l["bet"]
+		response["winnings"] = l["winnings"]
+
 		for key, value in l.items():
-			if key != "id" and key != "week" and key != "year" and key != "points":
+			if key != "id" and key != "week" and key != "year" and key != "points" and key != "bet" and key != "winnings":
 				if value is None:
 					response[key] = None
 				else:

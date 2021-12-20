@@ -41,6 +41,7 @@ const LineupCard = ({ lineup }) => {
 		<div className="lineup-card">
   		<h2>Week {lineup.week}, {lineup.year}</h2>
       <h4>{lineup.points} PTS</h4>
+      <h4>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${lineup.winnings - lineup.bet}`}</h4>
   		<hr/>
       {!loading ?
         <>

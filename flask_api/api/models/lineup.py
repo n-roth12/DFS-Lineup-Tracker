@@ -16,8 +16,10 @@ class Lineup(db.Model):
 	te = db.Column(db.Integer())
 	flex = db.Column(db.Integer())
 	points = db.Column(db.Float())
+	bet = db.Column(db.Float())
+	winnings = db.Column(db.Float())
 
-	def __init__(self, user_id, week, year):
+	def __init__(self, user_id, week, year, bet, winnings):
 		self.user_id = user_id
 		self.week = week
 		self.year = year
@@ -30,9 +32,11 @@ class Lineup(db.Model):
 		self.te = None
 		self.flex = None
 		self.points = 0
+		self.bet = bet
+		self.winnings = winnings
 
 	def __str__(self):
-		return f'{self.id} {self.user_id} {self.year} {self.week} {self.qb} {self.rb1} {self.rb2} {self.wr1} {self.wr2} {self.wr3} {self.te} {self.flex} {self.points}'
+		return f'{self.id} {self.user_id} {self.year} {self.week} {self.qb} {self.rb1} {self.rb2} {self.wr1} {self.wr2} {self.wr3} {self.te} {self.flex} {self.points} {self.bet} {self.winnings}'
 
 	def update(self, data):
 		for key, value in data.items():
@@ -41,12 +45,12 @@ class Lineup(db.Model):
 
 class LineupSchema(ma.SQLAlchemySchema):
 	class Meta:
-		fields = ('id', 'user_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points')
+		fields = ('id', 'user_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings')
 
 
 class FullLineupSchema(ma.SQLAlchemySchema):
 	class Meta:
-		fields = ('id', 'user_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points')
+		fields = ('id', 'user_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings')
 
 	qb = ma.Nested(PlayerSchema)
 	rb1 = ma.Nested(PlayerSchema)

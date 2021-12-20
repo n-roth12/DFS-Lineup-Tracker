@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Players from './Players'
 import Lineup from './Lineup'
-import '../App.css';
+import EditWagerForm from './EditWagerForm'
 import { FaAngleLeft } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
+import '../App.css';
 
 function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()
@@ -75,7 +76,7 @@ function SingleLineupPage() {
         temp[`${key}`] = null
       } else {
         players.map((player) => {
-          if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points' && key != 'fantasy_points'
+          if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points' && key != 'fantasy_points' && key != 'winnings' && key != 'bet'
             && lineup[`${key}`] == player.stats.id) {
               temp[`${key}`] = player
           }
@@ -187,10 +188,12 @@ function SingleLineupPage() {
   if (!loading) { 
     return (
       <div className="main row">
+        <EditWagerForm lineup={lineup} />
         <div className="col lineup-wrapper">
           <a className="back-btn" href="/"><FaAngleLeft />Back to Lineups</a>
           <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
           <h2>Point Total: {lineupScore}</h2>
+          <h2>Return: {lineup.winnings - lineup.bet}</h2>
           { viewSaveLineup && 
             <button className="view-players-btn"
               onClick={saveLineup}>Save Changes</button>
