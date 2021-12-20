@@ -70,10 +70,10 @@ body {
 }
 
 .player-search-form {
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 3px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
 }
 
 .pos-label {
@@ -83,10 +83,6 @@ body {
   margin: 3px;
   text-transform: uppercase;
   font-size: 11pt;
-}
-
-.players-wrapper {
-  margin-top: 100px;
 }
 
 .players, .lineup {
@@ -224,10 +220,14 @@ input {
   justify-content: left;
 }
 
+.lineup-card li {
+  font-size: 11pt;
+}
+
 .lineup-card {
   display: inline-block;
   margin: 3px;
-  padding: 15px;
+  padding: 20px;
   list-style: none;
   background-color: #ffffff;
   width: 250px;

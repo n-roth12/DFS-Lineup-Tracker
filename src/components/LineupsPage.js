@@ -73,7 +73,7 @@ const LineupsPage = () => {
 							onClick={() => setFilteredYears(year)}>{year}</button>
 					)}
 				</div>
-				
+
 		    <div className="lineups-wrapper">
 		    	{lineups.length > 0 ? lineups.map((lineup) => 
 		    		<>

@@ -40,7 +40,7 @@ const LineupCard = ({ lineup }) => {
   return (
 		<div className="lineup-card">
   		<h2>Week {lineup.week}, {lineup.year}</h2>
-      <h4>Points: {lineup.points} </h4>
+      <h4>{lineup.points} PTS</h4>
   		<hr/>
       {!loading ?
         <>

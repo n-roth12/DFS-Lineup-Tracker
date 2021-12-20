@@ -148,7 +148,9 @@ def delete_lineup(id):
 
 @app.route('/users/<user_id>', methods=['GET'])
 def get_user(user_id):
-	user_lineups = db.session.query(Lineup).filter(Lineup.user_id == user_id).all()
+	user_lineups = db.session.query(Lineup) \
+		.filter(Lineup.user_id == user_id) \
+		.order_by(Lineup.year.desc(), Lineup.week.desc()).all()
 	if not len(user_lineups):
 		return jsonify({ 'Error': 'No lineups for specified user.' })
 	whole_response = []
