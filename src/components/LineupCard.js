@@ -38,36 +38,38 @@ const LineupCard = ({ lineup }) => {
   }
 
   return (
-		<div className="lineup-card">
-  		<h2>Week {lineup.week}, {lineup.year}</h2>
-      <h4>{lineup.points} PTS</h4>
-      <h4>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${lineup.winnings - lineup.bet}`}</h4>
-  		<hr/>
-      {!loading ?
-        <>
-    			<li>QB: {lineupPlayers.qb ? <strong>{lineupPlayers.qb.name}</strong> : <em>________</em>}</li>
-          <li>RB: {lineupPlayers.rb1 ? <strong>{lineupPlayers.rb1.name}</strong> : <em>________</em>}</li>
-          <li>RB: {lineupPlayers.rb2 ? <strong>{lineupPlayers.rb2.name}</strong> : <em>________</em>}</li>
-          <li>WR: {lineupPlayers.wr1 ? <strong>{lineupPlayers.wr1.name}</strong> : <em>________</em>}</li>
-          <li>WR: {lineupPlayers.wr2 ? <strong>{lineupPlayers.wr2.name}</strong> : <em>________</em>}</li>
-          <li>WR: {lineupPlayers.wr3 ? <strong>{lineupPlayers.wr3.name}</strong> : <em>________</em>}</li>
-          <li>TE: {lineupPlayers.te ? <strong>{lineupPlayers.te.name}</strong> : <em>________</em>}</li>
-          <li>FLEX: {lineupPlayers.flex ? <strong>{lineupPlayers.flex.name}</strong> : <em>________</em>}</li>
-        </> : 
-        <>
-          <div>
-            <Ellipsis />
-          </div>
-        </>
-      }
-      <hr/>
-  		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
-        className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
-      <hr />
-      <div>
-        <a className="delete-lineup-link" href="" onClick={() => deleteLineup(lineup.id)}>Delete Lineup<FaTimes/></a>
-      </div>
-  	</div>
+    <Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`}>
+  		<div className="lineup-card">
+    		<h2>Week {lineup.week}, {lineup.year}</h2>
+        <h4>{lineup.points} PTS</h4>
+        <h4>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${lineup.winnings - lineup.bet}`}</h4>
+    		<hr/>
+        {!loading ?
+          <>
+      			<li>QB: {lineupPlayers.qb ? <strong>{lineupPlayers.qb.name}</strong> : <em>________</em>}</li>
+            <li>RB: {lineupPlayers.rb1 ? <strong>{lineupPlayers.rb1.name}</strong> : <em>________</em>}</li>
+            <li>RB: {lineupPlayers.rb2 ? <strong>{lineupPlayers.rb2.name}</strong> : <em>________</em>}</li>
+            <li>WR: {lineupPlayers.wr1 ? <strong>{lineupPlayers.wr1.name}</strong> : <em>________</em>}</li>
+            <li>WR: {lineupPlayers.wr2 ? <strong>{lineupPlayers.wr2.name}</strong> : <em>________</em>}</li>
+            <li>WR: {lineupPlayers.wr3 ? <strong>{lineupPlayers.wr3.name}</strong> : <em>________</em>}</li>
+            <li>TE: {lineupPlayers.te ? <strong>{lineupPlayers.te.name}</strong> : <em>________</em>}</li>
+            <li>FLEX: {lineupPlayers.flex ? <strong>{lineupPlayers.flex.name}</strong> : <em>________</em>}</li>
+          </> : 
+          <>
+            <div>
+              <Ellipsis />
+            </div>
+          </>
+        }
+        <hr/>
+    		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
+          className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
+        <hr />
+        <div>
+          <a className="delete-lineup-link" href="" onClick={() => deleteLineup(lineup.id)}>Delete Lineup<FaTimes/></a>
+        </div>
+    	</div>
+    </Link>
   )
 }
 

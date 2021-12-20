@@ -232,6 +232,7 @@ input {
 
 .lineup-card li {
   font-size: 11pt;
+  color: black;
 }
 
 .lineup-card {
@@ -247,6 +248,11 @@ input {
 
 .lineup-card ul {
   list-style-type: None;
+}
+
+.lineup-card:hover {
+  outline: 1px solid #202033;
+  cursor: pointer;
 }
 
 .view-lineup-btn {
@@ -271,6 +277,7 @@ h1 {
 h2 {
   font-size: 13pt;
   text-align: center;
+  color: black;
 }
 
 h3 {
@@ -280,11 +287,12 @@ h3 {
 
 h4 {
   font-size: 12pt;
+  color: black;
 }
 
  p {
   font-size: 10pt;
-/*  margin-bottom: 0;*/
+  color: black;
  }
 
  strong {
