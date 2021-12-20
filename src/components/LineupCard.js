@@ -1,8 +1,35 @@
 import { Link } from 'react-router-dom'
 import { FaAngleRight, FaTimes } from 'react-icons/fa'
-
+import { useState, useEffect } from 'react'
+import { Ellipsis } from 'react-awesome-spinners'
 
 const LineupCard = ({ lineup }) => {
+
+  const [lineupPlayers, setLineupPlayers] = useState({})
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true)
+    getCardData(lineup)
+  }, [])
+
+  const getCardData = async () => {
+    const res1 = await fetch(`lineups/${lineup['id']}`, {
+      method: 'GET'
+    })
+    const body_data = await res1.json()
+    const res2 = await fetch(`https://ffbapi.herokuapp.com/api/v1/playergamestats`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E',
+        'Content-type': 'application.json'
+      },
+      body: JSON.stringify(body_data)
+    })
+    const b = await res2.json()
+    await setLineupPlayers(b)
+    setLoading(false)
+  }
 
   const deleteLineup = async (id) => {
     await fetch(`http://localhost:3000/lineups/${id}`, {
@@ -14,18 +41,25 @@ const LineupCard = ({ lineup }) => {
 		<div className="lineup-card">
   		<h2>Week {lineup.week}, {lineup.year}</h2>
       <h4>Points: {lineup.points} </h4>
-{/*  		<hr/>
-  		<ul>
-  			<li>QB: {lineup.qb ? <strong>{lineup.qb.name}</strong> : <em>[empty]</em>}</li>
-        <li>RB: {lineup.rb1 ? <strong>{lineup.rb1.name}</strong> : <em>[empty]</em>}</li>
-        <li>RB: {lineup.rb2 ? <strong>{lineup.rb2.name}</strong> : <em>[empty]</em>}</li>
-        <li>WR: {lineup.wr1 ? <strong>{lineup.wr1.name}</strong> : <em>[empty]</em>}</li>
-        <li>WR: {lineup.wr2 ? <strong>{lineup.wr2.name}</strong> : <em>[empty]</em>}</li>
-        <li>WR: {lineup.wr3 ? <strong>{lineup.wr3.name}</strong> : <em>[empty]</em>}</li>
-        <li>TE: {lineup.te ? <strong>{lineup.te.name}</strong> : <em>[empty]</em>}</li>
-        <li>FLEX: {lineup.flex ? <strong>{lineup.flex.name}</strong> : <em>[empty]</em>}</li>
-  		</ul>*/}
   		<hr/>
+      {!loading ?
+        <>
+    			<li>QB: {lineupPlayers.qb ? <strong>{lineupPlayers.qb.name}</strong> : <em>________</em>}</li>
+          <li>RB: {lineupPlayers.rb1 ? <strong>{lineupPlayers.rb1.name}</strong> : <em>________</em>}</li>
+          <li>RB: {lineupPlayers.rb2 ? <strong>{lineupPlayers.rb2.name}</strong> : <em>________</em>}</li>
+          <li>WR: {lineupPlayers.wr1 ? <strong>{lineupPlayers.wr1.name}</strong> : <em>________</em>}</li>
+          <li>WR: {lineupPlayers.wr2 ? <strong>{lineupPlayers.wr2.name}</strong> : <em>________</em>}</li>
+          <li>WR: {lineupPlayers.wr3 ? <strong>{lineupPlayers.wr3.name}</strong> : <em>________</em>}</li>
+          <li>TE: {lineupPlayers.te ? <strong>{lineupPlayers.te.name}</strong> : <em>________</em>}</li>
+          <li>FLEX: {lineupPlayers.flex ? <strong>{lineupPlayers.flex.name}</strong> : <em>________</em>}</li>
+        </> : 
+        <>
+          <div>
+            <Ellipsis />
+          </div>
+        </>
+      }
+      <hr/>
   		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
         className="view-lineup-btn">View Lineup<FaAngleRight/></Link>
       <hr />

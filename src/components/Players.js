@@ -19,7 +19,9 @@ const Players = ({ players, onAdd}) => {
           <label>Search Players:</label>
           <input type="text" placeholder="Search Players" value={playerFilter}
             onChange={(e) => setPlayerFilter(e.target.value)} />
-          <FaTimes onClick={() => setPlayerFilter('')} />
+          <div>
+            <FaTimes onClick={() => setPlayerFilter('')} />
+          </div>
         </div>
       </form>
       <div className="players">

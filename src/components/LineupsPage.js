@@ -58,12 +58,14 @@ const LineupsPage = () => {
 	  return (
 	  	<>
 		    <h1>Lineups</h1>
+
 		    <div className="lineupform-wrapper container">
 		    	{showNewLineupForm && <NewLineupForm onAdd={createLineup} />}
 				  <button className="view-players-btn" 
 				  	onClick={() => setShowNewLineupForm(!showNewLineupForm)}
 				  	>{showNewLineupForm ? "Hide" : "Create New Lineup"}</button>
 				</div>
+
 				<div className="filter-btn-wrapper">
 					<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
 					{years.length > 0 && years.map((year) => 
@@ -71,6 +73,7 @@ const LineupsPage = () => {
 							onClick={() => setFilteredYears(year)}>{year}</button>
 					)}
 				</div>
+				
 		    <div className="lineups-wrapper">
 		    	{lineups.length > 0 ? lineups.map((lineup) => 
 		    		<>
