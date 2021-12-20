@@ -14,7 +14,7 @@ const NewLineupForm = ({ onAdd }) => {
 			return 
 		}
 
-		onAdd( year, week, bet, winnings )
+		onAdd(year, week, bet, winnings)
 
 		setYear(null)
 		setWeek(null)
@@ -39,7 +39,7 @@ const NewLineupForm = ({ onAdd }) => {
 	    		onChange={(e) => setBet(e.target.value)} />
 	    		<label>Winings: </label>
 	    		<input type="text" placeholder="Enter Winnings Amount" value={winnings}
-	    		onChange={(e) => setWeek(e.target.value)} />
+	    		onChange={(e) => setWinnings(e.target.value)} />
 	    	</div>
 	    	<input type="submit" value="Create Lineup" className="" />
 	    </form>

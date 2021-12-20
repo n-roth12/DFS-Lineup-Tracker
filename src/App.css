@@ -31,6 +31,8 @@ body {
   border: None;
 }
 
+
+
 .ring {
   position: fixed;
   top: 50%;
@@ -199,6 +201,7 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center;
+
 }
 
 .lineupform {
@@ -211,6 +214,7 @@ input {
   flex-direction: column;
   border-radius: 3px;
   justify-content: space-around;
+
 }
 
 .form-control {

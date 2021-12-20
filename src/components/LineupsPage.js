@@ -40,11 +40,13 @@ const LineupsPage = () => {
  		setYears(temp)
  	}
 
-  const createLineup = async (year, week) => {
+  const createLineup = async (year, week, bet, winnings) => {
  		var data = {}
 		data["user_id"] = 1
 		data["year"] = year
 		data["week"] = week
+		data["bet"] = bet
+		data["winnings"] = winnings
   	await fetch(`/lineups`, {
   		method: 'POST',
   		headers: {

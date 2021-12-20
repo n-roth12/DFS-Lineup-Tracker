@@ -62,7 +62,7 @@ const LineupCard = ({ lineup }) => {
       }
       <hr/>
   		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
-        className="view-lineup-btn">View Lineup<FaAngleRight/></Link>
+        className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
       <hr />
       <div>
         <a className="delete-lineup-link" href="" onClick={() => deleteLineup(lineup.id)}>Delete Lineup<FaTimes/></a>
