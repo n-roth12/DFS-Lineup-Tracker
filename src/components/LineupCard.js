@@ -14,20 +14,9 @@ const LineupCard = ({ lineup }) => {
   }, [])
 
   const getCardData = async () => {
-    const res1 = await fetch(`lineups/${lineup['id']}`, {
-      method: 'GET'
-    })
-    const body_data = await res1.json()
-    const res2 = await fetch(`https://ffbapi.herokuapp.com/api/v1/playergamestats`, {
-      method: 'POST',
-      headers: {
-        'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E',
-        'Content-type': 'application.json'
-      },
-      body: JSON.stringify(body_data)
-    })
-    const b = await res2.json()
-    await setLineupPlayers(b)
+    const res = await fetch(`/lineup_data/${lineup['id']}`)
+    const b = await res.json()
+    await setLineupPlayers(b['lineup_data'])
     setLoading(false)
   }
 
@@ -42,11 +31,11 @@ const LineupCard = ({ lineup }) => {
   		<div className="lineup-card">
     		<h2>Week {lineup.week}, {lineup.year}</h2>
         <h4>{lineup.points} PTS</h4>
-        <h4>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${lineup.winnings - lineup.bet}`}</h4>
+        <h4>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>
     		<hr/>
         {!loading ?
           <>
-      			<li>QB: {lineupPlayers.qb ? <strong>{lineupPlayers.qb.name}</strong> : <em>________</em>}</li>
+      			<li>QB: {lineupPlayers.qb ? <strong>{lineupPlayers.qb.name}</strong>: <em>________</em>}</li>
             <li>RB: {lineupPlayers.rb1 ? <strong>{lineupPlayers.rb1.name}</strong> : <em>________</em>}</li>
             <li>RB: {lineupPlayers.rb2 ? <strong>{lineupPlayers.rb2.name}</strong> : <em>________</em>}</li>
             <li>WR: {lineupPlayers.wr1 ? <strong>{lineupPlayers.wr1.name}</strong> : <em>________</em>}</li>

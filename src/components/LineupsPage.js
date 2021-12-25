@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import LineupCard from './LineupCard'
 import SingleLineupPage from './SingleLineupPage'
 import NewLineupForm from './NewLineupForm'
+import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis } from'recharts'
 
 const LineupsPage = () => {
 
@@ -11,6 +12,30 @@ const LineupsPage = () => {
 	const [showNewLineupForm, setShowNewLineupForm] = useState(false)
 	const [years, setYears] = useState([])
 	const [filteredYears, setFilteredYears] = useState(null)
+	const [graphData, setGraphdata] = useState([])
+	const [loadingGraph, setLoadingGraph] = useState(false)
+	// [
+	//   {
+	//     name: 'January',
+	//     Iphone: 4000
+	//   },
+	//   {
+	//     name: "March",
+	//     Iphone: 1000,
+	//   },
+	//   {
+	//     name: "May",
+	//     Iphone: 4000,
+	//   },
+	//   {
+	//     name: "July",
+	//     Iphone: 800,
+	//   },
+	//   {
+	//     name: "October",
+	//     Iphone: 1500,
+	//   },
+	// ]
   
   useEffect(() => {
   	getUserLineups(1)
@@ -22,12 +47,14 @@ const LineupsPage = () => {
 
   const getUserLineups = async (user_id) => {
   	setLoading(true)
+  	setLoadingGraph(true)
     const res = await fetch(`users/${user_id}`)
     const userLineups = await res.json()
     await setLineups(userLineups)
     getYears()
     await setLoading(false)
-    console.log(lineups)
+    loadGraphData()
+    setLoadingGraph(false)
   }
 
  	const getYears = () => {
@@ -38,6 +65,18 @@ const LineupsPage = () => {
  			}
  		})
  		setYears(temp)
+ 	}
+
+ 	const loadGraphData = () => {
+ 		var data = []
+ 		lineups.map((lineup) => {
+ 			var temp = {}
+ 			temp["week"] = lineup.week
+ 			temp["points"] = lineup.points
+ 			temp["return"] = lineup.winnings - lineup.bet
+ 			data.push(temp)
+ 		})
+ 		setGraphdata(data)
  	}
 
   const createLineup = async (year, week, bet, winnings) => {
@@ -64,7 +103,7 @@ const LineupsPage = () => {
 
 		    <div className="lineupform-wrapper container">
 		    	{showNewLineupForm && <NewLineupForm onAdd={createLineup} />}
-				  <button className="view-players-btn" 
+				  <button className="toggle-lineupform-btn" 
 				  	onClick={() => setShowNewLineupForm(!showNewLineupForm)}
 				  	>{showNewLineupForm ? "Hide" : "Create New Lineup"}</button>
 				</div>
@@ -86,7 +125,48 @@ const LineupsPage = () => {
 		    		</>
 		    	) : <p>No lineups to show.</p>}
 		    </div>
-		  </>
+
+		   	<div className="row">
+		   		<h1>Points Progress</h1>
+		   		<div className="linechart-wrapper">
+			      <LineChart
+			        width={500}
+			        height={300}
+			        data={graphData}
+			        margin={{
+			          top: 20,
+			          right: 30,
+			          left: 0,
+			          bottom: 10,
+			        }}>
+			        <CartesianGrid  horizontal="true" vertical="" stroke="#202033"/>
+			        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
+			        <YAxis tick={{fill:"#000000"}} />
+			        <Line type="monotone" dataKey="points" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033",strokeWidth: 2,r:5}} activeDot={{fill:"#2e4355",stroke:"#8884d8",strokeWidth: 5,r:10}} />
+		      	</LineChart>
+		    	</div>
+		    </div>
+		    <div>
+		   		<h1>Bankroll Progress</h1>
+		   		<div className="linechart-wrapper">
+			      <LineChart
+			        width={500}
+			        height={300}
+			        data={graphData}
+			        margin={{
+			          top: 20,
+			          right: 30,
+			          left: 0,
+			          bottom: 10,
+			        }}>
+			        <CartesianGrid  horizontal="true" vertical="" stroke="#202033"/>
+			        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
+			        <YAxis tick={{fill:"#000000"}} />
+			        <Line type="monotone" dataKey="return" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033",strokeWidth: 2,r:2}} activeDot={{fill:"#2e4355",stroke:"#8884d8",strokeWidth: 5,r:10}} />
+		      	</LineChart>
+		    	</div>
+		    </div>
+		</>
 	  )
 	} else {
 		return (

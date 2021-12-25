@@ -21,6 +21,7 @@ body {
 
 .main {
   display: flex;
+  justify-content: space-around;
 }
 
 .hidden {
@@ -31,8 +32,6 @@ body {
   border: None;
 }
 
-
-
 .ring {
   position: fixed;
   top: 50%;
@@ -40,8 +39,12 @@ body {
   transform: translate(-50%, -50%);
 }
 
-.lineup-wrapper, .players-wrapper {
-  margin: 20px;
+.lineup-wrapper {
+  margin-top: 50px;
+}
+
+.players-wrapper {
+  margin-top: 100px;
 }
 
 .filter-btn-active {
@@ -182,14 +185,38 @@ input {
   font-size: 11pt;
 }
 
-.back-btn {
-  background: None;
-  color: #0069ed;
-  border: None;
-  font-size: 12pt;
-  padding: 5px;
-  text-decoration: none;
+.back-btn-wrapper {
+  background: #2d78fa;
+  display: flex;
 
+}
+
+.back-btn:hover, {
+  color: #ffffff;
+  border-bottom: 3px solid #ffffff;
+}
+
+.back-btn {
+  color: #ffffff;
+  font-size: 13pt;
+  text-decoration: None;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggle-lineupform-btn {
+  padding: 10px;
+  background: None;
+  border: None;
+  color: #0069ed;
+  width: 100%;
+}
+
+.toggle-lineupform-btn:hover {
+  color: #202033;
 }
 
 .new-lineup-btn {
@@ -200,34 +227,38 @@ input {
 .lineupform-wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-
-}
-
-.lineupform {
   border: 1px solid #d3d3d3;
   background-color: #ffffff;
   box-shadow: 0px 0px 3px 1px lightgray;
-  padding: 15px;
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 3px;
-  justify-content: space-around;
-
+  width: fit-content;
+  height: fit-content;
 }
 
-.form-control {
+.linechart-wrapper {
+  align-items: center;
+  border: 1px solid #d3d3d3;
+  border-radius: 3px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 3px 1px lightgray;
+  width: fit-content;
+  height: fit-content;
+}
+
+.lineupform {
+  padding: 10px;
+  box-shadow: None !important;
   display: flex;
-  justify-content:;
-  margin: 5px;
+  flex-direction: column;
+  border: None;
+  justify-content: space-around;
 }
 
 .lineups-wrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: left;
 }
 
 .lineup-card li {

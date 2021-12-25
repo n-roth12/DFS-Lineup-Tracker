@@ -2,10 +2,13 @@ from api import app, db, ma
 from flask import Flask, request, jsonify
 import json
 import requests
+import redis
 from flask_cors import cross_origin
 from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 # from api.models.statline import StatLine, StatLineSchema
+
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
 @app.route('/test', methods=['GET'])
@@ -15,7 +18,7 @@ def get_test():
 
 @app.route('/players', defaults={'id': None}, methods=['GET'])
 @app.route('/players/<id>', methods=['GET'])
-def get_players(id):
+def get_players(id: int):
 	if id:
 		player = db.session.query(Player).filter(Player.id == id).first()
 		if not player:
@@ -44,7 +47,7 @@ def add_player():
 
 
 @app.route('/players/<id>', methods=['DELETE'])
-def delete_player(id):
+def delete_player(id: int):
 	player = db.session.query(Player).filter(Player.id == id).first()
 	if not player:
 		return jsonify({ 'Error': 'No player found with specified id.' })
@@ -56,7 +59,7 @@ def delete_player(id):
 
 
 @app.route('/players/<id>', methods=['PUT'])
-def edit_player(id):
+def edit_player(id: int):
 	player = db.session.query(Player).filter(Player.id == id).first()
 	if not player:
 		return jsonify({ 'Error': 'No player with specified id.' })
@@ -75,7 +78,7 @@ def edit_player(id):
 
 @app.route('/lineups', defaults={'id': None}, methods=['GET'])
 @app.route('/lineups/<id>', methods=['GET'])
-def get_lineup(id):
+def get_lineup(id: int):
 	if not id:
 		lineups = db.session.query(Lineup).all()
 		if not len(lineups):
@@ -124,7 +127,11 @@ def create_lineup():
 
 
 @app.route('/lineups/<id>', methods=['PUT'])
-def edit_lineup(id):
+def edit_lineup(id: int):
+	key = f'lineup_data_{id}'
+
+	redis_client.delete(key)
+
 	lineup = db.session.query(Lineup).filter(Lineup.id == id).first()
 	if not lineup:
 		return jsonify({ 'Error': 'No lineup with specified id.' })
@@ -137,7 +144,7 @@ def edit_lineup(id):
 
 
 @app.route('/lineups/<id>', methods=['DELETE'])
-def delete_lineup(id):
+def delete_lineup(id: int):
 	lineup = db.session.query(Lineup).filter(Lineup.id == id).first()
 	if not lineup:
 		return jsonify({ 'Error': 'No lineup found with specified id.' })
@@ -148,7 +155,8 @@ def delete_lineup(id):
 
 
 @app.route('/users/<user_id>', methods=['GET'])
-def get_user(user_id):
+def get_user(user_id: int):
+
 	user_lineups = db.session.query(Lineup) \
 		.filter(Lineup.user_id == user_id) \
 		.order_by(Lineup.year.desc(), Lineup.week.desc()).all()
@@ -176,6 +184,24 @@ def get_user(user_id):
 					response[key] = PlayerSchema().dump(p)
 		whole_response.append(response)
 	return jsonify(whole_response)
+
+@app.route('/lineup_data/<lineup_id>', methods=['GET'])
+def get_lineup_data(lineup_id: int):
+	key = f'lineup_data_{lineup_id}'
+	lineup_data_from_cache = redis_client.get(key)
+	if lineup_data_from_cache is None:
+
+		body_data = requests.get(f'http://127.0.0.1:5000/lineups/{lineup_id}').json()
+		res = requests.post(f'https://ffbapi.herokuapp.com/api/playergamestats', 
+			headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' },
+			json=body_data)
+		t = res.json()
+
+		redis_client.set(key, json.dumps(t))
+
+	result = json.loads(redis_client.get(key))
+
+	return jsonify({ 'lineup_data': result }), 200
 
 
 

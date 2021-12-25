@@ -50,7 +50,7 @@ function SingleLineupPage() {
 
   // Fetch Players
   const fetchPlayers = async () => {
-    const res = await fetch(`https://ffbapi.herokuapp.com/api/v1/top?year=${lineupYear}&week=${lineupWeek}`, {
+    const res = await fetch(`https://ffbapi.herokuapp.com/api/top?year=${lineupYear}&week=${lineupWeek}`, {
       method: 'GET',
       headers: {
         'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E'
@@ -187,41 +187,51 @@ function SingleLineupPage() {
 
   if (!loading) { 
     return (
-      <div className="main row">
-        <EditWagerForm lineup={lineup} />
-        <div className="col lineup-wrapper">
-          <a className="back-btn" href="/"><FaAngleLeft />Back to Lineups</a>
-          <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
-          <h2>Point Total: {lineupScore}</h2>
-          <h2>Return: {lineup.winnings - lineup.bet}</h2>
-          { viewSaveLineup && 
-            <button className="view-players-btn"
-              onClick={saveLineup}>Save Changes</button>
-          }
-          { viewLineup &&  
-            <>
-              <Lineup lineup={lineupData} 
-                onDelete={deleteFromLineup} 
-                onAdd={editLineup}
-                editingPos={editingPos}
-                cancelEdit={cancelEdit} 
-                lineupWeek={lineupWeek}
-                lineupYear={lineupYear}
-                lineupScore={lineupScore}/>
-            </>
-          } 
-          <a className="delete-lineup-btn text-center" 
-            onClick={deleteLineup} href="/">Delete Lineup</a>
+      <div className="main row container-fluid">
+        <div className="row">
+          <div className="col-2 back-btn-wrapper">
+            <a className="back-btn" href="/"><FaAngleLeft />Back to Lineups</a>
+          </div>
+          <div className="col-10">
+            <EditWagerForm lineup={lineup} />
+          </div>
+          </div>
+        <div className="col-12 col-md-6 col-lg-5">
+          <div className="lineup-wrapper">
+            <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
+            <h2>Point Total: {lineupScore}</h2>
+            <h2>Return: {lineup.winnings - lineup.bet}</h2>
+            { viewSaveLineup && 
+              <button className="view-players-btn"
+                onClick={saveLineup}>Save Changes</button>
+            }
+            { viewLineup &&  
+              <>
+                <Lineup lineup={lineupData} 
+                  onDelete={deleteFromLineup} 
+                  onAdd={editLineup}
+                  editingPos={editingPos}
+                  cancelEdit={cancelEdit} 
+                  lineupWeek={lineupWeek}
+                  lineupYear={lineupYear}
+                  lineupScore={lineupScore}/>
+              </>
+            } 
+            <a className="delete-lineup-btn text-center" 
+              onClick={deleteLineup} href="/">Delete Lineup</a>
+            </div>
         </div>
-        <div className="col players-wrapper">
-          { editingPos && 
-            <>
-              <h1>Available {editingPos !== null && editingPos.replace(/[0-9]/g, '').toUpperCase()}</h1>
-              { players.length > 0 ? <Players 
-                players={filterPlayers(players)} 
-                onAdd={addToLineup} /> : 'No Players to show.' }
-            </>
-          }
+        <div className="col-12 col-md-6 col-lg-5">
+          <div className="players-wrapper">
+            { editingPos && 
+              <>
+                <h1>Available {editingPos !== null && editingPos.replace(/[0-9]/g, '').toUpperCase()}</h1>
+                { players.length > 0 ? <Players 
+                  players={filterPlayers(players)} 
+                  onAdd={addToLineup} /> : 'No Players to show.' }
+              </>
+            }
+          </div>
         </div>
       </div>
     )

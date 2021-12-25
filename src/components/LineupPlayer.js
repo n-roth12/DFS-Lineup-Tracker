@@ -1,12 +1,12 @@
 import { FaTimes } from 'react-icons/fa'
 
-const LineupPlayer = ({ player, position, onDelete }) => {
+const LineupPlayer = ({ player, position, onDelete, onAdd }) => {
 
   // Round player fantasy points to two decimal places
   const truncPoints = Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
 
   return (
-    <div className="player">
+    <div className="player" onClick={() => onAdd(position)} style={{cursor: "pointer"}}>
       <h3><span className="pos-label">{position}</span> {player.name} <span className="info">({player.stats.team})</span></h3>
       <div className="delete-btn">
         <p><FaTimes style={{ color: "red", cursor: "pointer"}}

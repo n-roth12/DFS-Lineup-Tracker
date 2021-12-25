@@ -11,6 +11,7 @@ flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 psycopg2-binary = "*"
 flask-cors = "*"
+redis = "*"
 
 [dev-packages]
 

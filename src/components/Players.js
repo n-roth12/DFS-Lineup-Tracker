@@ -14,7 +14,7 @@ const Players = ({ players, onAdd}) => {
 
   return (
     <>
-      <div className="players-wrapper">
+      <div>
         <form className="player-search-form">
           <label>Search Players:</label>
           <input type="text" placeholder="Search Players" value={playerFilter}

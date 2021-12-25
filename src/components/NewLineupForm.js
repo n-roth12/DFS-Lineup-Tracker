@@ -23,8 +23,8 @@ const NewLineupForm = ({ onAdd }) => {
 	}
 
   return (
-  	<div className="lineupform-wrapper">
-	    <form className="lineupform" onSubmit={onSubmit}>
+  	<div className="lineupform">
+	    <form className="" onSubmit={onSubmit}>
 	    	<div className="form-control">
 	    		<label>Year: </label>
 	    		<input type="text" placeholder="Enter Lineup Year" value={year}
