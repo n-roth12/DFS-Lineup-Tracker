@@ -25,16 +25,12 @@ def get_players():
 	players_from_cache = redis_client.get(key)
 
 	if players_from_cache is None:
-		print('Player data not found in redis, fetching from api...')
 		res = requests.get(f'https://ffbapi.herokuapp.com/api/top?year={year}&week={week}',
 			headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' }
 		)
-		t = res.json()
-		redis_client.set(key, json.dumps(t))
+		players_from_api = res.json()
+		redis_client.set(key, json.dumps(players_from_api))
 		players_from_cache = redis_client.get(key)
-
-	else:
-		print('Serving player data from redis...')
 
 	players = json.loads(players_from_cache)
 
@@ -204,9 +200,9 @@ def get_lineup_data(lineup_id: int):
 		res = requests.post(f'https://ffbapi.herokuapp.com/api/playergamestats', 
 			headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' },
 			json=body_data)
-		t = res.json()
+		lineup_data_from_api = res.json()
 
-		redis_client.set(key, json.dumps(t))
+		redis_client.set(key, json.dumps(lineup_data_from_api))
 		lineup_data_from_cache = redis_client.get(key)
 
 	result = json.loads(lineup_data_from_cache)
