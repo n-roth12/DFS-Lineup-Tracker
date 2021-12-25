@@ -122,18 +122,24 @@ const LineupsPage = () => {
 		    </div>
 		  </> : <h1>Loading Lineups...</h1>}
 
-	    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
-	    	<>
-	    		<h1>Loading Points Graph...</h1> 
-	    		<Ellipsis /> 
-	    	</>
-	   	}
-	    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
-	    	<>
-	    		<h1>Loading Bankroll Graph...</h1> 
-	    		<Ellipsis />
-	    	</>
-	    }
+		  <div className="container">
+		  	<div className="graphs-wrapper row">
+		  		<h1>History</h1>
+			    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
+			    	<>
+			    		<h1>Loading Points Graph...</h1> 
+			    		<Ellipsis /> 
+			    	</>
+			   	}
+			    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
+			    	<>
+			    		<h1>Loading Bankroll Graph...</h1> 
+			    		<Ellipsis />
+			    	</>
+			    }
+			  </div>
+	    </div>
+
 	</>
   )
 }
