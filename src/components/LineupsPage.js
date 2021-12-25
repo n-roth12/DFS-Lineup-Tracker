@@ -5,6 +5,7 @@ import SingleLineupPage from './SingleLineupPage'
 import NewLineupForm from './NewLineupForm'
 import PointsGraph from './PointsGraph'
 import BankrollGraph from './BankrollGraph'
+import { Ellipsis } from 'react-awesome-spinners'
 
 const LineupsPage = () => {
 
@@ -53,13 +54,16 @@ const LineupsPage = () => {
  		setLoadingBankrollGraph(true)
  		var data1 = []
  		var data2 = []
- 		lineups.map((lineup) => {
+ 		var bankRollSum = 0
+ 		lineups.reverse().map((lineup) => {
  			var temp1 = {}
  			var temp2 = {}
  			temp1["week"] = `${lineup.year}/${lineup.week}`
  			temp2["week"] = `${lineup.year}/${lineup.week}`
  			temp1["points"] = lineup.points
- 			temp2["return"] = lineup.winnings - lineup.bet
+ 			const newBankRollSum = bankRollSum + (lineup.winnings - lineup.bet)
+ 			temp2["return"] = newBankRollSum
+ 			bankRollSum = newBankRollSum
  			data1.push(temp1)
 			data2.push(temp2)
  		})
@@ -117,8 +121,19 @@ const LineupsPage = () => {
 		    	) : <p>No lineups to show.</p>}
 		    </div>
 		  </> : <h1>Loading Lineups...</h1>}
-	    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : <h1>Loading Points Graph...</h1> }
-	    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : <h1>Loading Bankroll Graph...</h1> }
+
+	    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
+	    	<>
+	    		<h1>Loading Points Graph...</h1> 
+	    		<Ellipsis /> 
+	    	</>
+	   	}
+	    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
+	    	<>
+	    		<h1>Loading Bankroll Graph...</h1> 
+	    		<Ellipsis />
+	    	</>
+	    }
 	</>
   )
 }
