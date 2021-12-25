@@ -6,7 +6,6 @@ import redis
 from flask_cors import cross_origin
 from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
-# from api.models.statline import StatLine, StatLineSchema
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -16,21 +15,30 @@ def get_test():
 	return jsonify({ 'Message': 'Test GET succeeded!' })
 
 
-@app.route('/players', defaults={'id': None}, methods=['GET'])
-@app.route('/players/<id>', methods=['GET'])
-def get_players(id: int):
-	if id:
-		player = db.session.query(Player).filter(Player.id == id).first()
-		if not player:
-			return jsonify({ 'Error': 'No player with specified id.' })
-		return jsonify(PlayerSchema().dump(player)), 200
-	
-	players = db.session.query(Player).all()
-	if not len(players):
-		return jsonify({ 'Error': 'No players in database!' })
+@app.route('/players', methods=['GET'])
+def get_players():
 
-	schema = PlayerSchema(many=True)
-	return jsonify({ 'players': schema.dump(players) }), 200
+	year = request.args.get('year')
+	week = request.args.get('week')
+
+	key = f'players_{year}_{week}'
+	players_from_cache = redis_client.get(key)
+
+	if players_from_cache is None:
+		print('Player data not found in redis, fetching from api...')
+		res = requests.get(f'https://ffbapi.herokuapp.com/api/top?year={year}&week={week}',
+			headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' }
+		)
+		t = res.json()
+		redis_client.set(key, json.dumps(t))
+		players_from_cache = redis_client.get(key)
+
+	else:
+		print('Serving player data from redis...')
+
+	players = json.loads(players_from_cache)
+
+	return jsonify({ 'players': players }), 200
 	
 
 @app.route('/players', methods=['POST'])
@@ -185,6 +193,7 @@ def get_user(user_id: int):
 		whole_response.append(response)
 	return jsonify(whole_response)
 
+
 @app.route('/lineup_data/<lineup_id>', methods=['GET'])
 def get_lineup_data(lineup_id: int):
 	key = f'lineup_data_{lineup_id}'
@@ -198,10 +207,14 @@ def get_lineup_data(lineup_id: int):
 		t = res.json()
 
 		redis_client.set(key, json.dumps(t))
+		lineup_data_from_cache = redis_client.get(key)
 
-	result = json.loads(redis_client.get(key))
+	result = json.loads(lineup_data_from_cache)
 
 	return jsonify({ 'lineup_data': result }), 200
+
+
+
 
 
 

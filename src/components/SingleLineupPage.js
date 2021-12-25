@@ -50,14 +50,11 @@ function SingleLineupPage() {
 
   // Fetch Players
   const fetchPlayers = async () => {
-    const res = await fetch(`https://ffbapi.herokuapp.com/api/top?year=${lineupYear}&week=${lineupWeek}`, {
-      method: 'GET',
-      headers: {
-        'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E'
-      },
+    const res = await fetch(`/players?year=${lineupYear}&week=${lineupWeek}`, {
+      method: 'GET'
     })
     const data = await res.json()
-    return data
+    return data['players']
   }
 
   const getPlayers = async () => {
