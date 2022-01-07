@@ -24,24 +24,30 @@ const NewLineupForm = ({ onAdd }) => {
 
   return (
   	<div className="lineupform">
-	    <form className="" onSubmit={onSubmit}>
-	    	<div className="form-control">
+	    <form className="container" onSubmit={onSubmit}>
+	    	<div>
 	    		<label>Year: </label>
-	    		<input type="text" placeholder="Enter Lineup Year" value={year}
+	    		<input className="form-control" type="text" placeholder="Enter Lineup Year" value={year}
 	    			onChange={(e) => setYear(e.target.value)} />
+	    		<hr />
 	    		<label>Week: </label>
-	    		<input type="text" placeholder="Enter Lineup Week" value={week}
+	    		<input className="form-control" type="text" placeholder="Enter Lineup Week" value={week}
 	    		onChange={(e) => setWeek(e.target.value)} />
+	    		<hr />
 	    	</div>
-	    	<div className="form-control">
+	    	<div>
 	    		<label>Bet: </label>
-	    		<input type="text" placeholder="Enter Bet Amount" value={bet}
+	    		<input className="form-control" type="text" placeholder="Enter Bet Amount" value={bet}
 	    		onChange={(e) => setBet(e.target.value)} />
+	    		<hr />
 	    		<label>Winings: </label>
-	    		<input type="text" placeholder="Enter Winnings Amount" value={winnings}
+	    		<input className="form-control" type="text" placeholder="Enter Winnings Amount" value={winnings}
 	    		onChange={(e) => setWinnings(e.target.value)} />
+	    		<hr />
 	    	</div>
-	    	<input type="submit" value="Create Lineup" className="" />
+	    	<div className="row">
+	    		<input className="form-submit-btn" type="submit" value="Create Lineup" />
+	    	</div>
 	    </form>
 	  </div>
   )

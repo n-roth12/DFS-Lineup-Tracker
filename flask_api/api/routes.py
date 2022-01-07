@@ -7,10 +7,14 @@ from flask_cors import cross_origin
 from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 
+# to start flask_api server, run npm run start-flask-api in react_project
+# to start react server, run npm start in react_project
+# to start redis, run redis-server in the terminal in any directory
+
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
-
 @app.route('/test', methods=['GET'])
+
 def get_test():
 	return jsonify({ 'Message': 'Test GET succeeded!' })
 

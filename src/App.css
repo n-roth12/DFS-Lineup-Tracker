@@ -32,6 +32,10 @@ body {
   border: None;
 }
 
+.wagerform {
+  background-color: #ffffff;
+}
+
 .ring {
   position: fixed;
   top: 50%;
@@ -116,6 +120,10 @@ body {
   border: 1px solid #d3d3d3;
 }
 
+.player:hover {
+  border: 1px solid #9e9e9e;
+}
+
 .delete-btn, .add-btn {
   text-align: right;
   margin-bottom: -7px;
@@ -123,7 +131,7 @@ body {
 
 .delete-lineup-btn {
   display: block;
-  color: #991728;
+  color: #f6404f;
   background: None;
   font-size: 12pt;
   padding: 5px;
@@ -131,9 +139,14 @@ body {
   width: 50%;
   margin-left: auto;
   margin-right: auto;
-  border: solid 1px #991728;
+  border: solid 1px #f6404f;
   border-radius: 3px;
   text-decoration: none;
+}
+
+.delete-lineup-btn:hover {
+  background: #f6404f;
+  color: #ffffff;
 }
 
 .view-players-btn {
@@ -151,6 +164,11 @@ body {
   text-decoration: none !important;
 }
 
+.view-players-btn:hover {
+  color: #ffffff;
+  background: #0069ed;
+}
+
 .info {
   color: black;
   font-size: 10pt;
@@ -164,8 +182,6 @@ body {
 .graphs-wrapper {
   display: flex;
 }
-
-
 
 input {
   margin-left: 10px;
@@ -207,7 +223,7 @@ input {
   font-size: 13pt;
   text-decoration: None;
   width: 100%;
-  height: 100%;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -236,24 +252,21 @@ input {
   justify-content: center;
   align-items: center;
   border: 1px solid #d3d3d3;
+  border-radius: 3px;
   background-color: #ffffff;
   box-shadow: 0px 0px 3px 1px lightgray;
   width: fit-content;
   height: fit-content;
 }
 
-.graphs-wrapper {
-/*  display: flex;
-  flex-direction: row;
-  justify-content: space-around;*/
-}
-
-.graph-wrapper {
+.graph {
   border: 1px solid #d3d3d3;
-  border-radius: 3px;
+  border-radius: 5px;
   background-color: #ffffff;
   box-shadow: 0px 0px 3px 1px lightgray;
+  margin: 3px;
 }
+
 
 .lineupform {
   padding: 10px;
@@ -291,8 +304,20 @@ input {
 }
 
 .lineup-card:hover {
-  outline: 1px solid #a3a3a3;
+  outline: 1px solid #9e9e9e;
   cursor: pointer;
+}
+
+.form-submit-btn {
+  border: None;
+  background-color: #2d78fa;
+  color: white;
+  border-radius: 5px;
+  padding: 7px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+
 }
 
 .view-lineup-btn {
@@ -302,7 +327,7 @@ input {
 }
 
 hr {
-  background: #d3d3d3;
+  background: #9e9e9e;
   height: 1px;
   border: None;
   margin: 5px;

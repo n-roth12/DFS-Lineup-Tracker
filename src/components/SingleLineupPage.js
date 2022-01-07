@@ -189,7 +189,7 @@ function SingleLineupPage() {
           <div className="col-2 back-btn-wrapper">
             <a className="back-btn" href="/"><FaAngleLeft />Back to Lineups</a>
           </div>
-          <div className="col-10">
+          <div className="col-12">
             <EditWagerForm lineup={lineup} />
           </div>
           </div>

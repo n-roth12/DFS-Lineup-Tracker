@@ -28,15 +28,21 @@ const EditWagerForm = ({ lineup }) => {
 
   return (
   	<div className="wagerform-wrapper">
-	    <form className="wagerform" onSubmit={onSubmit}>
-	    	<div className="form-control">
+	    <form className="wagerform row" onSubmit={onSubmit}>
+	    	<div className="col">
 	    		<label>Bet: </label>
-	    		<input type="text" placeholder="Enter Bet Amount" value={bet}
-	    			onChange={(e) => setBet(e.target.value)} />
+		    	<input className="form-control" type="text" placeholder="Enter Bet Amount" value={bet}
+		    		onChange={(e) => setBet(e.target.value)} />
+		    	<hr />
+	    	</div>
+	    	<div className="col">
 	    		<label>Winnings: </label>
-	    		<input type="text" placeholder="Enter Winnings Amount" value={winnings}
+	    		<input className="form-control" type="text" placeholder="Enter Winnings Amount" value={winnings}
 	    		onChange={(e) => setWinnings(e.target.value)} />
-	    		<input type="submit" value="Submit Wager Changes" className="" />
+	    		<hr />
+	    	</div>
+	    	<div className="col">
+	    		<input className="view-players-btn" type="submit" value="Submit Wager Changes" />
 	    	</div>
 	    </form>
 	  </div>
