@@ -3,7 +3,7 @@ import { FaTimes } from 'react-icons/fa'
 
 const EmptyPlayer = ({ position, showAddPlayer, onAdd, beingEdited, cancelEdit }) => {
   return (
-    <div className="empty-player player">
+    <div className={`empty-player player ${beingEdited ? 'selected': ''}`}>
       <h3><span className="pos-label">{ position }</span></h3>
       { beingEdited ? 
         <button className="cancel-add-btn"

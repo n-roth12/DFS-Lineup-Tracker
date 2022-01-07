@@ -1,3 +1,4 @@
 TODO:
 	- fix edit wager form 
-	- add cancel changes button to single lineups page
+	- cancel edit for non empty players in lineup
+	- messages banner for when post requests have been made (ie wager changes or lineup changes submitted)

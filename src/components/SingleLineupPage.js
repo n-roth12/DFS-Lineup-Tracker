@@ -10,6 +10,7 @@ import '../App.css';
 function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()
   const [players, setPlayers] = useState([])
+  const [prevLineup, setPrevLineup] = useState()
   const [lineup, setLineup] = useState()
   const [lineupData, setLineupData] = useState({})
   const [viewPlayers, setViewPlayers] = useState(false)
@@ -97,7 +98,9 @@ function SingleLineupPage() {
   const getLineup = async () => {
     const res = await fetch(`/lineups/${lineupId}`)
     const lineupFromServer = await res.json()
-    await setLineup({...lineupFromServer})
+    const temp = {...lineupFromServer}
+    await setLineup(temp)
+    await setPrevLineup(temp)
     // await loadLineup()
     getPlayers()
   }
@@ -120,8 +123,6 @@ function SingleLineupPage() {
     setViewSaveLineup(true)
   }
 
-  // TODO: make it so changes arent immediately applied to database, must press save first
-  // TODO: make it so that the I make a fetch call to ffbrestapi to retreive player data and load it in the app
   const addPlayerToLineup = async (id) => {
     if (editingPos) {
       var temp = {...lineup}
@@ -137,7 +138,6 @@ function SingleLineupPage() {
   }
 
   const saveLineup = async () => {
-    setLoading('Saving Lineup')
     setViewSaveLineup(false)
     var temp = {...lineup}
     temp.points = lineupScore
@@ -148,7 +148,8 @@ function SingleLineupPage() {
       },
       body: JSON.stringify(temp)
     })
-    setLoading(null)
+    await setPrevLineup(lineup)
+
   }
 
   // Extract IDs of players in lineup for filtering purposes
@@ -177,6 +178,14 @@ function SingleLineupPage() {
     return filteredPlayers
   }
 
+  const cancelChanges = async () => {
+    setViewSaveLineup(false)
+    setLineup(prevLineup)
+    setEditingPos(null)
+    setViewPlayers(false)
+
+  }
+
   const cancelEdit = () => {
     setViewPlayers(false) 
     setEditingPos(null)
@@ -199,8 +208,12 @@ function SingleLineupPage() {
             <h2>Point Total: {lineupScore}</h2>
             <h2>Return: {lineup.winnings - lineup.bet}</h2>
             { viewSaveLineup && 
-              <button className="view-players-btn"
-                onClick={saveLineup}>Save Changes</button>
+              <>
+                <button className="view-players-btn"
+                  onClick={saveLineup}>Save Changes</button>
+                <button className="delete-lineup-btn"
+                  onClick={cancelChanges}>Cancel Changes</button>
+              </>
             }
             { viewLineup &&  
               <>
@@ -213,7 +226,8 @@ function SingleLineupPage() {
                   lineupYear={lineupYear}
                   lineupScore={lineupScore}/>
               </>
-            } 
+            }
+            <br /> 
             <a className="delete-lineup-btn text-center" 
               onClick={deleteLineup} href="/">Delete Lineup</a>
             </div>
