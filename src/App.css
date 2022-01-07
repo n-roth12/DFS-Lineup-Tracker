@@ -131,8 +131,8 @@ body {
 
 .delete-lineup-btn {
   display: block;
-  color: #f6404f;
-  background: None;
+  color: #ffffff;
+  background: #f6404f;
   font-size: 12pt;
   padding: 5px;
   margin: 5px;
@@ -145,14 +145,14 @@ body {
 }
 
 .delete-lineup-btn:hover {
-  background: #f6404f;
-  color: #ffffff;
+  background: None;
+  color: #f6404f;
 }
 
 .view-players-btn {
   display: block;
-  background: None;
-  color: #0069ed;
+  background: #0069ed;
+  color: #ffffff;
   font-size: 12pt;
   padding: 5px;
   margin: 5px;
@@ -165,8 +165,8 @@ body {
 }
 
 .view-players-btn:hover {
-  color: #ffffff;
-  background: #0069ed;
+  color: #0069ed;
+  background: None;
 }
 
 .info {
