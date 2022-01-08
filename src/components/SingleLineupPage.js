@@ -12,7 +12,7 @@ function SingleLineupPage() {
   const [players, setPlayers] = useState([])
   const [prevLineup, setPrevLineup] = useState()
   const [lineup, setLineup] = useState()
-  const [lineupData, setLineupData] = useState({})
+  const [lineupData, setLineupData] = useState()
   const [viewPlayers, setViewPlayers] = useState(false)
   const [editingPos, setEditingPos] = useState(null)
   const [loading, setLoading] = useState("Loading")
@@ -24,8 +24,8 @@ function SingleLineupPage() {
   useEffect(() => {
     setLoading("Loading Lineup Data...")
     loadPage()
-    setEditingPos(null)
-    setViewPlayers(false)
+    // setEditingPos(null)
+    // setViewPlayers(false)
   }, [])
 
   useEffect(() => {
@@ -66,31 +66,35 @@ function SingleLineupPage() {
   }
 
   // Fetch user lineup
-  const getLineupData = async () => {
-    var temp = await {...lineupData}
-    var scoreSum = 0
-    for (var key in lineup) {
-      if (lineup[key] == null) {
-        temp[`${key}`] = null
-      } else {
-        players.map((player) => {
-          if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points' && key != 'fantasy_points' && key != 'winnings' && key != 'bet'
-            && lineup[`${key}`] == player.stats.id) {
-              temp[`${key}`] = player
-          }
-        })
+  const getLineupData = () => {
+    if (lineup != null) {
+      var temp = {...lineupData}
+      var scoreSum = 0
+      for (var key in lineup) {
+        if (lineup[key] == null) {
+          temp[`${key}`] = null
+        } else {
+          players.map((player) => {
+            if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points' && key != 'fantasy_points' && key != 'winnings' && key != 'bet'
+              && lineup[`${key}`] == player.stats.id) {
+                temp[`${key}`] = player
+            }
+          })
+        }
       }
+      setLineupData(temp)
     }
-    await setLineupData(temp)
   }
 
   const getLineupScore = () => {
     var scoreSum = 0
-    Object.values(lineupData).map((player) => {
-      if (!(player == null || player.name == null)) {
-        scoreSum += player.stats.fantasy_points
-      }
-    })
+    if (lineup != null) {
+      Object.values(lineupData).map((player) => {
+        if (!(player == null || player.name == null)) {
+          scoreSum += player.stats.fantasy_points
+        }
+      })
+    }
     const roundScore = Math.round((scoreSum + Number.EPSILON) * 100) / 100
     setLineupScore(roundScore)
   }
@@ -98,11 +102,9 @@ function SingleLineupPage() {
   const getLineup = async () => {
     const res = await fetch(`/lineups/${lineupId}`)
     const lineupFromServer = await res.json()
-    const temp = {...lineupFromServer}
+    const temp = await {...lineupFromServer}
     await setLineup(temp)
     await setPrevLineup(temp)
-    // await loadLineup()
-    getPlayers()
   }
 
   const editLineup = async (pos) => {
