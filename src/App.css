@@ -33,7 +33,7 @@ body {
 }
 
 .wagerform {
-  background-color: #ffffff;
+  display: flex;
 }
 
 .ring {
@@ -48,7 +48,11 @@ body {
 }
 
 .players-wrapper {
-  margin-top: 100px;
+  margin-top: 50px;
+}
+
+.header {
+  background-color: #ffffff;
 }
 
 .filter-btn-active {
@@ -112,12 +116,23 @@ body {
 }
 
 .player {
-  height: 100px;
+  height: 80px;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
   padding: 5px;
   border: 1px solid #d3d3d3;
+}
+
+.player-body {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+}
+
+.player-info {
+  margin-left: 40px;
+  margin-top: 15px;
 }
 
 .player:hover {

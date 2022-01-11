@@ -30,6 +30,7 @@ const LineupsPage = () => {
 
   const loadPage = async () => {
   	await getUserLineups(1)
+  	await loadPlayerCounts()
   }
 
   const getUserLineups = async (user_id) => {
@@ -47,6 +48,10 @@ const LineupsPage = () => {
  			}
  		})
  		setYears(temp)
+ 	}
+
+ 	const loadPlayerCounts = async () => {
+ 		const res = await fetch(`/best_week/${1}`)
  	}
 
  	const loadGraphData = async () => {

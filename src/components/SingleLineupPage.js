@@ -24,8 +24,6 @@ function SingleLineupPage() {
   useEffect(() => {
     setLoading("Loading Lineup Data...")
     loadPage()
-    // setEditingPos(null)
-    // setViewPlayers(false)
   }, [])
 
   useEffect(() => {
@@ -196,17 +194,20 @@ function SingleLineupPage() {
   if (!loading) { 
     return (
       <div className="main row container-fluid">
-        <div className="row">
+        <div className="row header">
           <div className="col-2 back-btn-wrapper">
             <a className="back-btn" href="/"><FaAngleLeft />Back to Lineups</a>
           </div>
-          <div className="col-12">
+          <div className="col-5">
+            <h1>Fanduel Lineup: {lineupYear}, Week {lineupWeek}</h1>
+          </div>
+          <div className="col-5">
             <EditWagerForm lineup={lineup} />
           </div>
           </div>
         <div className="col-12 col-md-6 col-lg-5">
           <div className="lineup-wrapper">
-            <h1>Lineup {lineupYear}, Week {lineupWeek}</h1>
+            <h1>Your Lineup</h1>
             <h2>Point Total: {lineupScore}</h2>
             <h2>Return: {lineup.winnings - lineup.bet}</h2>
             { viewSaveLineup && 
@@ -238,7 +239,7 @@ function SingleLineupPage() {
           <div className="players-wrapper">
             { editingPos && 
               <>
-                <h1>Available {editingPos !== null && editingPos.replace(/[0-9]/g, '').toUpperCase()}</h1>
+                <h1>Available {editingPos !== null && editingPos.replace(/[0-9]/g, '').toUpperCase()}s</h1>
                 { players.length > 0 ? <Players 
                   players={filterPlayers(players)} 
                   onAdd={addToLineup} /> : 'No Players to show.' }

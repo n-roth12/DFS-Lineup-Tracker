@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContainer, Label } from 'recharts'
 
 const BankrollGraph = ({ graphData }) => {
   return (
@@ -13,13 +13,18 @@ const BankrollGraph = ({ graphData }) => {
 		        margin={{
 		          top: 20,
 		          right: 30,
-		          left: 0,
+		          left: 30,
 		          bottom: 10,
 		        }}>
-		        <CartesianGrid  horizontal="true" vertical="" stroke="#202033"/>
+		        <CartesianGrid strokeDasharray="5 5" stroke="#ccc"/>
 		        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
-		        <YAxis tick={{fill:"#000000"}} />
-		        <Line dataKey="return" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033",strokeWidth: 2,r:2}} activeDot={{fill:"#2e4355",stroke:"#8884d8",strokeWidth: 5,r:10}} />
+		        <YAxis tick={{fill:"#000000"}}>
+		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>
+		        		Cumulative Bankroll
+		        	</Label>
+		        </YAxis>
+		        <Line dataKey="return" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033", r:2}} activeDot={{fill:"#202033",stroke:"#202033", r:4}} />
+		        <Tooltip />
 		  		</LineChart>
 		  	</ResponsiveContainer>
 		  </div>

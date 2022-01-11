@@ -121,11 +121,40 @@ def get_lineup(id: int):
 	return jsonify(LineupSchema().dump(lineup))
 
 
+@app.route('/best_week/<user_id>', methods=['GET'])
+def get_best_week(user_id):
+	lineups = get_user(user_id)
+	data = json.loads(lineups.data)
+
+	print(data)
+
+	return jsonify({ 'Message': 'Success' })
+
+
+@app.route('/player_counts', methods=['GET'])
+def get_player_counts():
+	lineups = db.session.query(Lineup).all()
+
+	player_counts_dict = {}
+
+	for lineup in lineups:
+		data = json.loads(get_lineup_data(lineup.id)[0].data)
+		print(data)
+		
+		# for lineup_data in data:
+		# 	if lineup_data[]
+
+	return jsonify({ 'Message': 'Success' })
+
+
 @app.route('/lineups', methods=['POST'])
 def create_lineup():
 	data = json.loads(request.data)
-	new_lineup = Lineup(user_id=data["user_id"], week=data["week"], 
-		year=data["year"], bet=data["bet"], winnings=data["winnings"])
+	new_lineup = Lineup(user_id=data["user_id"], 
+						week=data["week"], 
+						year=data["year"], 
+						bet=data["bet"], 
+						winnings=data["winnings"])
 	db.session.add(new_lineup)
 	db.session.commit()
 
@@ -202,8 +231,8 @@ def get_lineup_data(lineup_id: int):
 
 		body_data = requests.get(f'http://127.0.0.1:5000/lineups/{lineup_id}').json()
 		res = requests.post(f'https://ffbapi.herokuapp.com/api/playergamestats', 
-			headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' },
-			json=body_data)
+							headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' },
+							json=body_data)
 		lineup_data_from_api = res.json()
 
 		redis_client.set(key, json.dumps(lineup_data_from_api))

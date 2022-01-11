@@ -8,17 +8,17 @@ const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd }) => {
   return (
     <div className={`player ${beingEdited ? 'selected' : ''}`} onClick={() => onAdd(position)} style={{cursor: "pointer"}}>
       <h3><span className="pos-label">{position}</span> {player.name} <span className="info">({player.stats.team})</span></h3>
-      <div className="delete-btn">
-        <p><FaTimes style={{ color: "red", cursor: "pointer"}}
-          onClick={() => onDelete(position)} /></p>
-      </div>
-      <div>
-        <p>
+      <span className="player-body">
+        <p className="player-info">
           {player.stats.game} | {player.stats.rushing_touchdowns + player.stats.passing_touchdowns + player.stats.recieving_touchdowns} TD
           | {player.stats.rushing_yards + player.stats.recieving_yards + player.stats.passing_yards} YRDS
           |  <strong>{truncPoints} </strong> Points
         </p>
+      <div className="delete-btn">
+        <p><FaTimes style={{ color: "red", cursor: "pointer"}}
+          onClick={() => onDelete(position)} /></p>
       </div>
+      </span>
     </div>
   )
 }
