@@ -203,22 +203,14 @@ def get_user(user_id: int):
 
 	whole_response = []
 	for user_lineup in user_lineups:
-		l = LineupSchema().dump(user_lineup)
 		response = {}
-		response["id"] = l["id"]
-		response["week"] = l["week"]
-		response["year"] = l["year"]
-		response["points"] = l["points"]
-		response["bet"] = l["bet"]
-		response["winnings"] = l["winnings"]
+		response["id"] = user_lineup.id
+		response["week"] = user_lineup.week
+		response["year"] = user_lineup.year
+		response["points"] =user_lineup.points
+		response["bet"] = user_lineup.bet
+		response["winnings"] = user_lineup.winnings
 
-		for key, value in l.items():
-			if key != "id" and key != "week" and key != "year" and key != "points" and key != "bet" and key != "winnings":
-				if value is None:
-					response[key] = None
-				else:
-					p = db.session.query(Player).filter(Player.id == value).first()
-					response[key] = PlayerSchema().dump(p)
 		whole_response.append(response)
 	return jsonify(whole_response)
 
@@ -241,6 +233,17 @@ def get_lineup_data(lineup_id: int):
 	result = json.loads(lineup_data_from_cache)
 
 	return jsonify({ 'lineup_data': result }), 200
+
+
+# @app.route('/favorite_players/<user_id>', methods=['GET'])
+# def get_favorite_players(user_id: int):
+# 	lineups = get_user(user_id)
+# 	for lineup in lineups.get_json():
+# 		res = get_lineup_data(lineup['id']).json()
+# 		print(res)
+
+
+
 
 
 

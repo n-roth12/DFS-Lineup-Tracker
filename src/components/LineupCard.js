@@ -30,6 +30,7 @@ const LineupCard = ({ lineup }) => {
   return (
   	<div className="lineup-card">
     		<h2>Week {lineup.week}, {lineup.year}</h2>
+        <br />
         <div className="lineup-card-info">
           <h4>{lineup.points} PTS</h4>
           <h4>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>

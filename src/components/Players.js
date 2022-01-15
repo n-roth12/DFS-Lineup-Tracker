@@ -14,13 +14,13 @@ const Players = ({ players, onAdd}) => {
 
   return (
     <>
-      <div>
+      <div className="search-wrapper">
         <form className="player-search-form">
-          <label>Search Players:</label>
-          <input type="text" placeholder="Search Players" value={playerFilter}
+          <label className="search-label">Search Players:</label>
+          <input className="" type="text" placeholder="Enter Name" value={playerFilter}
             onChange={(e) => setPlayerFilter(e.target.value)} />
           <div>
-            <FaTimes onClick={() => setPlayerFilter('')} />
+            <FaTimes style={{marginLeft: "10px", fontSize: "16pt"}} onClick={() => setPlayerFilter('')} />
           </div>
         </form>
       </div>
