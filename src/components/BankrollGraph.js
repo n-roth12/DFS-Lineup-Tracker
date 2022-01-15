@@ -2,7 +2,7 @@ import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContai
 
 const BankrollGraph = ({ graphData }) => {
   return (
-		<div className="graph-wrapper col-12 col-md-6">
+		<div className="graph-wrapper col-12 col-lg-6">
 			<div className="graph">
 				<h1>Bankroll</h1>
 				<ResponsiveContainer aspect={1.5}>

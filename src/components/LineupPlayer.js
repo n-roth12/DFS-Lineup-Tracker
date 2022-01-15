@@ -1,4 +1,5 @@
 import { FaTimes } from 'react-icons/fa'
+import { MdCompareArrows } from 'react-icons/md'
 
 const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd }) => {
 
@@ -6,7 +7,7 @@ const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd }) => {
   const truncPoints = Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
 
   return (
-    <div className={`player ${beingEdited ? 'selected' : ''}`} onClick={() => onAdd(position)} style={{cursor: "pointer"}}>
+    <div className={`player ${beingEdited ? 'selected' : ''}`}>
       <h3><span className="pos-label">{position}</span> {player.name} <span className="info">({player.stats.team})</span></h3>
       <span className="player-body">
         <p className="player-info">
@@ -14,10 +15,12 @@ const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd }) => {
           | {player.stats.rushing_yards + player.stats.recieving_yards + player.stats.passing_yards} YRDS
           |  <strong>{truncPoints} </strong> Points
         </p>
-      <div className="delete-btn">
-        <p><FaTimes style={{ color: "red", cursor: "pointer"}}
-          onClick={() => onDelete(position)} /></p>
-      </div>
+        <div className="player-btns">
+          <MdCompareArrows style={{ color: "green", cursor: "pointer", fontSize: "20pt", marginRight: "8px" }}
+            onClick={() => onAdd(position)} />
+          <FaTimes style={{ color: "red", cursor: "pointer", fontSize: "16pt", marginRight: "8px"}}
+            onClick={() => onDelete(position)} />
+        </div>
       </span>
     </div>
   )

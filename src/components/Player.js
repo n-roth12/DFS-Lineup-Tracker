@@ -5,7 +5,7 @@ const Player = ({ player, onAdd }) => {
   const truncPoints = Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
   
   return (
-    <div className="player" onClick={() => onAdd(player.stats.id)} style={{cursor: "pointer"}}>
+    <div className="player">
       <h3 className="player-section"><span className="pos-label">{player.position}</span> { player.name } <span className="info">({player.stats.team})</span></h3>
       <span className="player-body">
         <p className="player-info">
@@ -14,7 +14,7 @@ const Player = ({ player, onAdd }) => {
           | <strong>{truncPoints}</strong> Points 
         </p>
         <div className="add-btn player-section">
-          <p><FaPlus style={{ color: "#0069ed" }}
+          <p><FaPlus style={{ color: "#0069ed", fontSize: "14pt", marginRight: "8px", cursor: "pointer" }}
             onClick={() => onAdd(player.stats.id)} /></p>
         </div>
       </span>

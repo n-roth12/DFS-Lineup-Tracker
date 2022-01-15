@@ -13,7 +13,7 @@ function SingleLineupPage() {
   const [prevLineup, setPrevLineup] = useState()
   const [lineup, setLineup] = useState()
   const [lineupData, setLineupData] = useState()
-  const [viewPlayers, setViewPlayers] = useState(false)
+  const [viewPlayers, setViewPlayers] = useState(true)
   const [editingPos, setEditingPos] = useState(null)
   const [loading, setLoading] = useState("Loading")
   const [viewLineup, setViewLineup] = useState(true)
@@ -167,6 +167,9 @@ function SingleLineupPage() {
   // are not of the same position as the one being edited
   const filterPlayers = (players) => {
     const ids = extractIds()
+    if (!editingPos) {
+      return players
+    }
     const filteredPlayers = players.filter((player) => {
       const posWithoutNumbers = editingPos.replace(/[0-9]/g, '').toUpperCase()
       return (
@@ -239,7 +242,7 @@ function SingleLineupPage() {
           <div className="players-wrapper">
             { editingPos && 
               <>
-                <h1>Available {editingPos !== null && editingPos.replace(/[0-9]/g, '').toUpperCase()}s</h1>
+                <h1>Available {editingPos !== null ? editingPos.replace(/[0-9]/g, '').toUpperCase() : 'Players'}</h1>
                 { players.length > 0 ? <Players 
                   players={filterPlayers(players)} 
                   onAdd={addToLineup} /> : 'No Players to show.' }

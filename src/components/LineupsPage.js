@@ -99,6 +99,23 @@ const LineupsPage = () => {
   	<>
   		{!loadingLineups ?
   		<>
+  			<div className="container">
+			  	<div className="graphs-wrapper row">
+			  		<h1>History</h1>
+				    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
+				    	<>
+				    		<h1>Loading Points Graph...</h1> 
+				    		<Ellipsis /> 
+				    	</>
+				   	}
+				    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
+				    	<>
+				    		<h1>Loading Bankroll Graph...</h1> 
+				    		<Ellipsis />
+				    	</>
+				    }
+				  </div>
+		    </div>
 		    <h1>Lineups</h1>
 
 		    <div className="lineupform-wrapper container">
@@ -126,24 +143,6 @@ const LineupsPage = () => {
 		    	) : <p>No lineups to show.</p>}
 		    </div>
 		  </> : <h1>Loading Lineups...</h1>}
-
-		  <div className="container">
-		  	<div className="graphs-wrapper row">
-		  		<h1>History</h1>
-			    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
-			    	<>
-			    		<h1>Loading Points Graph...</h1> 
-			    		<Ellipsis /> 
-			    	</>
-			   	}
-			    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
-			    	<>
-			    		<h1>Loading Bankroll Graph...</h1> 
-			    		<Ellipsis />
-			    	</>
-			    }
-			  </div>
-	    </div>
 
 	</>
   )
