@@ -116,7 +116,7 @@ const LineupsPage = () => {
 					)}
 				</div>
 
-		    <div className="lineups-wrapper">
+		    <div className="lineups-wrapper container">
 		    	{lineups.length > 0 ? lineups.map((lineup) => 
 		    		<>
 		    			{(filteredYears == null || lineup.year == filteredYears) &&
