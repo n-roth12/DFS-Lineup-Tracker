@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes } from 'react-icons/fa'
+import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import { Ellipsis } from 'react-awesome-spinners'
 
@@ -32,8 +32,8 @@ const LineupCard = ({ lineup }) => {
     		<h2>Week {lineup.week}, {lineup.year}</h2>
         <br />
         <div className="lineup-card-info">
-          <h4>{lineup.points} PTS</h4>
-          <h4>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>
+          <h4>{lineup.points > 140 && <FaFire style={{ color: "orange" }} />} {lineup.points < 90 && <FaSnowflake  style={{ color: "blue" }} />} {lineup.points} PTS</h4>
+          <h4 style={{ color: lineup.bet > lineup.winnings ? 'green' : 'red' }}>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>
         </div>
         <div className="expand-lineup-wrapper" onClick={showPlayers ? () => setShowPlayers(false) : () => setShowPlayers(true)}>
           {showPlayers ? <FaAngleUp className="expand-lineup-btn"/> : <FaAngleDown className="expand-lineup-btn" />}
