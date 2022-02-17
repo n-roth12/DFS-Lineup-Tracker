@@ -30,12 +30,13 @@ const LineupCard = ({ lineup }) => {
   return (
   	<div className="lineup-card">
     		<h2>Week {lineup.week}, {lineup.year}</h2>
-        <br />
-        <div className="lineup-card-info">
-          <h4>{lineup.points > 140 && <FaFire style={{ color: "orange" }} />} {lineup.points < 90 && <FaSnowflake  style={{ color: "blue" }} />} {lineup.points} PTS</h4>
-          <h4 style={{ color: lineup.bet > lineup.winnings ? 'green' : 'red' }}>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>
+        <div className="lineup-info">
+          <h4 className="lineup-points">{lineup.points > 140 && <FaFire style={{ color: "orange" }} />} {lineup.points < 90 && <FaSnowflake  style={{ color: "blue" }} />} {lineup.points} PTS</h4>
+          <h4 className="lineup-bet">Bet: ${lineup.bet}</h4>
+          <h4 className="lineup-winnings">Winnings: ${lineup.winnings}</h4>
+          <h4 className="lineup-profit" style={{ color: lineup.bet > lineup.winnings ? 'green' : 'red' }}>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>
         </div>
-        <div className="expand-lineup-wrapper" onClick={showPlayers ? () => setShowPlayers(false) : () => setShowPlayers(true)}>
+        {/*<div className="expand-lineup-wrapper" onClick={showPlayers ? () => setShowPlayers(false) : () => setShowPlayers(true)}>
           {showPlayers ? <FaAngleUp className="expand-lineup-btn"/> : <FaAngleDown className="expand-lineup-btn" />}
         </div>
         {showPlayers &&
@@ -58,16 +59,11 @@ const LineupCard = ({ lineup }) => {
               </div>
             </>
           }
-        <hr/>
-    		<Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
-          className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
-        <hr />
-        <div>
-          <a className="delete-lineup-link" href="" onClick={() => deleteLineup(lineup.id)}>Delete Lineup<FaTimes/></a>
-        </div>
         </>
-      }
-    	</div>
+      }*/}
+        <Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
+          className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>
+    </div>
   )
 }
 

@@ -2,6 +2,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
+from flask_login import LoginManager
 import os
 import config
 
@@ -15,5 +18,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+migrate = Migrate(app, db)
 from api import routes
 

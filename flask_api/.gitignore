@@ -1,2 +1,5 @@
 config.py
 __pycache__
+notes.txt
+dump.rdb
+migrations

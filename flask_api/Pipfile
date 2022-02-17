@@ -12,6 +12,9 @@ marshmallow-sqlalchemy = "*"
 psycopg2-binary = "*"
 flask-cors = "*"
 redis = "*"
+flask-login = "*"
+flask-bcrypt = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

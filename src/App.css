@@ -321,14 +321,16 @@ input {
 }
 
 .lineup-card {
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
   font-family: Inter;
   height: fit-content;
   margin: 3px;
   padding: 20px;
   list-style: none;
   background-color: #ffffff;
-  width: 250px;
+  width: 100%;
   box-shadow: 0px 0px 3px 1px lightgray;
   border-radius: 3px;
 }
@@ -369,11 +371,13 @@ input {
   font-size: 15pt;
 }
 
-.lineup-card-info {
+.lineup-info {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 50%;
 }
+
 
 .view-lineup-btn {
   text-decoration: None;

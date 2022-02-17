@@ -1,11 +1,13 @@
 from api import app, db, ma
 from flask import Flask, request, jsonify
+from flask_login import login_user, logout_user, login_required, current_user
 import json
 import requests
 import redis
 from flask_cors import cross_origin
 from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
+from api.models.user import User
 
 # to start flask_api server, run npm run start-flask-api in react_project
 # to start react server, run npm start in react_project
@@ -233,6 +235,28 @@ def get_lineup_data(lineup_id: int):
 	result = json.loads(lineup_data_from_cache)
 
 	return jsonify({ 'lineup_data': result }), 200
+
+
+@app.route('/users/register', methods=['POST'])
+def register_user():
+	data = json.loads(request.data)
+
+	user_exists = db.session.query(User.id).filter(User.username == data['username']).first()
+	if user_exists:
+		return jsonify({ 'Error': 'Username is already in use.' }), 400
+
+	user_to_create = User(username=data['username'], password=data['password'])
+	db.session.add(user_to_create)
+	db.session.commit()
+
+	login_user(user_to_create)
+	return jsonify({ 'message': 'new user successfully registered', 'id': str(user_to_create.id) }), 200
+
+
+@app.route('/users', methods=['GET'])
+def get_users():
+	users = db.session.query(User).all()
+	return jsonify({'Message': str(len(users))}), 200
 
 
 # @app.route('/favorite_players/<user_id>', methods=['GET'])
