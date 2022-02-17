@@ -12,12 +12,13 @@ import './App.css';
 import { FaAngleLeft } from 'react-icons/fa'
 
 function App() {
-  const [userId, setUserId] = useState(null)
-  const [token, setToken] = useState(null)
 
+  const setToken = (userToken) => {
+    sessionStorage.setItem('dfsTrackerToken', JSON.stringify(userToken))
+  } 
 
-  const test2 = () => {
-    console.log('test')
+  const setUserId = (userId) => {
+    sessionStorage.setItem('dfsTrackerUserId', JSON.stringify(userId))
   }
 
   return (
@@ -26,16 +27,16 @@ function App() {
         <Routes>
           <Route exact path="/" element={
             <>
-              {token ?
+              {sessionStorage.dfsTrackerToken ?
                 <LineupsPage />
               : 
-                <LoginPage setToken={setToken} />
+                <LoginPage setToken={setToken} setUserId={setUserId} />
               }
             </>
           } />
 
           <Route path="/login" element={
-            <LoginPage setToken={setToken}/>
+            <LoginPage setToken={setToken} setUserId={setUserId} />
           } />
 
           <Route path="register" element={
@@ -46,7 +47,7 @@ function App() {
             <LineupsPage />
           } />
 
-          <Route path='/lineups/lineup/:lineupId/:lineupWeek/:lineupYear' element={
+          <Route path='/lineup/:lineupId/:lineupWeek/:lineupYear' element={
             <SingleLineupPage />
           } />
         </Routes>

@@ -29,7 +29,7 @@ const LineupsPage = () => {
   }, [loadingLineups])
 
   const loadPage = async () => {
-  	await getUserLineups(1)
+  	await getUserLineups(sessionStorage.dfsTrackerUserId)
   	await loadPlayerCounts()
   }
 
@@ -42,7 +42,7 @@ const LineupsPage = () => {
 
  	const getYears = () => {
  		var temp = [...years]
- 		lineups.map((lineup) => {
+ 		lineups.length > 0 && lineups.map((lineup) => {
  			if (!(temp.includes(lineup.year))) {
  				temp.push(lineup.year)
  			}
@@ -60,7 +60,7 @@ const LineupsPage = () => {
  		var data1 = []
  		var data2 = []
  		var bankRollSum = 0
- 		lineups.reverse().map((lineup) => {
+ 		lineups.length > 0 && lineups.reverse().map((lineup) => {
  			var temp1 = {}
  			var temp2 = {}
  			temp1["week"] = `${lineup.year}/${lineup.week}`
@@ -80,7 +80,7 @@ const LineupsPage = () => {
 
   const createLineup = async (year, week, bet, winnings) => {
  		var data = {}
-		data["user_id"] = 1
+		data["user_id"] = sessionStorage.dfsTrackerUserId
 		data["year"] = year
 		data["week"] = week
 		data["bet"] = bet
@@ -92,7 +92,7 @@ const LineupsPage = () => {
   		},
   		body: JSON.stringify(data)
   	})
-  	getUserLineups(1)
+  	getUserLineups(sessionStorage.dfsTrackerUserId)
   }
 
   return (

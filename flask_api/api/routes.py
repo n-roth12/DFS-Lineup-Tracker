@@ -243,7 +243,7 @@ def register_user():
 
 	user_exists = db.session.query(User.id).filter(User.username == data['username']).first()
 	if user_exists:
-		return jsonify({ 'Error': 'Username is already in use.' }), 400
+		return jsonify({ 'Error': 'Username is already in use.' }), 409
 
 	user_to_create = User(username=data['username'], password=data['password'])
 	db.session.add(user_to_create)
@@ -251,6 +251,16 @@ def register_user():
 
 	login_user(user_to_create)
 	return jsonify({ 'message': 'new user successfully registered', 'id': str(user_to_create.id) }), 200
+
+@app.route('/users/login', methods=['POST'])
+def login_user():
+	data = json.loads(request.data)
+
+	attempted_user = db.session.query(User).filter(User.username == data['username']).first()
+	if attempted_user and attempted_user.check_password_correction(attempted_password=data['password']):
+		return jsonify({ 'token': 'token12345', 'user_id': attempted_user.id })
+	else:
+		return jsonify({ 'Error': 'Unable to login.' }), 403
 
 
 @app.route('/users', methods=['GET'])
