@@ -4,7 +4,8 @@ from .player import Player, PlayerSchema
 class Lineup(db.Model):
 	__tablename__ = 'lineups'
 	id = db.Column(db.Integer(), primary_key=True)
-	user_id = db.Column(db.Integer())
+	user_public_id = db.Column(db.String(50), db.ForeignKey('user.public_id'))
+	user = db.relationship("User")
 	week = db.Column(db.Integer())
 	year = db.Column(db.Integer())
 	qb = db.Column(db.Integer())
@@ -19,8 +20,8 @@ class Lineup(db.Model):
 	bet = db.Column(db.Float())
 	winnings = db.Column(db.Float())
 
-	def __init__(self, user_id, week, year, bet, winnings):
-		self.user_id = user_id
+	def __init__(self, user_public_id, week, year, bet, winnings):
+		self.user_public_id = user_id
 		self.week = week
 		self.year = year
 		self.qb = None
@@ -36,7 +37,7 @@ class Lineup(db.Model):
 		self.winnings = winnings
 
 	def __str__(self):
-		return f'{self.id} {self.user_id} {self.year} {self.week} {self.qb} {self.rb1} {self.rb2} {self.wr1} {self.wr2} {self.wr3} {self.te} {self.flex} {self.points} {self.bet} {self.winnings}'
+		return f'{self.id} {self.user_public_id} {self.year} {self.week} {self.qb} {self.rb1} {self.rb2} {self.wr1} {self.wr2} {self.wr3} {self.te} {self.flex} {self.points} {self.bet} {self.winnings}'
 
 	def update(self, data):
 		for key, value in data.items():
@@ -45,12 +46,12 @@ class Lineup(db.Model):
 
 class LineupSchema(ma.SQLAlchemySchema):
 	class Meta:
-		fields = ('id', 'user_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings')
+		fields = ('id', 'user_public_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings')
 
 
 class FullLineupSchema(ma.SQLAlchemySchema):
 	class Meta:
-		fields = ('id', 'user_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings')
+		fields = ('id', 'user_public_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings')
 
 	qb = ma.Nested(PlayerSchema)
 	rb1 = ma.Nested(PlayerSchema)

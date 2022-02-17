@@ -4,7 +4,10 @@ from flask_login import login_user, logout_user, login_required, current_user
 import json
 import requests
 import redis
+import jwt
+import uuid
 from flask_cors import cross_origin
+from functools import wraps
 from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 from api.models.user import User
@@ -15,10 +18,31 @@ from api.models.user import User
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
-@app.route('/test', methods=['GET'])
 
+def token_required(f):
+	@wraps(f)
+	def decorated(*args, **kwargs):
+		token = None
+		if 'x-access-token' in request.headers:
+			token = request.headers['x-access-token']
+		if not token:
+			return jsonify({ 'Error': 'Token is missing.' }), 401
+		try:
+			data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
+			current_user = db.session.query(User).filter(User.public_id == data['public_id']).first()
+		except:
+			return jsonify({ 'Error': 'Token is invalid.' }), 401
+
+		return f(current_user, *args, **kwargs)
+
+	return decorated
+
+
+@app.route('/test', methods=['GET'])
 def get_test():
 	return jsonify({ 'Message': 'Test GET succeeded!' })
+
+
 
 
 @app.route('/players', methods=['GET'])
@@ -89,6 +113,7 @@ def edit_player(id: int):
 @app.route('/lineups', defaults={'id': None}, methods=['GET'])
 @app.route('/lineups/<id>', methods=['GET'])
 def get_lineup(id: int):
+	print(current_user.public_id)
 	if not id:
 		lineups = db.session.query(Lineup).all()
 		if not len(lineups):
@@ -123,14 +148,14 @@ def get_lineup(id: int):
 	return jsonify(LineupSchema().dump(lineup))
 
 
-@app.route('/best_week/<user_id>', methods=['GET'])
-def get_best_week(user_id):
-	lineups = get_user(user_id)
-	data = json.loads(lineups.data)
+# @app.route('/best_week/<user_id>', methods=['GET'])
+# def get_best_week(user_id):
+# 	lineups = get_user(user_id)
+# 	data = json.loads(lineups.data)
 
-	print(data)
+# 	print(data)
 
-	return jsonify({ 'Message': 'Success' })
+# 	return jsonify({ 'Message': 'Success' })
 
 
 @app.route('/player_counts', methods=['GET'])
@@ -193,15 +218,11 @@ def delete_lineup(id: int):
 	return jsonify({ 'Message': 'Lineup successfully deleted!' })
 
 
-@app.route('/users/<user_id>', methods=['GET'])
-def get_user(user_id: int):
+@app.route('/users', methods=['GET'])
+@token_required
+def get_user(current_user: User):
 
-	user_lineups = db.session.query(Lineup) \
-		.filter(Lineup.user_id == user_id) \
-		.order_by(Lineup.year.desc(), Lineup.week.desc()).all()
-
-	if not len(user_lineups):
-		return jsonify({ 'Error': 'No lineups for specified user.' })
+	user_lineups = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id).all()
 
 	whole_response = []
 	for user_lineup in user_lineups:
@@ -214,7 +235,7 @@ def get_user(user_id: int):
 		response["winnings"] = user_lineup.winnings
 
 		whole_response.append(response)
-	return jsonify(whole_response)
+	return jsonify(whole_response), 200
 
 
 @app.route('/lineup_data/<lineup_id>', methods=['GET'])
@@ -245,20 +266,26 @@ def register_user():
 	if user_exists:
 		return jsonify({ 'Error': 'Username is already in use.' }), 409
 
-	user_to_create = User(username=data['username'], password=data['password'])
+	user_to_create = User(public_id=str(uuid.uuid4()) ,username=data['username'], password=data['password'])
 	db.session.add(user_to_create)
 	db.session.commit()
 
 	login_user(user_to_create)
 	return jsonify({ 'message': 'new user successfully registered', 'id': str(user_to_create.id) }), 200
 
+
 @app.route('/users/login', methods=['POST'])
 def login_user():
+	"""
+		Logs in a User.
+	"""
 	data = json.loads(request.data)
 
 	attempted_user = db.session.query(User).filter(User.username == data['username']).first()
+
 	if attempted_user and attempted_user.check_password_correction(attempted_password=data['password']):
-		return jsonify({ 'token': 'token12345', 'user_id': attempted_user.id })
+		token = jwt.encode({ 'public_id': attempted_user.public_id }, app.config['SECRET_KEY'], algorithm='HS256')
+		return jsonify({ 'token': token })
 	else:
 		return jsonify({ 'Error': 'Unable to login.' }), 403
 

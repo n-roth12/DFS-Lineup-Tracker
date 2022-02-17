@@ -12,7 +12,6 @@ const LoginPage = ({ setToken, setUserId }) => {
 	const loginUser = async (credentials) => {
 		const res = await axios.post('/users/login', credentials)
 		setToken(res.data.token)
-		setUserId(res.data.user_id)
 	}
 
 	const handleSubmit = async () => {

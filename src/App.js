@@ -30,13 +30,13 @@ function App() {
               {sessionStorage.dfsTrackerToken ?
                 <LineupsPage />
               : 
-                <LoginPage setToken={setToken} setUserId={setUserId} />
+                <LoginPage setToken={setToken} />
               }
             </>
           } />
 
           <Route path="/login" element={
-            <LoginPage setToken={setToken} setUserId={setUserId} />
+            <LoginPage setToken={setToken} />
           } />
 
           <Route path="register" element={
