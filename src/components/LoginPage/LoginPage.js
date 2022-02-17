@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import axios from 'axios'
 import './LoginPage.css'
 
-const LoginPage = () => {
+const LoginPage = ({ setToken }) => {
 
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 
-	const onSubmit = async () => {
-		const params = {'username': username, 'password': password}
-		const res = await axios.post('/users/login', params)
-		console.log(res)
+	const loginUser = async (credentials) => {
+		const res = await axios.post('/users/login', credentials)
+		setToken(res.data.token)
 	}
 
-	const login = async () => {
-		console.log(username, password)
+	const handleSubmit = async () => {
+		const token = await loginUser({
+			username, password
+		})
 	}
 
 	return (
@@ -25,7 +27,7 @@ const LoginPage = () => {
 			</div>
 			<div className="login-form-wrapper">
 				<h1>Login</h1>
-				<form className="login-form" onSubmit={onSubmit}>
+				<form className="login-form" onSubmit={handleSubmit}>
 		    	<div>
 		    		<input className="form-control" type="text" placeholder="Username" value={username}
 		    			onChange={(e) => setUsername(e.target.value)} />
@@ -33,7 +35,7 @@ const LoginPage = () => {
 		    		onChange={(e) => setPassword(e.target.value)} />
 		    	</div>
 		    </form>
-		    <button className="form-submit-btn form-control" onClick={() => onSubmit()}>Login</button>
+		    <button className="form-submit-btn form-control" onClick={() => handleSubmit()}>Login</button>
 		    <div className="register-page-link-wrapper">
 		    	<h4>Don't have an account?      
 		    	<Link to='/register' className="register-page-link">Register</Link></h4>
@@ -45,3 +47,7 @@ const LoginPage = () => {
 }
 
 export default LoginPage
+
+LoginPage.propTypes = {
+	setToken: PropTypes.func.isRequired
+}

@@ -13,28 +13,29 @@ import { FaAngleLeft } from 'react-icons/fa'
 
 function App() {
   const [userId, setUserId] = useState(null)
+  const [token, setToken] = useState(null)
 
-  useEffect(() => {
-    console.log(sessionStorage.token)
-  }, [])
+
+  const test2 = () => {
+    console.log('test')
+  }
 
   return (
     <div className="App">
-{/*      <Navbar />*/}
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={
             <>
-              {sessionStorage.token ?
+              {token ?
                 <LineupsPage />
               : 
-                <LoginPage />
+                <LoginPage setToken={setToken} />
               }
             </>
           } />
 
           <Route path="/login" element={
-            <LoginPage />
+            <LoginPage setToken={setToken}/>
           } />
 
           <Route path="register" element={
@@ -55,3 +56,4 @@ function App() {
 }
 
 export default App
+
