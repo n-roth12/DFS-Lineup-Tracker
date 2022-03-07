@@ -168,9 +168,11 @@ def get_player_counts():
 @app.route('/lineups', methods=['POST'])
 @token_required
 def create_lineup(current_user: User):
-	print('test')
-	print(current_user)
 	data = json.loads(request.data)
+	if data['year'] not in range(2012, 2021):
+		return jsonify({ 'Error': 'Not valid year' }), 400
+	if data['week'] not in range(0, 18):
+		return jsonify({ 'Error': 'Not valid week' }), 400
 	new_lineup = Lineup(user_public_id=current_user.public_id, 
 						week=data["week"],
 						year=data["year"], 
@@ -179,7 +181,7 @@ def create_lineup(current_user: User):
 	db.session.add(new_lineup)
 	db.session.commit()
 
-	return jsonify(LineupSchema().dump(new_lineup))
+	return jsonify(LineupSchema().dump(new_lineup)), 200
 
 
 @app.route('/lineups/<id>', methods=['PUT'])

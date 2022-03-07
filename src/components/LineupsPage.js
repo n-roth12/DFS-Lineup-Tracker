@@ -85,12 +85,15 @@ const LineupsPage = () => {
 		data["week"] = week
 		data["bet"] = bet
 		data["winnings"] = winnings
-  	await fetch(`/lineups`, {
+  	const res = await fetch(`/lineups`, {
   		method: 'POST',
   		headers: {
   			'x-access-token': sessionStorage.dfsTrackerToken
   		},
   		body: JSON.stringify(data)
+  	})
+  	.then(() => {
+  		alert('New Lineup Created.')
   	})
   	getUserLineups(sessionStorage.dfsTrackerUserId)
   }
