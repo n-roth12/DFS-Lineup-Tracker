@@ -1,27 +1,29 @@
 from api import db, ma
 from .player import Player, PlayerSchema
+from datetime import datetime
 
 class Lineup(db.Model):
 	__tablename__ = 'lineups'
 	id = db.Column(db.Integer(), primary_key=True)
 	user_public_id = db.Column(db.String(50), db.ForeignKey('user.public_id'))
 	user = db.relationship("User")
-	week = db.Column(db.Integer())
-	year = db.Column(db.Integer())
-	qb = db.Column(db.Integer())
-	rb1 = db.Column(db.Integer())
-	rb2 = db.Column(db.Integer())
-	wr1 = db.Column(db.Integer())
-	wr2 = db.Column(db.Integer())
-	wr3 = db.Column(db.Integer())
-	te = db.Column(db.Integer())
-	flex = db.Column(db.Integer())
-	points = db.Column(db.Float())
-	bet = db.Column(db.Float())
-	winnings = db.Column(db.Float())
+	week = db.Column(db.Integer)
+	year = db.Column(db.Integer)
+	qb = db.Column(db.Integer)
+	rb1 = db.Column(db.Integer)
+	rb2 = db.Column(db.Integer)
+	wr1 = db.Column(db.Integer)
+	wr2 = db.Column(db.Integer)
+	wr3 = db.Column(db.Integer)
+	te = db.Column(db.Integer)
+	flex = db.Column(db.Integer)
+	points = db.Column(db.Float)
+	bet = db.Column(db.Float)
+	winnings = db.Column(db.Float)
+	created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 	def __init__(self, user_public_id, week, year, bet, winnings):
-		self.user_public_id = user_id
+		self.user_public_id = user_public_id
 		self.week = week
 		self.year = year
 		self.qb = None

@@ -18,31 +18,32 @@ from api.models.user import User
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
-
 def token_required(f):
+	"""
+		Decorator for handling required json web tokens.
+	"""
 	@wraps(f)
 	def decorated(*args, **kwargs):
 		token = None
 		if 'x-access-token' in request.headers:
-			token = request.headers['x-access-token']
+			token = request.headers['x-access-token'].replace('"', '')
 		if not token:
+			print('no token')
 			return jsonify({ 'Error': 'Token is missing.' }), 401
 		try:
 			data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
+			print(data['public_id'])
 			current_user = db.session.query(User).filter(User.public_id == data['public_id']).first()
 		except:
+			print('token invalid')
 			return jsonify({ 'Error': 'Token is invalid.' }), 401
-
 		return f(current_user, *args, **kwargs)
-
 	return decorated
 
 
 @app.route('/test', methods=['GET'])
 def get_test():
 	return jsonify({ 'Message': 'Test GET succeeded!' })
-
-
 
 
 @app.route('/players', methods=['GET'])
@@ -112,8 +113,8 @@ def edit_player(id: int):
 
 @app.route('/lineups', defaults={'id': None}, methods=['GET'])
 @app.route('/lineups/<id>', methods=['GET'])
-def get_lineup(id: int):
-	print(current_user.public_id)
+@token_required
+def get_lineup(current_user, id: int):
 	if not id:
 		lineups = db.session.query(Lineup).all()
 		if not len(lineups):
@@ -148,16 +149,6 @@ def get_lineup(id: int):
 	return jsonify(LineupSchema().dump(lineup))
 
 
-# @app.route('/best_week/<user_id>', methods=['GET'])
-# def get_best_week(user_id):
-# 	lineups = get_user(user_id)
-# 	data = json.loads(lineups.data)
-
-# 	print(data)
-
-# 	return jsonify({ 'Message': 'Success' })
-
-
 @app.route('/player_counts', methods=['GET'])
 def get_player_counts():
 	lineups = db.session.query(Lineup).all()
@@ -175,10 +166,13 @@ def get_player_counts():
 
 
 @app.route('/lineups', methods=['POST'])
-def create_lineup():
+@token_required
+def create_lineup(current_user: User):
+	print('test')
+	print(current_user)
 	data = json.loads(request.data)
-	new_lineup = Lineup(user_id=data["user_id"], 
-						week=data["week"], 
+	new_lineup = Lineup(user_public_id=current_user.public_id, 
+						week=data["week"],
 						year=data["year"], 
 						bet=data["bet"], 
 						winnings=data["winnings"])
@@ -187,10 +181,9 @@ def create_lineup():
 
 	return jsonify(LineupSchema().dump(new_lineup))
 
-#### TODO make the put request return the lineup so i dont have to do an additional get request
-
 
 @app.route('/lineups/<id>', methods=['PUT'])
+@token_required
 def edit_lineup(id: int):
 	key = f'lineup_data_{id}'
 
@@ -221,7 +214,9 @@ def delete_lineup(id: int):
 @app.route('/users', methods=['GET'])
 @token_required
 def get_user(current_user: User):
-
+	"""
+		This function retrieves the lineups for a User.
+	"""
 	user_lineups = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id).all()
 
 	whole_response = []
@@ -260,6 +255,10 @@ def get_lineup_data(lineup_id: int):
 
 @app.route('/users/register', methods=['POST'])
 def register_user():
+	"""
+		Registers a User.
+		Returns a JSON web token in order to authorize further requests from the User.
+	"""
 	data = json.loads(request.data)
 
 	user_exists = db.session.query(User.id).filter(User.username == data['username']).first()
@@ -269,15 +268,16 @@ def register_user():
 	user_to_create = User(public_id=str(uuid.uuid4()) ,username=data['username'], password=data['password'])
 	db.session.add(user_to_create)
 	db.session.commit()
+	token = jwt.encode({ 'public_id': user_to_create.public_id }, app.config['SECRET_KEY'], algorithm='HS256')
 
-	login_user(user_to_create)
-	return jsonify({ 'message': 'new user successfully registered', 'id': str(user_to_create.id) }), 200
+	return jsonify({ 'token': token }), 200
 
 
 @app.route('/users/login', methods=['POST'])
 def login_user():
 	"""
 		Logs in a User.
+		Returns a JSON web token in order to authorize further requests from the User.
 	"""
 	data = json.loads(request.data)
 
@@ -290,18 +290,9 @@ def login_user():
 		return jsonify({ 'Error': 'Unable to login.' }), 403
 
 
-@app.route('/users', methods=['GET'])
-def get_users():
-	users = db.session.query(User).all()
-	return jsonify({'Message': str(len(users))}), 200
 
 
-# @app.route('/favorite_players/<user_id>', methods=['GET'])
-# def get_favorite_players(user_id: int):
-# 	lineups = get_user(user_id)
-# 	for lineup in lineups.get_json():
-# 		res = get_lineup_data(lineup['id']).json()
-# 		print(res)
+
 
 
 

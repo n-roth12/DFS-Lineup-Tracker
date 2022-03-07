@@ -21,27 +21,28 @@ const LoginPage = ({ setToken, setUserId }) => {
 	}
 
 	return (
-		<div className="login-page">
-			<div className="hero">
-				<h1>Hello</h1>
+		<div className="temp">
+			<div className="login-page">
+				<div className="hero">
+					<h1>Hello</h1>
+				</div>
+				<div className="login-form-wrapper">
+					<h1>Login</h1>
+					<form className="login-form" onSubmit={handleSubmit}>
+				    	<div>
+				    		<input className="form-control" type="text" placeholder="Username" value={username}
+				    			onChange={(e) => setUsername(e.target.value)} />
+				    		<input className="form-control" type="text" placeholder="Password" value={password}
+				    		onChange={(e) => setPassword(e.target.value)} />
+				    	</div>
+				    </form>
+				    <button className="form-submit-btn form-control" onClick={() => handleSubmit()}>Login</button>
+				    <div className="register-page-link-wrapper">
+				    	<h4>Don't have an account?      
+				    	<Link to='/register' className="register-page-link">Register</Link></h4>
+				    </div>
+				</div>
 			</div>
-			<div className="login-form-wrapper">
-				<h1>Login</h1>
-				<form className="login-form" onSubmit={handleSubmit}>
-		    	<div>
-		    		<input className="form-control" type="text" placeholder="Username" value={username}
-		    			onChange={(e) => setUsername(e.target.value)} />
-		    		<input className="form-control" type="text" placeholder="Password" value={password}
-		    		onChange={(e) => setPassword(e.target.value)} />
-		    	</div>
-		    </form>
-		    <button className="form-submit-btn form-control" onClick={() => handleSubmit()}>Login</button>
-		    <div className="register-page-link-wrapper">
-		    	<h4>Don't have an account?      
-		    	<Link to='/register' className="register-page-link">Register</Link></h4>
-		    </div>
-		  </div>
-
 		</div>
 	)
 }

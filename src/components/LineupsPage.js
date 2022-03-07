@@ -6,6 +6,7 @@ import NewLineupForm from './NewLineupForm'
 import PointsGraph from './PointsGraph'
 import BankrollGraph from './BankrollGraph'
 import { Ellipsis } from 'react-awesome-spinners'
+import axios from 'axios'
 
 const LineupsPage = () => {
 
@@ -29,13 +30,16 @@ const LineupsPage = () => {
   }, [loadingLineups])
 
   const loadPage = async () => {
-  	await getUserLineups(sessionStorage.dfsTrackerUserId)
-  	await loadPlayerCounts()
+  	await getUserLineups(sessionStorage.dfsTrackerToken)
   }
 
-  const getUserLineups = async (user_id) => {
-    const res = await fetch(`users/${user_id}`)
-    const userLineups = await res.json()
+  const getUserLineups = async (token) => {
+  	const res = await axios.get('/users', {
+  		headers: {
+  			'x-access-token': token
+  		}
+  	})
+    const userLineups = res.data
     await setLineups(userLineups)
     setLoadingLineups(false)
   }
@@ -48,10 +52,6 @@ const LineupsPage = () => {
  			}
  		})
  		setYears(temp)
- 	}
-
- 	const loadPlayerCounts = async () => {
- 		const res = await fetch(`/best_week/${1}`)
  	}
 
  	const loadGraphData = async () => {
@@ -88,7 +88,7 @@ const LineupsPage = () => {
   	await fetch(`/lineups`, {
   		method: 'POST',
   		headers: {
-  			'Content-type': 'application.json'
+  			'x-access-token': sessionStorage.dfsTrackerToken
   		},
   		body: JSON.stringify(data)
   	})

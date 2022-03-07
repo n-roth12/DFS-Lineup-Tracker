@@ -11,13 +11,12 @@ const NewLineupForm = ({ onAdd }) => {
 
 		if (!year || !week) {
 			alert('Please enter a year and a week.')
-			return 
+		} else {
+			onAdd(year, week, bet, winnings)
 		}
 
-		onAdd(year, week, bet, winnings)
-
-		setYear(null)
-		setWeek(null)
+		setYear('')
+		setWeek('')
 		setBet(0)
 		setWinnings(0)
 	}

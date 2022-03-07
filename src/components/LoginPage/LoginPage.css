@@ -1,9 +1,18 @@
+.temp {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100vw;
+}
+
 .login-form-wrapper {
-	width: 55%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin: 30px;
+	width: 50%;
 }
 
 input {
@@ -24,14 +33,17 @@ input:focus {
 .login-page {
 	display: flex;
 	flex-direction: row;
-	height: 100vh;
+	height: 100%;
+	width: 80%;
+	max-width: 1000px;
 }
 
 .hero {
-	width: 45%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin: 20px;
+	width: 50%;
 }
 
 .hero h1 {
