@@ -1,10 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Players from './components/Players'
-import Lineup from './components/Lineup'
-import LineupsPage from './components/LineupsPage'
-import SingleLineupPage from './components/SingleLineupPage'
+import LineupsPage from './components/LineupsPage/LineupsPage'
+import SingleLineupPage from './components/SingleLineupPage/SingleLineupPage'
 import LoginPage from './components/LoginPage/LoginPage'
 import RegisterPage from './components/RegisterPage/RegisterPage'
 import Navbar from './components/Navbar'
