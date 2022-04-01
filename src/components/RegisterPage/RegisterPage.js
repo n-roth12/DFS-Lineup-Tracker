@@ -12,8 +12,23 @@ const LandingPage = () => {
 	const onSubmit = async () => {
 		if (password === passwordCheck) {
 			const params = {'username': username, 'password': password}
-			const res = await axios.post('/users/register', params)
-			console.log(res)
+			await axios.post('/users/register', params)
+			.then((res) => {
+				alert('User successfully registered!')
+			})
+			.catch((error) => {
+				if (error.response && error.response.status === 409) {
+					alert('Username is already in use!')
+				} else {
+					alert('An error occured!')
+				}
+				setPassword('')
+				setPasswordCheck('')
+			})
+		} else {
+			alert('Passwords do not match!')
+			setPassword('')
+			setPasswordCheck('')
 		}
 	}
 
@@ -23,9 +38,6 @@ const LandingPage = () => {
 
 	return (
 		<div className="register-page">
-			<div className="hero">
-				<h1>Hello</h1>
-			</div>
 			<div className="register-form-wrapper">
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>

@@ -5,7 +5,7 @@ import LineupsPage from './components/LineupsPage/LineupsPage'
 import SingleLineupPage from './components/SingleLineupPage/SingleLineupPage'
 import LoginPage from './components/LoginPage/LoginPage'
 import RegisterPage from './components/RegisterPage/RegisterPage'
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar/Navbar'
 import './App.css';
 import { FaAngleLeft } from 'react-icons/fa'
 
@@ -37,7 +37,7 @@ function App() {
             <LoginPage setToken={setToken} />
           } />
 
-          <Route path="register" element={
+          <Route path="/register" element={
             <RegisterPage />
           } />
 

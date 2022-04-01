@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import Players from './Players'
-import Lineup from './Lineup'
-import EditWagerForm from './EditWagerForm'
+import Players from './Players/Players'
+import Lineup from './Lineup/Lineup'
+import EditWagerForm from './EditWagerForm/EditWagerForm'
 import { FaAngleLeft } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
-import '../App.css';
+import '../../App.css';
 
 function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()

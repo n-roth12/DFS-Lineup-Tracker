@@ -1,5 +1,5 @@
-import LineupPlayer from './LineupPlayer'
-import EmptyPlayer from './EmptyPlayer'
+import LineupPlayer from './LineupPlayer/LineupPlayer'
+import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
 
 const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore }) => {
 

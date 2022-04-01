@@ -1,4 +1,4 @@
-.temp {
+.login-page {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -11,8 +11,6 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin: 30px;
-	width: 50%;
 }
 
 input {
@@ -28,26 +26,6 @@ input:focus {
 .form-submit-btn {
 	margin-top: 30px;
 	width: 100%;
-}
-
-.login-page {
-	display: flex;
-	flex-direction: row;
-	height: 100%;
-	width: 80%;
-	max-width: 1000px;
-}
-
-.hero {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: 20px;
-	width: 50%;
-}
-
-.hero h1 {
-	font-size: 60pt;
 }
 
 .form-control {
@@ -67,3 +45,4 @@ input:focus {
 	margin-left: 20px;
 	text-decoration: none;
 }
+

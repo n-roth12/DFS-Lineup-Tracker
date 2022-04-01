@@ -1,5 +1,12 @@
+.register-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100vw;
+}
+
 .register-form-wrapper {
-	width: 55%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -19,23 +26,6 @@ input:focus {
 .form-submit-btn {
 	margin-top: 30px;
 	width: 100%;
-}
-
-.register-page {
-	display: flex;
-	flex-direction: row;
-	height: 100vh;
-}
-
-.hero {
-	width: 45%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.hero h1 {
-	font-size: 60pt;
 }
 
 .form-control {

@@ -1,4 +1,4 @@
-import Player from './Player'
+import Player from './Player/Player'
 import { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
-import LineupCard from './LineupCard'
-import SingleLineupPage from './SingleLineupPage'
-import NewLineupForm from './NewLineupForm'
-import PointsGraph from './PointsGraph'
-import BankrollGraph from './BankrollGraph'
+import Navbar from '../Navbar/Navbar'
+import LineupCard from './LineupCard/LineupCard'
+import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
+import NewLineupForm from './NewLineupForm/NewLineupForm'
+import PointsGraph from './PointsGraph/PointsGraph'
+import BankrollGraph from './BankrollGraph/BankrollGraph'
 import { Ellipsis } from 'react-awesome-spinners'
 import axios from 'axios'
 
