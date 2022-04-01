@@ -1,11 +1,24 @@
 import { Link } from 'react-router-dom'
+import './Navbar.css'
 
 const Navbar = () => {
+
+  const logout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    alert('You have succesfully logged out')
+  }
+
   return (
   	<nav>
-      <li> 
-        <Link to="/login">Login</Link>
-      </li>
+      <ul>
+{/*        <li> 
+          <Link className="navlink" to="/login">Login</Link>
+        </li>*/}
+        <li>
+          <Link className="navlink" to="/login" onClick={() => logout()}>Logout</Link>
+        </li>
+      </ul>
     </nav>
   )
 }

@@ -101,6 +101,7 @@ const LineupsPage = () => {
 
   return (
   	<>
+  		<Navbar />
   		{!loadingLineups ?
   		<>
   			<div className="container">
@@ -144,7 +145,7 @@ const LineupsPage = () => {
 		    				<LineupCard key={lineup.id} lineup={lineup} />
 		    			}
 		    		</>
-		    	) : <p>No lineups to show.</p>}
+		    	) : <h2>No lineups to show.</h2>}
 		    </div>
 		  </> : <h1>Loading Lineups...</h1>}
 
