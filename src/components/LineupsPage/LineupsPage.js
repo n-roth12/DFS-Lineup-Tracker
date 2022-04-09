@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import './LineupsPage.css';
 import Navbar from '../Navbar/Navbar'
 import LineupCard from './LineupCard/LineupCard'
 import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
@@ -7,6 +9,7 @@ import NewLineupForm from './NewLineupForm/NewLineupForm'
 import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
 import { Ellipsis } from 'react-awesome-spinners'
+import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake } from 'react-icons/fa'
 import axios from 'axios'
 
 const LineupsPage = () => {
@@ -81,7 +84,6 @@ const LineupsPage = () => {
 
   const createLineup = async (year, week, bet, winnings) => {
  		var data = {}
-		data["user_id"] = sessionStorage.dfsTrackerUserId
 		data["year"] = year
 		data["week"] = week
 		data["bet"] = bet
@@ -117,7 +119,6 @@ const LineupsPage = () => {
   		<>
   			<div className="container">
 			  	<div className="graphs-wrapper row">
-			  		<h1>History</h1>
 				    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
 				    	<>
 				    		<h1>Loading Points Graph...</h1> 
@@ -132,8 +133,6 @@ const LineupsPage = () => {
 				    }
 				  </div>
 		    </div>
-		    <h1>Lineups</h1>
-
 		    <div className="lineupform-wrapper container">
 		    	{showNewLineupForm && <NewLineupForm onAdd={createLineup} />}
 				  <button className="toggle-lineupform-btn" 
@@ -149,15 +148,39 @@ const LineupsPage = () => {
 					)}
 				</div>
 
-		    <div className="lineups-wrapper container">
-		    	{lineups.length > 0 ? lineups.map((lineup) => 
-		    		<>
-		    			{(filteredYears == null || lineup.year == filteredYears) &&
-		    				<LineupCard key={lineup.id} lineup={lineup} />
-		    			}
-		    		</>
-		    	) : <h2>No lineups to show.</h2>}
-		    </div>
+				<div className="lineups-wrapper container">
+					<table className="lineups-table">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Points</th>
+								<th>Wager</th>
+								<th>Winnings</th>
+								<th>Profit</th>
+								<th>Details</th>
+							</tr>
+						</thead>
+						<tbody>
+							{lineups.length > 0 && lineups.map((lineup) => 
+								<>
+		    					{(filteredYears == null || lineup.year == filteredYears) &&
+				    				<tr>
+				    					<td>Week {lineup.week}, {lineup.year}</td>
+				    					<td >{lineup.points > 140 &&<FaFire style={{color: "orange"}}/>} 
+				    								{lineup.points < 90 && <FaSnowflake style={{color:"blue"}}/>}
+				    								{lineup.points} PTS</td>
+				    					<td>${lineup.bet}</td>
+				    					<td>${lineup.winnings}</td>
+				    					<td style={{color:lineup.bet > lineup.winnings ? "red" : "green"}}>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</td>
+				    					<td><Link to={`/lineups/${lineup.id}/${lineup.week}/${lineup.year}`}
+				    						className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link></td>
+				    				</tr>
+				    			}
+				    		</>
+				    	)}
+						</tbody>
+					</table>
+				</div>
 		  </> : <h1>Loading Lineups...</h1>}
 
 	</>

@@ -45,7 +45,7 @@ function App() {
             <LineupsPage />
           } />
 
-          <Route path='/lineup/:lineupId/:lineupWeek/:lineupYear' element={
+          <Route path='/lineups/:lineupId/:lineupWeek/:lineupYear' element={
             <SingleLineupPage />
           } />
         </Routes>

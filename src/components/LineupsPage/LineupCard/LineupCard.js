@@ -60,6 +60,7 @@ const LineupCard = ({ lineup }) => {
             </>
           }
         </>
+        
       }*/}
         <Link to={`lineup/${lineup.id}/${lineup.week}/${lineup.year}`} 
           className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link>

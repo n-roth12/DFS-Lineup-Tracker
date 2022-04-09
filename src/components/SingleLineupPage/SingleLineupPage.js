@@ -50,7 +50,10 @@ function SingleLineupPage() {
   // Fetch Players
   const fetchPlayers = async () => {
     const res = await fetch(`/players?year=${lineupYear}&week=${lineupWeek}`, {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
     })
     const data = await res.json()
     return data['players']
@@ -98,7 +101,11 @@ function SingleLineupPage() {
   }
 
   const getLineup = async () => {
-    const res = await fetch(`/lineups/${lineupId}`)
+    const res = await fetch(`/lineups/${lineupId}`,{
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
+    })
     const lineupFromServer = await res.json()
     const temp = await {...lineupFromServer}
     await setLineup(temp)
@@ -138,16 +145,21 @@ function SingleLineupPage() {
   }
 
   const saveLineup = async () => {
-    setViewSaveLineup(false)
     var temp = {...lineup}
     temp.points = lineupScore
-    await fetch(`/lineups/${lineupId}`, {
+    const res = await fetch(`/lineups/${lineupId}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application.json',
+        'x-access-token': sessionStorage.dfsTrackerToken
       },
       body: JSON.stringify(temp)
     })
+    if (res.status === 200) {
+      setViewSaveLineup(false)
+    } else {
+      alert('An error occured when saving lineup!')
+    }
     await setPrevLineup(lineup)
 
   }
@@ -212,7 +224,7 @@ function SingleLineupPage() {
           <div className="lineup-wrapper">
             <h1>Your Lineup</h1>
             <h2>Point Total: {lineupScore}</h2>
-            <h2>Return: {lineup.winnings - lineup.bet}</h2>
+            <h2>Return: {(lineup.winnings && lineup.bet) ? lineup.winnings - lineup.bet : 0}</h2>
             { viewSaveLineup && 
               <>
                 <button className="view-players-btn"

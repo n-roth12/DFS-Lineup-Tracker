@@ -1,13 +1,14 @@
 import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContainer, Label } from 'recharts'
+import './PointsGraph.css'
 
 const PointsGraph = ({ graphData }) => {
   return (
-    <div className="graph-wrapper col-12 col-lg-6">
-    	<div className="graph">
-				<h1>Points</h1>
-				<ResponsiveContainer aspect={1.5}>
+    <div className="graph-wrapper">
+    	<div className="points-graph">
+				<h1 className="graph-label">Points</h1>
+				<ResponsiveContainer aspect={3}>
 		      <LineChart
-		        width={500}
+		        width={400}
 		        height={300}
 		        data={graphData}
 		        margin={{
@@ -16,7 +17,7 @@ const PointsGraph = ({ graphData }) => {
 		          left: 30,
 		          bottom: 10,
 		        }}>
-		        <CartesianGrid strokeDasharray="5 5" stroke="#ccc"/>
+		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/>
 		        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
 		        <YAxis tick={{fill:"#000000"}}>
 		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>

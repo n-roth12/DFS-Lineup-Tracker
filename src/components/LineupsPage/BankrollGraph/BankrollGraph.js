@@ -1,11 +1,12 @@
 import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContainer, Label } from 'recharts'
+import './BankrollGraph.css'
 
 const BankrollGraph = ({ graphData }) => {
   return (
-		<div className="graph-wrapper col-12 col-lg-6">
-			<div className="graph">
-				<h1>Bankroll</h1>
-				<ResponsiveContainer aspect={1.5}>
+		<div className="graph-wrapper">
+			<div className="bankroll-graph">
+				<h1 className="graph-label">Bankroll</h1>
+				<ResponsiveContainer aspect={3}>
 		      <LineChart
 		        width={500}
 		        height={300}
@@ -16,7 +17,7 @@ const BankrollGraph = ({ graphData }) => {
 		          left: 30,
 		          bottom: 10,
 		        }}>
-		        <CartesianGrid strokeDasharray="5 5" stroke="#ccc"/>
+		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/>
 		        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
 		        <YAxis tick={{fill:"#000000"}}>
 		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>

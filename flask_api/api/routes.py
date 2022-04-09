@@ -113,7 +113,7 @@ def edit_player(id: int):
 @app.route('/lineups', defaults={'id': None}, methods=['GET'])
 @app.route('/lineups/<id>', methods=['GET'])
 @token_required
-def get_lineup(current_user, id: int):
+def get_lineup(current_user: User, id: int):
 	if not id:
 		lineups = db.session.query(Lineup).all()
 		if not len(lineups):
@@ -191,7 +191,7 @@ def create_lineup(current_user: User):
 
 @app.route('/lineups/<id>', methods=['PUT'])
 @token_required
-def edit_lineup(id: int):
+def edit_lineup(current_user: User, id: int):
 	key = f'lineup_data_{id}'
 
 	redis_client.delete(key)
@@ -224,7 +224,9 @@ def get_user(current_user: User):
 	"""
 		This function retrieves the lineups for a User.
 	"""
-	user_lineups = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id).all()
+	user_lineups = db.session.query(Lineup) \
+					.filter(Lineup.user_public_id == current_user.public_id) \
+					.order_by(Lineup.year, Lineup.week).all()
 
 	whole_response = []
 	for user_lineup in user_lineups:
@@ -248,7 +250,6 @@ def get_lineup_data(lineup_id: int):
 
 		body_data = requests.get(f'http://127.0.0.1:5000/lineups/{lineup_id}').json()
 		res = requests.post(f'https://ffbapi.herokuapp.com/api/playergamestats', 
-							headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' },
 							json=body_data)
 		lineup_data_from_api = res.json()
 
