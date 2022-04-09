@@ -37,7 +37,7 @@ const LineupsPage = () => {
   const getUserLineups = async (token) => {
   	const res = await axios.get('/users', {
   		headers: {
-  			'x-access-token': token
+  			'x-access-token': sessionStorage.dfsTrackerToken
   		}
   	})
     const userLineups = res.data
@@ -86,16 +86,27 @@ const LineupsPage = () => {
 		data["week"] = week
 		data["bet"] = bet
 		data["winnings"] = winnings
-  	const res = await fetch(`/lineups`, {
-  		method: 'POST',
-  		headers: {
-  			'x-access-token': sessionStorage.dfsTrackerToken
-  		},
-  		body: JSON.stringify(data)
-  	})
-  	.then(() => {
-  		alert('New Lineup Created.')
-  	})
+		if (isNaN(year) || isNaN(week) || isNaN(bet) || isNaN(winnings)) {
+			alert("New lineup year, week, bet, and winnings must be numbers!")
+		}
+		else {
+	  	const res = await fetch(`/lineups`, {
+	  		method: 'POST',
+	  		headers: {
+	  			'x-access-token': sessionStorage.dfsTrackerToken
+	  		},
+	  		body: JSON.stringify(data)
+	  	})
+	  	if (res.status === 200) {
+	  		alert('New lineup created!')
+	  		data = await res.json()
+	  		window.location.href = `lineup/${data["id"]}/${data["week"]}/${data["year"]}`
+	  	} else if (res.status === 400) {
+	  		alert('Lineup cannot be created for the specified week and year!')
+	  	} else {
+	  		alert('An error occured while creating lineup!')
+	  	}
+	  }
   	getUserLineups(sessionStorage.dfsTrackerUserId)
   }
 

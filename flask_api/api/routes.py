@@ -32,7 +32,6 @@ def token_required(f):
 			return jsonify({ 'Error': 'Token is missing.' }), 401
 		try:
 			data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
-			print(data['public_id'])
 			current_user = db.session.query(User).filter(User.public_id == data['public_id']).first()
 		except:
 			print('token invalid')
@@ -169,17 +168,23 @@ def get_player_counts():
 @token_required
 def create_lineup(current_user: User):
 	data = json.loads(request.data)
-	if data['year'] not in range(2012, 2021):
+	try:
+		year = int(data['year'])
+		week = int(data['week'])
+	except ValueError:
+		return jsonify({ 'Error': 'Year and week must be integers.' }), 400
+	if year not in range(2012, 2021):
 		return jsonify({ 'Error': 'Not valid year' }), 400
-	if data['week'] not in range(0, 18):
+	if week not in range(0, 18):
 		return jsonify({ 'Error': 'Not valid week' }), 400
 	new_lineup = Lineup(user_public_id=current_user.public_id, 
-						week=data["week"],
-						year=data["year"], 
-						bet=data["bet"], 
-						winnings=data["winnings"])
+						week=week,
+						year=year, 
+						bet=data["bet"] if data["bet"] else 0, 
+						winnings=data["winnings"] if data["winnings"] else 0)
 	db.session.add(new_lineup)
 	db.session.commit()
+	print(LineupSchema().dump(new_lineup))
 
 	return jsonify(LineupSchema().dump(new_lineup)), 200
 

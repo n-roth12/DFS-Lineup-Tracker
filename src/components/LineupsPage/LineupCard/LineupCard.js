@@ -11,15 +11,15 @@ const LineupCard = ({ lineup }) => {
 
   useEffect(() => {
     setLoading(true)
-    getCardData(lineup)
+    // getCardData(lineup)
   }, [])
 
-  const getCardData = async () => {
-    const res = await fetch(`/lineup_data/${lineup['id']}`)
-    const b = await res.json()
-    await setLineupPlayers(b['lineup_data'])
-    setLoading(false)
-  }
+  // const getCardData = async () => {
+  //   const res = await fetch(`/lineup_data/${lineup['id']}`)
+  //   const b = await res.json()
+  //   await setLineupPlayers(b['lineup_data'])
+  //   setLoading(false)
+  // }
 
   const deleteLineup = async (id) => {
     await fetch(`http://localhost:3000/lineups/${id}`, {
@@ -34,7 +34,7 @@ const LineupCard = ({ lineup }) => {
           <h4 className="lineup-points">{lineup.points > 140 && <FaFire style={{ color: "orange" }} />} {lineup.points < 90 && <FaSnowflake  style={{ color: "blue" }} />} {lineup.points} PTS</h4>
           <h4 className="lineup-bet">Bet: ${lineup.bet}</h4>
           <h4 className="lineup-winnings">Winnings: ${lineup.winnings}</h4>
-          <h4 className="lineup-profit" style={{ color: lineup.bet > lineup.winnings ? 'green' : 'red' }}>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>
+          <h4 className="lineup-profit" style={{ color: lineup.bet > lineup.winnings ? 'red' : 'green' }}>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</h4>
         </div>
         {/*<div className="expand-lineup-wrapper" onClick={showPlayers ? () => setShowPlayers(false) : () => setShowPlayers(true)}>
           {showPlayers ? <FaAngleUp className="expand-lineup-btn"/> : <FaAngleDown className="expand-lineup-btn" />}

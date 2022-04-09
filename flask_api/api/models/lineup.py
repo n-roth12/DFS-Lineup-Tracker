@@ -6,7 +6,7 @@ class Lineup(db.Model):
 	__tablename__ = 'lineups'
 	id = db.Column(db.Integer(), primary_key=True)
 	user_public_id = db.Column(db.String(50), db.ForeignKey('user.public_id'))
-	user = db.relationship("User")
+	user = db.relationship('User', foreign_keys=[user_public_id])
 	week = db.Column(db.Integer)
 	year = db.Column(db.Integer)
 	qb = db.Column(db.Integer)
