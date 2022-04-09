@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom'
 import Players from './Players/Players'
 import Lineup from './Lineup/Lineup'
 import EditWagerForm from './EditWagerForm/EditWagerForm'
+import Navbar from '../Navbar/Navbar'
 import { FaAngleLeft } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
 import '../../App.css';
+import './SingleLineupPage.css'
 
 function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()
@@ -206,74 +208,81 @@ function SingleLineupPage() {
     setEditingPos(null)
   }
 
-  if (!loading) { 
-    return (
-      <div className="main row container-fluid">
-        <div className="row header">
-          <div className="col-2 back-btn-wrapper">
-            <a className="back-btn" href="/"><FaAngleLeft />Back to Lineups</a>
-          </div>
-          <div className="col-5">
-            <h1>Fanduel Lineup: {lineupYear}, Week {lineupWeek}</h1>
-          </div>
-          <div className="col-5">
-            <EditWagerForm lineup={lineup} />
-          </div>
-          </div>
-        <div className="col-12 col-md-6 col-lg-5">
-          <div className="lineup-wrapper">
-            <h1>Your Lineup</h1>
-            <h2>Point Total: {lineupScore}</h2>
-            <h2>Return: {(lineup.winnings && lineup.bet) ? lineup.winnings - lineup.bet : 0}</h2>
-            { viewSaveLineup && 
-              <>
-                <button className="view-players-btn"
-                  onClick={saveLineup}>Save Changes</button>
-                <button className="delete-lineup-btn"
-                  onClick={cancelChanges}>Cancel Changes</button>
-              </>
-            }
-            { viewLineup &&  
-              <>
-                <Lineup lineup={lineupData} 
-                  onDelete={deleteFromLineup} 
-                  onAdd={editLineup}
-                  editingPos={editingPos}
-                  cancelEdit={cancelEdit} 
-                  lineupWeek={lineupWeek}
-                  lineupYear={lineupYear}
-                  lineupScore={lineupScore}/>
-              </>
-            }
-            <br /> 
-            <a className="delete-lineup-btn text-center" 
-              onClick={deleteLineup} href="/">Delete Lineup</a>
+  return (
+    <>
+      <Navbar />
+      {!loading ? 
+      <>
+        <div className="lineup-header-wrapper">
+          <div className="lineup-header">
+            <h1 className="lineup-title">Fanduel Lineup: {lineupYear}, Week {lineupWeek}</h1>
+            <div className="lineup-details">
+              <span>
+                <p className="lineup-detail">Entry Fee: ${lineup.bet}</p>
+                <p className="lineup-detail">Winnings: ${lineup.winnings}</p>
+                <p className="lineup-detail">Return: {(lineup.winnings && lineup.bet) ? lineup.winnings - lineup.bet : 0}</p>
+                <button className="lineup-detail edit-wager-btn">Edit</button>
+              </span>
+              <span>
+                <p className="lineup-detail">Point Total: {lineupScore}</p>
+              </span>
             </div>
-        </div>
-        <div className="col-12 col-md-6 col-lg-5">
-          <div className="players-wrapper">
-            { editingPos && 
-              <>
-                <h1>Available {editingPos !== null ? editingPos.replace(/[0-9]/g, '').toUpperCase() : 'Players'}</h1>
-                { players.length > 0 ? <Players 
-                  players={filterPlayers(players)} 
-                  onAdd={addToLineup} /> : 'No Players to show.' }
-              </>
-            }
           </div>
         </div>
-      </div>
-    )
-  } else {
-    return (
+        <div className="container">
+          <div className="row">
+            <div className="col-12 col-md-6 col-lg-5">
+              <div className="lineup-wrapper">
+                <h1>Your Lineup</h1>
+                { viewSaveLineup && 
+                  <>
+                    <button className="view-players-btn"
+                      onClick={saveLineup}>Save Changes</button>
+                    <button className="delete-lineup-btn"
+                      onClick={cancelChanges}>Cancel Changes</button>
+                  </>
+                }
+                { viewLineup &&  
+                  <>
+                    <Lineup lineup={lineupData} 
+                      onDelete={deleteFromLineup} 
+                      onAdd={editLineup}
+                      editingPos={editingPos}
+                      cancelEdit={cancelEdit} 
+                      lineupWeek={lineupWeek}
+                      lineupYear={lineupYear}
+                      lineupScore={lineupScore}/>
+                  </>
+                }
+                <br /> 
+                <a className="delete-lineup-btn text-center" 
+                  onClick={deleteLineup} href="/">Delete Lineup</a>
+                </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-5">
+              <div className="players-wrapper">
+                { editingPos && 
+                  <>
+                    <h1>Available {editingPos !== null ? editingPos.replace(/[0-9]/g, '').toUpperCase() : 'Players'}</h1>
+                    { players.length > 0 ? <Players 
+                      players={filterPlayers(players)} 
+                      onAdd={addToLineup} /> : 'No Players to show.' }
+                  </>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </> : 
       <>
         <h1>{loading}</h1>
         <div className="ring">
           <Roller />
         </div>
       </>
-    )
-  }
+    }
+    </>
+  )
 }
 
 export default SingleLineupPage

@@ -16,6 +16,9 @@ const Navbar = () => {
           <Link className="navlink" to="/login">Login</Link>
         </li>*/}
         <li>
+          <Link className="navlink" to="/">Home</Link>
+        </li>
+        <li>
           <Link className="navlink" to="/login" onClick={() => logout()}>Logout</Link>
         </li>
       </ul>

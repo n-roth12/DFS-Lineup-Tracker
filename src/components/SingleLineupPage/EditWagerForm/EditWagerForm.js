@@ -45,6 +45,7 @@ const EditWagerForm = ({ lineup }) => {
 
   return (
   	<div className="wagerform-wrapper">
+
 	    <form className="wagerform" onSubmit={onSubmit}>
 	    	<div>
 	    		<label>Buy-in: </label>
@@ -59,7 +60,7 @@ const EditWagerForm = ({ lineup }) => {
 	    		<hr />
 	    	</div>
 	    	{showSaveBtn && 
-		    		<input className="view-players-btn" type="submit" value="Save Changes" />
+		    	<input className="view-players-btn" type="submit" value="Save Changes" />
 	    	}
 	    </form>
 {/*	    {showCancelBtn && 

@@ -11,3 +11,7 @@ li {
 a {
 	color: white;
 }
+
+nav {
+	position: static;
+}

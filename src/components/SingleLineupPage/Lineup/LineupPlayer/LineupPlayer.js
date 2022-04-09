@@ -1,5 +1,6 @@
 import { FaTimes } from 'react-icons/fa'
 import { MdCompareArrows } from 'react-icons/md'
+import './LineupPlayer.css'
 
 const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd }) => {
 
