@@ -80,7 +80,7 @@
 }
 
 .graph-btn:hover {
-	color: #000000;
+	border-bottom: 3px solid #8c8c8c;
 }
 
 .graph-btn {
