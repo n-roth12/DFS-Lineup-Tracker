@@ -5,12 +5,17 @@ import './LineupsPage.css';
 import Navbar from '../Navbar/Navbar'
 import LineupCard from './LineupCard/LineupCard'
 import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
-import NewLineupForm from './NewLineupForm/NewLineupForm'
 import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
 import { Ellipsis } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake } from 'react-icons/fa'
 import axios from 'axios'
+import Dialog from "@material-ui/core/Dialog";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Button from "@material-ui/core/Button";
 
 const LineupsPage = () => {
 
@@ -23,6 +28,10 @@ const LineupsPage = () => {
 	const [bankrollGraphData, setBankrollGraphData] = useState([])
 	const [loadingPointsGraph, setLoadingPointsGraph] = useState(true)
 	const [loadingBankrollGraph, setLoadingBankrollGraph] = useState(true)
+	const [newLineupYear, setNewLineupYear] = useState('')
+	const [newLineupWeek, setNewLineupWeek] = useState('')
+	const [newLineupBet, setNewLineupBet] = useState('')
+	const [newLineupWinnings, setNewLineupWinnings] = useState('')
   
   useEffect(() => {
   	loadPage()
@@ -116,6 +125,14 @@ const LineupsPage = () => {
   	getUserLineups(sessionStorage.dfsTrackerUserId)
   }
 
+  const submitNewLineupForm = async () => {
+  	await createLineup(newLineupYear, newLineupWeek, newLineupBet, newLineupWinnings)
+  	setNewLineupWeek('')
+  	setNewLineupYear('')
+  	setNewLineupBet('')
+  	setNewLineupWinnings('')
+  }
+
   return (
   	<>
   		<Navbar />
@@ -138,10 +155,39 @@ const LineupsPage = () => {
 				  </div>
 		    </div>
 		    <div className="lineupform-wrapper container">
-		    	{showNewLineupForm && <NewLineupForm onAdd={createLineup} />}
 				  <button className="toggle-lineupform-btn" 
-				  	onClick={() => setShowNewLineupForm(!showNewLineupForm)}
-				  	>{showNewLineupForm ? "Hide" : "Create New Lineup"}</button>
+				  	onClick={() => setShowNewLineupForm(true)}
+				  	>Create New Lineup</button>
+				  <Dialog
+				  	open={showNewLineupForm}>
+				  	<DialogTitle>New Lineup</DialogTitle>
+				  	<DialogContent>
+				    	<div>
+				    		<label>Year: </label>
+				    		<input className="form-control" type="text" placeholder="Enter Lineup Year" value={newLineupYear}
+				    			onChange={(e) => setNewLineupYear(e.target.value)} />
+				    		<hr />
+				    		<label>Week: </label>
+				    		<input className="form-control" type="text" placeholder="Enter Lineup Week" value={newLineupWeek}
+				    		onChange={(e) => setNewLineupWeek(e.target.value)} />
+				    		<hr />
+				    	</div>
+				    	<div>
+				    		<label>Bet: </label>
+				    		<input className="form-control" type="text" placeholder="Enter Bet Amount" value={newLineupBet}
+				    		onChange={(e) => setNewLineupBet(e.target.value)} />
+				    		<hr />
+				    		<label>Winings: </label>
+				    		<input className="form-control" type="text" placeholder="Enter Winnings Amount" value={newLineupWinnings}
+				    		onChange={(e) => setNewLineupWinnings(e.target.value)} />
+				    		<hr />
+				    	</div>
+				  	</DialogContent>
+				  	<DialogActions>
+				  		<button onClick={() => setShowNewLineupForm(false)}>Close</button>
+				  		<button onClick={() => submitNewLineupForm()}>Submit</button>
+				  	</DialogActions>
+				  </Dialog>
 				</div>
 
 				<div className="filter-btn-wrapper">
@@ -186,6 +232,7 @@ const LineupsPage = () => {
 					</table>
 				</div>
 		  </> : <h1>Loading Lineups...</h1>}
+
 
 	</>
   )
