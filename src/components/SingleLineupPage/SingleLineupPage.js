@@ -325,8 +325,8 @@ function SingleLineupPage() {
                     <h2>Are you sure you want to delete this lineup?</h2>
                   </DialogContent>
                   <DialogActions>
-                    <button onClick={() => deleteLineup()}>Delete</button>
-                    <button onClick={() => setShowConfirmDelete(false)}>Cancel</button>
+                    <button className="submit-btn" onClick={() => deleteLineup()}>Delete</button>
+                    <button className="close-btn" onClick={() => setShowConfirmDelete(false)}>Cancel</button>
                   </DialogActions>
                 </Dialog>
               </div>

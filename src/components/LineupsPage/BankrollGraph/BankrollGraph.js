@@ -24,7 +24,7 @@ const BankrollGraph = ({ graphData }) => {
 		        		Cumulative Bankroll
 		        	</Label>
 		        </YAxis>
-		        <Line dataKey="return" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033", r:2}} activeDot={{fill:"#202033",stroke:"#202033", r:4}} />
+		        <Line dataKey="bankroll" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033", r:2}} activeDot={{fill:"#202033",stroke:"#202033", r:4}} />
 		        <Tooltip />
 		  		</LineChart>
 		  	</ResponsiveContainer>

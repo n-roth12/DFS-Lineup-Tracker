@@ -77,15 +77,21 @@ const LineupsPage = () => {
  			var week_string = `${lineup.year}/${lineup.week}`
  			var sameWeeks =  data.filter(week => week.week === week_string)
  			if (sameWeeks.length > 0) {
- 				sameWeeks[0]["return"] = bankRollSum
+ 				sameWeeks[0]["bankroll"] = bankRollSum
  				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1) 
  				sameWeeks[0]["lineup_count"] += 1
+ 				if (data.length > 0) {
+ 					sameWeeks[0]["change"] = (sameWeeks[0]["points"] - data[data.length - 1]["points"]).toFixed(2)
+ 				}
  			} else {
 	 			var lineup_data = {}
 	 			lineup_data["points"] = lineup.points
 	 			lineup_data["lineup_count"] = 1
-	 			lineup_data["return"] = bankRollSum
+	 			lineup_data["bankroll"] = bankRollSum
 	 			lineup_data["week"] = week_string
+	 			if (data.length > 0) {
+	 				lineup_data["change"] = (lineup.points - data[data.length - 1]["points"]).toFixed(2)
+	 			}
 	 			data.push(lineup_data)
 	 		}
  		})
@@ -138,7 +144,7 @@ const LineupsPage = () => {
   		<Navbar />
   		{!loadingLineups ?
   		<>
-  			<div className="container">
+  			<div className="main container">
 			  	<div className="graphs-wrapper row">
 				    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
 				    	<>
@@ -183,9 +189,9 @@ const LineupsPage = () => {
 				    		<hr />
 				    	</div>
 				  	</DialogContent>
-				  	<DialogActions>
-				  		<button onClick={() => setShowNewLineupForm(false)}>Close</button>
-				  		<button onClick={() => submitNewLineupForm()}>Submit</button>
+				  	<DialogActions className="dialog-actions">
+				  		<button className="close-btn btn" onClick={() => setShowNewLineupForm(false)}>Close</button>
+				  		<button className="submit-btn btn" onClick={() => submitNewLineupForm()}>Submit</button>
 				  	</DialogActions>
 				  </Dialog>
 				</div>

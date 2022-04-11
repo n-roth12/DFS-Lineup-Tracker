@@ -32,6 +32,7 @@
   padd: 20px;
   display: flex;
   justify-content: center;
+  margin-top: 50px;
 }
 
 .lineup-header {
@@ -81,4 +82,17 @@ h1 {
 .row {
   display: flex;
   justify-content: space-around;
+}
+
+.close-btn, .submit-btn {
+  border: None;
+  background:  None;
+}
+
+.submit-btn {
+  color: blue;
+}
+
+.close-btn {
+  color: red;
 }

@@ -1,3 +1,4 @@
+
 .lineups-table {
 	background: #ffffff;
 	box-shadow: 0px 0px 3px 1px lightgrey;
@@ -38,4 +39,17 @@
 .graphs-wrapper {
   display: flex;
   margin: 20px;
+}
+
+.close-btn, .submit-btn {
+	border: None;
+	background:  None;
+}
+
+.submit-btn {
+	color: blue;
+}
+
+.close-btn {
+	color: red;
 }

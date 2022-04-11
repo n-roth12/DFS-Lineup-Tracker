@@ -12,9 +12,6 @@ const Navbar = () => {
   return (
   	<nav>
       <ul>
-{/*        <li> 
-          <Link className="navlink" to="/login">Login</Link>
-        </li>*/}
         <li>
           <Link className="navlink" to="/">Home</Link>
         </li>

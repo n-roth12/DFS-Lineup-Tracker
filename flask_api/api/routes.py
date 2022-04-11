@@ -133,18 +133,6 @@ def get_lineup(current_user: User, id: int):
 			data = requests.get(f'https://ffbapi.herokuapp.com/api/v1/stats/{value}')
 			response[key] = data
 
-	# response = {}
-	# response["id"] = l["id"]
-	# response["week"] = l["week"]
-	# response["year"] = l["year"]
-	# for key, value in l.items():
-	# 	if key != "id" and key != "week" and key != "year":
-	# 		if value is None:
-	# 			response[key] = None
-	# 		else:
-	# 			p = db.session.query(Player).filter(Player.id == value).first()
-	# 			response[key] = PlayerSchema().dump(p)
-
 	return jsonify(LineupSchema().dump(lineup))
 
 
