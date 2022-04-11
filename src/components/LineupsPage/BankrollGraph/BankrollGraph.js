@@ -8,11 +8,14 @@ const BankrollGraph = ({ graphData }) => {
 		if (active && payload && payload.length) {
 			return (
 				<div className="custom-tooltip">
-					<p>{payload[0].payload.bankroll < 0 && '-'}${Math.abs(payload[0].payload.bankroll)}</p>
-					{payload[0].payload.bankroll_change &&
-						<p>{payload[0].payload.bankroll_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown styl={{color:'red'}}/>}
-								${Math.abs(payload[0].payload.bankroll_change)}</p>
-					}
+					<h3>{payload[0].payload.week}: </h3>
+					<span>
+						<p>{payload[0].payload.bankroll < 0 && '-'}${Math.abs(payload[0].payload.bankroll)}</p>
+						{payload[0].payload.bankroll_change &&
+							<p>{payload[0].payload.bankroll_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown style={{color:'red'}}/>}
+									${Math.abs(payload[0].payload.bankroll_change)}</p>
+						}
+					</span>
 				</div>
 			)
 		}

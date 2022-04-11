@@ -8,11 +8,14 @@ const PointsGraph = ({ graphData }) => {
 		if (active && payload && payload.length) {
 			return (
 				<div className="custom-tooltip">
-					<p>{payload[0].payload.points} PTS</p>
-					{payload[0].payload.points_change &&
-						<p>{payload[0].payload.points_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown styl={{color:'red'}}/>}
-								{Math.abs(payload[0].payload.points_change)} PTS</p>
-					}
+					<h3>{payload[0].payload.week}: </h3>
+					<span>
+						<p>{payload[0].payload.points} PTS</p>
+						{payload[0].payload.points_change &&
+							<p>{payload[0].payload.points_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown style={{color:'red'}}/>}
+									{Math.abs(payload[0].payload.points_change)} PTS</p>
+						}
+					</span>
 				</div>
 			)
 		}

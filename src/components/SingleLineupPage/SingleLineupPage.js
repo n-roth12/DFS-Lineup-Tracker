@@ -287,8 +287,8 @@ function SingleLineupPage() {
             </div>
           </DialogContent>
           <DialogActions>
-            <button onClick={() => setShowEditWagerForm(false)}>Close</button>
-            <button onClick={() => submitEditWagerForm()}>Submit</button>
+            <button className="close-btn" onClick={() => setShowEditWagerForm(false)}>Close</button>
+            <button className="submit-btn" onClick={() => submitEditWagerForm()}>Submit</button>
           </DialogActions>
         </Dialog>
         <div className="container">
@@ -325,8 +325,8 @@ function SingleLineupPage() {
                     <h2>Are you sure you want to delete this lineup?</h2>
                   </DialogContent>
                   <DialogActions>
-                    <button className="submit-btn" onClick={() => deleteLineup()}>Delete</button>
                     <button className="close-btn" onClick={() => setShowConfirmDelete(false)}>Cancel</button>
+                    <button className="submit-btn" onClick={() => deleteLineup()}>Delete</button>
                   </DialogActions>
                 </Dialog>
               </div>

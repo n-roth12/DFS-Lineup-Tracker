@@ -1,4 +1,3 @@
-
 .lineups-table {
 	background: #ffffff;
 	box-shadow: 0px 0px 3px 1px lightgrey;
@@ -53,3 +52,64 @@
 .close-btn {
 	color: red;
 }
+
+.filter-btn-active {
+  border: 1px solid #0069ed;
+  background-color: #0069ed;
+  color: #ffffff;
+  padding: 5px;
+}
+
+.filter-btn {
+  border: 1px solid #0069ed;
+  color: #0069ed;
+  background-color: #ffffff;
+  padding: 5px;
+}
+
+.filter-btn-wrapper {
+  padding: 10px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.graph-btn-wrapper {
+	width: 90%;
+	margin-bottom: 15px;
+}
+
+.graph-btn:hover {
+	color: #000000;
+}
+
+.graph-btn {
+	color: #4f4f4f;
+}
+
+.graph-btn, .graph-btn-active {
+	border: None;
+	background: None;
+	margin-right: 20px;
+	font-size: 18pt;
+	padding-bottom: 5px;
+}
+
+.graph-btn-active {
+	border-bottom: 3px solid black;
+	color: black;
+}
+
+.icon {
+	margin-bottom: 4px;
+	margin-right: 3px;
+}
+
+.fire-icon {
+	color: orange;
+}
+
+.ice-icon {
+	color: blue;
+}
+

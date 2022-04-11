@@ -9,14 +9,10 @@
 html {
 }
 
-nav {
-  height: 50px;
-  background-color: #202033;
-}
-
 body {
   background-color: #f0f3f8;
   font-family: 'Nunito', sans-serif;
+  font-weight: 500;
 }
 
 .main {

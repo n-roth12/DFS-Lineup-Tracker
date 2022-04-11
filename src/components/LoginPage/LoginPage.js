@@ -46,7 +46,7 @@ const LoginPage = ({ setToken, setUserId }) => {
 			    </form>
 			    <button className="form-submit-btn form-control" onClick={() => handleSubmit()}>Login</button>
 			    <div className="register-page-link-wrapper">
-			    	<h4>Don't have an account?      
+			    	<h4>Don't have an account?
 			    	<Link to='/register' className="register-page-link">Register</Link></h4>
 			    </div>
 			</div>

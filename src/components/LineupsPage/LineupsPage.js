@@ -32,6 +32,7 @@ const LineupsPage = () => {
 	const [newLineupWeek, setNewLineupWeek] = useState('')
 	const [newLineupBet, setNewLineupBet] = useState('')
 	const [newLineupWinnings, setNewLineupWinnings] = useState('')
+	const [graphView, setGraphView] = useState('bankroll')
   
   useEffect(() => {
   	loadPage()
@@ -64,7 +65,7 @@ const LineupsPage = () => {
  				temp.push(lineup.year)
  			}
  		})
- 		setYears(temp)
+ 		setYears(temp.sort().reverse())
  	}
 
  	const loadGraphData = async () => {
@@ -148,18 +149,30 @@ const LineupsPage = () => {
   		<>
   			<div className="main container">
 			  	<div className="graphs-wrapper row">
-				    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
-				    	<>
-				    		<h1>Loading Points Graph...</h1> 
-				    		<Ellipsis /> 
-				    	</>
-				   	}
-				    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
-				    	<>
-				    		<h1>Loading Bankroll Graph...</h1> 
-				    		<Ellipsis />
-				    	</>
-				    }
+						<div className="graph-btn-wrapper">
+							<button className={`graph-btn${graphView === 'bankroll' ? '-active' : ''}`} onClick={() => setGraphView('bankroll')}>Bankroll</button>
+							<button className={`graph-btn${graphView === 'points' ? '-active' : ''}`} onClick={() => setGraphView('points')}>Points</button>
+						</div>
+						{ graphView === 'points' &&
+						<>
+					    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
+					    	<>
+					    		<h1>Loading Points Graph...</h1> 
+					    		<Ellipsis /> 
+					    	</>
+					   	}
+					  	</>
+					  }
+					  { graphView === 'bankroll' &&
+					  <>
+					    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
+					    	<>
+					    		<h1>Loading Bankroll Graph...</h1> 
+					    		<Ellipsis />
+					    	</>
+					    }
+					  </>
+					 	}
 				  </div>
 		    </div>
 		    <div className="lineupform-wrapper container">
@@ -224,8 +237,8 @@ const LineupsPage = () => {
 		    					{(filteredYears == null || lineup.year == filteredYears) &&
 				    				<tr>
 				    					<td>Week {lineup.week}, {lineup.year}</td>
-				    					<td >{lineup.points > 140 &&<FaFire style={{color: "orange"}}/>} 
-				    								{lineup.points < 90 && <FaSnowflake style={{color:"blue"}}/>}
+				    					<td >{lineup.points > 140 && <FaFire className="icon fire-icon"/>} 
+				    								{lineup.points < 90 && <FaSnowflake className="icon ice-icon"/>}
 				    								{lineup.points} PTS</td>
 				    					<td>${lineup.bet}</td>
 				    					<td>${lineup.winnings}</td>
