@@ -81,7 +81,8 @@ const LineupsPage = () => {
  				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1) 
  				sameWeeks[0]["lineup_count"] += 1
  				if (data.length > 0) {
- 					sameWeeks[0]["change"] = (sameWeeks[0]["points"] - data[data.length - 1]["points"]).toFixed(2)
+ 					sameWeeks[0]["points_change"] = (sameWeeks[0]["points"] - data[data.length - 1]["points"]).toFixed(2)
+ 					sameWeeks[0]["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"]).toFixed(2)
  				}
  			} else {
 	 			var lineup_data = {}
@@ -90,7 +91,8 @@ const LineupsPage = () => {
 	 			lineup_data["bankroll"] = bankRollSum
 	 			lineup_data["week"] = week_string
 	 			if (data.length > 0) {
-	 				lineup_data["change"] = (lineup.points - data[data.length - 1]["points"]).toFixed(2)
+	 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"]).toFixed(2)
+	 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"]).toFixed(2)
 	 			}
 	 			data.push(lineup_data)
 	 		}

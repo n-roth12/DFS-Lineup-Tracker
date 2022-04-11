@@ -1,11 +1,28 @@
 import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContainer, Label } from 'recharts'
 import './BankrollGraph.css'
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
 
 const BankrollGraph = ({ graphData }) => {
+
+	const CustomToolTip = ({ active, payload, label }) => {
+		if (active && payload && payload.length) {
+			return (
+				<div className="custom-tooltip">
+					<p>{payload[0].payload.bankroll < 0 && '-'}${Math.abs(payload[0].payload.bankroll)}</p>
+					{payload[0].payload.bankroll_change &&
+						<p>{payload[0].payload.bankroll_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown styl={{color:'red'}}/>}
+								${Math.abs(payload[0].payload.bankroll_change)}</p>
+					}
+				</div>
+			)
+		}
+		return null
+	}
+
   return (
 		<div className="graph-wrapper">
 			<div className="bankroll-graph">
-				<h1 className="graph-label">Cumulative Bankroll:</h1>
+				<h1 className="graph-label">Cumulative Return:</h1>
 				<ResponsiveContainer aspect={3}>
 		      <LineChart
 		        width={500}
@@ -20,12 +37,12 @@ const BankrollGraph = ({ graphData }) => {
 		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" vertical={false}/>
 		        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
 		        <YAxis tick={{fill:"#000000"}}>
-		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>
+{/*		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>
 		        		Cumulative Bankroll
-		        	</Label>
+		        	</Label>*/}
 		        </YAxis>
 		        <Line dataKey="bankroll" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033", r:2}} activeDot={{fill:"#202033",stroke:"#202033", r:4}} />
-		        <Tooltip />
+		        <Tooltip content={<CustomToolTip />}/>
 		  		</LineChart>
 		  	</ResponsiveContainer>
 		  </div>
