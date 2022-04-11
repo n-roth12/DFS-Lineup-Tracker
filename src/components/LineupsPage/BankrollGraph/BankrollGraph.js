@@ -5,7 +5,7 @@ const BankrollGraph = ({ graphData }) => {
   return (
 		<div className="graph-wrapper">
 			<div className="bankroll-graph">
-				<h1 className="graph-label">Bankroll</h1>
+				<h1 className="graph-label">Cumulative Bankroll:</h1>
 				<ResponsiveContainer aspect={3}>
 		      <LineChart
 		        width={500}
@@ -17,7 +17,7 @@ const BankrollGraph = ({ graphData }) => {
 		          left: 30,
 		          bottom: 10,
 		        }}>
-		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/>
+		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" vertical={false}/>
 		        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
 		        <YAxis tick={{fill:"#000000"}}>
 		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>

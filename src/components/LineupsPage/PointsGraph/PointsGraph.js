@@ -5,7 +5,7 @@ const PointsGraph = ({ graphData }) => {
   return (
     <div className="graph-wrapper">
     	<div className="points-graph">
-				<h1 className="graph-label">Points</h1>
+				<h1 className="graph-label">Points (Average Per Lineup):</h1>
 				<ResponsiveContainer aspect={3}>
 		      <LineChart
 		        width={400}
@@ -17,7 +17,7 @@ const PointsGraph = ({ graphData }) => {
 		          left: 30,
 		          bottom: 10,
 		        }}>
-		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/>
+		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" vertical={false}/>
 		        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
 		        <YAxis tick={{fill:"#000000"}}>
 		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>

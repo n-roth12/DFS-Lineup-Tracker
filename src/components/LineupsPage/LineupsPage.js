@@ -61,23 +61,27 @@ const LineupsPage = () => {
  	const loadGraphData = async () => {
  		setLoadingPointsGraph(true)
  		setLoadingBankrollGraph(true)
- 		var data1 = []
- 		var data2 = []
+ 		var data = []
  		var bankRollSum = 0
  		lineups.length > 0 && lineups.reverse().map((lineup) => {
- 			var temp1 = {}
- 			var temp2 = {}
- 			temp1["week"] = `${lineup.year}/${lineup.week}`
- 			temp2["week"] = `${lineup.year}/${lineup.week}`
- 			temp1["points"] = lineup.points
- 			const newBankRollSum = bankRollSum + (lineup.winnings - lineup.bet)
- 			temp2["return"] = newBankRollSum
- 			bankRollSum = newBankRollSum
- 			data1.push(temp1)
-			data2.push(temp2)
+ 			bankRollSum += (lineup.winnings - lineup.bet)
+ 			var week_string = `${lineup.year}/${lineup.week}`
+ 			var sameWeeks =  data.filter(week => week.week === week_string)
+ 			if (sameWeeks.length > 0) {
+ 				sameWeeks[0]["return"] = bankRollSum
+ 				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1) 
+ 				sameWeeks[0]["lineup_count"] += 1
+ 			} else {
+	 			var lineup_data = {}
+	 			lineup_data["points"] = lineup.points
+	 			lineup_data["lineup_count"] = 1
+	 			lineup_data["return"] = bankRollSum
+	 			lineup_data["week"] = week_string
+	 			data.push(lineup_data)
+	 		}
  		})
-		await setPointsGraphData(data1)
-		await setBankrollGraphData(data2)
+		await setPointsGraphData(data)
+		await setBankrollGraphData(data)
 		setLoadingPointsGraph(false)
 		setLoadingBankrollGraph(false)
  	}
@@ -102,7 +106,7 @@ const LineupsPage = () => {
 	  	if (res.status === 200) {
 	  		alert('New lineup created!')
 	  		data = await res.json()
-	  		window.location.href = `lineup/${data["id"]}/${data["week"]}/${data["year"]}`
+	  		window.location.href = `lineups/${data["id"]}/${data["week"]}/${data["year"]}`
 	  	} else if (res.status === 400) {
 	  		alert('Lineup cannot be created for the specified week and year!')
 	  	} else {
@@ -142,7 +146,7 @@ const LineupsPage = () => {
 
 				<div className="filter-btn-wrapper">
 					<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
-					{years.length > 0 && years.map((year) => 
+					{years.length > 0 && years.reverse().map((year) => 
 						<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
 							onClick={() => setFilteredYears(year)}>{year}</button>
 					)}
