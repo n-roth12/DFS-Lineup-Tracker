@@ -88,7 +88,7 @@ function SingleLineupPage() {
         if (lineup[key] == null) {
           temp[`${key}`] = null
         } else {
-          players.map((player) => {
+          players.length > 0 && players.map((player) => {
             if (key !== "week" && key !== "year" && key !== "id" && key != "user_id" && key != 'points' && key != 'fantasy_points' && key != 'winnings' && key != 'bet'
               && lineup[`${key}`] == player.stats.id) {
                 temp[`${key}`] = player
