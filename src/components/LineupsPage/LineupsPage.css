@@ -133,10 +133,3 @@
 .toggle-lineupform-btn:hover {
   color: #202033;
 }
-
-.alert-bar {
-	background-color: grey;
-	height: 50px;
-	border: 1px solid blue;
-
-}

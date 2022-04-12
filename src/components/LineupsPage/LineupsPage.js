@@ -172,9 +172,6 @@ const LineupsPage = () => {
   return (
   	<>
   		<Navbar />
-  		<div className="alert-bar">
-  			<p>Hello World</p>
-  		</div>
   		{!loadingLineups ?
   		<>
   			<div className="main container">

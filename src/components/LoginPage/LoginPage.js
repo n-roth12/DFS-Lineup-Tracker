@@ -8,6 +8,7 @@ const LoginPage = ({ setToken, setUserId }) => {
 
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const [alert, setAlert] = useState('')
 
 	const loginUser = async (credentials) => {
 		await axios.post('/users/login', credentials)
@@ -18,9 +19,9 @@ const LoginPage = ({ setToken, setUserId }) => {
 		})
 		.catch((error) => {
 			if (error.response && error.response.status === 403) {
-				alert('Incorrect username or password!')
+				setAlert('Incorrect username or password!')
 			} else {
-				alert('An error occured!')
+				setAlert('An error occured!')
 			}
 			setPassword('')
 		})
@@ -42,6 +43,11 @@ const LoginPage = ({ setToken, setUserId }) => {
 			    			onChange={(e) => setUsername(e.target.value)} />
 			    		<input className="form-control" type="text" placeholder="Password" value={password}
 			    		onChange={(e) => setPassword(e.target.value)} />
+			    		{alert.length > 0 &&
+			    			<>
+			    				<p className="alert">{alert}</p>
+			    			</>
+			    		}
 			    	</div>
 			    </form>
 			    <button className="form-submit-btn form-control" onClick={() => handleSubmit()}>Login</button>

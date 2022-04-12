@@ -8,6 +8,7 @@ const LandingPage = () => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [passwordCheck, setPasswordCheck] = useState('')
+	const [alert, setAlert] = useState('')
 
 	const onSubmit = async () => {
 		if (password === passwordCheck) {
@@ -18,22 +19,18 @@ const LandingPage = () => {
 			})
 			.catch((error) => {
 				if (error.response && error.response.status === 409) {
-					alert('Username is already in use!')
+					setAlert('Username is already in use!')
 				} else {
-					alert('An error occured!')
+					setAlert('An error occured!')
 				}
 				setPassword('')
 				setPasswordCheck('')
 			})
 		} else {
-			alert('Passwords do not match!')
+			setAlert('Passwords do not match!')
 			setPassword('')
 			setPasswordCheck('')
 		}
-	}
-
-	const login = async () => {
-		console.log(username, password)
 	}
 
 	return (
@@ -48,6 +45,11 @@ const LandingPage = () => {
 		    		onChange={(e) => setPassword(e.target.value)} />
 		    		<input className="form-control" type="text" placeholder="Re-enter password" value={passwordCheck}
 		    		onChange={(e) => setPasswordCheck(e.target.value)} />
+		    		{alert.length > 0 &&
+		    			<>
+		    				<p className="alert">{alert}</p>
+		    			</>
+		    		}
 		    	</div>
 		    </form>
 		    <button className="form-submit-btn form-control" onClick={() => onSubmit()}>Register</button>

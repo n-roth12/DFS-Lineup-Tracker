@@ -51,3 +51,9 @@ input:focus {
 	text-decoration: none;
 	color: blue;
 }
+
+.alert {
+	color: red;
+	font-size: 11pt;
+	text-align: center;
+}
