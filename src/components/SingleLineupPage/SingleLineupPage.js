@@ -299,7 +299,7 @@ function SingleLineupPage() {
           </DialogActions>
         </Dialog>
         <Dialog open={showPlayerDialog} className="player-info-dialog">
-          {dialogPlayer &&
+          {dialogPlayer.stats &&
           <>
             <DialogTitle>
               <h3>{dialogPlayer.name}</h3>
@@ -424,7 +424,8 @@ function SingleLineupPage() {
                     <h1>Available {editingPos !== null ? editingPos.replace(/[0-9]/g, '').toUpperCase() : 'Players'}</h1>
                     { players.length > 0 ? <Players 
                       players={filterPlayers(players)} 
-                      onAdd={addToLineup} /> : 'No Players to show.' }
+                      onAdd={addToLineup} 
+                      onOpenDialog={openDialog} /> : 'No Players to show.' }
                   </>
                 }
               </div>

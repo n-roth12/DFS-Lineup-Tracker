@@ -2,7 +2,7 @@ import Player from './Player/Player'
 import { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 
-const Players = ({ players, onAdd}) => {
+const Players = ({ players, onAdd, onOpenDialog}) => {
 
   const [playerFilter, setPlayerFilter] = useState('')
 
@@ -29,7 +29,7 @@ const Players = ({ players, onAdd}) => {
           <>
             {(playerFilter == "" || player.name.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
         			<Player
-        				key={player.stats.id} player={player} onAdd={onAdd} />
+        				key={player.stats.id} player={player} onAdd={onAdd} onOpenDialog={onOpenDialog}/>
             }
           </>
     		))}

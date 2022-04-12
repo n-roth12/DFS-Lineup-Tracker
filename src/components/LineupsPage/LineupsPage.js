@@ -33,6 +33,8 @@ const LineupsPage = () => {
 	const [newLineupBet, setNewLineupBet] = useState('')
 	const [newLineupWinnings, setNewLineupWinnings] = useState('')
 	const [graphView, setGraphView] = useState('bankroll')
+	const [showImportDialog, setShowImportDialog] = useState(false)
+	const [selectedFile, setSelectedFile] = useState(null)
   
   useEffect(() => {
   	loadPage()
@@ -44,10 +46,10 @@ const LineupsPage = () => {
   }, [loadingLineups])
 
   const loadPage = async () => {
-  	await getUserLineups(sessionStorage.dfsTrackerToken)
+  	await getUserLineups()
   }
 
-  const getUserLineups = async (token) => {
+  const getUserLineups = async () => {
   	const res = await axios.get('/users', {
   		headers: {
   			'x-access-token': sessionStorage.dfsTrackerToken
@@ -142,6 +144,31 @@ const LineupsPage = () => {
   	setNewLineupWinnings('')
   }
 
+  const onFileChange = (e) => {
+  	setSelectedFile(e.target.files[0])
+  }
+
+  const onFileUpload = async () => {
+  	var data = new FormData()
+  	data.append("myFile", selectedFile, selectedFile.name)
+  	console.log(selectedFile)
+  	const res = await fetch('/lineups/upload', {
+  		method: 'POST',
+  		headers: {
+  			'x-access-token': sessionStorage.dfsTrackerToken
+  		},
+  		body: data
+  	})
+  	if (res.status === 200) {
+  		alert('Lineup successfully uploaded!')
+  		setShowImportDialog(false)
+  		setSelectedFile(null)
+  	} else {
+  		alert('Failed to upload lineups!')
+  	}
+  	getUserLineups()
+  }
+
   return (
   	<>
   		<Navbar />
@@ -175,10 +202,15 @@ const LineupsPage = () => {
 					 	}
 				  </div>
 		    </div>
-		    <div className="lineupform-wrapper container">
+		    <div className="lineupform-wrapper">
 				  <button className="toggle-lineupform-btn" 
 				  	onClick={() => setShowNewLineupForm(true)}
 				  	>Create New Lineup</button>
+				  <button className="toggle-lineupform-btn"
+				  	onClick={() => setShowImportDialog(true)}
+				  	>Import Lineups</button>
+				 </div>
+
 				  <Dialog
 				  	open={showNewLineupForm}>
 				  	<DialogTitle>New Lineup</DialogTitle>
@@ -209,7 +241,29 @@ const LineupsPage = () => {
 				  		<button className="submit-btn btn" onClick={() => submitNewLineupForm()}>Submit</button>
 				  	</DialogActions>
 				  </Dialog>
-				</div>
+
+
+				  <Dialog
+				  	open={showImportDialog}>
+				  	<DialogTitle>Import Lineup Data</DialogTitle>
+				  	<DialogContent>
+				    	<div>
+							  <p>Upload a CSV file to create new lineups.</p>
+				    	</div>
+				  		<div>
+					  		<input 
+					  			type="file" 
+					  			onChange={onFileChange}
+					  			accept=".csv"
+					  		/>
+					  	</div> 
+				  	</DialogContent>
+				  	<DialogActions className="dialog-actions">
+				  		<button className="close-btn btn" onClick={() => setShowImportDialog(false)}>Close</button>
+				  		<button className="submit-btn btn" onClick={onFileUpload}>Upload</button>
+				  	</DialogActions>
+				  </Dialog>
+
 
 				<div className="filter-btn-wrapper">
 					<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>

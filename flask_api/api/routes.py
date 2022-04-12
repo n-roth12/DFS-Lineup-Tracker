@@ -11,10 +11,124 @@ from functools import wraps
 from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 from api.models.user import User
+import csv
+import datetime
 
 # to start flask_api server, run npm run start-flask-api in react_project
 # to start react server, run npm start in react_project
 # to start redis, run redis-server in the terminal in any directory
+
+week_dict = {
+	2012: {
+		'start': {
+			'day': 5,
+			'month': 9
+		},
+		'stop': {
+			'day': 30,
+			'month': 12
+		}
+	},
+	2013: {
+		'start': {
+			'day': 5,
+			'month': 9
+		},
+		'stop': {
+			'day': 29,
+			'month': 12
+		}
+	},
+	2014: {
+		'start': {
+			'day': 4,
+			'month': 9
+		},
+		'stop': {
+			'day': 28,
+			'month': 12
+		}
+	},
+	2015: {
+		'start': {
+			'day': 10,
+			'month': 9
+		},
+		'stop': {
+			'day': 3,
+			'month': 1
+		}
+	},
+	2016: {
+		'start': {
+			'day': 8,
+			'month': 9
+		},
+		'stop': {
+			'day': 1,
+			'month': 1,
+		}
+	},
+	2017: {
+		'start': {
+			'day': 7,
+			'month': 9
+		},
+		'stop': {
+			'day': 31,
+			'month': 12
+		}
+	},
+	2018: {
+		'start': {
+			'day': 6,
+			'month': 9
+		},
+		'stop': {
+			'day': 30,
+			'month': 12
+		}
+	},
+	2019: {
+		'start': {
+			'day': 5,
+			'month': 9
+		},
+		'stop': {
+			'day': 29,
+			'month': 12
+		}
+	},
+	2020: {
+		'start': {
+			'day': 10,
+			'month': 9
+		},
+		'stop': {
+			'day': 3,
+			'month': 1
+		}
+	},
+	2021: {
+		'start': {
+			'day': 8,
+			'month': 9
+		},
+		'stop': {
+			'day': 9,
+			'month': 1
+		}
+	}
+}
+
+days_of_months = {
+	8: 31,
+	9: 30,
+	10: 31,
+	11: 30,
+	12: 31,
+	1: 31
+}
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -284,6 +398,71 @@ def login_user():
 		return jsonify({ 'token': token })
 	else:
 		return jsonify({ 'Error': 'Unable to login.' }), 403
+
+
+@app.route('/lineups/upload', methods=['POST'])
+@token_required
+def upload_file(current_user: User):
+	file = request.files["myFile"]
+	if not file.filename:
+		return jsonify({ 'Error': 'Missing file!' }), 400
+
+	with open(file.filename, newline='') as csvfile:
+		reader = csv.DictReader(csvfile)
+		already_exists = 0
+		for row in reader:
+			if row['Sport'] == 'nfl' and row['Score'] != '':
+				lineup_exists = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id,
+																Lineup.entry_id == row['Entry Id']).first()
+				if not lineup_exists:
+					parsed_week = parseDate(row['Date'])
+					if parsed_week == -1:
+						continue
+					new_lineup = Lineup()
+					year = int(row["Date"].split("/")[0])
+					new_lineup.year = year if year > 8 else year - 1
+					new_lineup.week = parsed_week
+					new_lineup.points = float(row['Score'])
+					new_lineup.bet = float(row['Entry ($)'])
+					new_lineup.winnings = float(row['Winnings ($)'])
+					new_lineup.user_public_id = current_user.public_id
+					new_lineup.entry_id = row['Entry Id']
+					new_lineup.tournament_name = row['Title']
+					new_lineup.site = 'Fanduel'
+					new_lineup.imported = True
+					db.session.add(new_lineup)
+					db.session.commit()
+				else:
+					already_exists += 1
+
+	return jsonify(already_exists), 200
+
+@app.route('/parse', methods=['GET'])
+def parseDate(date):
+	date_split = date.split('/')
+	year = int(date_split[0])
+	month = int(date_split[1])
+	day = int(date_split[2])
+	if year < 2012 or year > 2022:
+		return -1
+
+	lineup_date = datetime.date(year, month, day)
+
+	start = week_dict[year - 1 if month < 3 else year]['start']
+	stop = week_dict[year - 1 if month < 3 else year]['stop']
+	start_date = datetime.date(year - 1 if month < 3 else year, start['month'], start['day'])
+	stop_date = datetime.date(year + 1 if stop['month'] <= 3 else year, stop['month'], stop['day'])
+	if lineup_date < start_date:
+		return -1
+
+	day_count = lineup_date - start_date
+	result = -(-day_count.days // 7)
+	if result > 17 and year < 2022 or result > 18 and year > 2021:
+		return -1
+
+	return result
+
+
 
 
 

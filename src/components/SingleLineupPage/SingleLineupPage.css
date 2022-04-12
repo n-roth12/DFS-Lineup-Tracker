@@ -118,3 +118,8 @@ h1 {
 .player-info-content, .player-info-actions {
   background-color: #f0f3f8;
 }
+
+.player-name {
+  color: blue;
+  cursor: pointer;
+}

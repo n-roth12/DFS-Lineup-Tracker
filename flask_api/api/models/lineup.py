@@ -20,23 +20,29 @@ class Lineup(db.Model):
 	points = db.Column(db.Float)
 	bet = db.Column(db.Float)
 	winnings = db.Column(db.Float)
+	imported = db.Column(db.Boolean)
+	site = db.Column(db.String(30))
 	created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+	entry_id = db.Column(db.String(50))
+	position = db.Column(db.Integer)
+	entries = db.Column(db.Integer)
+	tournament_name = db.Column(db.String)
 
-	def __init__(self, user_public_id, week, year, bet, winnings):
-		self.user_public_id = user_public_id
-		self.week = week
-		self.year = year
-		self.qb = None
-		self.rb1 = None
-		self.rb2 = None
-		self.wr1 = None
-		self.wr2 = None
-		self.wr3 = None
-		self.te = None
-		self.flex = None
-		self.points = 0
-		self.bet = bet
-		self.winnings = winnings
+	# def __init__(self, user_public_id, week, year, bet, winnings):
+	# 	self.user_public_id = user_public_id
+	# 	self.week = week
+	# 	self.year = year
+	# 	self.qb = None
+	# 	self.rb1 = None
+	# 	self.rb2 = None
+	# 	self.wr1 = None
+	# 	self.wr2 = None
+	# 	self.wr3 = None
+	# 	self.te = None
+	# 	self.flex = None
+	# 	self.points = 0
+	# 	self.bet = bet
+	# 	self.winnings = winnings
 
 	def __str__(self):
 		return f'{self.id} {self.user_public_id} {self.year} {self.week} {self.qb} {self.rb1} {self.rb2} {self.wr1} {self.wr2} {self.wr3} {self.te} {self.flex} {self.points} {self.bet} {self.winnings}'
