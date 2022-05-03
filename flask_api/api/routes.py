@@ -240,11 +240,7 @@ def get_lineup(current_user: User, id: int):
 		return jsonify({ 'Error': 'No lineup with specified id.' })
 
 	l = LineupSchema().dump(lineup)
-	response = {}
-	for key, value in l.items():
-		if value != None:
-			data = requests.get(f'{app.config["FFB_API_URL"]}api/v1/playergamestats/{value}')
-			response[key] = data
+	print(l)
 	return jsonify(LineupSchema().dump(lineup))
 
 

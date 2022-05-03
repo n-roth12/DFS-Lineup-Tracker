@@ -15,7 +15,6 @@ const LandingPage = ({ setToken }) => {
 			const params = {'username': username, 'password': password}
 			await axios.post('/users/register', params)
 			.then((res) => {
-				// alert('User successfully registered!')
 				setToken(res.data.token)
 	    		window.location.href = "/lineups";
 			})

@@ -79,7 +79,6 @@ function SingleLineupPage() {
     }
   }
 
-  // Fetch user lineup
   const getLineupData = () => {
     if (lineup != null) {
       var temp = {...lineupData}

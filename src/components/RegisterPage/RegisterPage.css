@@ -64,7 +64,5 @@ h1 {
 }
 
 .website-title {
-	position: absolute;
-	top: 0;
-	left: 10vw;
+	margin-bottom: 50px;
 }
