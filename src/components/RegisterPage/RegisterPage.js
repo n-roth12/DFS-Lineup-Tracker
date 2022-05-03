@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './RegisterPage.css'
 
-const LandingPage = () => {
+const LandingPage = ({ setToken }) => {
 
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
@@ -15,7 +15,9 @@ const LandingPage = () => {
 			const params = {'username': username, 'password': password}
 			await axios.post('/users/register', params)
 			.then((res) => {
-				alert('User successfully registered!')
+				// alert('User successfully registered!')
+				setToken(res.data.token)
+	    		window.location.href = "/lineups";
 			})
 			.catch((error) => {
 				if (error.response && error.response.status === 409) {
@@ -35,6 +37,7 @@ const LandingPage = () => {
 
 	return (
 		<div className="register-page">
+			<h1 className="website-title">DFSTracker</h1>
 			<div className="register-form-wrapper">
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>

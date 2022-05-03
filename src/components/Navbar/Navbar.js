@@ -6,14 +6,13 @@ const Navbar = () => {
   const logout = () => {
     localStorage.clear();
     sessionStorage.clear();
-    alert('You have succesfully logged out')
   }
 
   return (
   	<nav>
       <ul>
         <li>
-          <Link className="navlink" to="/">Home</Link>
+          <Link className="navlink home-link" to="/">DFSTracker</Link>
         </li>
         <li>
           <Link className="navlink" to="/login" onClick={() => logout()}>Logout</Link>

@@ -57,3 +57,13 @@ input:focus {
 	font-size: 11pt;
 	text-align: center;
 }
+
+h1 {
+	color: #000000;
+}
+
+.website-title {
+	position: absolute;
+	top: 0;
+	left: 10vw;
+}

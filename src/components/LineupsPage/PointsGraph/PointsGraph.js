@@ -10,10 +10,10 @@ const PointsGraph = ({ graphData }) => {
 				<div className="custom-tooltip">
 					<h3>{payload[0].payload.week}: </h3>
 					<span>
-						<p>{payload[0].payload.points} PTS</p>
+						<p>{parseFloat(payload[0].payload.points).toFixed(2)} PTS</p>
 						{payload[0].payload.points_change &&
 							<p>{payload[0].payload.points_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown style={{color:'red'}}/>}
-									{Math.abs(payload[0].payload.points_change)} PTS</p>
+									{parseFloat(Math.abs(payload[0].payload.points_change)).toFixed(2)} PTS</p>
 						}
 					</span>
 				</div>

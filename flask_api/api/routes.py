@@ -12,11 +12,10 @@ from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 from api.models.user import User
 import csv
-import datetime
+from .date_services import parseDate
 
-# to start flask_api server, run npm run start-flask-api in react_project
-# to start react server, run npm start in react_project
-# to start redis, run redis-server in the terminal in any directory
+# to start backend: $ npm run start-backend
+# starts the flask api and redis server
 
 week_dict = {
 	2012: {
@@ -169,15 +168,15 @@ def get_players():
 	players_from_cache = redis_client.get(key)
 
 	if players_from_cache is None:
-		res = requests.get(f'https://ffbapi.herokuapp.com/api/top?year={year}&week={week}',
-			headers={ 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiJlZDg3MTJlYi03NmI5LTRlMDctODJjNS1lMTQ0Y2FjNjhlYjAifQ.P4W9vpQpXOVIRhvqBDtK42h4gx_4i5bq07geyAtWs7E' }
-		)
+		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}')
 		players_from_api = res.json()
+		res2 = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=dst')
+		defenses_from_api = res2.json()
+		players_from_api.extend(defenses_from_api)
 		redis_client.set(key, json.dumps(players_from_api))
 		players_from_cache = redis_client.get(key)
 
 	players = json.loads(players_from_cache)
-
 	return jsonify({ 'players': players }), 200
 	
 
@@ -244,9 +243,8 @@ def get_lineup(current_user: User, id: int):
 	response = {}
 	for key, value in l.items():
 		if value != None:
-			data = requests.get(f'https://ffbapi.herokuapp.com/api/v1/stats/{value}')
+			data = requests.get(f'{app.config["FFB_API_URL"]}api/v1/playergamestats/{value}')
 			response[key] = data
-
 	return jsonify(LineupSchema().dump(lineup))
 
 
@@ -350,8 +348,8 @@ def get_lineup_data(lineup_id: int):
 	lineup_data_from_cache = redis_client.get(key)
 	if lineup_data_from_cache is None:
 
-		body_data = requests.get(f'http://127.0.0.1:5000/lineups/{lineup_id}').json()
-		res = requests.post(f'https://ffbapi.herokuapp.com/api/playergamestats', 
+		body_data = requests.get(f'{app.config["BASE_URL"]}/lineups/{lineup_id}').json()
+		res = requests.post(f'{app.config["FFB_API_URL"]}api/playergamestats', 
 							json=body_data)
 		lineup_data_from_api = res.json()
 
@@ -408,7 +406,7 @@ def upload_file(current_user: User):
 		return jsonify({ 'Error': 'Missing file!' }), 400
 
 	with open(file.filename, newline='') as csvfile:
-		reader = csv.DictReader(csvfile)
+		reader = csv.DictReader(file)
 		already_exists = 0
 		for row in reader:
 			if row['Sport'] == 'nfl' and row['Score'] != '':
@@ -430,6 +428,8 @@ def upload_file(current_user: User):
 					new_lineup.tournament_name = row['Title']
 					new_lineup.site = 'Fanduel'
 					new_lineup.imported = True
+					new_lineup.position = row['Position']
+					new_lineup.entries = row['Entries']
 					db.session.add(new_lineup)
 					db.session.commit()
 				else:
@@ -437,31 +437,51 @@ def upload_file(current_user: User):
 
 	return jsonify(already_exists), 200
 
-@app.route('/parse', methods=['GET'])
-def parseDate(date):
-	date_split = date.split('/')
-	year = int(date_split[0])
-	month = int(date_split[1])
-	day = int(date_split[2])
-	if year < 2012 or year > 2022:
-		return -1
 
-	lineup_date = datetime.date(year, month, day)
+# @app.route('/lineups/upload', methods=['POST'])
+# @token_required
+# def upload_file(current_user: User):
+# 	file = request.files["myFile"]
+# 	if not file.filename:
+# 		return jsonify({ 'Error': 'Missing file!' }), 400
 
-	start = week_dict[year - 1 if month < 3 else year]['start']
-	stop = week_dict[year - 1 if month < 3 else year]['stop']
-	start_date = datetime.date(year - 1 if month < 3 else year, start['month'], start['day'])
-	stop_date = datetime.date(year + 1 if stop['month'] <= 3 else year, stop['month'], stop['day'])
-	if lineup_date < start_date:
-		return -1
+# 	file_str = file.read('r')
+# 	print(file_str)
+# 	file_str = file.decode('utf-8')
+# 	# file_dict = json.loads(file_str)
+# 	print(file_str)
+# 	f = open("new_file.csv", "x")
+# 	f.
+# 		# reader = csv.DictReader(file)
+# 		# already_exists = 0
+# 		# for row in reader:
+# 		# 	if row['Sport'] == 'nfl' and row['Score'] != '':
+# 		# 		lineup_exists = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id,
+# 		# 														Lineup.entry_id == row['Entry Id']).first()
+# 		# 		if not lineup_exists:
+# 		# 			parsed_week = parseDate(row['Date'])
+# 		# 			if parsed_week == -1:
+# 		# 				continue
+# 		# 			new_lineup = Lineup()
+# 		# 			year = int(row["Date"].split("/")[0])
+# 		# 			new_lineup.year = year if year > 8 else year - 1
+# 		# 			new_lineup.week = parsed_week
+# 		# 			new_lineup.points = float(row['Score'])
+# 		# 			new_lineup.bet = float(row['Entry ($)'])
+# 		# 			new_lineup.winnings = float(row['Winnings ($)'])
+# 		# 			new_lineup.user_public_id = current_user.public_id
+# 		# 			new_lineup.entry_id = row['Entry Id']
+# 		# 			new_lineup.tournament_name = row['Title']
+# 		# 			new_lineup.site = 'Fanduel'
+# 		# 			new_lineup.imported = True
+# 		# 			new_lineup.position = row['Position']
+# 		# 			new_lineup.entries = row['Entries']
+# 		# 			db.session.add(new_lineup)
+# 		# 			db.session.commit()
+# 		# 		else:
+# 		# 			already_exists += 1
 
-	day_count = lineup_date - start_date
-	result = -(-day_count.days // 7)
-	if result > 17 and year < 2022 or result > 18 and year > 2021:
-		return -1
-
-	return result
-
+# 	return jsonify(already_exists), 200
 
 
 

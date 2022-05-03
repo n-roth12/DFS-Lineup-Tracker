@@ -10,10 +10,10 @@ const BankrollGraph = ({ graphData }) => {
 				<div className="custom-tooltip">
 					<h3>{payload[0].payload.week}: </h3>
 					<span>
-						<p>{payload[0].payload.bankroll < 0 && '-'}${Math.abs(payload[0].payload.bankroll)}</p>
+						<p>{payload[0].payload.bankroll < 0 && '-'}${parseFloat(Math.abs(payload[0].payload.bankroll)).toFixed(2)}</p>
 						{payload[0].payload.bankroll_change &&
 							<p>{payload[0].payload.bankroll_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown style={{color:'red'}}/>}
-									${Math.abs(payload[0].payload.bankroll_change)}</p>
+									${parseFloat(Math.abs(payload[0].payload.bankroll_change)).toFixed(2)}</p>
 						}
 					</span>
 				</div>

@@ -70,22 +70,23 @@ const LineupsPage = () => {
  		setYears(temp.sort().reverse())
  	}
 
- 	const loadGraphData = async () => {
+ 	const loadGraphData = () => {
  		setLoadingPointsGraph(true)
  		setLoadingBankrollGraph(true)
  		var data = []
  		var bankRollSum = 0
- 		lineups.length > 0 && lineups.reverse().map((lineup) => {
+
+ 		lineups.length > 0 && lineups.map((lineup) => {
  			bankRollSum += (lineup.winnings - lineup.bet)
  			var week_string = `${lineup.year}/${lineup.week}`
  			var sameWeeks =  data.filter(week => week.week === week_string)
  			if (sameWeeks.length > 0) {
  				sameWeeks[0]["bankroll"] = bankRollSum
- 				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1) 
+ 				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1)
  				sameWeeks[0]["lineup_count"] += 1
- 				if (data.length > 0) {
- 					sameWeeks[0]["points_change"] = (sameWeeks[0]["points"] - data[data.length - 1]["points"]).toFixed(2)
- 					sameWeeks[0]["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"]).toFixed(2)
+ 				if (data.length > 1) {
+ 					sameWeeks[0]["points_change"] = sameWeeks[0]["points"] - data[data.length - 2]["points"]
+ 					sameWeeks[0]["bankroll_change"] = bankRollSum - data[data.length - 2]["bankroll"]
  				}
  			} else {
 	 			var lineup_data = {}
@@ -94,14 +95,15 @@ const LineupsPage = () => {
 	 			lineup_data["bankroll"] = bankRollSum
 	 			lineup_data["week"] = week_string
 	 			if (data.length > 0) {
-	 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"]).toFixed(2)
-	 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"]).toFixed(2)
+	 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"])
+	 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"])
 	 			}
 	 			data.push(lineup_data)
 	 		}
  		})
-		await setPointsGraphData(data)
-		await setBankrollGraphData(data)
+
+		setPointsGraphData(data)
+		setBankrollGraphData(data)
 		setLoadingPointsGraph(false)
 		setLoadingBankrollGraph(false)
  	}

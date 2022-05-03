@@ -203,7 +203,7 @@ function SingleLineupPage() {
         ((player.position == posWithoutNumbers) || ((posWithoutNumbers === 'FLEX') && ( 
           (player.position === 'RB') || (player.position === 'WR') || (player.position === 'TE'))))
         && (!ids.includes(player.stats.id))
-        )
+      )
     })
     return filteredPlayers
   }

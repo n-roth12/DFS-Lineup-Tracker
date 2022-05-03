@@ -129,6 +129,21 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             beingEdited={checkBeingEdited('flex')} 
             cancelEdit={cancelEdit} />
         }
+        {lineup.dst ?
+          <LineupPlayer
+            player={lineup.dst}
+            position={'dst'}
+            beingEdited={checkBeingEdited('dst')}
+            onDelete={onDelete}
+            onAdd={onAdd}
+            onOpenDialog={onOpenDialog} />
+        : <EmptyPlayer
+            key={'dst'}
+            position={'dst'}
+            onAdd={onAdd}
+            beingEdited={checkBeingEdited('dst')}
+            cancelEdit={cancelEdit} /> 
+        }
     </div>
   )
 }

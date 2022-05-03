@@ -1,5 +1,6 @@
 .register-page {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
@@ -56,4 +57,14 @@ input:focus {
 	color: red;
 	font-size: 11pt;
 	text-align: center;
+}
+
+h1 {
+	color: #000000;
+}
+
+.website-title {
+	position: absolute;
+	top: 0;
+	left: 10vw;
 }

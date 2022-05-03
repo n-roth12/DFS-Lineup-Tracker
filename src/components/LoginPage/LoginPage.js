@@ -13,9 +13,10 @@ const LoginPage = ({ setToken, setUserId }) => {
 	const loginUser = async (credentials) => {
 		await axios.post('/users/login', credentials)
 		.then((res) => {
-			alert('Succesfully logged in!')
-			setToken(res.data.token)
-    		window.location.href = "/lineups";
+			if (res.status === 200) {
+				setToken(res.data.token)
+	    		window.location.href = "/lineups";
+	    	}
 		})
 		.catch((error) => {
 			if (error.response && error.response.status === 403) {
@@ -35,6 +36,7 @@ const LoginPage = ({ setToken, setUserId }) => {
 
 	return (
 		<div className="login-page">
+			<h1 className="website-title">DFSTracker</h1>
 			<div className="login-form-wrapper">
 				<h1>Login</h1>
 				<form className="login-form" onSubmit={handleSubmit}>

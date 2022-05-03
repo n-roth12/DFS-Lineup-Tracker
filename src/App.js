@@ -38,7 +38,7 @@ function App() {
           } />
 
           <Route path="/register" element={
-            <RegisterPage />
+            <RegisterPage setToken={setToken} />
           } />
 
           <Route path='/lineups' element={
