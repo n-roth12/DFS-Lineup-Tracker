@@ -17,6 +17,7 @@ flask-bcrypt = "*"
 flask-migrate = "*"
 pyjwt = "*"
 uuid = "*"
+pandas = "*"
 
 [dev-packages]
 

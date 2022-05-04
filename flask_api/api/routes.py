@@ -13,121 +13,10 @@ from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 from api.models.user import User
 import csv
 from .date_services import parseDate
+from pandas import read_csv
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
-
-week_dict = {
-	2012: {
-		'start': {
-			'day': 5,
-			'month': 9
-		},
-		'stop': {
-			'day': 30,
-			'month': 12
-		}
-	},
-	2013: {
-		'start': {
-			'day': 5,
-			'month': 9
-		},
-		'stop': {
-			'day': 29,
-			'month': 12
-		}
-	},
-	2014: {
-		'start': {
-			'day': 4,
-			'month': 9
-		},
-		'stop': {
-			'day': 28,
-			'month': 12
-		}
-	},
-	2015: {
-		'start': {
-			'day': 10,
-			'month': 9
-		},
-		'stop': {
-			'day': 3,
-			'month': 1
-		}
-	},
-	2016: {
-		'start': {
-			'day': 8,
-			'month': 9
-		},
-		'stop': {
-			'day': 1,
-			'month': 1,
-		}
-	},
-	2017: {
-		'start': {
-			'day': 7,
-			'month': 9
-		},
-		'stop': {
-			'day': 31,
-			'month': 12
-		}
-	},
-	2018: {
-		'start': {
-			'day': 6,
-			'month': 9
-		},
-		'stop': {
-			'day': 30,
-			'month': 12
-		}
-	},
-	2019: {
-		'start': {
-			'day': 5,
-			'month': 9
-		},
-		'stop': {
-			'day': 29,
-			'month': 12
-		}
-	},
-	2020: {
-		'start': {
-			'day': 10,
-			'month': 9
-		},
-		'stop': {
-			'day': 3,
-			'month': 1
-		}
-	},
-	2021: {
-		'start': {
-			'day': 8,
-			'month': 9
-		},
-		'stop': {
-			'day': 9,
-			'month': 1
-		}
-	}
-}
-
-days_of_months = {
-	8: 31,
-	9: 30,
-	10: 31,
-	11: 30,
-	12: 31,
-	1: 31
-}
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -401,35 +290,37 @@ def upload_file(current_user: User):
 	if not file.filename:
 		return jsonify({ 'Error': 'Missing file!' }), 400
 
-	with open(file.filename, newline='') as csvfile:
-		reader = csv.DictReader(file)
-		already_exists = 0
-		for row in reader:
-			if row['Sport'] == 'nfl' and row['Score'] != '':
-				lineup_exists = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id,
-																Lineup.entry_id == row['Entry Id']).first()
-				if not lineup_exists:
-					parsed_week = parseDate(row['Date'])
-					if parsed_week == -1:
-						continue
-					new_lineup = Lineup()
-					year = int(row["Date"].split("/")[0])
-					new_lineup.year = year if year > 8 else year - 1
-					new_lineup.week = parsed_week
-					new_lineup.points = float(row['Score'])
-					new_lineup.bet = float(row['Entry ($)'])
-					new_lineup.winnings = float(row['Winnings ($)'])
-					new_lineup.user_public_id = current_user.public_id
-					new_lineup.entry_id = row['Entry Id']
-					new_lineup.tournament_name = row['Title']
-					new_lineup.site = 'Fanduel'
-					new_lineup.imported = True
-					new_lineup.position = row['Position']
-					new_lineup.entries = row['Entries']
-					db.session.add(new_lineup)
-					db.session.commit()
-				else:
-					already_exists += 1
+	csv_file = read_csv(file, header=0, index_col=False, 
+		usecols = ['Entry Id', 'Sport', 'Date', 'Title', 'SalaryCap', 
+			'Score', 'Position', 'Entries', 'Entry ($)', 'Winnings ($)'])
+
+	already_exists = 0
+	for index, row in csv_file.iterrows():
+		if row['Sport'] == 'nfl' and row['Score'] == row['Score']:
+			lineup_exists = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id,
+															Lineup.entry_id == row['Entry Id']).first()
+			if not lineup_exists:
+				parsed_week = parseDate(row['Date'])
+				if parsed_week == -1:
+					continue
+				new_lineup = Lineup()
+				year = int(row['Date'].split("/")[0])
+				new_lineup.year = year if year > 8 else year - 1
+				new_lineup.week = parsed_week
+				new_lineup.points = float(row['Score'])
+				new_lineup.bet = float(row['Entry ($)'])
+				new_lineup.winnings = float(row['Winnings ($)'])
+				new_lineup.user_public_id = current_user.public_id
+				new_lineup.entry_id = row['Entry Id']
+				new_lineup.tournament_name = row['Title']
+				new_lineup.site = 'Fanduel'
+				new_lineup.imported = True
+				new_lineup.position = row['Position']
+				new_lineup.entries = row['Entries']
+				db.session.add(new_lineup)
+				db.session.commit()
+			else:
+				already_exists += 1
 
 	return jsonify(already_exists), 200
 

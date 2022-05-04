@@ -1,5 +1,118 @@
 import datetime
 
+week_dict = {
+	2012: {
+		'start': {
+			'day': 5,
+			'month': 9
+		},
+		'stop': {
+			'day': 30,
+			'month': 12
+		}
+	},
+	2013: {
+		'start': {
+			'day': 5,
+			'month': 9
+		},
+		'stop': {
+			'day': 29,
+			'month': 12
+		}
+	},
+	2014: {
+		'start': {
+			'day': 4,
+			'month': 9
+		},
+		'stop': {
+			'day': 28,
+			'month': 12
+		}
+	},
+	2015: {
+		'start': {
+			'day': 10,
+			'month': 9
+		},
+		'stop': {
+			'day': 3,
+			'month': 1
+		}
+	},
+	2016: {
+		'start': {
+			'day': 8,
+			'month': 9
+		},
+		'stop': {
+			'day': 1,
+			'month': 1,
+		}
+	},
+	2017: {
+		'start': {
+			'day': 7,
+			'month': 9
+		},
+		'stop': {
+			'day': 31,
+			'month': 12
+		}
+	},
+	2018: {
+		'start': {
+			'day': 6,
+			'month': 9
+		},
+		'stop': {
+			'day': 30,
+			'month': 12
+		}
+	},
+	2019: {
+		'start': {
+			'day': 5,
+			'month': 9
+		},
+		'stop': {
+			'day': 29,
+			'month': 12
+		}
+	},
+	2020: {
+		'start': {
+			'day': 10,
+			'month': 9
+		},
+		'stop': {
+			'day': 3,
+			'month': 1
+		}
+	},
+	2021: {
+		'start': {
+			'day': 8,
+			'month': 9
+		},
+		'stop': {
+			'day': 9,
+			'month': 1
+		}
+	}
+}
+
+days_of_months = {
+	8: 31,
+	9: 30,
+	10: 31,
+	11: 30,
+	12: 31,
+	1: 31
+}
+
+
 def parseDate(date):
 	date_split = date.split('/')
 	year = int(date_split[0])
