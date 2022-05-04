@@ -2,13 +2,22 @@ import { FaPlus } from 'react-icons/fa'
 
 const Player = ({ player, onAdd, onOpenDialog }) => {
   
-  const truncPoints = Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
+  var truncPoints = 0
+  if (player.position == 'DST') {
+    truncPoints = player.stats.fanduel_points
+  } else {
+    truncPoints = Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
+  }
   
   return (
     <div className="player">
       {player.position != 'DST' ?
         <>
-          <h3 className="player-section"><span className="pos-label">{player.position}</span> <span className="player-name" onClick={() => onOpenDialog(player)}>{player.name} </span><span className="info">({player.stats.team})</span></h3>
+          <h3 className="player-section">
+            <span className="pos-label">{player.position}</span>
+            <span className="player-name" onClick={() => onOpenDialog(player)}>{player.name}</span>
+            <span className="info">({player.stats.team})</span>
+          </h3>
           <span className="player-body">
             <p className="player-info">
               {player.stats.game} | {player.stats.rushing_touchdowns + player.stats.passing_touchdowns + player.stats.recieving_touchdowns} TD
@@ -23,7 +32,10 @@ const Player = ({ player, onAdd, onOpenDialog }) => {
         </>
       :
         <>
-          <h3 className="player-section"><span className="pos-label">{player.position}</span> <span className="player-name" onClick={() => onOpenDialog(player)}>{player.city} {player.name}</span></h3>
+          <h3 className="player-section">
+            <span className="pos-label">{player.position}</span>
+            <span className="player-name" onClick={() => onOpenDialog(player)}>{player.city} {player.name}</span>
+          </h3>
           <span className="player-body">
             <p className="player-info">
               {`${player.stats.game} `}

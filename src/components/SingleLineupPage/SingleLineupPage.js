@@ -104,7 +104,11 @@ function SingleLineupPage() {
     if (lineup != null) {
       Object.values(lineupData).map((player) => {
         if (!(player == null || player.name == null)) {
-          scoreSum += player.stats.fantasy_points
+          if (player.position === 'DST') {
+            scoreSum += player.stats.fanduel_points
+          } else {
+            scoreSum += player.stats.fantasy_points
+          }
         }
       })
     }
