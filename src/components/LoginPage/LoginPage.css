@@ -66,3 +66,18 @@ h1 {
 .website-title {
 	margin-bottom: 50px;
 }
+
+.show-password {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.show-password p {
+	margin: 0;
+}
+
+.show-password input {
+	margin:  0px;
+	margin-right: 10px;
+}

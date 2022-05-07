@@ -9,6 +9,7 @@ const LoginPage = ({ setToken, setUserId }) => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [alert, setAlert] = useState('')
+	const [showPassword, setShowPassword] = useState(false)
 
 	const loginUser = async (credentials) => {
 		await axios.post('/users/login', credentials)
@@ -34,6 +35,10 @@ const LoginPage = ({ setToken, setUserId }) => {
 		})
 	}
 
+	const toggle = () => {
+		setShowPassword(!showPassword)
+	}
+
 	return (
 		<div className="login-page">
 			<h1 className="website-title">DFSTracker</h1>
@@ -43,8 +48,12 @@ const LoginPage = ({ setToken, setUserId }) => {
 			    	<div>
 			    		<input className="form-control" type="text" placeholder="Username" value={username}
 			    			onChange={(e) => setUsername(e.target.value)} />
-			    		<input className="form-control" type="text" placeholder="Password" value={password}
+			    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Password" value={password}
 			    		onChange={(e) => setPassword(e.target.value)} />
+			    		<div className="show-password">
+			    			<input className="checkbox" type="checkbox" checked={showPassword} onClick={toggle} />
+			    			<p>Show Password</p>
+			    		</div>
 			    		{alert.length > 0 &&
 			    			<>
 			    				<p className="alert">{alert}</p>

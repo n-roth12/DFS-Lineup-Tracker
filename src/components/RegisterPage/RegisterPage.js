@@ -9,6 +9,7 @@ const LandingPage = ({ setToken }) => {
 	const [password, setPassword] = useState('')
 	const [passwordCheck, setPasswordCheck] = useState('')
 	const [alert, setAlert] = useState('')
+	const [showPassword, setShowPassword] = useState(false)
 
 	const onSubmit = async () => {
 		if (password === passwordCheck) {
@@ -34,6 +35,10 @@ const LandingPage = ({ setToken }) => {
 		}
 	}
 
+	const toggle = () => {
+		setShowPassword(!showPassword)
+	}
+
 	return (
 		<div className="register-page">
 			<h1 className="website-title">DFSTracker</h1>
@@ -43,10 +48,14 @@ const LandingPage = ({ setToken }) => {
 		    	<div>
 		    		<input className="form-control" type="text" placeholder="Enter a username" value={username}
 		    			onChange={(e) => setUsername(e.target.value)} />
-		    		<input className="form-control" type="text" placeholder="Enter a password" value={password}
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter a password" value={password}
 		    		onChange={(e) => setPassword(e.target.value)} />
-		    		<input className="form-control" type="text" placeholder="Re-enter password" value={passwordCheck}
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Re-enter password" value={passwordCheck}
 		    		onChange={(e) => setPasswordCheck(e.target.value)} />
+		    		<div className="show-password">
+		    			<input className="checkbox" type="checkbox" checked={showPassword} onClick={toggle} />
+		    			<p>Show Password</p>
+		    		</div>
 		    		{alert.length > 0 &&
 		    			<>
 		    				<p className="alert">{alert}</p>
