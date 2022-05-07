@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './LineupsPage.css';
 import Navbar from '../Navbar/Navbar'
+import Footer from '../Footer/Footer'
 import LineupCard from './LineupCard/LineupCard'
 import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
 import PointsGraph from './PointsGraph/PointsGraph'
@@ -309,8 +310,7 @@ const LineupsPage = () => {
 					</table>
 				</div>
 		  </> : <h1>Loading Lineups...</h1>}
-
-
+		 <Footer />
 	</>
   )
 }

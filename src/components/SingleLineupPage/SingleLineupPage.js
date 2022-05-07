@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import Players from './Players/Players'
 import Lineup from './Lineup/Lineup'
 import Navbar from '../Navbar/Navbar'
+import Footer from '../Footer/Footer'
 import { FaAngleLeft } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
 import '../../App.css';
