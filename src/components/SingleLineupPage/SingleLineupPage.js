@@ -5,6 +5,7 @@ import Lineup from './Lineup/Lineup'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 import LineupInfo from './LineupInfo/LineupInfo'
+import TeamInfo from './TeamInfo/TeamInfo'
 import PlayerDialog from './PlayerDialog/PlayerDialog'
 import { FaAngleLeft } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
@@ -320,9 +321,16 @@ function SingleLineupPage() {
             <button className="submit-btn" onClick={() => submitEditWagerForm()}>Submit</button>
           </DialogActions>
         </Dialog>
-        {lineupInfo != {} &&
-          <LineupInfo lineupInfo={lineupInfo} />
-        }
+        <div className="lineup-information">
+          <div className="lineup-information-inner">
+            {lineupInfo != {} &&
+              <LineupInfo lineupInfo={lineupInfo} />
+            }
+            {(lineupYear && lineupWeek) &&
+              <TeamInfo week={lineupWeek} year={lineupYear} />
+            }
+          </div>
+        </div>
         <PlayerDialog 
           showPlayerDialog={showPlayerDialog} 
           onClose={() => setShowPlayerDialog(false)} 

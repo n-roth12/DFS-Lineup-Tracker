@@ -1,15 +1,4 @@
-.lineup-information {
-	background-color: white;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-}
-
-.lineup-information-inner {
-	width: 100%;
-	max-width: 1200px;
-}
-
 .lineup-bar-chart {
 	width: 500px;
+	display: inline-grid;
 }

@@ -29,20 +29,16 @@ const LineupInfo = ({ lineupInfo }) => {
 	}
 
   return (
-    <div className="lineup-information">
-    	<div className="lineup-information-inner">
-    		<div className="lineup-bar-chart">
-    			<h1>Your Lineup</h1>
-	    		<BarChart data={processInfo(lineupInfo)} width={500} height={250} layout="vertical">
-	    			<XAxis type="number" hide />
-	    			<YAxis type="category" dataKey="position" />
-	    			<Bar dataKey="points" fill="#8884d8" >
-	    				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
-	    			</Bar>
-	    		</BarChart>
-	    	</div>
-    	</div>
-    </div>
+		<div className="lineup-bar-chart">
+			<h1>Your Lineup</h1>
+  		<BarChart data={processInfo(lineupInfo)} width={500} height={250} layout="vertical">
+  			<XAxis type="number" hide />
+  			<YAxis type="category" dataKey="position" />
+  			<Bar dataKey="points" fill="#8884d8" >
+  				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
+  			</Bar>
+  		</BarChart>
+  	</div>
   )
 }
 

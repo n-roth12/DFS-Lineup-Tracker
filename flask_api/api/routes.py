@@ -187,6 +187,24 @@ def temp(current_user: User):
 	return result, 200
 
 
+@app.route('/teaminfo', methods=['GET'])
+@token_required
+def temp1(current_user: User):
+	year = request.args.get('year')
+	week = request.args.get('week')
+	res = requests.get(f'http://127.0.0.1:8000/api/teamstats?year={year}&week={week}')
+	data = res.json()
+	result = []
+	for team, players in data.items():
+		team_result = {'team': team}
+		point_total = sum([player['stats']['fantasy_points'] for player in players])
+		team_result['points'] = point_total
+		result.append(team_result)
+
+	return jsonify(result), 200
+
+
+
 @app.route('/lineups/<id>', methods=['PUT'])
 @token_required
 def edit_lineup(current_user: User, id: int):

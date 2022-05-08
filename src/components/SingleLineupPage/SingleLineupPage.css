@@ -127,3 +127,21 @@ h1 {
   color: blue;
   cursor: pointer;
 }
+
+.lineup-information {
+  background-color: white;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+
+.lineup-information-inner {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+}
