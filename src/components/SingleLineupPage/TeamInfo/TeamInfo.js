@@ -17,7 +17,17 @@ const TeamInfo = ({ lineupWeek, lineupYear }) => {
 				'x-access-token': sessionStorage.dfsTrackerToken
 			}
 		})
-		setTeamInfo(await res.json())
+		setTeamInfo(processTeamInfo(await res.json()))
+	}
+
+	const processTeamInfo = (info) => {
+		info.forEach((item) => {
+			item["points"] = parseFloat((item["points"]).toFixed(2))
+		})
+		info.sort((a, b) => {
+			return b["points"] - a["points"]
+		})
+		return info
 	}
 
 	const renderCustomizedLabel = (props) => {
@@ -32,14 +42,16 @@ const TeamInfo = ({ lineupWeek, lineupYear }) => {
 
   return (
 		<div className="team-bar-chart">
-			<h1>Teams</h1>
-  		<BarChart data={teamInfo} width={500} height={1200} layout="vertical">
-  			<XAxis type="number" hide />
-  			<YAxis type="category" dataKey="team" />
-  			<Bar dataKey="points" fill="#8884d8">
-  				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
-  			</Bar>
-  		</BarChart>
+			<h1>Team Scoring</h1>
+			<div className="team-bar-chart-inner">
+	  		<BarChart data={teamInfo} width={500} height={1200} layout="vertical">
+	  			<XAxis type="number" hide />
+	  			<YAxis type="category" dataKey="team" />
+	  			<Bar dataKey="points" fill="#8884d8">
+	  				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
+	  			</Bar>
+	  		</BarChart>
+	  	</div>
   	</div>
   )
 }

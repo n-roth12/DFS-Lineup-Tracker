@@ -1,6 +1,9 @@
 .team-bar-chart {
-	height: 300px;
+	display: inline-grid;
+}
+
+.team-bar-chart-inner {
+	height: 250px;
 	width: 500px;
 	overflow-y: auto;
-	display: inline-grid;
 }

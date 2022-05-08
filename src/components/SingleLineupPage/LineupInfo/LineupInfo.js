@@ -15,6 +15,9 @@ const LineupInfo = ({ lineupInfo }) => {
 		result.forEach((item) => {
 			item["percentage"] = parseFloat(((item["points"] / totalPoints) * 100).toFixed(2))
 		})
+		result.sort((a, b) => {
+			return b["percentage"] - a["percentage"]
+		})
 		return result
 	}
 

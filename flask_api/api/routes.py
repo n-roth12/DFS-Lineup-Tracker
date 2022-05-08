@@ -196,10 +196,11 @@ def temp1(current_user: User):
 	data = res.json()
 	result = []
 	for team, players in data.items():
-		team_result = {'team': team}
-		point_total = sum([player['stats']['fantasy_points'] for player in players])
-		team_result['points'] = point_total
-		result.append(team_result)
+		if len(players):
+			team_result = {'team': team}
+			point_total = sum([player['stats']['fantasy_points'] for player in players])
+			team_result['points'] = point_total
+			result.append(team_result)
 
 	return jsonify(result), 200
 
