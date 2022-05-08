@@ -5,12 +5,14 @@ import { useState } from 'react'
 
 const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd, onOpenDialog }) => {
 
-  var truncPoints = 0
-  if (player.position == 'DST') {
-    truncPoints = player.stats.fanduel_points
-  } else {
-    const truncPoints = Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
+  const truncPoints = (player) => {
+    var truncPoints = 0
+    if (player.position == 'DST') {
+      return player.stats.fanduel_points
+    }
+    return  Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
   }
+
   return (
     <div className={`player ${beingEdited ? 'selected' : ''}`}>
       {player.position != 'DST' ?
@@ -23,7 +25,7 @@ const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd, onOpenDi
             <p className="player-info">
               {player.stats.game} | {player.stats.rushing_touchdowns + player.stats.passing_touchdowns + player.stats.recieving_touchdowns} TD
               | {player.stats.rushing_yards + player.stats.recieving_yards + player.stats.passing_yards} YRDS
-              |  <strong>{truncPoints} </strong> Points
+              |  <strong>{truncPoints(player)} </strong> Points
             </p>
             <div className="player-btns">
               <MdCompareArrows style={{ color: "green", cursor: "pointer", fontSize: "20pt", marginRight: "8px" }}
@@ -48,7 +50,7 @@ const LineupPlayer = ({ player, position, beingEdited, onDelete, onAdd, onOpenDi
               {player.stats.safeties > 0 && `| ${player.stats.safeties} SFT `}
               {player.stats.fumble_recoveries > 0 && `| ${player.stats.fumble_recoveries} FR `}
               {player.stats.blocks > 0 && `| ${player.stats.blocks} BLK `}
-              | <strong>{truncPoints}</strong> Points 
+              | <strong>{truncPoints(player)}</strong> Points 
             </p>
             <div className="player-btns">
               <MdCompareArrows style={{ color: "green", cursor: "pointer", fontSize: "20pt", marginRight: "8px" }}

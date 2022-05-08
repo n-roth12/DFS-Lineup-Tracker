@@ -2,13 +2,15 @@ import { FaPlus } from 'react-icons/fa'
 
 const Player = ({ player, onAdd, onOpenDialog }) => {
   
-  var truncPoints = 0
-  if (player.position == 'DST') {
-    truncPoints = player.stats.fanduel_points
-  } else {
-    truncPoints = Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
+
+  const truncPoints = (player) => {
+    if (player.position == 'DST') {
+      return player.stats.fanduel_points
+    }
+    console.log(player.stats.fantasy_points)
+    return Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
   }
-  
+
   return (
     <div className="player">
       {player.position != 'DST' ?
@@ -22,7 +24,7 @@ const Player = ({ player, onAdd, onOpenDialog }) => {
             <p className="player-info">
               {player.stats.game} | {player.stats.rushing_touchdowns + player.stats.passing_touchdowns + player.stats.recieving_touchdowns} TD
               | {player.stats.rushing_yards + player.stats.recieving_yards + player.stats.passing_yards} YRDS
-              | <strong>{truncPoints}</strong> Points 
+              | <strong>{truncPoints(player)}</strong> Points 
             </p>
             <div className="add-btn player-section">
               <p><FaPlus style={{ color: "#0069ed", fontSize: "14pt", marginRight: "8px", cursor: "pointer" }}
@@ -45,7 +47,7 @@ const Player = ({ player, onAdd, onOpenDialog }) => {
               {player.stats.safeties > 0 && `| ${player.stats.safeties} SFT `}
               {player.stats.fumble_recoveries > 0 && `| ${player.stats.fumble_recoveries} FR `}
               {player.stats.blocks > 0 && `| ${player.stats.blocks} BLK `}
-              | <strong>{truncPoints}</strong> Points 
+              | <strong>{truncPoints(player)}</strong> Points 
             </p>
             <div className="add-btn player-section">
               <p><FaPlus style={{ color: "#0069ed", fontSize: "14pt", marginRight: "8px", cursor: "pointer" }}

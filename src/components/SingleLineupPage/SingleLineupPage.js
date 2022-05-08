@@ -5,6 +5,7 @@ import Lineup from './Lineup/Lineup'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 import LineupInfo from './LineupInfo/LineupInfo'
+import PlayerDialog from './PlayerDialog/PlayerDialog'
 import { FaAngleLeft } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
 import '../../App.css';
@@ -122,14 +123,16 @@ function SingleLineupPage() {
 
   const getLineupPercentages = async () => {
     const data = lineupData
-    const res = await fetch('/temp', {
-      method: 'POST',
-      headers: {
-        'x-access-token': sessionStorage.dfsTrackerToken
-      },
-      body: JSON.stringify(data)
-    })
-    setLineupInfo(await res.json())
+    if (lineupData){
+      const res = await fetch('/temp', {
+        method: 'POST',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        },
+        body: JSON.stringify(data)
+      })
+      setLineupInfo(await res.json())
+    }
   }
 
   const getLineup = async () => {
@@ -280,7 +283,7 @@ function SingleLineupPage() {
     <>
       <Navbar />
       {!loading ? 
-      <>
+      <div>
         <div className="lineup-header-wrapper">
           <div className="lineup-header">
             <h1 className="lineup-title">Fanduel Lineup: {lineupYear}, Week {lineupWeek}</h1>
@@ -320,84 +323,11 @@ function SingleLineupPage() {
         {lineupInfo != {} &&
           <LineupInfo lineupInfo={lineupInfo} />
         }
-        <Dialog open={showPlayerDialog} className="player-info-dialog">
-          {dialogPlayer.stats &&
-          <>
-            <DialogTitle>
-              <h3>{dialogPlayer.name}</h3>
-              <p>Week {lineup.week} Rank: {dialogPlayer.position}{dialogPlayer.rank}</p>
-              <p>Game: {dialogPlayer.stats.game}</p>
-            </DialogTitle>
-            <DialogContent className="player-info-content">
-              <h4>Passing:</h4>
-              <table className="player-info-table">
-                <thead>
-                  <tr>
-                    <th>CMPS/ATTS</th>
-                    <th>YRDS</th>
-                    <th>TDS</th>
-                    <th>INTS</th>
-                    <th>2PTS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{dialogPlayer.stats.passing_completions}/{dialogPlayer.stats.passing_attempts}</td>
-                    <td>{dialogPlayer.stats.passing_yards}</td>
-                    <td>{dialogPlayer.stats.passing_touchdowns}</td>
-                    <td>{dialogPlayer.stats.passing_interceptions}</td>
-                    <td>{dialogPlayer.stats.passing_2point_conversions}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <h4>Rushing:</h4>
-              <table className="player-info-table">
-                <thead>
-                  <tr>
-                    <th>YRDS</th>
-                    <th>TDS</th>
-                    <th>INTS</th>
-                    <th>2PTS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{dialogPlayer.stats.rushing_yards}</td>
-                    <td>{dialogPlayer.stats.rushing_touchdowns}</td>
-                    <td>{dialogPlayer.stats.fumbles_lost}</td>
-                    <td>{dialogPlayer.stats.rushing_2point_conversions}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <h4>Recieving:</h4>
-              <table className="player-info-table">
-                <thead>
-                  <tr>
-                    <th>REC</th>
-                    <th>YRDS</th>
-                    <th>TDS</th>
-                    <th>2PTS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{dialogPlayer.stats.receptions}</td>
-                    <td>{dialogPlayer.stats.recieving_yards}</td>
-                    <td>{dialogPlayer.stats.recieving_touchdowns}</td>
-                    <td>{dialogPlayer.stats.recieving_2point_conversions}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <hr />
-              <p><strong>Fanduel Points: {dialogPlayer.stats.fantasy_points.toFixed(2)}</strong></p>
-            </DialogContent>
-            <DialogActions className="player-info-actions"> 
-              <button className="close-btn" onClick={() => setShowPlayerDialog(false)}>Close</button>
-            </DialogActions>
-          </>
-          }
-        </Dialog>
-
+        <PlayerDialog 
+          showPlayerDialog={showPlayerDialog} 
+          onClose={() => setShowPlayerDialog(false)} 
+          dialogPlayer={dialogPlayer}/>
+        
         <div className="container">
           <div className="row">
             <div className="col-12 col-md-6 col-lg-5">
@@ -454,14 +384,15 @@ function SingleLineupPage() {
             </div>
           </div>
         </div>
-      </> : 
-      <>
+      </div> : 
+      <div className="loading-screen">
         <h1>{loading}</h1>
         <div className="ring">
           <Roller />
         </div>
-      </>
+      </div>
     }
+    <Footer />
     </>
   )
 }

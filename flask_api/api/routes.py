@@ -169,7 +169,6 @@ def create_lineup(current_user: User):
 						winnings=data["winnings"] if data["winnings"] else 0)
 	db.session.add(new_lineup)
 	db.session.commit()
-	print(LineupSchema().dump(new_lineup))
 
 	return jsonify(LineupSchema().dump(new_lineup)), 200
 

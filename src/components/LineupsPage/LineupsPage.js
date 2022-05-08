@@ -309,7 +309,11 @@ const LineupsPage = () => {
 						</tbody>
 					</table>
 				</div>
-		  </> : <h1>Loading Lineups...</h1>}
+		  </> 
+		 : 
+		 	<div className="loading-screen">
+		  	<h1>Loading Lineups...</h1>
+		  </div>}
 		 <Footer />
 	</>
   )

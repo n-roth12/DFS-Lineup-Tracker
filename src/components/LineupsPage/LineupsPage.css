@@ -5,6 +5,10 @@
 	margin: 10px;
 }
 
+.loading-screen {
+	min-height: 100vh;
+}
+
 .lineups-table thead {
 	background-color: lightgrey;
 }
