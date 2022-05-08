@@ -174,6 +174,20 @@ def create_lineup(current_user: User):
 	return jsonify(LineupSchema().dump(new_lineup)), 200
 
 
+@app.route('/temp', methods=['POST'])
+@token_required
+def temp(current_user: User):
+	data = json.loads(request.data)
+	result = {'QB': 0, 'RB': 0, 'WR': 0, 'TE': 0, 'DST': 0}
+	for key, item in data.items():
+		if item:
+			if item['stats'].get('fanduel_points'):
+				result[item['position']] += item['stats']['fanduel_points']
+			else:
+				result[item['position']] += item['stats']['fantasy_points']
+	return result, 200
+
+
 @app.route('/lineups/<id>', methods=['PUT'])
 @token_required
 def edit_lineup(current_user: User, id: int):

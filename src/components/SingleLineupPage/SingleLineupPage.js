@@ -4,6 +4,7 @@ import Players from './Players/Players'
 import Lineup from './Lineup/Lineup'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
+import LineupInfo from './LineupInfo/LineupInfo'
 import { FaAngleLeft } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
 import '../../App.css';
@@ -33,6 +34,7 @@ function SingleLineupPage() {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
   const [dialogPlayer, setDialogPlayer] = useState({})
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
+  const [lineupInfo, setLineupInfo] = useState({})
 
   // Get lineup and players on page load
   useEffect(() => {
@@ -46,6 +48,7 @@ function SingleLineupPage() {
 
   useEffect(() => {
     getLineupScore()
+    getLineupPercentages()
   }, [lineupData])
 
   // Listens for change in position being edited
@@ -115,6 +118,18 @@ function SingleLineupPage() {
     }
     const roundScore = Math.round((scoreSum + Number.EPSILON) * 100) / 100
     setLineupScore(roundScore)
+  }
+
+  const getLineupPercentages = async () => {
+    const data = lineupData
+    const res = await fetch('/temp', {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify(data)
+    })
+    setLineupInfo(await res.json())
   }
 
   const getLineup = async () => {
@@ -302,6 +317,9 @@ function SingleLineupPage() {
             <button className="submit-btn" onClick={() => submitEditWagerForm()}>Submit</button>
           </DialogActions>
         </Dialog>
+        {lineupInfo != {} &&
+          <LineupInfo lineupInfo={lineupInfo} />
+        }
         <Dialog open={showPlayerDialog} className="player-info-dialog">
           {dialogPlayer.stats &&
           <>
