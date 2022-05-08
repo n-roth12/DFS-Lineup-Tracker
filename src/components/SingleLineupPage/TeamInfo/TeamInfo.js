@@ -1,31 +1,31 @@
 import './TeamInfo.css'
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, LabelList, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContainer, Label } from 'recharts'
+import { Roller } from 'react-awesome-spinners'
 
-const TeamInfo = ({ lineupWeek, lineupYear }) => {
+const TeamInfo = ({ week, year }) => {
 
 	const [teamInfo, setTeamInfo] = useState([])
+	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
 		getTeamData()
 	}, [])
 
 	const getTeamData = async () => {
-		const res = await fetch('/teaminfo?week=9&year=2020',{
+		const res = await fetch(`/teaminfo?week=${week}&year=${year}`,{
 			method: 'GET',
 			headers: {
 				'x-access-token': sessionStorage.dfsTrackerToken
 			}
 		})
 		setTeamInfo(processTeamInfo(await res.json()))
+		setLoading(false)
 	}
 
 	const processTeamInfo = (info) => {
 		info.forEach((item) => {
 			item["points"] = parseFloat((item["points"]).toFixed(2))
-		})
-		info.sort((a, b) => {
-			return b["points"] - a["points"]
 		})
 		return info
 	}
@@ -43,15 +43,24 @@ const TeamInfo = ({ lineupWeek, lineupYear }) => {
   return (
 		<div className="team-bar-chart">
 			<h1>Team Scoring</h1>
-			<div className="team-bar-chart-inner">
-	  		<BarChart data={teamInfo} width={500} height={1200} layout="vertical">
-	  			<XAxis type="number" hide />
-	  			<YAxis type="category" dataKey="team" />
-	  			<Bar dataKey="points" fill="#8884d8">
-	  				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
-	  			</Bar>
-	  		</BarChart>
-	  	</div>
+			{!loading ?
+				<div className="team-bar-chart-inner">
+		  		<BarChart data={teamInfo} width={500} height={1200} layout="vertical">
+		  			<XAxis type="number" hide />
+		  			<YAxis type="category" dataKey="team" />
+		  			<Bar dataKey="points" fill="#8884d8">
+		  				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
+		  			</Bar>
+		  		</BarChart>
+		  	</div>
+		  :
+		  	<div className="teaminfo-loading">
+	        <h1>Loading...</h1>
+	        <div className="teaminfo-ring">
+	          <Roller />
+	        </div>
+        </div>
+		  }
   	</div>
   )
 }

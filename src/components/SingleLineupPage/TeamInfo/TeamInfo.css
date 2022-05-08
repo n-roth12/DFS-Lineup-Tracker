@@ -7,3 +7,16 @@
 	width: 500px;
 	overflow-y: auto;
 }
+
+.teaminfo-loading {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+}
+
+.teaminfo-ring {
+  	transform: translate(0%, 50%);
+}

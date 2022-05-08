@@ -125,7 +125,7 @@ function SingleLineupPage() {
   const getLineupPercentages = async () => {
     const data = lineupData
     if (lineupData){
-      const res = await fetch('/temp', {
+      const res = await fetch('/pos_points', {
         method: 'POST',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken

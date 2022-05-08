@@ -173,7 +173,7 @@ def create_lineup(current_user: User):
 	return jsonify(LineupSchema().dump(new_lineup)), 200
 
 
-@app.route('/temp', methods=['POST'])
+@app.route('/pos_points', methods=['POST'])
 @token_required
 def temp(current_user: User):
 	data = json.loads(request.data)
@@ -189,21 +189,28 @@ def temp(current_user: User):
 
 @app.route('/teaminfo', methods=['GET'])
 @token_required
-def temp1(current_user: User):
+def team_info(current_user: User):
 	year = request.args.get('year')
 	week = request.args.get('week')
-	res = requests.get(f'http://127.0.0.1:8000/api/teamstats?year={year}&week={week}')
-	data = res.json()
-	result = []
-	for team, players in data.items():
-		if len(players):
-			team_result = {'team': team}
-			point_total = sum([player['stats']['fantasy_points'] for player in players])
-			team_result['points'] = point_total
-			result.append(team_result)
+	if not year or not week:
+		return jsonify({ 'Error': 'Year or week not specified.' }), 400
+	key = f'team_info_{year}_{week}'
+	team_info_from_cache = redis_client.get(key)
+	if team_info_from_cache is None:
+		res = requests.get(f'{app.config["FFB_API_URL"]}api/teamstats?year={year}&week={week}')
+		data = res.json()
+		result = []
+		for team, players in data.items():
+			if len(players):
+				team_result = {'team': team}
+				point_total = sum([player['stats']['fantasy_points'] for player in players])
+				team_result['points'] = point_total
+				result.append(team_result)
+		result = sorted(result, key=lambda x: x['points'], reverse=True)
+		redis_client.set(key, json.dumps(result))
+		return jsonify(result), 200
 
-	return jsonify(result), 200
-
+	return jsonify(json.loads(team_info_from_cache)), 200
 
 
 @app.route('/lineups/<id>', methods=['PUT'])
@@ -269,6 +276,7 @@ def get_lineup_data(lineup_id: int):
 		res = requests.post(f'{app.config["FFB_API_URL"]}api/playergamestats', 
 							json=body_data)
 		lineup_data_from_api = res.json()
+
 
 		redis_client.set(key, json.dumps(lineup_data_from_api))
 		lineup_data_from_cache = redis_client.get(key)
