@@ -282,9 +282,8 @@ function SingleLineupPage() {
 
   return (
     <>
-      <Navbar />
       {!loading ? 
-      <div>
+      <div className="single-lineup-page">
         <div className="lineup-header-wrapper">
           <div className="lineup-header">
             <h1 className="lineup-title">Fanduel Lineup: {lineupYear}, Week {lineupWeek}</h1>
@@ -400,7 +399,6 @@ function SingleLineupPage() {
         </div>
       </div>
     }
-    <Footer />
     </>
   )
 }

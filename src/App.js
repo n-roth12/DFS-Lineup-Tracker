@@ -50,13 +50,45 @@ function App() {
             <RegisterPage setToken={setToken} />
           } />
 
-          <Route path='/lineups' element={
-            <LineupsPage />
+          <Route exact path="/lineups" element={
+            <>
+              {sessionStorage.dfsTrackerToken ?
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <SideNav />
+                    <LineupsPage />
+                  </div>
+                  <Footer />
+                </div>
+              : 
+                <LoginPage setToken={setToken} />
+              }
+            </>
           } />
 
-          <Route path='/lineups/:lineupId/:lineupWeek/:lineupYear' element={
+{/*          <Route path='/lineups/:lineupId/:lineupWeek/:lineupYear' element={
             <SingleLineupPage />
+          } />*/}
+
+          <Route path="/lineups/:lineupId/:lineupWeek/:lineupYear" element={
+            <>
+              {sessionStorage.dfsTrackerToken ?
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <SideNav />
+                    <SingleLineupPage />
+                  </div>
+                  <Footer />
+                </div>
+              : 
+                <LoginPage setToken={setToken} />
+              }
+            </>
           } />
+
+
         </Routes>
       </BrowserRouter>
     </div>
