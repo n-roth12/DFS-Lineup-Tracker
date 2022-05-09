@@ -55,12 +55,16 @@ class Lineup(db.Model):
 
 class LineupSchema(ma.SQLAlchemySchema):
 	class Meta:
-		fields = ('id', 'user_public_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'dst', 'points', 'bet', 'winnings')
+		fields = ('id', 'user_public_id', 'week', 'year', 'qb', 'rb1', 'rb2', 
+			'wr1', 'wr2', 'wr3', 'te', 'flex', 'dst', 'points', 'bet', 'winnings', 
+			'position', 'entries')
 
 
 class FullLineupSchema(ma.SQLAlchemySchema):
 	class Meta:
-		fields = ('id', 'user_public_id', 'week', 'year', 'qb', 'rb1', 'rb2', 'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings')
+		fields = ('id', 'user_public_id', 'week', 'year', 'qb', 'rb1', 'rb2', 
+			'wr1', 'wr2', 'wr3', 'te', 'flex', 'points', 'bet', 'winnings', 
+			'position', 'entries')
 
 	qb = ma.Nested(PlayerSchema)
 	rb1 = ma.Nested(PlayerSchema)

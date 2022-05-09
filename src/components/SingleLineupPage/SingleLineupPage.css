@@ -41,13 +41,17 @@
 .lineup-header-wrapper {
   background-color: #ffffff;
   width: 100%;
-  padd: 20px;
   display: flex;
   justify-content: center;
+  box-shadow: ;
+  border-bottom: 1px solid #202033;
+/*  box-shadow: 0px 0px 3px 1px lightgray;*/
+  z-index: 90;
 }
 
 .lineup-header {
-  width: 70%;
+  width: 100%;
+  padding: 10px;
 }
 
 .lineup-title {
@@ -66,6 +70,9 @@
   font-size: 12pt;
   margin-right: 30px;
   font-weight: 500;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .edit-wager-btn {
@@ -73,7 +80,7 @@
   border: None;
   box-shadow: None;
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   color: blue;
   text-decoration: underline;
 }
@@ -142,6 +149,7 @@ h1 {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  box-shadow: 0px 0px 3px 1px lightgray;
 }
 
 
@@ -153,4 +161,8 @@ h1 {
   justify-content: space-around;
   align-items: flex-start;
   flex-wrap: wrap;
+}
+
+.lineup-details p {
+  font-size: 13pt;
 }

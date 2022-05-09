@@ -293,9 +293,15 @@ function SingleLineupPage() {
                 <p className="lineup-detail">Return: {(lineup.winnings && lineup.bet) ? lineup.winnings - lineup.bet : 0}</p>
                 <button className="lineup-detail edit-wager-btn" onClick={() => setShowEditWagerForm(true)}>Edit</button>
               </span>
-              <span>
-                <p className="lineup-detail">Point Total: {lineupScore}</p>
-              </span>
+              {(lineup.position && lineup.entries) ?
+                <span>
+                  <p className="lineup-detail">Placement: {lineup.position} / {lineup.entries}</p>
+                </span>
+              :
+                <span>
+                  <p className="lineup-detail">No Placement Data</p>
+                </span>
+              }
             </div>
           </div>
         </div>
@@ -338,7 +344,7 @@ function SingleLineupPage() {
           <div className="row">
             <div className="col-12 col-md-6 col-lg-5">
               <div className="lineup-wrapper">
-                <h1>Your Lineup</h1>
+                <h1>Your Lineup ({lineupScore} PTS):</h1>
                 { viewSaveLineup && 
                   <>
                     <button className="view-players-btn"

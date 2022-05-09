@@ -11,7 +11,7 @@ const SideNav = () => {
     	<h1>DFSTracker</h1>
     	<div>
     		<ul className="side-nav-links">
-    			<li className={window.location.pathname === '/' ? 'active' : ''}><Link to={'/'} style={{textDecoration: "none"}} className="side-nav-link"><FaBook /> History</Link></li>
+    			<li className={(window.location.pathname === '/' || window.location.pathname === '/lineups') ? 'active' : ''}><Link to={'/'} style={{textDecoration: "none"}} className="side-nav-link"><FaBook /> History</Link></li>
     			<li><Link to={'/'} style={{textDecoration: "none"}} className="side-nav-link"><FaCalendarAlt /> Upcoming</Link></li>
     			<li><Link to={'/'} style={{textDecoration: "none"}} className="side-nav-link"><FaChartBar /> Research</Link></li>
     		</ul>

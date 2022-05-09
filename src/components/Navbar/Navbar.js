@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
   	<nav className="top-nav">
-      {window.location.pathname === '/' && 
+      {(window.location.pathname === '/' || window.location.pathname === '/lineups')&& 
         <h1>History</h1>
       }
       {window.location.pathname.startsWith('/lineups/') &&
