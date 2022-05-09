@@ -286,7 +286,6 @@ function SingleLineupPage() {
       <div className="single-lineup-page">
         <div className="lineup-header-wrapper">
           <div className="lineup-header">
-            <h1 className="lineup-title">Fanduel Lineup: {lineupYear}, Week {lineupWeek}</h1>
             <div className="lineup-details">
               <span>
                 <p className="lineup-detail">Entry Fee: ${lineup.bet}</p>
@@ -316,8 +315,8 @@ function SingleLineupPage() {
             </div>
           </DialogContent>
           <DialogActions>
-            <button className="close-btn" onClick={() => setShowEditWagerForm(false)}>Close</button>
-            <button className="submit-btn" onClick={() => submitEditWagerForm()}>Submit</button>
+            <button className="close-btn btn" onClick={() => setShowEditWagerForm(false)}>Close</button>
+            <button className="submit-btn btn" onClick={() => submitEditWagerForm()}>Submit</button>
           </DialogActions>
         </Dialog>
         <div className="lineup-information">
