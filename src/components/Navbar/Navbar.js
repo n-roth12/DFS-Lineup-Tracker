@@ -9,13 +9,11 @@ const Navbar = () => {
   }
 
   return (
-  	<nav>
-      <ul>
+  	<nav className="top-nav">
+      <h1>{window.location.pathname === '/' ? 'History': ""}</h1>
+      <ul className="top-nav-links">
         <li>
-          <Link className="navlink home-link" to="/">DFSTracker</Link>
-        </li>
-        <li>
-          <Link className="navlink" to="/login" onClick={() => logout()}>Logout</Link>
+          <Link className="top-nav-link" to="/login" style={{textDecoration:"None"}} onClick={() => logout()}>Logout</Link>
         </li>
       </ul>
     </nav>

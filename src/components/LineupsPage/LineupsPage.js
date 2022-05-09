@@ -8,6 +8,7 @@ import LineupCard from './LineupCard/LineupCard'
 import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
 import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
+import SideNav from '../SideNav/SideNav'
 import { Ellipsis } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake } from 'react-icons/fa'
 import axios from 'axios'
@@ -173,8 +174,7 @@ const LineupsPage = () => {
   }
 
   return (
-  	<>
-  		<Navbar />
+  	<div className="lineups-page">
   		{!loadingLineups ?
   		<>
   			<div className="main container">
@@ -314,8 +314,7 @@ const LineupsPage = () => {
 		 	<div className="loading-screen">
 		  	<h1>Loading Lineups...</h1>
 		  </div>}
-		 <Footer />
-	</>
+	</div>
   )
 }
 

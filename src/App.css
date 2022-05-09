@@ -6,18 +6,26 @@
   margin: 0;
 }
 
-html {
-}
-
 body {
   background-color: #f0f3f8;
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
 }
 
-.main {
+.page-wrapper {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  height: 100%;
+}
+
+.page-wrapper-inner {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+a {
+  color: white;
 }
 
 .hidden {

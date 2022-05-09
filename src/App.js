@@ -6,6 +6,8 @@ import SingleLineupPage from './components/SingleLineupPage/SingleLineupPage'
 import LoginPage from './components/LoginPage/LoginPage'
 import RegisterPage from './components/RegisterPage/RegisterPage'
 import Navbar from './components/Navbar/Navbar'
+import SideNav from './components/SideNav/SideNav'
+import Footer from './components/Footer/Footer'
 import './App.css';
 import { FaAngleLeft } from 'react-icons/fa'
 
@@ -26,7 +28,14 @@ function App() {
           <Route exact path="/" element={
             <>
               {sessionStorage.dfsTrackerToken ?
-                <LineupsPage />
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <SideNav />
+                    <LineupsPage />
+                  </div>
+                  <Footer />
+                </div>
               : 
                 <LoginPage setToken={setToken} />
               }
