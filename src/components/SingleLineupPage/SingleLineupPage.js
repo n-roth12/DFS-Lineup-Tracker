@@ -152,7 +152,6 @@ function SingleLineupPage() {
     setEditingPos(pos)
   }
 
-  // Remove a player from the users lineup
   const deleteFromLineup = async (position) => {
     const temp = {...lineup}
     temp[`${position}`] = null
@@ -398,7 +397,6 @@ function SingleLineupPage() {
         </div>
       </div> : 
       <div className="loading-screen">
-        <h1>{loading}</h1>
         <div className="ring">
           <Roller />
         </div>

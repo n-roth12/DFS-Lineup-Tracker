@@ -14,6 +14,7 @@ from api.models.user import User
 import csv
 from .date_services import parseDate
 from pandas import read_csv
+from sqlalchemy import desc
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
@@ -142,9 +143,7 @@ def get_player_counts():
 	for lineup in lineups:
 		data = json.loads(get_lineup_data(lineup.id)[0].data)
 		print(data)
-		
-		# for lineup_data in data:
-		# 	if lineup_data[]
+	
 
 	return jsonify({ 'Message': 'Success' })
 
@@ -250,7 +249,7 @@ def get_user(current_user: User):
 	"""
 	user_lineups = db.session.query(Lineup) \
 					.filter(Lineup.user_public_id == current_user.public_id) \
-					.order_by(Lineup.year, Lineup.week).all()
+					.order_by(Lineup.year.desc(), Lineup.week.desc()).all()
 
 	whole_response = []
 	for user_lineup in user_lineups:
@@ -261,8 +260,11 @@ def get_user(current_user: User):
 		response["points"] =user_lineup.points
 		response["bet"] = user_lineup.bet
 		response["winnings"] = user_lineup.winnings
+		response["position"] = user_lineup.position
+		response["entries"] = user_lineup.entries
 
 		whole_response.append(response)
+
 	return jsonify(whole_response), 200
 
 
@@ -365,50 +367,27 @@ def upload_file(current_user: User):
 	return jsonify(already_exists), 200
 
 
-# @app.route('/lineups/upload', methods=['POST'])
-# @token_required
-# def upload_file(current_user: User):
-# 	file = request.files["myFile"]
-# 	if not file.filename:
-# 		return jsonify({ 'Error': 'Missing file!' }), 400
+@app.route('/upcoming', methods=['GET'])
+@token_required
+def upcoming(current_user: User):
+	
+	key = f'games_week_year'
+	games_from_cache = redis_client.get(key)
 
-# 	file_str = file.read('r')
-# 	print(file_str)
-# 	file_str = file.decode('utf-8')
-# 	# file_dict = json.loads(file_str)
-# 	print(file_str)
-# 	f = open("new_file.csv", "x")
-# 	f.
-# 		# reader = csv.DictReader(file)
-# 		# already_exists = 0
-# 		# for row in reader:
-# 		# 	if row['Sport'] == 'nfl' and row['Score'] != '':
-# 		# 		lineup_exists = db.session.query(Lineup).filter(Lineup.user_public_id == current_user.public_id,
-# 		# 														Lineup.entry_id == row['Entry Id']).first()
-# 		# 		if not lineup_exists:
-# 		# 			parsed_week = parseDate(row['Date'])
-# 		# 			if parsed_week == -1:
-# 		# 				continue
-# 		# 			new_lineup = Lineup()
-# 		# 			year = int(row["Date"].split("/")[0])
-# 		# 			new_lineup.year = year if year > 8 else year - 1
-# 		# 			new_lineup.week = parsed_week
-# 		# 			new_lineup.points = float(row['Score'])
-# 		# 			new_lineup.bet = float(row['Entry ($)'])
-# 		# 			new_lineup.winnings = float(row['Winnings ($)'])
-# 		# 			new_lineup.user_public_id = current_user.public_id
-# 		# 			new_lineup.entry_id = row['Entry Id']
-# 		# 			new_lineup.tournament_name = row['Title']
-# 		# 			new_lineup.site = 'Fanduel'
-# 		# 			new_lineup.imported = True
-# 		# 			new_lineup.position = row['Position']
-# 		# 			new_lineup.entries = row['Entries']
-# 		# 			db.session.add(new_lineup)
-# 		# 			db.session.commit()
-# 		# 		else:
-# 		# 			already_exists += 1
+	if games_from_cache is None:
+		data = requests.get(f'{app.config["FFB_API_URL"]}/api/teamstats?week=18&year=2021').json()
+		games = []
 
-# 	return jsonify(already_exists), 200
+		for team, team_data in data.items():
+			if len(team_data):
+				game = team_data[0]['stats']['game']
+				if game not in games:
+					games.append(game)
+		redis_client.set(key, json.dumps(games))
+
+		return jsonify(games), 200
+
+	return jsonify(json.loads(games_from_cache)), 200
 
 
 

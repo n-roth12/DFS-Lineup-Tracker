@@ -2,7 +2,7 @@ import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContai
 import './PointsGraph.css'
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
 
-const PointsGraph = ({ graphData }) => {
+const PointsGraph = ({ graphData, year }) => {
 
 	const CustomToolTip = ({ active, payload, label }) => {
 		if (active && payload && payload.length) {
@@ -11,9 +11,13 @@ const PointsGraph = ({ graphData }) => {
 					<h3>{payload[0].payload.week}: </h3>
 					<span>
 						<p>{parseFloat(payload[0].payload.points).toFixed(2)} PTS</p>
-						{payload[0].payload.points_change &&
-							<p>{payload[0].payload.points_change > 0 ? <FaArrowUp style={{color:'green'}}/> : <FaArrowDown style={{color:'red'}}/>}
-									{parseFloat(Math.abs(payload[0].payload.points_change)).toFixed(2)} PTS</p>
+						{Math.abs(payload[0].payload.points_change) > 0 &&
+							<p>{payload[0].payload.points_change > 0 ? 
+								<FaArrowUp style={{color:'green'}}/> 
+							: 
+								<FaArrowDown style={{color:'red'}}/>
+							}
+							{parseFloat(Math.abs(payload[0].payload.points_change)).toFixed(2)} PTS</p>
 						}
 					</span>
 				</div>
@@ -25,7 +29,7 @@ const PointsGraph = ({ graphData }) => {
   return (
     <div className="graph-wrapper">
     	<div className="points-graph">
-				<h1 className="graph-label">Points (Average Per Lineup):</h1>
+				<h1 className="graph-label">{year} Points (Average Per Lineup):</h1>
 				<ResponsiveContainer aspect={3}>
 		      <LineChart
 		        width={400}
@@ -44,7 +48,13 @@ const PointsGraph = ({ graphData }) => {
 		        		Fantasy Points Scored
 		        	</Label>*/}
 		        </YAxis>
-		        <Line dataKey="points" stroke="#202033" strokeWidth="2" dot={{fill:"#202033",stroke:"#202033",r:2}} activeDot={{fill:"#202033",stroke:"#202033",r:4}} />
+		        <Line 
+		        	dataKey="points" 
+		        	stroke="#202033" 
+		        	strokeWidth="2" 
+		        	dot={{fill:"#202033",stroke:"#202033",r:2}} 
+		        	activeDot={{fill:"#202033",stroke:"#202033",r:4}} 
+		        />
 		        <Tooltip content={<CustomToolTip />}/>
 		  		</LineChart>
 		  	</ResponsiveContainer>

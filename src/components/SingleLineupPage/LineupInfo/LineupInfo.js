@@ -15,8 +15,9 @@ const LineupInfo = ({ lineupInfo }) => {
 		result.forEach((item) => {
 			item["percentage"] = parseFloat(((item["points"] / totalPoints) * 100).toFixed(2))
 		})
+		const sortedPos = ["QB", "RB", "WR", "TE", "DST"]
 		result.sort((a, b) => {
-			return b["percentage"] - a["percentage"]
+			return sortedPos.indexOf(a["position"]) - sortedPos.indexOf(b["position"])
 		})
 		return result
 	}
@@ -34,14 +35,14 @@ const LineupInfo = ({ lineupInfo }) => {
   return (
 		<div className="lineup-bar-chart">
 			<h1>Your Lineup</h1>
-  		<BarChart data={processInfo(lineupInfo)} width={500} height={250} layout="vertical">
-  			<XAxis type="number" hide />
-  			<YAxis type="category" dataKey="position" />
-  			<Bar dataKey="points" fill="#8884d8" >
-  				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
-  			</Bar>
-  		</BarChart>
-  	</div>
+	  		<BarChart data={processInfo(lineupInfo)} width={500} height={250} layout="vertical">
+	  			<XAxis type="number" hide />
+	  			<YAxis type="category" dataKey="position" />
+	  			<Bar dataKey="points" fill="#8884d8" >
+	  				<LabelList dataKey="points" content={renderCustomizedLabel} style={{ fill: "white" }}/>
+	  			</Bar>
+	  		</BarChart>
+  		</div>
   )
 }
 

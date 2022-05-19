@@ -1,0 +1,36 @@
+.upcoming-page {
+	margin-top: 60px;
+	margin-left: 250px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.upcoming-games {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 10px;
+}
+
+.upcoming-games > h2 {
+	height: 100%;
+	font-size: 16pt;
+	display: flex;
+	align-items: center;
+}
+
+.games-list {
+	display: flex;
+	flex-direction: row;
+	list-style-type: None;
+	flex-wrap: wrap;
+}
+
+.games-list li {
+	background-color: white;
+	border: 1px solid lightgray;
+	padding: 5px;
+	border-radius: 5px;
+	margin-right: 5px;
+}

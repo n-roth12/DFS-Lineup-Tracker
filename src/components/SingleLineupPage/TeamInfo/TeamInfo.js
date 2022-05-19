@@ -55,7 +55,6 @@ const TeamInfo = ({ week, year }) => {
 		  	</div>
 		  :
 		  	<div className="teaminfo-loading">
-	        <h1>Loading...</h1>
 	        <div className="teaminfo-ring">
 	          <Roller />
 	        </div>

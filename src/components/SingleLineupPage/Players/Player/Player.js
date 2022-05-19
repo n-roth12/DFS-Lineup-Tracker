@@ -17,7 +17,7 @@ const Player = ({ player, onAdd, onOpenDialog }) => {
         <>
           <h3 className="player-section">
             <span className="pos-label">{player.position}</span>
-            <span className="player-name" onClick={() => onOpenDialog(player)}>{player.name}</span>
+            <span className="player-name" onClick={() => onOpenDialog(player)}>{player.name} </span>
             <span className="info">({player.stats.team})</span>
           </h3>
           <span className="player-body">

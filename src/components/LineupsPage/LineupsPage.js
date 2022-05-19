@@ -8,8 +8,9 @@ import LineupCard from './LineupCard/LineupCard'
 import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
 import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
+import PlacementGraph from './PlacementGraph/PlacementGraph'
 import SideNav from '../SideNav/SideNav'
-import { Ellipsis } from 'react-awesome-spinners'
+import { Roller } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake } from 'react-icons/fa'
 import axios from 'axios'
 import Dialog from "@material-ui/core/Dialog";
@@ -28,6 +29,7 @@ const LineupsPage = () => {
 	const [filteredYears, setFilteredYears] = useState(null)
 	const [pointsGraphData, setPointsGraphData] = useState([])
 	const [bankrollGraphData, setBankrollGraphData] = useState([])
+	const [placementGraphData, setPlacementGraphData] = useState([])
 	const [loadingPointsGraph, setLoadingPointsGraph] = useState(true)
 	const [loadingBankrollGraph, setLoadingBankrollGraph] = useState(true)
 	const [newLineupYear, setNewLineupYear] = useState('')
@@ -46,6 +48,10 @@ const LineupsPage = () => {
   	getYears()
   	loadGraphData()
   }, [loadingLineups])
+
+  useEffect(() => {
+  	loadGraphData()
+  }, [filteredYears])
 
   const loadPage = async () => {
   	await getUserLineups()
@@ -77,32 +83,36 @@ const LineupsPage = () => {
  		setLoadingBankrollGraph(true)
  		var data = []
  		var bankRollSum = 0
+ 		var lineups_copy = [...lineups]
+ 		lineups_copy.reverse()
 
- 		lineups.length > 0 && lineups.map((lineup) => {
- 			bankRollSum += (lineup.winnings - lineup.bet)
- 			var week_string = `${lineup.year}/${lineup.week}`
- 			var sameWeeks =  data.filter(week => week.week === week_string)
- 			if (sameWeeks.length > 0) {
- 				sameWeeks[0]["bankroll"] = bankRollSum
- 				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1)
- 				sameWeeks[0]["lineup_count"] += 1
- 				if (data.length > 1) {
- 					sameWeeks[0]["points_change"] = sameWeeks[0]["points"] - data[data.length - 2]["points"]
- 					sameWeeks[0]["bankroll_change"] = bankRollSum - data[data.length - 2]["bankroll"]
- 				}
- 			} else {
-	 			var lineup_data = {}
-	 			lineup_data["points"] = lineup.points
-	 			lineup_data["lineup_count"] = 1
-	 			lineup_data["bankroll"] = bankRollSum
-	 			lineup_data["week"] = week_string
-	 			if (data.length > 0) {
-	 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"])
-	 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"])
-	 			}
-	 			data.push(lineup_data)
-	 		}
- 		})
+ 		lineups_copy.length > 0 && lineups_copy.map((lineup) => {
+ 			if (filteredYears == null || filteredYears == lineup.year) {
+	 			bankRollSum += (lineup.winnings - lineup.bet)
+	 			var week_string = `${lineup.year}/${lineup.week}`
+	 			var sameWeeks =  data.filter(week => week.week === week_string)
+	 			if (sameWeeks.length > 0) {
+	 				sameWeeks[0]["bankroll"] = bankRollSum
+	 				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1)
+	 				sameWeeks[0]["lineup_count"] += 1
+	 				if (data.length > 1) {
+	 					sameWeeks[0]["points_change"] = sameWeeks[0]["points"] - data[data.length - 2]["points"]
+	 					sameWeeks[0]["bankroll_change"] = bankRollSum - data[data.length - 2]["bankroll"]
+	 				}
+	 			} else {
+		 			var lineup_data = {}
+		 			lineup_data["points"] = lineup.points
+		 			lineup_data["lineup_count"] = 1
+		 			lineup_data["bankroll"] = bankRollSum
+		 			lineup_data["week"] = week_string
+		 			if (data.length > 0) {
+		 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"])
+		 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"])
+		 			}
+		 			data.push(lineup_data)
+		 		}
+		 	}
+	 	})	
 
 		setPointsGraphData(data)
 		setBankrollGraphData(data)
@@ -180,31 +190,55 @@ const LineupsPage = () => {
   			<div className="main container">
 			  	<div className="graphs-wrapper row">
 						<div className="graph-btn-wrapper">
-							<button className={`graph-btn${graphView === 'bankroll' ? '-active' : ''}`} onClick={() => setGraphView('bankroll')}>Bankroll</button>
-							<button className={`graph-btn${graphView === 'points' ? '-active' : ''}`} onClick={() => setGraphView('points')}>Points</button>
+							<button 
+								className={`graph-btn${graphView === 'bankroll' ? '-active' : ''}`} 
+								onClick={() => setGraphView('bankroll')}>Bankroll
+							</button>
+							<button 
+								className={`graph-btn${graphView === 'points' ? '-active' : ''}`} 
+								onClick={() => setGraphView('points')}>Points
+							</button>
 						</div>
+
 						{ graphView === 'points' &&
 						<>
-					    { !loadingPointsGraph ? <PointsGraph graphData={pointsGraphData} /> : 
+					    { !loadingPointsGraph ? 
+					    	<PointsGraph 
+					    		graphData={pointsGraphData} 
+					    		year={filteredYears} 
+					    	/> 
+					    : 
 					    	<>
-					    		<h1>Loading Points Graph...</h1> 
-					    		<Ellipsis /> 
+					    		<Roller /> 
 					    	</>
 					   	}
-					  	</>
+					  </>
 					  }
 					  { graphView === 'bankroll' &&
 					  <>
-					    { !loadingBankrollGraph ? <BankrollGraph graphData={bankrollGraphData} /> : 
+					    { !loadingBankrollGraph ? 
+					    	<BankrollGraph 
+					    		graphData={bankrollGraphData} 
+					    		year={filteredYears}
+					    	/> 
+					    : 
 					    	<>
-					    		<h1>Loading Bankroll Graph...</h1> 
-					    		<Ellipsis />
+					    		<Roller />
 					    	</>
 					    }
 					  </>
 					 	}
 				  </div>
 		    </div>
+
+				<div className="filter-btn-wrapper">
+					<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
+					{years.length > 0 && years.reverse().map((year) => 
+						<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
+							onClick={() => setFilteredYears(year)}>{year}</button>
+					)}
+				</div>
+
 		    <div className="lineupform-wrapper">
 				  <button className="toggle-lineupform-btn" 
 				  	onClick={() => setShowNewLineupForm(true)}
@@ -245,7 +279,6 @@ const LineupsPage = () => {
 				  	</DialogActions>
 				  </Dialog>
 
-
 				  <Dialog
 				  	open={showImportDialog}>
 				  	<DialogTitle>Import Lineup Data</DialogTitle>
@@ -266,15 +299,6 @@ const LineupsPage = () => {
 				  		<button className="submit-btn btn" onClick={onFileUpload}>Upload</button>
 				  	</DialogActions>
 				  </Dialog>
-
-
-				<div className="filter-btn-wrapper">
-					<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
-					{years.length > 0 && years.reverse().map((year) => 
-						<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
-							onClick={() => setFilteredYears(year)}>{year}</button>
-					)}
-				</div>
 
 				<div className="lineups-wrapper container">
 					<table className="lineups-table">
@@ -312,7 +336,7 @@ const LineupsPage = () => {
 		  </> 
 		 : 
 		 	<div className="loading-screen">
-		  	<h1>Loading Lineups...</h1>
+		 		<Roller />
 		  </div>}
 	</div>
   )

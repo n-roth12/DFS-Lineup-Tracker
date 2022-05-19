@@ -5,6 +5,8 @@ import LineupsPage from './components/LineupsPage/LineupsPage'
 import SingleLineupPage from './components/SingleLineupPage/SingleLineupPage'
 import LoginPage from './components/LoginPage/LoginPage'
 import RegisterPage from './components/RegisterPage/RegisterPage'
+import UpcomingPage from './components/UpcomingPage/UpcomingPage'
+import ResearchPage from './components/ResearchPage/ResearchPage'
 import Navbar from './components/Navbar/Navbar'
 import SideNav from './components/SideNav/SideNav'
 import Footer from './components/Footer/Footer'
@@ -67,10 +69,6 @@ function App() {
             </>
           } />
 
-{/*          <Route path='/lineups/:lineupId/:lineupWeek/:lineupYear' element={
-            <SingleLineupPage />
-          } />*/}
-
           <Route path="/lineups/:lineupId/:lineupWeek/:lineupYear" element={
             <>
               {sessionStorage.dfsTrackerToken ?
@@ -88,6 +86,39 @@ function App() {
             </>
           } />
 
+          <Route path="/upcoming" element={
+            <>
+              {sessionStorage.dfsTrackerToken ?
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <SideNav />
+                    <UpcomingPage week={18} year={2021} />
+                  </div>
+                  <Footer />
+                </div>
+              : 
+                <LoginPage setToken={setToken} />
+              }
+            </>
+          } />
+
+          <Route path="/research" element={
+            <>
+              {sessionStorage.dfsTrackerToken ?
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <SideNav />
+                    <ResearchPage />
+                  </div>
+                  <Footer />
+                </div>
+              : 
+                <LoginPage setToken={setToken} />
+              }
+            </>
+          } />
 
         </Routes>
       </BrowserRouter>
