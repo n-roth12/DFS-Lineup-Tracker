@@ -1,5 +1,6 @@
 import './ResearchPage.css'
 import { useState, useEffect, useRef } from 'react'
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 
 const ResearchPage = () => {
 
@@ -10,7 +11,12 @@ const ResearchPage = () => {
   const [playerData, setPlayerData] = useState({})
   const [gamesData, setGamesData] = useState([])
 
-  const listRef = useRef()
+  const listRefAll = useRef()
+  const listRefQB = useRef()
+  const listRefRB = useRef()
+  const listRefWR = useRef()
+  const listRefTE = useRef()
+  const listRefDST = useRef()
 
   const search = (week, year) => {
     getPlayers(week, year)
@@ -42,19 +48,16 @@ const ResearchPage = () => {
     setSelectedYear(year)
   }
 
-  const handleClick = (direction) => {
-    var distance = listRef.current.getBoundingClientRect().x
+  const handleClick = (direction, ref) => {
+    const left_pos = ref.current.getBoundingClientRect().x - 270
     if (direction === 'left') {
-      console.log(distance)
-      listRef.current.style.transform = `translateX(${250 + distance}px)`
+      ref.current.style.transform = `translateX(${left_pos + 540}px)`
     } else {
-      console.log(distance)
-      listRef.current.style.transform = `translateX(${-250 - distance}px)`
+      ref.current.style.transform = `translateX(${left_pos - 540}px)`
     }
   }
 
   return (
-
     <div className="research-page">
       <div className="header">
         <h1>Select a Week to Research</h1>
@@ -95,89 +98,159 @@ const ResearchPage = () => {
       <div className="search-results">
         <div className="players-results">
           <h1>Players:</h1>
-          <div className="players-row-wrapper">
-            <h2>All</h2>
-            <div className="players-row">
-              <>
-              {playerData.map((player) => 
-                <div className="research-card">
-                  <h3 className="pos-label">OVR{player.rank}</h3>
-                  <h3>{player.name}</h3>
-                </div>
-              )}
-              </>
-            </div>
-          </div>
-          <div className="players-row-wrapper">
-            <h2>QB</h2>
-            <div className="players-row">
-              <>
-              {playerData.map((player) => 
-                player.position === "QB" &&
+          <div className="players-row-outer">
+            <h2 className="players-row-label">All</h2>
+            <div className="players-row-wrapper">
+              <button 
+                className="left-paddle paddle" 
+                onClick={() => handleClick("left", listRefAll)} >
+                  <FaAngleLeft className="slider-icon" />
+              </button>
+              <div className="players-row" ref={listRefAll}>
+                <>
+                {playerData.map((player) => 
                   <div className="research-card">
-                    <h3 className="pos-label">QB{player.rank}</h3>
+                    <h3 className="pos-label">OVR{player.rank}</h3>
                     <h3>{player.name}</h3>
                   </div>
-              )}
-              </>
+                )}
+                </>
+              </div>
+                <button 
+                  className="right-paddle paddle" 
+                  onClick={() => handleClick("right", listRefAll)}>
+                    <FaAngleRight className="slider-icon" />
+                </button>
             </div>
           </div>
-          <div className="players-row-wrapper">
-            <h2>RB</h2>
-            <div className="players-row">
-              <>
-              {playerData.map((player) => 
-                player.position === "RB" &&
-                  <div className="research-card">
-                    <h3 className="pos-label">RB{player.rank}</h3>
-                    <h3>{player.name}</h3>
-                  </div>
-              )}
-              </>
+          <div className="players-row-outer">
+            <h2 className="players-row-label">QB</h2>
+            <div className="players-row-wrapper">
+              <button 
+                className="left-paddle paddle" 
+                onClick={() => handleClick("left", listRefQB)} >
+                  <FaAngleLeft className="slider-icon" />
+              </button>
+              <div className="players-row" ref={listRefQB}>
+                <>
+                {playerData.map((player) => 
+                  player.position === "TE" &&
+                    <div className="research-card">
+                      <h3 className="pos-label">QB{player.rank}</h3>
+                      <h3>{player.name}</h3>
+                    </div>
+                )}
+                </>
+              </div>
+                <button 
+                  className="right-paddle paddle" 
+                  onClick={() => handleClick("right", listRefQB)}>
+                    <FaAngleRight className="slider-icon" />
+                </button>
             </div>
           </div>
-          <div className="players-row-wrapper">
-            <h2>WR</h2>
-            <div className="players-row">
-              <>
-              {playerData.map((player) => 
-                player.position === "WR" &&
-                  <div className="research-card">
-                    <h3 className="pos-label">WR{player.rank}</h3>
-                    <h3>{player.name}</h3>
-                  </div>  
-              )}
-              </>
+          <div className="players-row-outer">
+            <h2 className="players-row-label">RB</h2>
+            <div className="players-row-wrapper">
+              <button 
+                className="left-paddle paddle" 
+                onClick={() => handleClick("left", listRefRB)} >
+                  <FaAngleLeft className="slider-icon" />
+              </button>
+              <div className="players-row" ref={listRefRB}>
+                <>
+                {playerData.map((player) => 
+                  player.position === "RB" &&
+                    <div className="research-card">
+                      <h3 className="pos-label">RB{player.rank}</h3>
+                      <h3>{player.name}</h3>
+                    </div>
+                )}
+                </>
+              </div>
+                <button 
+                  className="right-paddle paddle" 
+                  onClick={() => handleClick("right", listRefRB)}>
+                    <FaAngleRight className="slider-icon" />
+                </button>
             </div>
           </div>
-          <h2>TE</h2>
-          <div className="players-row-wrapper">
-            <button className="left-paddle paddle" onClick={() => handleClick("left")} ></button>
-            <div className="players-row" ref={listRef}>
-              <>
-              {playerData.map((player) => 
-                player.position === "TE" &&
-                  <div className="research-card">
-                    <h3 className="pos-label">TE{player.rank}</h3>
-                    <h3>{player.name}</h3>
-                  </div>
-              )}
-              </>
+          <div className="players-row-outer">
+            <h2 className="players-row-label">WR</h2>
+            <div className="players-row-wrapper">
+              <button 
+                className="left-paddle paddle" 
+                onClick={() => handleClick("left", listRefWR)} >
+                  <FaAngleLeft className="slider-icon" />
+              </button>
+              <div className="players-row" ref={listRefWR}>
+                <>
+                {playerData.map((player) => 
+                  player.position === "WR" &&
+                    <div className="research-card">
+                      <h3 className="pos-label">WR{player.rank}</h3>
+                      <h3>{player.name}</h3>
+                    </div>
+                )}
+                </>
+              </div>
+                <button 
+                  className="right-paddle paddle" 
+                  onClick={() => handleClick("right", listRefWR)}>
+                    <FaAngleRight className="slider-icon" />
+                </button>
             </div>
-              <button className="right-paddle paddle" onClick={() => handleClick("right")}></button>
           </div>
-          <div className="players-row-wrapper">
-            <h2>DST</h2>
-            <div className="players-row">
-              <>
-              {playerData.map((player) => 
-                player.position === "DST" &&
-                  <div className="research-card">
-                    <h3 className="pos-label">DST{player.rank}</h3>
-                    <h3>{player.name}</h3>
-                  </div>
-              )}
-              </>
+          <div className="players-row-outer">
+            <h2 className="players-row-label">TE</h2>
+            <div className="players-row-wrapper">
+              <button 
+                className="left-paddle paddle" 
+                onClick={() => handleClick("left", listRefTE)} >
+                  <FaAngleLeft className="slider-icon" />
+              </button>
+              <div className="players-row" ref={listRefTE}>
+                <>
+                {playerData.map((player) => 
+                  player.position === "TE" &&
+                    <div className="research-card">
+                      <h3 className="pos-label">TE{player.rank}</h3>
+                      <h3>{player.name}</h3>
+                    </div>
+                )}
+                </>
+              </div>
+                <button 
+                  className="right-paddle paddle" 
+                  onClick={() => handleClick("right", listRefTE)}>
+                    <FaAngleRight className="slider-icon" />
+                </button>
+            </div>
+          </div>
+          <div className="players-row-outer">
+            <h2 className="players-row-label">DST</h2>
+            <div className="players-row-wrapper">
+              <button 
+                className="left-paddle paddle" 
+                onClick={() => handleClick("left", listRefDST)} >
+                  <FaAngleLeft className="slider-icon" />
+              </button>
+              <div className="players-row" ref={listRefDST}>
+                <>
+                {playerData.map((player) => 
+                  player.position === "TE" &&
+                    <div className="research-card">
+                      <h3 className="pos-label">DST{player.rank}</h3>
+                      <h3>{player.name}</h3>
+                    </div>
+                )}
+                </>
+              </div>
+                <button 
+                  className="right-paddle paddle" 
+                  onClick={() => handleClick("right", listRefDST)}>
+                    <FaAngleRight className="slider-icon" />
+                </button>
             </div>
           </div>
         </div>

@@ -53,22 +53,25 @@
 	max-width: 300px;
 }
 
+.players-row-outer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
 .players-row-wrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	position: relative;
 	overflow-x: hidden;
-	-ms-overflow-style: none;
-	scrollbar-width: none;
 }
 
-.players-row-wrapper h2 {
+.players-row-outer h2 {
 	margin-right: 10px;
 	min-width: 30px;
 	text-align: left;
 }
-
 
 .research-page .player-card {
 	background-color: white;
@@ -138,15 +141,19 @@
 	margin: auto;
 	background-color: rgb(22,22,22,0.4);
 	border: None;
-	z-index: 300;
+	z-index: 100;
 }
 
 .left-paddle {
-	left: 2.8rem;
+	left: 0;
 }
 
 .right-paddle {
 	right: 0;
+}
+
+.slider-icon {
+	color: white;
 }
 
 
