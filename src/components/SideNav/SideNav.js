@@ -21,8 +21,8 @@ const SideNav = () => {
               style={{textDecoration: "none"}} 
               className="side-nav-link"><FaCalendarAlt /> Upcoming</Link>
           </li>
-    			<li>
-            <Link to={'/'} 
+    			<li className={window.location.pathname === '/research' ? 'active' : ''}>
+            <Link to={'/research'} 
               style={{textDecoration: "none"}} 
               className="side-nav-link"><FaChartBar /> Research</Link>
           </li>

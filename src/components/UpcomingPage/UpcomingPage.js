@@ -17,7 +17,7 @@ const UpcomingPage = ({ week, year }) => {
 
 
 	const getGames = async () => {
-		const res = await fetch('/upcoming', {
+		const res = await fetch('/upcoming/games', {
 			method: 'GET',
 			headers: {
 				'x-access-token': sessionStorage.dfsTrackerToken
@@ -25,6 +25,10 @@ const UpcomingPage = ({ week, year }) => {
 		})
 		const games = await res.json()
 		setGames(games)
+	}
+
+	const getPlayers = async () => {
+		return
 	}
 
 

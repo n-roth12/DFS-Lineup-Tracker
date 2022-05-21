@@ -68,19 +68,6 @@ def get_players():
 
 	players = json.loads(players_from_cache)
 	return jsonify({ 'players': players }), 200
-	
-
-@app.route('/players', methods=['POST'])
-def add_player():
-	data = json.loads(request.data)
-	if not data:
-		return jsonify({ 'Error': 'Request body does not contain necessary data.' })
-
-	new_player = Player(name=data['name'], position=data['position'], team=data['team'])
-	db.session.add(new_player)
-	db.session.commit()
-
-	return jsonify({ 'Message': 'New player successfully addded!' })
 
 
 @app.route('/players/<id>', methods=['DELETE'])
@@ -130,22 +117,7 @@ def get_lineup(current_user: User, id: int):
 		return jsonify({ 'Error': 'No lineup with specified id.' })
 
 	l = LineupSchema().dump(lineup)
-	print(l)
 	return jsonify(LineupSchema().dump(lineup))
-
-
-@app.route('/player_counts', methods=['GET'])
-def get_player_counts():
-	lineups = db.session.query(Lineup).all()
-
-	player_counts_dict = {}
-
-	for lineup in lineups:
-		data = json.loads(get_lineup_data(lineup.id)[0].data)
-		print(data)
-	
-
-	return jsonify({ 'Message': 'Success' })
 
 
 @app.route('/lineups', methods=['POST'])
@@ -367,9 +339,9 @@ def upload_file(current_user: User):
 	return jsonify(already_exists), 200
 
 
-@app.route('/upcoming', methods=['GET'])
+@app.route('/upcoming/games', methods=['GET'])
 @token_required
-def upcoming(current_user: User):
+def upcoming_games(current_user: User):
 	
 	key = f'games_week_year'
 	games_from_cache = redis_client.get(key)
@@ -388,6 +360,43 @@ def upcoming(current_user: User):
 		return jsonify(games), 200
 
 	return jsonify(json.loads(games_from_cache)), 200
+
+
+@app.route('/upcoming/players', methods=['GET'])
+@token_required
+def upcoming_players(current_user: User):
+	return
+
+
+@app.route('/research/search', methods=['GET'])
+@token_required
+def research_search(current_user: User):
+	year = request.args.get('year')
+	week = request.args.get('week')
+	if (not year or not week):
+		return jsonify({ 'Error': 'Missing year or week!' }), 400
+
+	try:
+		year = int(year)
+		week = int(week)
+	except ValueError:
+		return jsonify({ 'Error': 'Year and week must be integers!' }), 400
+
+	key = f'players_{year}_{week}'
+	players_from_cache = redis_client.get(key)
+
+	if players_from_cache is None:
+		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}')
+		players_from_api = res.json()
+		res2 = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=dst')
+		defenses_from_api = res2.json()
+		players_from_api.extend(defenses_from_api)
+		redis_client.set(key, json.dumps(players_from_api))
+		players_from_cache = redis_client.get(key)
+
+	players = json.loads(players_from_cache)
+
+	return jsonify(players), 200
 
 
 
