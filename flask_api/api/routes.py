@@ -417,7 +417,13 @@ def research_search(current_user: User):
 
 
 
+@app.route('/research/player', methods=['GET'])
+@token_required
+def research_player(current_user: User):
+	name = request.args.get('name')
 
+
+	return 'Success', 200
 
 
 
