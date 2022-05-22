@@ -382,8 +382,8 @@ def research_search(current_user: User):
 	except ValueError:
 		return jsonify({ 'Error': 'Year and week must be integers!' }), 400
 
-	key = f'players_{year}_{week}'
-	players_from_cache = redis_client.get(key)
+	key1 = f'players_{year}_{week}'
+	players_from_cache = redis_client.get(key1)
 
 	if players_from_cache is None:
 		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}')
@@ -391,12 +391,29 @@ def research_search(current_user: User):
 		res2 = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=dst')
 		defenses_from_api = res2.json()
 		players_from_api.extend(defenses_from_api)
-		redis_client.set(key, json.dumps(players_from_api))
-		players_from_cache = redis_client.get(key)
+		redis_client.set(key1, json.dumps(players_from_api))
+		players_from_cache = redis_client.get(key1)
 
 	players = json.loads(players_from_cache)
 
-	return jsonify(players), 200
+	key2 = f'games_{year}_{week}'
+	games_from_cache = redis_client.get(key2)
+
+	if games_from_cache is None:
+		data = requests.get(f'{app.config["FFB_API_URL"]}/api/teamstats?week={week}&year={year}').json()
+		games = []
+
+		for team, team_data in data.items():
+			if len(team_data):
+				game = team_data[0]['stats']['game']
+				if game not in games:
+					games.append(game)
+		redis_client.set(key2, json.dumps(games))
+		games_from_cache = redis_client.get(key2)
+
+	games = json.loads(games_from_cache)
+
+	return jsonify({ 'players': players, 'games': games}), 200
 
 
 

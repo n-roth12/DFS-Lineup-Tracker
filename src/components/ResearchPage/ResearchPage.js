@@ -1,6 +1,8 @@
 import './ResearchPage.css'
 import { useState, useEffect, useRef } from 'react'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
+import PlayerDialog from '../SingleLineupPage/PlayerDialog/PlayerDialog'
+import { Link } from 'react-router-dom'
 
 const ResearchPage = () => {
 
@@ -10,6 +12,8 @@ const ResearchPage = () => {
   const [selectedWeek, setSelectedWeek] = useState("18")
   const [playerData, setPlayerData] = useState({})
   const [gamesData, setGamesData] = useState([])
+  const [showPlayerDialog, setShowPlayerDialog] = useState(false)
+  const [dialogPlayer, setDialogPlayer] = useState({})
 
   const listRefAll = useRef()
   const listRefQB = useRef()
@@ -18,29 +22,17 @@ const ResearchPage = () => {
   const listRefTE = useRef()
   const listRefDST = useRef()
 
-  const search = (week, year) => {
-    getPlayers(week, year)
-    getGames(week, year)
-  }
 
-  const getPlayers = async (week, year) => {
+  const search = async (week, year) => {
     const res = await fetch(`/research/search?week=${week}&year=${year}`, {
       method: "GET",
       headers: {
         "x-access-token": sessionStorage.dfsTrackerToken
       },
     })
-    setPlayerData(await res.json())
-  }
-
-  const getGames = async (week, year) => {
-    const res = await fetch(`/upcoming/games?week=${week}&year=${year}`, {
-      method: 'GET',
-      headers: {
-        'x-access-token': sessionStorage.dfsTrackerToken
-      }
-    })
-    setGamesData(await res.json())
+    const result = await res.json()
+    setPlayerData(result["players"])
+    setGamesData(result["games"])
   }
 
   const changeYear = (year) => {
@@ -50,11 +42,28 @@ const ResearchPage = () => {
 
   const handleClick = (direction, ref) => {
     const left_pos = ref.current.getBoundingClientRect().x - 270
-    if (direction === 'left') {
-      ref.current.style.transform = `translateX(${left_pos + 540}px)`
-    } else {
-      ref.current.style.transform = `translateX(${left_pos - 540}px)`
+    console.log(left_pos)
+    if (direction === "left" && left_pos < 0) {
+      ref.current.style.transform = `translateX(${left_pos + 400}px)`
+    } else if (direction === "right") {
+      ref.current.style.transform = `translateX(${left_pos - 400}px)`
     }
+  }
+
+  const openPlayerDialog = (player) => {
+    setDialogPlayer(player)
+    setShowPlayerDialog(true)
+  }
+
+  const truncPoints = (player) => {
+    if (player.position == 'DST') {
+      return player.stats.fanduel_points
+    }
+    return Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
+  }
+
+  const alterGame = (game) => {
+    return game.replace("@", "-")
   }
 
   return (
@@ -111,7 +120,8 @@ const ResearchPage = () => {
                 {playerData.map((player) => 
                   <div className="research-card">
                     <h3 className="pos-label">OVR{player.rank}</h3>
-                    <h3>{player.name}</h3>
+                    <h3 className="player-name" onClick={(() => openPlayerDialog(player))}>{player.name}</h3>
+                    <h3>{truncPoints(player)} Pts</h3>
                   </div>
                 )}
                 </>
@@ -127,7 +137,7 @@ const ResearchPage = () => {
             <h2 className="players-row-label">QB</h2>
             <div className="players-row-wrapper">
               <button 
-                className="left-paddle paddle" 
+                className="left-paddle paddle hidden" 
                 onClick={() => handleClick("left", listRefQB)} >
                   <FaAngleLeft className="slider-icon" />
               </button>
@@ -153,7 +163,7 @@ const ResearchPage = () => {
             <h2 className="players-row-label">RB</h2>
             <div className="players-row-wrapper">
               <button 
-                className="left-paddle paddle" 
+                className="left-paddle paddle hidden" 
                 onClick={() => handleClick("left", listRefRB)} >
                   <FaAngleLeft className="slider-icon" />
               </button>
@@ -179,7 +189,7 @@ const ResearchPage = () => {
             <h2 className="players-row-label">WR</h2>
             <div className="players-row-wrapper">
               <button 
-                className="left-paddle paddle" 
+                className="left-paddle paddle hidden" 
                 onClick={() => handleClick("left", listRefWR)} >
                   <FaAngleLeft className="slider-icon" />
               </button>
@@ -205,7 +215,7 @@ const ResearchPage = () => {
             <h2 className="players-row-label">TE</h2>
             <div className="players-row-wrapper">
               <button 
-                className="left-paddle paddle" 
+                className="left-paddle paddle hidden" 
                 onClick={() => handleClick("left", listRefTE)} >
                   <FaAngleLeft className="slider-icon" />
               </button>
@@ -231,7 +241,7 @@ const ResearchPage = () => {
             <h2 className="players-row-label">DST</h2>
             <div className="players-row-wrapper">
               <button 
-                className="left-paddle paddle" 
+                className="left-paddle paddle hidden" 
                 onClick={() => handleClick("left", listRefDST)} >
                   <FaAngleLeft className="slider-icon" />
               </button>
@@ -253,6 +263,10 @@ const ResearchPage = () => {
                 </button>
             </div>
           </div>
+          <PlayerDialog 
+            showPlayerDialog={showPlayerDialog} 
+            onClose={() => setShowPlayerDialog(false)} 
+            dialogPlayer={dialogPlayer}/>
         </div>
 
         {gamesData.length > 0 &&
@@ -260,8 +274,10 @@ const ResearchPage = () => {
           <h1>Games:</h1>
           <div className="upcoming-games"> 
             <ul className="games-list">
-            {gamesData.map((game) => 
-              <li>{game}</li>
+            {gamesData.map((game) =>
+              <li>
+                <Link className="game-link" to={`/research/${alterGame(game)}/${selectedWeek}/${selectedYear}`}>{game}</Link>
+              </li>
             )}
             </ul>
           </div>

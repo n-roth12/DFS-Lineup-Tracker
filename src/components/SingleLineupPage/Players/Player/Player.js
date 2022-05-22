@@ -7,7 +7,6 @@ const Player = ({ player, onAdd, onOpenDialog }) => {
     if (player.position == 'DST') {
       return player.stats.fanduel_points
     }
-    console.log(player.stats.fantasy_points)
     return Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
   }
 

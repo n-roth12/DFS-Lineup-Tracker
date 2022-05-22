@@ -12,6 +12,7 @@
 	flex-direction: column;
 	align-items: center;
 	padding-bottom: 20px;
+  	box-shadow: 0px 0px 3px 1px lightgray;
 }
 
 .selects {
@@ -38,6 +39,7 @@
 }
 
 .search-results {
+	width: 100%;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap-reverse;
@@ -49,8 +51,7 @@
 }
 
 .games-results {
-	width: 30%;
-	max-width: 300px;
+	width: 20%;
 }
 
 .players-row-outer {
@@ -104,7 +105,7 @@
 	flex-direction: row;
 	align-content: center;
 	transform: translateX(0px);
-	transition: all 1s ease;
+	transition: all 0.7s ease;
 }
 
 .players-row-wrapper::-webkit-scrollbar {
@@ -112,7 +113,6 @@
 }
 
 .research-card {
-  height: 80px;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -154,6 +154,11 @@
 
 .slider-icon {
 	color: white;
+}
+
+.research-page .game-link {
+	color: blue;
+	text-decoration: none;
 }
 
 
