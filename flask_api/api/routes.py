@@ -67,6 +67,7 @@ def get_players():
 		players_from_cache = redis_client.get(key)
 
 	players = json.loads(players_from_cache)
+	print(players)
 	return jsonify({ 'players': players }), 200
 
 
@@ -421,9 +422,14 @@ def research_search(current_user: User):
 @token_required
 def research_player(current_user: User):
 	name = request.args.get('name')
+	last_year = 2021
+	this_year = None
 
+	name_fixed = name.replace(' ', '_')
+	career_data = requests.get(f'{app.config["FFB_API_URL"]}/api/stats?name={name_fixed}').json()
+	last_year_data = requests.get(f'{app.config["FFB_API_URL"]}/api/stats?name={name_fixed}&year={last_year}').json()
 
-	return 'Success', 200
+	return jsonify({ 'last_year': last_year_data, 'career': career_data }), 200
 
 
 
