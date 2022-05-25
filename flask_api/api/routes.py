@@ -67,7 +67,6 @@ def get_players():
 		players_from_cache = redis_client.get(key)
 
 	players = json.loads(players_from_cache)
-	print(players)
 	return jsonify({ 'players': players }), 200
 
 

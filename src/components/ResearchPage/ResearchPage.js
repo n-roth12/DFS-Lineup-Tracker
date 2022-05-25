@@ -10,7 +10,7 @@ const ResearchPage = () => {
   const weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
   const [selectedYear, setSelectedYear] = useState("2021")
   const [selectedWeek, setSelectedWeek] = useState("18")
-  const [playerData, setPlayerData] = useState({})
+  const [playerData, setPlayerData] = useState([])
   const [gamesData, setGamesData] = useState([])
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
   const [dialogPlayer, setDialogPlayer] = useState({})
@@ -24,6 +24,7 @@ const ResearchPage = () => {
   const listRefWR = useRef()
   const listRefTE = useRef()
   const listRefDST = useRef()
+  const listRefGames = useRef()
 
 
   const weekSearch = async (week, year) => {
@@ -35,7 +36,17 @@ const ResearchPage = () => {
     })
     const result = await res.json()
     setPlayerData(result["players"])
-    setGamesData(result["games"])
+    var games_data = []
+    result["games"].map((game) => {
+      const games_split = game.split("@")
+      games_data.push(
+      {
+        "game": game,
+        "away": games_split[0],
+        "home": games_split[1]
+      })
+    })
+    setGamesData(games_data)
   }
 
   const playerSearch = async (name) => {
@@ -144,6 +155,35 @@ const ResearchPage = () => {
       </div>
       {playerData.length > 0 && activeTab === "week" &&
       <div className="search-results">
+        {gamesData.length > 0 &&
+        <div className="players-results">
+          <h1>Games:</h1>
+          <div className="players-row-outer"> 
+            <div className="players-row-wrapper">
+              <button 
+                className="left-paddle paddle" 
+                onClick={() => handleClick("left", listRefGames)} >
+                  <FaAngleLeft className="slider-icon" />
+              </button>
+              <div className="players-row" ref={listRefGames}>
+              {gamesData.map((game) =>
+                  <div className="research-card">
+                    <span><Link className="game-link" to={`/research/${game["home"]}`}>{game["home"]}</Link></span>
+                    <span>@</span>
+                    <span><Link className="game-link" to={`/research/${game["away"]}`}>{game["away"]}</Link></span>
+                    <span><Link className="game-link" to={`/research/${alterGame(game["game"])}/${selectedWeek}/${selectedYear}`}>Details</Link></span>
+                  </div>
+              )}
+              </div>
+              <button 
+                className="right-paddle paddle" 
+                onClick={() => handleClick("right", listRefGames)}>
+                  <FaAngleRight className="slider-icon" />
+              </button>
+            </div>
+          </div>
+        </div>
+        }
         <div className="players-results">
           <h1>Players:</h1>
           <div className="players-row-outer">
@@ -312,22 +352,6 @@ const ResearchPage = () => {
             onClose={() => setShowPlayerDialog(false)} 
             dialogPlayer={dialogPlayer}/>
         </div>
-
-        {gamesData.length > 0 &&
-        <div className="games-results">
-          <h1>Games:</h1>
-          <div className="upcoming-games"> 
-            <ul className="games-list">
-            {gamesData.map((game) =>
-              <li>
-                <Link className="game-link" to={`/research/${alterGame(game)}/${selectedWeek}/${selectedYear}`}>{game}</Link>
-              </li>
-            )}
-            </ul>
-          </div>
-        </div>
-        }
-      }
       </div>
     }
     { activeTab === "player" &&
