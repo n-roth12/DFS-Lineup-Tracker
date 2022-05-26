@@ -17,7 +17,6 @@
 	.week-search {
 		display: flex;
 		flex-direction: row;
-		width: 90%;
 		justify-content: center;
 		align-items: center;
 
@@ -64,7 +63,7 @@
 		.research-card {
 			min-width: 150px;
 			max-width: 200px;
-			min-height: 75px;
+			height: 100px;
 			background-color: white;
 			margin: 3px;
 			border-radius: 5px;
@@ -99,10 +98,25 @@
 
 		.lineups-table {
 			font-size: 10pt;
+			max-width: 70%;
+			overflow-x: auto;
 
-			.col-label {
-				border-left: 1px solid gray;
-				border-right: 1px solid gray;
+			.col-labels {
+				background-color: #f2f2f2;
+				border-bottom: None;
+
+				.col-label {
+					border-left: 1px solid gray;
+					border-right: 1px solid gray;
+				}
+			}
+
+			.table-header {
+				border-top: none;
+			}
+
+			tr:hover {
+				background-color: #d5d8dc;
 			}
 
 		}
@@ -110,16 +124,12 @@
 	}
 
 	.paddle {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		height: 3rem;
-		width: 3rem;
-		border-radius: 50%;
+		position: relative;
+		height: 100px;
+		width: 5rem;
 		margin: auto;
 		background-color: rgb(22,22,22,0.4);
 		border: None;
-		z-index: 100;
 	}
 
 	.left-paddle {

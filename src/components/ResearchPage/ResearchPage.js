@@ -160,12 +160,12 @@ const ResearchPage = () => {
         <div className="games-results">
           <h1>Games:</h1>
           <div className="games-row-outer"> 
+            <button 
+              className="left-paddle paddle" 
+              onClick={() => handleClick("left", listRefGames)} >
+                <FaAngleLeft className="slider-icon" />
+            </button>
             <div className="games-row-wrapper">
-              <button 
-                className="left-paddle paddle" 
-                onClick={() => handleClick("left", listRefGames)} >
-                  <FaAngleLeft className="slider-icon" />
-              </button>
               <div className="games-row" ref={listRefGames}>
               {gamesData.map((game) =>
                 <div className="research-card">
@@ -176,12 +176,12 @@ const ResearchPage = () => {
                 </div>
               )}
               </div>
-              <button 
-                className="right-paddle paddle" 
-                onClick={() => handleClick("right", listRefGames)}>
-                  <FaAngleRight className="slider-icon" />
-              </button>
             </div>
+            <button 
+              className="right-paddle paddle" 
+              onClick={() => handleClick("right", listRefGames)}>
+                <FaAngleRight className="slider-icon" />
+            </button>
           </div>
         </div>
         }
@@ -210,13 +210,14 @@ const ResearchPage = () => {
             </button>
           </div>
           <table className="lineups-table">
-            <tr>
+            <tr className="col-labels">
               <th colspan="5"></th>
               <th className="col-label" colspan="3">Passing</th>
               <th className="col-label" colspan="2">Rushing</th>
               <th className="col-label" colspan="3">Recieving</th>
+              <th className="col-label" colspan="1">Misc.</th>
             </tr>
-            <tr>
+            <tr className="table-header">
               <th>Rank</th>
               <th>Name</th>
               <th>Pos</th>
@@ -237,10 +238,10 @@ const ResearchPage = () => {
               || (player.position === posFilter)) &&
               <tr>
                 <td>{player.rank}</td>
-                <td>{player.name}</td>
+                <td><strong><Link className="game-link" to={`/research`}>{player.name}</Link></strong></td>
                 <td>{player.position}</td>
                 <td>{player.stats.team}</td>
-                <td>{player.stats.fantasy_points}</td>
+                <td className="points-col"><strong>{truncPoints(player)}</strong></td>
                 <td>{player.stats.passing_yards}</td>
                 <td>{player.stats.passing_touchdowns}</td>
                 <td>{player.stats.passing_interceptions}</td>
