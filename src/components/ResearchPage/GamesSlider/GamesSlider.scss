@@ -1,0 +1,64 @@
+.games-results {
+	width: 80%;
+
+	.games-row-outer {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.games-row-wrapper {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		position: relative;
+		overflow-x: hidden;
+	}
+
+	.research-card {
+		min-width: 150px;
+		max-width: 200px;
+		height: 100px;
+		background-color: white;
+		margin: 3px;
+		border-radius: 5px;
+	  display: flex;
+	  flex-direction: column;
+	  padding: 5px;
+	  border: 1px solid #d3d3d3;
+	}
+
+	.games-row {
+		display: flex;
+		flex-direction: row;
+		align-content: center;
+		transform: translateX(0px);
+		transition: all 0.7s ease;
+	}
+
+	.paddle {
+		position: relative;
+		height: 100px;
+		width: 5rem;
+		margin: auto;
+		background-color: rgb(22,22,22,0.4);
+		border: None;
+	}
+
+	.left-paddle {
+		left: 0;
+	}
+
+	.right-paddle {
+		right: 0;
+	}
+
+	.slider-icon {
+		color: white;
+	}
+
+	.game-link {
+		color: blue;
+		text-decoration: none;
+	}
+}

@@ -1,0 +1,47 @@
+.players-results {
+
+	max-width: 100%;
+
+	.pos-filters {
+		list-style-type: None;
+		background-color: white;
+		display: flex;
+		flex-direction: row;
+		width: fit-content;
+	}
+
+	li {
+		border: 1px solid gray;
+	}
+
+	.lineups-table {
+		font-size: 10pt;
+		max-width: 100%;
+		overflow-x: auto;
+
+		.col-labels {
+			background-color: #f2f2f2;
+			border-bottom: None;
+
+			.col-label {
+				border-left: 1px solid gray;
+				border-right: 1px solid gray;
+			}
+		}
+
+		.table-header {
+			border-top: none;
+		}
+
+		tr:hover {
+			background-color: #d5d8dc;
+		}
+
+		.player-link {
+			color: blue;
+			text-decoration: none;
+		}
+
+	}
+
+}

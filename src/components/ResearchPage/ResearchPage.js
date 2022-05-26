@@ -1,8 +1,8 @@
 import './ResearchPage.scss'
 import { useState, useEffect, useRef } from 'react'
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import PlayerDialog from '../SingleLineupPage/PlayerDialog/PlayerDialog'
-import { Link } from 'react-router-dom'
+import PlayersTable from './PlayersTable/PlayersTable'
+import GamesSlider from './GamesSlider/GamesSlider'
 
 const ResearchPage = () => {
 
@@ -17,7 +17,6 @@ const ResearchPage = () => {
   const [playerSearchData, setPlayerSearchData] = useState({})
   const [nameSearch, setNameSearch] = useState("")
   const [activeTab, setActiveTab] = useState("week")
-  const [posFilter, setPosFilter] = useState("")
 
   const listRefAll = useRef()
   const listRefQB = useRef()
@@ -25,7 +24,6 @@ const ResearchPage = () => {
   const listRefWR = useRef()
   const listRefTE = useRef()
   const listRefDST = useRef()
-  const listRefGames = useRef()
 
 
   const weekSearch = async (week, year) => {
@@ -65,15 +63,6 @@ const ResearchPage = () => {
     setSelectedYear(year)
   }
 
-  const handleClick = (direction, ref) => {
-    const left_pos = ref.current.getBoundingClientRect().x - 270
-    if (direction === "left" && left_pos < 0) {
-      ref.current.style.transform = `translateX(${left_pos + 400}px)`
-    } else if (direction === "right") {
-      ref.current.style.transform = `translateX(${left_pos - 400}px)`
-    }
-  }
-
   const openPlayerDialog = (player) => {
     setDialogPlayer(player)
     setShowPlayerDialog(true)
@@ -84,10 +73,6 @@ const ResearchPage = () => {
       return player.stats.fanduel_points
     }
     return Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
-  }
-
-  const alterGame = (game) => {
-    return game.replace("@", "-")
   }
 
   return (
@@ -156,105 +141,8 @@ const ResearchPage = () => {
       </div>
       {playerData.length > 0 && activeTab === "week" &&
       <div className="search-results">
-        {gamesData.length > 0 &&
-        <div className="games-results">
-          <h1>Games:</h1>
-          <div className="games-row-outer"> 
-            <button 
-              className="left-paddle paddle" 
-              onClick={() => handleClick("left", listRefGames)} >
-                <FaAngleLeft className="slider-icon" />
-            </button>
-            <div className="games-row-wrapper">
-              <div className="games-row" ref={listRefGames}>
-              {gamesData.map((game) =>
-                <div className="research-card">
-                  <span><Link className="game-link" to={`/research/${game["home"]}`}>{game["home"]}</Link></span>
-                  <span>@</span>
-                  <span><Link className="game-link" to={`/research/${game["away"]}`}>{game["away"]}</Link></span>
-                  <span><Link className="game-link" to={`/research/${alterGame(game["game"])}/${selectedWeek}/${selectedYear}`}>Details</Link></span>
-                </div>
-              )}
-              </div>
-            </div>
-            <button 
-              className="right-paddle paddle" 
-              onClick={() => handleClick("right", listRefGames)}>
-                <FaAngleRight className="slider-icon" />
-            </button>
-          </div>
-        </div>
-        }
-        <div className="players-results">
-          <h1>Players:</h1>
-          <div className="filter-btn-wrapper">
-            <button 
-              className={`filter-btn${posFilter === "" ? "-active" : ""}`} 
-              onClick={() => setPosFilter("")}>All
-            </button>
-            <button 
-              className={`filter-btn${posFilter === "QB" ? "-active" : ""}`} 
-              onClick={() => setPosFilter("QB")}>QB
-            </button>
-            <button 
-              className={`filter-btn${posFilter === "RB" ? "-active" : ""}`} 
-              onClick={() => setPosFilter("RB")}>RB
-            </button>
-            <button 
-              className={`filter-btn${posFilter === "WR" ? "-active" : ""}`} 
-              onClick={() => setPosFilter("WR")}>WR
-            </button>
-            <button 
-              className={`filter-btn${posFilter === "TE" ? "-active" : ""}`} 
-              onClick={() => setPosFilter("TE")}>TE
-            </button>
-          </div>
-          <table className="lineups-table">
-            <tr className="col-labels">
-              <th colspan="5"></th>
-              <th className="col-label" colspan="3">Passing</th>
-              <th className="col-label" colspan="2">Rushing</th>
-              <th className="col-label" colspan="3">Recieving</th>
-              <th className="col-label" colspan="1">Misc.</th>
-            </tr>
-            <tr className="table-header">
-              <th>Rank</th>
-              <th>Name</th>
-              <th>Pos</th>
-              <th>Team</th>
-              <th>FAN Pts</th>
-              <th>YRDs</th>
-              <th>TDs</th>
-              <th>INTs</th>
-              <th>YRDs</th>
-              <th>TDs</th>
-              <th>RECs</th>
-              <th>YRDs</th>
-              <th>TDs</th>
-              <th>FUM Lost</th>
-            </tr>
-            {playerData.map((player) => 
-              ((posFilter === "" && player.position !== "DST")
-              || (player.position === posFilter)) &&
-              <tr>
-                <td>{player.rank}</td>
-                <td><strong><Link className="game-link" to={`/research`}>{player.name}</Link></strong></td>
-                <td>{player.position}</td>
-                <td>{player.stats.team}</td>
-                <td className="points-col"><strong>{truncPoints(player)}</strong></td>
-                <td>{player.stats.passing_yards}</td>
-                <td>{player.stats.passing_touchdowns}</td>
-                <td>{player.stats.passing_interceptions}</td>
-                <td>{player.stats.rushing_yards}</td>
-                <td>{player.stats.rushing_touchdowns}</td>
-                <td>{player.stats.receptions}</td>
-                <td>{player.stats.recieving_yards}</td>
-                <td>{player.stats.recieving_touchdowns}</td>
-                <td>{player.stats.fumbles_lost}</td>
-              </tr>
-            )}
-          </table>
-        </div>
+        <GamesSlider games={gamesData} selectedWeek={selectedWeek} selectedYear={selectedYear} />
+        <PlayersTable players={playerData} />
       </div>
     }
     { activeTab === "player" &&
