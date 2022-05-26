@@ -44,34 +44,21 @@
 		flex-direction: column;
 	}
 
-	.players-results {
-		padding: 20px;
-		width: 100%;
+	.games-results {
+		width: 80%;
 
-		.players-row-outer {
+		.games-row-outer {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-
-			h2 {
-				margin-right: 10px;
-				min-width: 30px;
-				text-align: left;
-			}
 		}
 
-		.players-row-wrapper {
+		.games-row-wrapper {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			position: relative;
 			overflow-x: hidden;
-		}
-
-		.player-card {
-			background-color: white;
-			margin-right: 5px;
-			padding: 10px;
 		}
 
 		.research-card {
@@ -87,45 +74,39 @@
 		  border: 1px solid #d3d3d3;
 		}
 
-		.players-row {
+		.games-row {
 			display: flex;
 			flex-direction: row;
 			align-content: center;
 			transform: translateX(0px);
 			transition: all 0.7s ease;
 		}
-
-		.players-row-wrapper::-webkit-scrollbar {
-		  display: none;
-		}
 	}
 
-	.games-results {
-		width: 100%;
+	.players-results {
 
-		.game-card {
-			min-width: 150px;
-			max-width: 200px;
-			min-height: 75px;
+		.pos-filters {
+			list-style-type: None;
 			background-color: white;
-			margin: 3px;
-			border-radius: 5px;
-		  display: flex;
-		  flex-direction: column;
-		  padding: 5px;
-		  border: 1px solid #d3d3d3;
+			display: flex;
+			flex-direction: row;
+			width: fit-content;
 		}
-	}
 
-	.player-body {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-	}
+		li {
+			border: 1px solid gray;
+		}
 
-	.player-info {
-	  margin-left: 40px;
-	  margin-top: 15px;
+		.lineups-table {
+			font-size: 10pt;
+
+			.col-label {
+				border-left: 1px solid gray;
+				border-right: 1px solid gray;
+			}
+
+		}
+
 	}
 
 	.paddle {
