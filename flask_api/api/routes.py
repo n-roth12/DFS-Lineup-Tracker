@@ -431,6 +431,17 @@ def research_player(current_user: User):
 	return jsonify({ 'last_year': last_year_data, 'career': career_data }), 200
 
 
+@app.route('/nfl/teams', methods=['GET'])
+@token_required
+def nfl_teams(current_user: User):
+	teams_from_cache = redis_client.get('nfl_teams')
+	if teams_from_cache is None:
+		teams = requests.get(f'{app.config["FFB_API_URL"]}/api/nfl/teams').json()
+		redis_client.set('nfl_teams', json.dumps(teams))
+		teams_from_cache = teams
+
+	return teams_from_cache, 200
+
 
 
 

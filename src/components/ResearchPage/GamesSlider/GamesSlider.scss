@@ -1,31 +1,35 @@
-.games-results {
-	width: 80%;
+.games-slider {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
 	.games-row-outer {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		width: 100%;
 	}
 
 	.games-row-wrapper {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		position: relative;
 		overflow-x: hidden;
 	}
 
 	.research-card {
-		min-width: 150px;
+		width: 10vw;
+		min-width: 100px;
 		max-width: 200px;
 		height: 100px;
 		background-color: white;
 		margin: 3px;
 		border-radius: 5px;
-	  display: flex;
-	  flex-direction: column;
-	  padding: 5px;
-	  border: 1px solid #d3d3d3;
+		display: flex;
+		flex-direction: column;
+		padding: 5px;
+		border: 1px solid #d3d3d3;
 	}
 
 	.games-row {
@@ -37,10 +41,9 @@
 	}
 
 	.paddle {
-		position: relative;
 		height: 100px;
 		width: 5rem;
-		margin: auto;
+		min-width: 50px;
 		background-color: rgb(22,22,22,0.4);
 		border: None;
 	}

@@ -1,0 +1,53 @@
+.header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 20px;
+  	box-shadow: 0px 0px 3px 1px lightgray;
+
+  	.week-search {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.week-search-inner {
+			display: flex;
+			flex-direction: row;
+		}
+
+		label {
+			margin-right: 10px;
+		}
+
+		select {
+			margin-right: 20px
+		}
+	}
+
+	.year-select {
+		width: fit-content;
+	}
+
+	.week-select {
+		width: fit-content;
+	}
+
+	.tabs {
+
+		.active {
+			background-color: white;
+			border: solid #ccc;
+			border-width: 1px 1px 1px 1px;
+		}
+
+		li {
+			display: inline-block;
+			list-style: none;
+			padding: 5px;
+			margin-top: 3px;
+			margin-bottom: 0;
+			cursor: pointer;
+		}
+	}
+}

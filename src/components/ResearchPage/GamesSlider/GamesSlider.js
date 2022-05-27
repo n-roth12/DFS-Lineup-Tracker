@@ -21,7 +21,7 @@ const GamesSlider = ({ games, selectedWeek, selectedYear }) => {
   }
 
   return (
-    <div className="games-results">
+    <div className="games-slider">
       <h1>Games:</h1>
       <div className="games-row-outer"> 
         <button 
