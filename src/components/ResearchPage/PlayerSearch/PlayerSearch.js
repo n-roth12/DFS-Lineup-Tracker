@@ -1,4 +1,4 @@
-
+import './PlayerSearch.scss'
 
 const PlayerSearch = ({ playerSearchData }) => {
   return (

@@ -5,8 +5,12 @@
 	justify-content: center;
 	align-items: center;
 
-	.filter-btn, .filter-btn-active {
-		padding: 3px 8px 3px 8px;
+	.filter-btn-wrapper-outer {
+		display: flex;
+
+		.filter-btn, .filter-btn-active {
+			padding: 3px 8px 3px 8px;
+		}
 	}
 
 	.load-more-btn {
@@ -34,7 +38,6 @@
 		max-width: 1100px;
 
 		.col-labels {
-			background-color: #f2f2f2;
 			border-bottom: None;
 
 			.col-label {
@@ -44,6 +47,7 @@
 		}
 
 		.table-header {
+			background-color: #d3d3d3;
 			border-top: none;
 		}
 

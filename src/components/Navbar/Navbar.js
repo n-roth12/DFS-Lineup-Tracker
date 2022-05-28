@@ -19,6 +19,9 @@ const Navbar = () => {
       {window.location.pathname === '/upcoming' &&
         <h1>Upcoming</h1>
       }
+      {window.location.pathname === '/research' &&
+        <h1>Research</h1>
+      }
       <ul className="top-nav-links">
         <li>
           <Link className="top-nav-link" to="/login" style={{textDecoration:"None"}} onClick={() => logout()}>Logout</Link>

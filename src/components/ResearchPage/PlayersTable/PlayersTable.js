@@ -22,74 +22,123 @@ const PlayersTable = ({ players }) => {
   return (
     <div className="players-results">
       <h1>Players:</h1>
-      <div className="filter-btn-wrapper">
-        <button 
-          className={`filter-btn${posFilter === "All" ? "-active" : ""}`} 
-          onClick={() => changeFilter("All")}>All
-        </button>
-        <button 
-          className={`filter-btn${posFilter === "QB" ? "-active" : ""}`} 
-          onClick={() => changeFilter("QB")}>QB
-        </button>
-        <button 
-          className={`filter-btn${posFilter === "RB" ? "-active" : ""}`} 
-          onClick={() => changeFilter("RB")}>RB
-        </button>
-        <button 
-          className={`filter-btn${posFilter === "WR" ? "-active" : ""}`} 
-          onClick={() => changeFilter("WR")}>WR
-        </button>
-        <button 
-          className={`filter-btn${posFilter === "TE" ? "-active" : ""}`} 
-          onClick={() => changeFilter("TE")}>TE
-        </button>
+      <div className="filter-btn-wrapper-outer">
+        <div className="filter-btn-wrapper">
+          <button 
+            className={`filter-btn${posFilter === "All" ? "-active" : ""}`} 
+            onClick={() => changeFilter("All")}>All
+          </button>
+          <button 
+            className={`filter-btn${posFilter === "QB" ? "-active" : ""}`} 
+            onClick={() => changeFilter("QB")}>QB
+          </button>
+          <button 
+            className={`filter-btn${posFilter === "RB" ? "-active" : ""}`} 
+            onClick={() => changeFilter("RB")}>RB
+          </button>
+          <button 
+            className={`filter-btn${posFilter === "WR" ? "-active" : ""}`} 
+            onClick={() => changeFilter("WR")}>WR
+          </button>
+          <button 
+            className={`filter-btn${posFilter === "TE" ? "-active" : ""}`} 
+            onClick={() => changeFilter("TE")}>TE
+          </button>
+        </div>
+        <div className="filter-btn-wrapper">
+          <button 
+            className={`filter-btn${posFilter === "DST" ? "-active" : ""}`} 
+            onClick={() => changeFilter("DST")}>DST
+          </button>
+        </div>
       </div>
       <table className="lineups-table">
-        <thead>
-          <tr className="col-labels">
-            <th colspan="5"></th>
-            <th className="col-label" colspan="3">Passing</th>
-            <th className="col-label" colspan="2">Rushing</th>
-            <th className="col-label" colspan="3">Recieving</th>
-            <th className="col-label" colspan="1">Misc.</th>
-          </tr>
-          <tr className="table-header">
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Pos</th>
-            <th>Team</th>
-            <th>FAN Pts</th>
-            <th>YRDs</th>
-            <th>TDs</th>
-            <th>INTs</th>
-            <th>YRDs</th>
-            <th>TDs</th>
-            <th>RECs</th>
-            <th>YRDs</th>
-            <th>TDs</th>
-            <th>FUM Lost</th>
-          </tr>
-        </thead>
-        <tbody>
-        {players[posFilter].slice(0, 50 + (currPage * 50)).map((player) => 
-          <tr>
-            <td>{player.rank}</td>
-            <td><strong><Link className="player-link" to={`/research`}>{player.name}</Link></strong></td>
-            <td>{player.position}</td>
-            <td>{player.stats.team}</td>
-            <td className="points-col"><strong>{truncPoints(player)}</strong></td>
-            <td>{player.stats.passing_yards}</td>
-            <td>{player.stats.passing_touchdowns}</td>
-            <td>{player.stats.passing_interceptions}</td>
-            <td>{player.stats.rushing_yards}</td>
-            <td>{player.stats.rushing_touchdowns}</td>
-            <td>{player.stats.receptions}</td>
-            <td>{player.stats.recieving_yards}</td>
-            <td>{player.stats.recieving_touchdowns}</td>
-            <td>{player.stats.fumbles_lost}</td>
-          </tr>
-        )}
-        </tbody>
+        {posFilter !== "DST" ? 
+        <>
+          <thead>
+            <tr className="col-labels">
+              <th colspan="5"></th>
+              <th className="col-label" colspan="3">Passing</th>
+              <th className="col-label" colspan="2">Rushing</th>
+              <th className="col-label" colspan="3">Recieving</th>
+              <th className="col-label" colspan="1">Misc.</th>
+            </tr>
+            <tr className="table-header">
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Pos</th>
+              <th>Team</th>
+              <th>FAN Pts</th>
+              <th>YRDs</th>
+              <th>TDs</th>
+              <th>INTs</th>
+              <th>YRDs</th>
+              <th>TDs</th>
+              <th>RECs</th>
+              <th>YRDs</th>
+              <th>TDs</th>
+              <th>FUM Lost</th>
+            </tr>
+          </thead>
+          <tbody>
+          { players[posFilter].slice(0, 50 + (currPage * 50)).map((player) => 
+            <tr>
+              <td>{player.rank}</td>
+              <td><strong><Link className="player-link" to={`/research`}>{player.name}</Link></strong></td>
+              <td>{player.position}</td>
+              <td>{player.stats.team}</td>
+              <td className="points-col"><strong>{truncPoints(player)}</strong></td>
+              <td>{player.stats.passing_yards}</td>
+              <td>{player.stats.passing_touchdowns}</td>
+              <td>{player.stats.passing_interceptions}</td>
+              <td>{player.stats.rushing_yards}</td>
+              <td>{player.stats.rushing_touchdowns}</td>
+              <td>{player.stats.receptions}</td>
+              <td>{player.stats.recieving_yards}</td>
+              <td>{player.stats.recieving_touchdowns}</td>
+              <td>{player.stats.fumbles_lost}</td>
+            </tr>
+          )}
+          </tbody>
+        </>
+      :
+        <>
+          <thead>
+            <tr className="table-header">
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Pos</th>
+              <th>Team</th>
+              <th>FAN Pts</th>
+              <th>TDs</th>
+              <th>INTs</th>
+              <th>BLKs</th>
+              <th>SFTs</th>
+              <th>FR</th>
+              <th>YRDs Allowed</th>
+              <th>PTs Allowed</th>
+            </tr>
+          </thead>
+          <tbody>
+          { players[posFilter].slice(0, 50 + (currPage * 50)).map((player) => 
+            <tr>
+              <td>{player.rank}</td>
+              <td><strong><Link className="player-link" to={`/research`}>{player.city} {player.name}</Link></strong></td>
+              <td>{player.position}</td>
+              <td>{player.stats.team}</td>
+              <td className="points-col"><strong>{truncPoints(player)}</strong></td>
+              <td>{player.stats.touchdowns}</td>
+              <td>{player.stats.interceptions}</td>
+              <td>{player.stats.blocks}</td>
+              <td>{player.stats.safeties}</td>
+              <td>{player.stats.fumble_recoveries}</td>
+              <td>{player.stats.passing_yards_against + player.stats.rushing_yards_against}</td>
+              <td>{player.stats.points_against}</td>
+            </tr>
+          )}
+          </tbody>
+        </>
+      }
       </table>
       { players[posFilter].length > (currPage + 1) * 50 &&
         <div>
