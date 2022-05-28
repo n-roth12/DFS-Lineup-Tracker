@@ -438,14 +438,36 @@ def research_search(current_user: User):
 @token_required
 def research_player(current_user: User):
 	name = request.args.get('name')
-	last_year = 2021
-	this_year = None
+	year = request.args.get('year')
+	if not year:
+		years = range(2012, 2022)
+		last_pos = "None"
+
+		name_fixed = name.replace(' ', '_')
+		result = []
+		for year in years:
+			res = requests.get(f'{app.config["FFB_API_URL"]}/api/stats?name={name_fixed}&year={year}')
+			if res.status_code == 200:
+
+				year_data = res.json()
+				last_pos = year_data['position']
+				result.append({'year': year, 'stats': year_data['stats'] })
+
+		if not len(result):
+			return jsonify({ 'Error': 'No data found.' }), 400
+
+		return jsonify({ 'name': ' '.join(word[0].upper() + word[1:] for word in name.split(' ')), 
+			'position': last_pos, 'stats': result}), 200
 
 	name_fixed = name.replace(' ', '_')
-	career_data = requests.get(f'{app.config["FFB_API_URL"]}/api/stats?name={name_fixed}').json()
-	last_year_data = requests.get(f'{app.config["FFB_API_URL"]}/api/stats?name={name_fixed}&year={last_year}').json()
+	result = []
+	res = requests.get(f'{app.config["FFB_API_URL"]}/api/performances?name={name_fixed}&year={year}')
+	if res.status_code != 200:
+		return jsonify({ 'Error': 'No data found.' }), 400
 
-	return jsonify({ 'last_year': last_year_data, 'career': career_data }), 200
+	year_data = res.json()
+
+	return jsonify(year_data), 200
 
 
 @app.route('/nfl/teams', methods=['GET'])

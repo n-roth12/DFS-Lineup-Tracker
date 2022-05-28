@@ -1,114 +1,126 @@
 import './PlayerSearch.scss'
+import { useState, useEffect } from 'react'
 
 const PlayerSearch = ({ playerSearchData }) => {
+
+  const [lastSeason, setLastSeason] = useState({})
+
+  useEffect(() => {
+    getLastSeason()
+  }, [playerSearchData])
+
+  const getLastSeason = async () => {
+    if (playerSearchData.name) {
+      const res = await fetch(`/research/player?name=${playerSearchData.name}&year=2021`, {
+        method: "GET",
+        headers: {
+          "x-access-token": sessionStorage.dfsTrackerToken
+        }
+      })
+      setLastSeason(await res.json())
+    } else {
+      setLastSeason({})
+    }
+  }
+
   return (
     <div className="player-search-results">
-      { playerSearchData && playerSearchData.career &&
-        <h2>{playerSearchData.career.name} | {playerSearchData.career.position}</h2> 
+      { playerSearchData.name &&
+        <h1>{playerSearchData.name} | {playerSearchData.position}</h1> 
       }
-      { playerSearchData && playerSearchData.last_year && 
-        <div className="last-year-stats">
-          <h2>2021</h2>
+      { playerSearchData.stats &&
+        <>
+          <h2>Past Seasons</h2>
           <table className="lineups-table">
-          { (playerSearchData.last_year.position === "RB" ||
-            playerSearchData.last_year.position === "WR" ||
-            playerSearchData.last_year.position === "TE" ) && 
-            <>
-              <tr>
-                <th>Rush Yrds</th>
-                <th>Rush TDs</th>
-                <th>Recs</th>
-                <th>Rec Yrds</th>
-                <th>Rec TDs</th>
-                <th>Fum Lost</th>
-                <th>Fan Pts</th>
+            <thead>
+              <tr className="col-labels">
+                <th colspan="2"></th>
+                <th className="col-label" colSpan="3">Passing</th>
+                <th className="col-label" colSpan="2">Rushing</th>
+                <th className="col-label" colSpan="3">Recieving</th>
+                <th className="col-label" colSpan="1">Misc.</th>
               </tr>
-              <tr>
-                <td>{playerSearchData.last_year.stats.rushing_yards}</td>
-                <td>{playerSearchData.last_year.stats.rushing_touchdowns}</td>
-                <td>{playerSearchData.last_year.stats.receptions}</td>
-                <td>{playerSearchData.last_year.stats.recieving_yards}</td>
-                <td>{playerSearchData.last_year.stats.recieving_touchdowns}</td>
-                <td>{playerSearchData.last_year.stats.fumbles_lost}</td>
-                <td>{playerSearchData.last_year.stats.fantasy_points}</td>
-              </tr>
-            </>
-          }
-          {
-            playerSearchData.last_year.position === "QB" &&
-            <>
-              <tr>
-                <th>Pass Yrds</th>
-                <th>Pass TDs</th>
-                <th>Rush Yrds</th>
-                <th>Rush Tds</th>
+              <tr className="table-header">
+                <th>Year</th>
+                <th>FAN Pts</th>
+                <th>YRDs</th>
+                <th>TDs</th>
                 <th>INTs</th>
-                <th>Fum Lost</th>
+                <th>YRDs</th>
+                <th>TDs</th>
+                <th>RECs</th>
+                <th>YRDs</th>
+                <th>TDs</th>
+                <th>FUM Lost</th>
               </tr>
-              <tr>
-                <td>{playerSearchData.last_year.stats.passing_yards}</td>
-                <td>{playerSearchData.last_year.stats.passing_touchdowns}</td>
-                <td>{playerSearchData.last_year.stats.rushing_yards}</td>
-                <td>{playerSearchData.last_year.stats.rushing_touchdowns}</td>
-                <td>{playerSearchData.last_year.stats.passing_interceptions}</td>
-                <td>{playerSearchData.last_year.stats.fumbles_lost}</td>
+            </thead>
+            <tbody>
+            { playerSearchData.stats.map((year) => 
+              <tr key={year}>
+                <td>{year.year}</td>
+                <td className="points-col"><strong>{year.stats.fantasy_points}</strong></td>
+                <td>{year.stats.passing_yards}</td>
+                <td>{year.stats.passing_touchdowns}</td>
+                <td>{year.stats.passing_interceptions}</td>
+                <td>{year.stats.rushing_yards}</td>
+                <td>{year.stats.rushing_touchdowns}</td>
+                <td>{year.stats.receptions}</td>
+                <td>{year.stats.recieving_yards}</td>
+                <td>{year.stats.recieving_touchdowns}</td>
+                <td>{year.stats.fumbles_lost}</td>
               </tr>
-            </>
-          }
+            )}
+            </tbody>
           </table>
-        </div>
+        </> 
       }
-      { playerSearchData && playerSearchData.career &&
-        <div className="career-stats">
-          <h2>Career</h2>
+      { lastSeason && lastSeason.stats &&
+        <>
+          <h2>2021 Season</h2>
           <table className="lineups-table">
-          { (playerSearchData.career.position === "RB" ||
-            playerSearchData.career.position === "WR" ||
-            playerSearchData.career.position === "TE") &&
-          <>
-            <tr>
-              <th>Rush Yrds</th>
-              <th>Rush TDs</th>
-              <th>Recs</th>
-              <th>Rec Yrds</th>
-              <th>Rec TDs</th>
-              <th>Fum Lost</th>
-              <th>Fan Pts</th>
-            </tr>
-            <tr>
-              <td>{playerSearchData.career.stats.rushing_yards}</td>
-              <td>{playerSearchData.career.stats.rushing_touchdowns}</td>
-              <td>{playerSearchData.career.stats.receptions}</td>
-              <td>{playerSearchData.career.stats.recieving_yards}</td>
-              <td>{playerSearchData.career.stats.recieving_touchdowns}</td>
-              <td>{playerSearchData.career.stats.fumbles_lost}</td>
-              <td>{playerSearchData.career.stats.fantasy_points}</td>
-            </tr>
-          </>
-          }
-          {
-            playerSearchData.last_year.position === "QB" &&
-            <>
-              <tr>
-                <th>Pass Yrds</th>
-                <th>Pass TDs</th>
-                <th>Rush Yrds</th>
-                <th>Rush Tds</th>
+            <thead>
+              <tr className="col-labels">
+                <th colspan="3"></th>
+                <th className="col-label" colSpan="3">Passing</th>
+                <th className="col-label" colSpan="2">Rushing</th>
+                <th className="col-label" colSpan="3">Recieving</th>
+                <th className="col-label" colSpan="1">Misc.</th>
+              </tr>
+              <tr className="table-header">
+                <th>Week</th>
+                <th>Game</th>
+                <th>FAN Pts</th>
+                <th>YRDs</th>
+                <th>TDs</th>
                 <th>INTs</th>
-                <th>Fum Lost</th>
+                <th>YRDs</th>
+                <th>TDs</th>
+                <th>RECs</th>
+                <th>YRDs</th>
+                <th>TDs</th>
+                <th>FUM Lost</th>
               </tr>
+            </thead>
+            <tbody>
+            {lastSeason.stats.map((week) =>
               <tr>
-                <td>{playerSearchData.career.stats.passing_yards}</td>
-                <td>{playerSearchData.career.stats.passing_touchdowns}</td>
-                <td>{playerSearchData.career.stats.rushing_yards}</td>
-                <td>{playerSearchData.career.stats.rushing_touchdowns}</td>
-                <td>{playerSearchData.career.stats.passing_interceptions}</td>
-                <td>{playerSearchData.career.stats.fumbles_lost}</td>
+                <td>{week.week}</td>
+                <td>{week.game}</td>
+                <td className="points-col"><strong>{week.fantasy_points}</strong></td>
+                <td>{week.passing_yards}</td>
+                <td>{week.passing_touchdowns}</td>
+                <td>{week.passing_interceptions}</td>
+                <td>{week.rushing_yards}</td>
+                <td>{week.rushing_touchdowns}</td>
+                <td>{week.receptions}</td>
+                <td>{week.recieving_yards}</td>
+                <td>{week.recieving_touchdowns}</td>
+                <td>{week.fumbles_lost}</td>
               </tr>
-            </>
-          }
+            )}
+            </tbody>
           </table>
-        </div>
+        </>
       }
     </div>
   )

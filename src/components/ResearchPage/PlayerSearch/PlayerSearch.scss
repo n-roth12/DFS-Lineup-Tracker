@@ -1,14 +1,40 @@
 .player-search-results {
 
-	.last-year-stats, .career-stats {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;		
-	}
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	h1 {
+		width: 80%;
+		text-align: left;
+		justify-content: left;
+	}		
 
 	.lineups-table {
+		font-size: 10pt;
 		width: 80%;
 		max-width: 1100px;
+
+		.col-labels {
+			border-bottom: None;
+
+			.col-label {
+				border-left: 1px solid gray;
+				border-right: 1px solid gray;
+			}
+		}
+
+		.table-header {
+			background-color: #d3d3d3;
+			border-top: none;
+		}
+
+		tbody {
+			tr:hover {
+				background-color: #d5d8dc;
+			}
+		}
+
 	}
 }
