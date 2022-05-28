@@ -33,7 +33,7 @@ const ResearchPage = () => {
         setSelectedTeam={setSelectedTeam}
         />
 
-      {activeTab === "week" && playerData.length > 0 &&
+      {activeTab === "week" && playerData["All"] &&
         <div className="search-results">
           <GamesSlider 
             games={gamesData} 

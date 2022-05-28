@@ -181,6 +181,18 @@ a {
   color: #f6404f;
 }
 
+.search-btn {
+  display: block;
+  background: #0069ed;
+  color: #ffffff;
+  font-size: 12pt;
+  padding: 5px 10px 5px 10px;
+  margin: 5px;
+  border: solid 1px #0069ed;
+  border-radius: 10px;
+  text-decoration: none !important;
+}
+
 .view-players-btn {
   display: block;
   background: #0069ed;

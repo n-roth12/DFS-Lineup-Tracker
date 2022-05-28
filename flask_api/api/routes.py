@@ -388,10 +388,27 @@ def research_search(current_user: User):
 	if players_from_cache is None:
 		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}')
 		players_from_api = res.json()
-		res2 = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=dst')
-		defenses_from_api = res2.json()
-		players_from_api.extend(defenses_from_api)
-		redis_client.set(key1, json.dumps(players_from_api))
+		qbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=QB')
+		qbs_from_api = qbs_res.json()
+		rbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=RB')
+		rbs_from_api = rbs_res.json()
+		wrs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=WR')
+		wrs_from_api = wrs_res.json()
+		tes_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=TE')
+		tes_from_api = tes_res.json()
+		def_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=dst')
+		defenses_from_api = def_res.json()
+
+		result = {
+			"All": players_from_api, 
+			"QB": qbs_from_api,
+			"RB": rbs_from_api,
+			"WR": wrs_from_api,
+			"TE": tes_from_api,
+			"DST": defenses_from_api 
+		}
+
+		redis_client.set(key1, json.dumps(result))
 		players_from_cache = redis_client.get(key1)
 
 	players = json.loads(players_from_cache)

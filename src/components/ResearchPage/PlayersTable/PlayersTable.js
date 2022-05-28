@@ -4,7 +4,8 @@ import './PlayersTable.scss'
 
 const PlayersTable = ({ players }) => {
 
-  const [posFilter, setPosFilter] = useState("")
+  const [posFilter, setPosFilter] = useState("All")
+  const [currPage, setCurrPage] = useState(0)
 
   const truncPoints = (player) => {
     if (player.position == 'DST') {
@@ -13,29 +14,34 @@ const PlayersTable = ({ players }) => {
     return Math.round((player.stats.fantasy_points + Number.EPSILON) * 100) / 100
   }
 
+  const changeFilter = (pos) => {
+    setPosFilter(pos)
+    setCurrPage(0)
+  }
+
   return (
     <div className="players-results">
       <h1>Players:</h1>
       <div className="filter-btn-wrapper">
         <button 
-          className={`filter-btn${posFilter === "" ? "-active" : ""}`} 
-          onClick={() => setPosFilter("")}>All
+          className={`filter-btn${posFilter === "All" ? "-active" : ""}`} 
+          onClick={() => changeFilter("All")}>All
         </button>
         <button 
           className={`filter-btn${posFilter === "QB" ? "-active" : ""}`} 
-          onClick={() => setPosFilter("QB")}>QB
+          onClick={() => changeFilter("QB")}>QB
         </button>
         <button 
           className={`filter-btn${posFilter === "RB" ? "-active" : ""}`} 
-          onClick={() => setPosFilter("RB")}>RB
+          onClick={() => changeFilter("RB")}>RB
         </button>
         <button 
           className={`filter-btn${posFilter === "WR" ? "-active" : ""}`} 
-          onClick={() => setPosFilter("WR")}>WR
+          onClick={() => changeFilter("WR")}>WR
         </button>
         <button 
           className={`filter-btn${posFilter === "TE" ? "-active" : ""}`} 
-          onClick={() => setPosFilter("TE")}>TE
+          onClick={() => changeFilter("TE")}>TE
         </button>
       </div>
       <table className="lineups-table">
@@ -65,9 +71,7 @@ const PlayersTable = ({ players }) => {
           </tr>
         </thead>
         <tbody>
-        {players.map((player) => 
-          ((posFilter === "" && player.position !== "DST")
-          || (player.position === posFilter)) &&
+        {players[posFilter].slice(0, 50 + (currPage * 50)).map((player) => 
           <tr>
             <td>{player.rank}</td>
             <td><strong><Link className="player-link" to={`/research`}>{player.name}</Link></strong></td>
@@ -87,6 +91,11 @@ const PlayersTable = ({ players }) => {
         )}
         </tbody>
       </table>
+      { players[posFilter].length > (currPage + 1) * 50 &&
+        <div>
+          <button className="load-more-btn" onClick={() => setCurrPage(currPage + 1)}>Load More</button>
+        </div>
+      }
     </div>
   )
 }

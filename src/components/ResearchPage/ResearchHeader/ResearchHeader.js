@@ -71,43 +71,41 @@ const ResearchHeader = ({ changeTab, activeTab, setSelectedWeek, selectedWeek,
       </div>
       {activeTab === "week" &&
         <div className="week-search">
-          <h2>Research a Week</h2>
           <div className="week-search-inner">
           	<div>
-	            <label for="years">Select Year:</label>
+	            <label>Year:</label>
 	            <select 
 	              className="year-select" 
 	              value={selectedYear} 
 	              onChange={(e) => changeYear(e.target.value) }>
 	            {years.map((year) => 
-	              <option value={year}>{year}</option>
+	              <option value={year} key={year}>{year}</option>
 	            )}
 	            </select>
 	          </div>
 	          <div>
-	            <label>Select Week:</label>
+	            <label>Week:</label>
 	            <select 
 	              className="week-select" 
 	              value={selectedWeek}
 	              onChange={(e) => setSelectedWeek(e.target.value)}>
 	            {weeks.map((week) =>
 	              !(week > 17 && selectedYear < 2021) &&
-	                <option value={week}>{week}</option>
+	                <option value={week} key={week}>{week}</option>
 	            )}
 	            </select>
 	          </div>
 	          <div>
-	            <button type="button" onClick={() => weekSearch(selectedWeek, selectedYear)}>Search</button>
+	            <button type="button" className="search-btn" onClick={() => weekSearch(selectedWeek, selectedYear)}>Search</button>
 	          </div>
 	        </div>
         </div>
       }
       { activeTab === "player" &&
         <div className="week-search">
-          <h2>Search a Player</h2>
           <div className="week-search-inner">
           	<div>
-	            <label>Enter a Player:</label>
+	            <label>Name:</label>
 	            <input 
 	              type="text" 
 	              placeholder="Enter Name" 
@@ -115,28 +113,27 @@ const ResearchHeader = ({ changeTab, activeTab, setSelectedWeek, selectedWeek,
 	              onChange={(e) => setNameSearch(e.target.value)} />
 	          </div>
 	          <div>
-	            <button type="button" onClick={() => playerSearch(nameSearch)}>Search</button>
+	            <button type="button" className="search-btn" onClick={() => playerSearch(nameSearch)}>Search</button>
 	          </div>
 	        </div>
         </div>
       }
       { activeTab === "team" &&
         <div className="week-search">
-          <h2>Search a Team:</h2>
           <div className="week-search-inner">
           	<div>
-	          	<label>Pick a Team</label>
+	          	<label>Team:</label>
 	            <select 
 	              className="week-select" 
 	              value={selectedTeam}
 	              onChange={(e) => setSelectedTeam(e.target.value)}>
 	            	{teams.teams.length > 0 && teams.teams.map((team) =>
-	                <option value={team}>{team}</option>
+	                <option value={team} key={team}>{team}</option>
 	            	)}
 	            </select>
 	            </div>
-	          <div>
-	          	<button type="button" onClick={() => teamSearch(selectedTeam)}>Search</button>
+	          <div>  
+	          	<button type="button" className="search-btn" onClick={() => teamSearch(selectedTeam)}>Search</button>
 	          </div>
 	        </div>
         </div>
