@@ -61,7 +61,7 @@ const PlayersTable = ({ players }) => {
               <th className="col-label" colspan="3">Passing</th>
               <th className="col-label" colspan="2">Rushing</th>
               <th className="col-label" colspan="3">Recieving</th>
-              <th className="col-label" colspan="1">Misc.</th>
+              <th className="col-label" colspan="2">Misc.</th>
             </tr>
             <tr className="table-header">
               <th>Rank</th>
@@ -78,13 +78,14 @@ const PlayersTable = ({ players }) => {
               <th>YRDs</th>
               <th>TDs</th>
               <th>FUM Lost</th>
+              <th>2PTs</th>
             </tr>
           </thead>
           <tbody>
           { players[posFilter].slice(0, 50 + (currPage * 50)).map((player) => 
             <tr>
               <td>{player.rank}</td>
-              <td><strong><Link className="player-link" to={`/research`}>{player.name}</Link></strong></td>
+              <td><strong><Link className="player-link" to={`/player/${player.name.replace(" ", "_")}`}>{player.name}</Link></strong></td>
               <td>{player.position}</td>
               <td>{player.stats.team}</td>
               <td className="points-col"><strong>{truncPoints(player)}</strong></td>
@@ -97,6 +98,7 @@ const PlayersTable = ({ players }) => {
               <td>{player.stats.recieving_yards}</td>
               <td>{player.stats.recieving_touchdowns}</td>
               <td>{player.stats.fumbles_lost}</td>
+              <td>{player.stats.passing_2point_conversions + player.stats.rushing_2point_conversions + player.stats.recieving_2point_conversions}</td>
             </tr>
           )}
           </tbody>
@@ -123,7 +125,7 @@ const PlayersTable = ({ players }) => {
           { players[posFilter].slice(0, 50 + (currPage * 50)).map((player) => 
             <tr>
               <td>{player.rank}</td>
-              <td><strong><Link className="player-link" to={`/research`}>{player.city} {player.name}</Link></strong></td>
+              <td><strong><Link className="player-link" to={`/team/${player.team}`}>{player.city} {player.name}</Link></strong></td>
               <td>{player.position}</td>
               <td>{player.stats.team}</td>
               <td className="points-col"><strong>{truncPoints(player)}</strong></td>

@@ -1,4 +1,4 @@
-import './SideNav.css'
+import './SideNav.scss'
 import { Link } from 'react-router-dom'
 import { FaChartBar, FaBook, FaCalendarAlt } from 'react-icons/fa'
 

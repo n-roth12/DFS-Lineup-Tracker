@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './ResearchHeader.scss'
 
-const ResearchHeader = ({ changeTab, activeTab, setSelectedWeek, selectedWeek, 
+const ResearchHeader = ({ props, changeTab, activeTab, setSelectedWeek, selectedWeek, 
 		setSelectedYear, selectedYear, setGames, setPlayers, setPlayerSearchData, 
 		selectedTeam, setSelectedTeam, teamSearch }) => {
 
@@ -44,7 +44,11 @@ const ResearchHeader = ({ changeTab, activeTab, setSelectedWeek, selectedWeek,
         "x-access-token": sessionStorage.dfsTrackerToken
       }
     })
-    setPlayerSearchData(await res.json())
+    if (res.status === 200) {
+    	setPlayerSearchData(await res.json())
+    } else {
+    	setPlayerSearchData({"error": "No Player Found"})
+    }
   }
 
   const getTeams = async () => {
@@ -63,7 +67,7 @@ const ResearchHeader = ({ changeTab, activeTab, setSelectedWeek, selectedWeek,
   }
 
   return (
-    <div className="header">
+    <div className="research-header">
       <div className="filter-btn-wrapper">
         <button className={`filter-btn${activeTab === "week" ? "-active": ""}`} onClick={() => changeTab("week")}>Week</button>
         <button className={`filter-btn${activeTab === "player" ? "-active": ""}`} onClick={() => changeTab("player")}>Player</button>
@@ -127,7 +131,7 @@ const ResearchHeader = ({ changeTab, activeTab, setSelectedWeek, selectedWeek,
 	              className="week-select" 
 	              value={selectedTeam}
 	              onChange={(e) => setSelectedTeam(e.target.value)}>
-	            	{teams.teams.length > 0 && teams.teams.map((team) =>
+	            	{teams.length > 0 && teams.map((team) =>
 	                <option value={team} key={team}>{team}</option>
 	            	)}
 	            </select>

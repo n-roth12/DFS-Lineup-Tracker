@@ -1,0 +1,39 @@
+.side-nav {
+	position: fixed;
+	background-color: #202033;
+	height: 100%;
+	width: 200px;
+	z-index: 101;
+
+	h1 {
+		color: white;
+		text-align: left;
+		padding: 20px;
+	}
+
+	.side-nav-links {
+		display: flex;
+		flex-direction: column;
+		margin-top: 50px;
+		list-style-type: none;
+		padding: 0;
+	}
+
+	.side-nav-link:hover {
+		color: #d3d3d3;
+	}
+
+	.side-nav-links .active {
+		color: #d3d3d3;
+		background-color: black;
+
+		* {
+			color: #d3d3d3;
+		}
+	}
+
+	li {
+		font-size: 15pt;
+		padding: 20px;
+	}
+}

@@ -25,6 +25,9 @@ const PlayerSearch = ({ playerSearchData }) => {
 
   return (
     <div className="player-search-results">
+      {playerSearchData.error &&
+        <h1>{playerSearchData.error}</h1>
+      }
       { playerSearchData.name &&
         <h1>{playerSearchData.name} | {playerSearchData.position}</h1> 
       }

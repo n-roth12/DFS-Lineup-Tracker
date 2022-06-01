@@ -8,7 +8,7 @@
 
 .lineups-table {
 	background: #ffffff;
-	box-shadow: 0px 0px 3px 1px lightgrey;
+	box-shadow: 0px 0px 10px 1px lightgrey;
 	width: 100%;
 	margin: 10px;
 }
@@ -45,6 +45,7 @@
 .lineups-table td {
 	padding: 10px;
 	text-align: center;
+	font-size: 10pt;
 }
 
 .graphs-wrapper {
@@ -145,3 +146,5 @@
 .toggle-lineupform-btn:hover {
   color: #202033;
 }
+
+

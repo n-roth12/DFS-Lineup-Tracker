@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import './Navbar.css'
+import './Navbar.scss'
 
 const Navbar = () => {
 
@@ -14,7 +14,7 @@ const Navbar = () => {
         <h1>History</h1>
       }
       {window.location.pathname.startsWith('/lineups/') &&
-        <h1>Fanduel Lineup: {window.location.pathname.split("/")[3]}, Week {window.location.pathname.split("/")[4]}</h1>
+        <h1>Fanduel Lineup: {window.location.pathname.split("/")[4]}, Week {window.location.pathname.split("/")[3]}</h1>
       }
       {window.location.pathname === '/upcoming' &&
         <h1>Upcoming</h1>

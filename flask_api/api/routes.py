@@ -124,12 +124,13 @@ def get_lineup(current_user: User, id: int):
 @token_required
 def create_lineup(current_user: User):
 	data = json.loads(request.data)
+	print(data)
 	try:
 		year = int(data['year'])
 		week = int(data['week'])
 	except ValueError:
 		return jsonify({ 'Error': 'Year and week must be integers.' }), 400
-	if year not in range(2012, 2021):
+	if year not in range(2012, 2022):
 		return jsonify({ 'Error': 'Not valid year' }), 400
 	if week not in range(0, 18):
 		return jsonify({ 'Error': 'Not valid week' }), 400
@@ -357,9 +358,9 @@ def upcoming_games(current_user: User):
 					games.append(game)
 		redis_client.set(key, json.dumps(games))
 
-		return jsonify(games), 200
+		return jsonify({'games': games}), 200
 
-	return jsonify(json.loads(games_from_cache)), 200
+	return jsonify({'games': json.loads(games_from_cache)}), 200
 
 
 @app.route('/upcoming/players', methods=['GET'])
@@ -433,7 +434,6 @@ def research_search(current_user: User):
 	return jsonify({ 'players': players, 'games': games}), 200
 
 
-
 @app.route('/research/player', methods=['GET'])
 @token_required
 def research_player(current_user: User):
@@ -476,10 +476,13 @@ def nfl_teams(current_user: User):
 	teams_from_cache = redis_client.get('nfl_teams')
 	if teams_from_cache is None:
 		teams = requests.get(f'{app.config["FFB_API_URL"]}/api/nfl/teams').json()
-		redis_client.set('nfl_teams', json.dumps(teams))
-		teams_from_cache = teams
+		sorted_teams = sorted(teams['teams'])
+		redis_client.set('nfl_teams', json.dumps(sorted_teams))
+		teams_from_cache = sorted_teams
+	else:
+		teams_from_cache = json.loads(teams_from_cache)
 
-	return teams_from_cache, 200
+	return jsonify(teams_from_cache), 200
 
 
 
