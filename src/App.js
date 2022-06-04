@@ -6,6 +6,7 @@ import SingleLineupPage from './components/SingleLineupPage/SingleLineupPage'
 import LoginPage from './components/LoginPage/LoginPage'
 import RegisterPage from './components/RegisterPage/RegisterPage'
 import UpcomingPage from './components/UpcomingPage/UpcomingPage'
+import HistoryPage from './components/HistoryPage/HistoryPage'
 import ResearchPage from './components/ResearchPage/ResearchPage'
 import Navbar from './components/Navbar/Navbar'
 import SideNav from './components/SideNav/SideNav'
@@ -111,6 +112,23 @@ function App() {
                   <div className="page-wrapper-inner"> 
                     <SideNav />
                     <ResearchPage />
+                  </div>
+                  <Footer />
+                </div>
+              : 
+                <LoginPage setToken={setToken} />
+              }
+            </>
+          } />
+
+          <Route path="/history" element={
+            <>
+              {sessionStorage.dfsTrackerToken ?
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <SideNav />
+                    <HistoryPage />
                   </div>
                   <Footer />
                 </div>

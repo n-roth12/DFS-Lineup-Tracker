@@ -1,6 +1,6 @@
 import './SideNav.scss'
 import { Link } from 'react-router-dom'
-import { FaChartBar, FaBook, FaCalendarAlt } from 'react-icons/fa'
+import { FaChartBar, FaBook, FaCalendarAlt, FaListAlt } from 'react-icons/fa'
 
 const SideNav = () => {
 
@@ -14,14 +14,19 @@ const SideNav = () => {
     			<li className={(window.location.pathname === '/' || window.location.pathname === '/lineups') ? 'active' : ''}>
               <Link to={'/'} 
                 style={{textDecoration: "none"}} 
-                className="side-nav-link"><FaBook /> History</Link>
+                className="side-nav-link"><FaListAlt /> Lineups</Link>
           </li>
     			<li className={window.location.pathname === '/upcoming' ? 'active' : ''}>
             <Link to={'/upcoming'} 
               style={{textDecoration: "none"}} 
               className="side-nav-link"><FaCalendarAlt /> Upcoming</Link>
           </li>
-    			<li className={window.location.pathname === '/research' ? 'active' : ''}>
+    			<li className={window.location.pathname === '/history' ? 'active' : ''}>
+            <Link to={'/history'} 
+              style={{textDecoration: "none"}} 
+              className="side-nav-link"><FaBook /> History</Link>
+          </li>
+          <li className={window.location.pathname === '/research' ? 'active' : ''}>
             <Link to={'/research'} 
               style={{textDecoration: "none"}} 
               className="side-nav-link"><FaChartBar /> Research</Link>

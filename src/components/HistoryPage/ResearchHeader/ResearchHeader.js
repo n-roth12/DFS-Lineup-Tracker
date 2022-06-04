@@ -16,7 +16,7 @@ const ResearchHeader = ({ props, changeTab, activeTab, setSelectedWeek, selected
   }, [])
 
   const weekSearch = async (week, year) => {
-    const res = await fetch(`/research/search?week=${week}&year=${year}`, {
+    const res = await fetch(`/history/search?week=${week}&year=${year}`, {
       method: "GET",
       headers: {
         "x-access-token": sessionStorage.dfsTrackerToken
@@ -38,7 +38,7 @@ const ResearchHeader = ({ props, changeTab, activeTab, setSelectedWeek, selected
   }
 
   const playerSearch = async (name) => {
-    const res = await fetch(`/research/player?name=${name}`, {
+    const res = await fetch(`/history/player?name=${name}`, {
       method: "GET",
       headers: {
         "x-access-token": sessionStorage.dfsTrackerToken

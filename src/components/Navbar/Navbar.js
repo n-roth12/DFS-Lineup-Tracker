@@ -11,13 +11,16 @@ const Navbar = () => {
   return (
   	<nav className="top-nav">
       {(window.location.pathname === '/' || window.location.pathname === '/lineups')&& 
-        <h1>History</h1>
+        <h1>Lineups</h1>
       }
       {window.location.pathname.startsWith('/lineups/') &&
         <h1>Fanduel Lineup: {window.location.pathname.split("/")[4]}, Week {window.location.pathname.split("/")[3]}</h1>
       }
       {window.location.pathname === '/upcoming' &&
         <h1>Upcoming</h1>
+      }
+      {window.location.pathname === '/history' &&
+        <h1>History</h1>
       }
       {window.location.pathname === '/research' &&
         <h1>Research</h1>

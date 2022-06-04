@@ -27,12 +27,12 @@ const UpcomingPage = ({ week, year }) => {
 		const result = await res.json()
     var games_data = []
     result["games"].map((game) => {
-      const games_split = game.split("@")
       games_data.push(
       {
-        "game": game,
-        "away": games_split[0],
-        "home": games_split[1]
+      	"game": `${game["away_team"]}@${game["home_team"]}`,
+        "away": game["away_team"],
+        "home": game["home_team"],
+
       })
     })
     setGames(games_data)

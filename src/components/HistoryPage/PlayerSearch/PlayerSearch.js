@@ -11,7 +11,7 @@ const PlayerSearch = ({ playerSearchData }) => {
 
   const getLastSeason = async () => {
     if (playerSearchData.name) {
-      const res = await fetch(`/research/player?name=${playerSearchData.name}&year=2021`, {
+      const res = await fetch(`/history/player?name=${playerSearchData.name}&year=2021`, {
         method: "GET",
         headers: {
           "x-access-token": sessionStorage.dfsTrackerToken

@@ -346,19 +346,15 @@ def upcoming_games(current_user: User):
 	
 	key = f'games_week_year'
 	games_from_cache = redis_client.get(key)
+	games_from_cache = None
 
 	if games_from_cache is None:
-		data = requests.get(f'{app.config["FFB_API_URL"]}/api/teamstats?week=18&year=2021').json()
-		games = []
+		data = requests.get(f'{app.config["FFB_API_URL"]}/api/upcoming_games').json()
+		games_from_api = data['games']
 
-		for team, team_data in data.items():
-			if len(team_data):
-				game = team_data[0]['stats']['game']
-				if game not in games:
-					games.append(game)
-		redis_client.set(key, json.dumps(games))
+		redis_client.set(key, json.dumps(games_from_api))
 
-		return jsonify({'games': games}), 200
+		return jsonify({'games': games_from_api}), 200
 
 	return jsonify({'games': json.loads(games_from_cache)}), 200
 
@@ -369,7 +365,7 @@ def upcoming_players(current_user: User):
 	return
 
 
-@app.route('/research/search', methods=['GET'])
+@app.route('/history/search', methods=['GET'])
 @token_required
 def research_search(current_user: User):
 	year = request.args.get('year')
@@ -434,7 +430,7 @@ def research_search(current_user: User):
 	return jsonify({ 'players': players, 'games': games}), 200
 
 
-@app.route('/research/player', methods=['GET'])
+@app.route('/history/player', methods=['GET'])
 @token_required
 def research_player(current_user: User):
 	name = request.args.get('name')
@@ -483,6 +479,15 @@ def nfl_teams(current_user: User):
 		teams_from_cache = json.loads(teams_from_cache)
 
 	return jsonify(teams_from_cache), 200
+
+
+@app.route('/research/lineups/count', methods=['GET'])
+@token_required
+def get_lineup_count(current_user: User):
+	lineups_count = db.session.query(Lineup) \
+				.filter(Lineup.user_public_id == current_user.public_id) \
+				.count()
+	return jsonify({ 'count': lineups_count }), 200
 
 
 
