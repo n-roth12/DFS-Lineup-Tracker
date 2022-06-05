@@ -15,6 +15,7 @@ import csv
 from .date_services import parseDate
 from pandas import read_csv
 from sqlalchemy import desc
+from sqlalchemy import func
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
@@ -490,7 +491,39 @@ def get_lineup_count(current_user: User):
 	return jsonify({ 'count': lineups_count }), 200
 
 
+@app.route('/research/lineups/max', methods=['GET'])
+@token_required
+def get_lineup_max(current_user: User):
+	max_score = db.session.query(func.max(Lineup.points)) \
+		.filter(Lineup.user_public_id == current_user.public_id) \
+		.scalar()
+	if not max_score:
+		return jsonify({ 'Error': 'No lineup max.' }), 400
+	max_lineup = db.session.query(Lineup) \
+		.filter(Lineup.points == max_score,
+			Lineup.user_public_id == current_user.public_id) \
+		.first()
+	print(max_lineup)
+	return jsonify({ 'max': LineupSchema().dump(max_lineup) }), 200
 
+@app.route('/research/lineups/highest', methods=['GET'])
+@token_required
+def get_highest_lineup(current_user: User):
+	max_winnings = db.session.query(func.max(Lineup.winnings - Lineup.bet)) \
+		.filter(Lineup.user_public_id == current_user.public_id) \
+		.scalar()
+	if max_winnings:
+		return jsonify({ 'highest': max_winnings }), 200
+	else:
+		return jsonify({ 'Error': 'No lineup max.' }), 400
+
+
+@app.route('/research/players/temp', methods=['GET'])
+@token_required
+def get_temp(current_user: User):
+	players = requests.get(f'{app.config["FFB_API_URL"]}/api/players?limit=10').json()
+	print(players)
+	return jsonify(players), 200
 
 
 

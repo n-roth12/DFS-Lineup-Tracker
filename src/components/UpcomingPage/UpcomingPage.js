@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import GamesSlider from '../ResearchPage/GamesSlider/GamesSlider'
+import GamesSlider from '../HistoryPage/GamesSlider/GamesSlider'
+import PlayersList from './PlayersList/PlayersList'
 import './UpcomingPage.css'
 import Dialog from "@material-ui/core/Dialog";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -11,9 +12,11 @@ import Button from "@material-ui/core/Button";
 const UpcomingPage = ({ week, year }) => {
 
 	const [games, setGames] = useState([])
+	const [players, setPlayers] = useState([])
 
 	useEffect(() => {
 		getGames()
+		getPlayers()
 	}, [])
 
 
@@ -39,7 +42,14 @@ const UpcomingPage = ({ week, year }) => {
 	}
 
 	const getPlayers = async () => {
-		return
+		const res = await fetch('/players?week=18&year=2021', {
+			method: 'GET',
+			headers: {
+				'x-access-token': sessionStorage.dfsTrackerToken
+			}
+		})
+		const result = await res.json()
+		setPlayers(result['players'])
 	}
 
 
@@ -52,7 +62,9 @@ const UpcomingPage = ({ week, year }) => {
           selectedWeek={week} 
           selectedYear={year} />
     	}
-			<p>Players: </p>
+			{players['All'] && players['All'].length > 0 &&
+				<PlayersList players={players} />
+			}
 
 			<button>Create Lineup</button>
     </div>

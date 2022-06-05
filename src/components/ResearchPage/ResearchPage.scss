@@ -6,5 +6,30 @@
 	flex-direction: column;
 	overflow: hidden;
 
-	
+	.research-card {
+		background-color: white;
+		border: 1px solid #d3d3d3;
+  		box-shadow: 0px 0px 3px 1px lightgray;
+  		width: 100%;
+  		padding: 10px;
+  		border-radius: 5px;
+  		display: flex;
+  		justfy-content: space-between;
+
+  		.research-section {
+  			width: 100%;
+
+	  		h2 {
+	  			margin-top: auto;
+	  			margin-bottom: auto;
+	  		}
+	  	}
+	}
+
+	.temp {
+		padding: 5px;
+		margin: 5px;
+		border: 1px solid black;
+		background-color: white;
+	}
 }

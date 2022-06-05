@@ -1,0 +1,84 @@
+.players-list {
+	display: flex;
+	flex-direction: column;
+	margin: 10px;
+
+	ul {
+		list-style: None;
+		padding-left: 0;
+	}
+
+	.save-btn-wrapper {
+		width: 400px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		padding: 5px;
+
+		button {
+			width: 40%;
+			border: None;
+			color: white;
+			border-radius: 5px;
+		}
+
+		.save-btn {
+			background-color: green;
+		}
+
+		.cancel-btn {
+			background-color: red;
+		}
+
+	}
+
+	.player-items {
+
+		width: fit-content;
+		max-height: 80vh;
+		overflow-y: auto;
+		box-shadow: 0px 0px 3px 1px lightgray;
+
+		.player-item {
+			background-color: white;
+			border-bottom: 1px solid #d3d3d3;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			width: 400px;
+			padding: 5px;
+
+			.player-item-inner {
+				display: flex;
+				flex-direction: column;
+
+				p {
+					margin: 0;
+				}
+			}
+
+			.btn-wrapper {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+
+				button {
+					color: white;
+					width: 30px;
+					height: 30px;
+					border: None;
+					border-radius: 50%;
+					margin: 2px;
+				}
+
+				.up-btn {
+					background-color: green;
+				}
+
+				.down-btn {
+					background-color: red;
+				}
+			}
+		}
+	}
+}
