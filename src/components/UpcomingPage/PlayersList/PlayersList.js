@@ -7,6 +7,8 @@ const PlayersList = ({ players }) => {
   const [playersCurr, setPlayersCurr] = useState(players['All'])
   const [playersPrev, setPlayersPrev] = useState(players['All'])
   const [showSaveBtn, setShowSaveBtn] = useState(false)
+  const [activeSort, setActiveSort] = useState('Salary')
+  const [activeFilter, setActiveFilter] = useState('All')
 
   const handleUp = (index) => {
     if (index < 1) return
@@ -38,7 +40,25 @@ const PlayersList = ({ players }) => {
 
   return (
     <div className="players-list">
-    	<h2>Players</h2>
+    	<h1>Players</h1>
+      <div className="sort-wrapper">
+        <h2>Sort:</h2>
+        <div className="buttons-wrapper">
+          <button className="filter-btn-active">Salary</button>
+          <button className="filter-btn">Proj PTs</button>
+          <button className="filter-btn">Custom</button>
+        </div>
+      </div>
+      <div className="filter-wrapper">
+        <h2>Filter:</h2>
+        <div className="buttons-wrapper">
+          <button className="filter-btn-active">All</button>
+          <button className="filter-btn">QB</button>
+          <button className="filter-btn">RB</button>
+          <button className="filter-btn">WR</button>
+          <button className="filter-btn">TE</button>
+        </div>
+      </div>
       {showSaveBtn &&
         <div className="save-btn-wrapper">
           <button className="save-btn" onClick={savePlayers}>Save</button>

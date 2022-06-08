@@ -8,7 +8,6 @@ const PointsGraph = ({ graphData, year }) => {
 		if (active && payload && payload.length) {
 			return (
 				<div className="custom-tooltip">
-					<h3>{payload[0].payload.week}: </h3>
 					<span>
 						<p>{parseFloat(payload[0].payload.points).toFixed(2)} PTS</p>
 						{Math.abs(payload[0].payload.points_change) > 0 &&

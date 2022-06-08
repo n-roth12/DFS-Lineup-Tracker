@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import './LineupsPage.css';
+import './LineupsPage.scss';
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 import LineupCard from './LineupCard/LineupCard'
@@ -39,6 +39,10 @@ const LineupsPage = () => {
 	const [graphView, setGraphView] = useState('bankroll')
 	const [showImportDialog, setShowImportDialog] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null)
+	const [lineupCount, setLineupCount] = useState()
+	const [maxScore, setMaxScore] = useState()
+	const [highestWin, setHighestWin] = useState()
+	const [highestPercentile, setHighestPercentile] = useState()
   
   useEffect(() => {
   	loadPage()
@@ -47,6 +51,7 @@ const LineupsPage = () => {
   useEffect(() => {
   	getYears()
   	loadGraphData()
+  	getExtras()
   }, [loadingLineups])
 
   useEffect(() => {
@@ -120,6 +125,17 @@ const LineupsPage = () => {
 		setLoadingBankrollGraph(false)
  	}
 
+ 	const getExtras = () => {
+ 		setLineupCount(lineups.length)
+ 		const a = Math.max(...lineups.map(lineup => (lineup.winnings - lineup.bet)))
+ 		setHighestWin(a)
+ 		const b = Math.max(...lineups.map(lineup => (lineup.percentile)))
+ 		setHighestPercentile(b)
+ 		const c = Math.max(...lineups.map(lineup => (lineup.points)))
+ 		setMaxScore(c)
+ 	}
+
+
   const createLineup = async (year, week, bet, winnings) => {
  		var data = {}
 		data["year"] = year
@@ -165,7 +181,6 @@ const LineupsPage = () => {
   const onFileUpload = async () => {
   	var data = new FormData()
   	data.append("myFile", selectedFile, selectedFile.name)
-  	console.log(selectedFile)
   	const res = await fetch('/lineups/upload', {
   		method: 'POST',
   		headers: {
@@ -188,6 +203,24 @@ const LineupsPage = () => {
   		{!loadingLineups ?
   		<>
   			<div className="main container">
+  				<div className="cards-wrapper">
+  					<div className="card">
+  						<p className="number">{lineupCount}</p>
+  						<p className="desc">Total Lineups</p>
+  					</div>
+  					<div className="card">
+  						<p className="number">{maxScore} Pts</p>
+  						<p className="desc">Max Score</p>
+  					</div>
+  					<div className="card">
+  						<p className="number">${highestWin}</p>
+  						<p className="desc">Highest Win</p>
+  					</div>
+  					<div className="card">
+  						<p className="number">{highestPercentile.toFixed(2)}%</p>
+  						<p className="desc">Highest Percentile Finish</p>
+  					</div>
+  				</div>
 			  	<div className="graphs-wrapper row">
 						<div className="graph-btn-wrapper">
 							<button 

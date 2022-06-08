@@ -236,6 +236,7 @@ def get_user(current_user: User):
 		response["winnings"] = user_lineup.winnings
 		response["position"] = user_lineup.position
 		response["entries"] = user_lineup.entries
+		response["percentile"] = user_lineup.percentile
 
 		whole_response.append(response)
 
@@ -503,7 +504,6 @@ def get_lineup_max(current_user: User):
 		.filter(Lineup.points == max_score,
 			Lineup.user_public_id == current_user.public_id) \
 		.first()
-	print(max_lineup)
 	return jsonify({ 'max': LineupSchema().dump(max_lineup) }), 200
 
 @app.route('/research/lineups/highest', methods=['GET'])
@@ -517,6 +517,16 @@ def get_highest_lineup(current_user: User):
 	else:
 		return jsonify({ 'Error': 'No lineup max.' }), 400
 
+@app.route('/research/lineups/percentile', methods=['GET'])
+@token_required
+def get_highest_percentile(current_user: User):
+	highest_percentile = db.session.query(Lineup) \
+		.filter(Lineup.user_public_id == current_user.public_id) \
+		.all()
+	print([p.percentile for p in highest_percentile])
+	if not highest_percentile:
+		return jsonify({ 'Error': 'No percentile max.' }), 400
+	return 'Success', 200
 
 @app.route('/research/players/temp', methods=['GET'])
 @token_required
@@ -524,6 +534,7 @@ def get_temp(current_user: User):
 	players = requests.get(f'{app.config["FFB_API_URL"]}/api/players?limit=10').json()
 	print(players)
 	return jsonify(players), 200
+
 
 
 

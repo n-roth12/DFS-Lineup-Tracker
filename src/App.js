@@ -28,116 +28,119 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={
-            <>
-              {sessionStorage.dfsTrackerToken ?
-                <div className="page-wrapper">
-                  <Navbar />
-                  <div className="page-wrapper-inner"> 
-                    <SideNav />
-                    <LineupsPage />
+          <Route path="/">
+            <Route index element={
+              <>
+                {sessionStorage.dfsTrackerToken ?
+                  <div className="page-wrapper">
+                    <Navbar />
+                    <div className="page-wrapper-inner"> 
+                      <SideNav />
+                      <LineupsPage />
+                    </div>
+                    <Footer />
                   </div>
-                  <Footer />
-                </div>
-              : 
-                <LoginPage setToken={setToken} />
-              }
-            </>
-          } />
+                : 
+                  <LoginPage setToken={setToken} />
+                }
+              </>
+            } />
 
-          <Route path="/login" element={
-            <LoginPage setToken={setToken} />
-          } />
+            <Route path="login" element={
+              <LoginPage setToken={setToken} />
+            } />
 
-          <Route path="/register" element={
-            <RegisterPage setToken={setToken} />
-          } />
+            <Route path="register" element={
+              <RegisterPage setToken={setToken} />
+            } />
 
-          <Route exact path="/lineups" element={
-            <>
-              {sessionStorage.dfsTrackerToken ?
-                <div className="page-wrapper">
-                  <Navbar />
-                  <div className="page-wrapper-inner"> 
-                    <SideNav />
-                    <LineupsPage />
+            <Route path="lineups">
+              <Route index element={
+                <>
+                  {sessionStorage.dfsTrackerToken ?
+                    <div className="page-wrapper">
+                      <Navbar />
+                      <div className="page-wrapper-inner"> 
+                        <SideNav />
+                        <LineupsPage />
+                      </div>
+                      <Footer />
+                    </div>
+                  : 
+                    <LoginPage setToken={setToken} />
+                  }
+                </>
+              } />
+
+              <Route path=":lineupId/:lineupWeek/:lineupYear" element={
+                <>
+                  {sessionStorage.dfsTrackerToken ?
+                    <div className="page-wrapper">
+                      <Navbar />
+                      <div className="page-wrapper-inner"> 
+                        <SideNav />
+                        <SingleLineupPage  />
+                      </div>
+                      <Footer />
+                    </div>
+                  : 
+                    <LoginPage setToken={setToken} />
+                  }
+                </>
+              } />
+            </Route>
+
+            <Route path="upcoming" element={
+              <>
+                {sessionStorage.dfsTrackerToken ?
+                  <div className="page-wrapper">
+                    <Navbar />
+                    <div className="page-wrapper-inner"> 
+                      <SideNav />
+                      <UpcomingPage week={18} year={2021} />
+                    </div>
+                    <Footer />
                   </div>
-                  <Footer />
-                </div>
-              : 
-                <LoginPage setToken={setToken} />
-              }
-            </>
-          } />
+                : 
+                  <LoginPage setToken={setToken} />
+                }
+              </>
+            } />
 
-          <Route path="/lineups/:lineupId/:lineupWeek/:lineupYear" element={
-            <>
-              {sessionStorage.dfsTrackerToken ?
-                <div className="page-wrapper">
-                  <Navbar />
-                  <div className="page-wrapper-inner"> 
-                    <SideNav />
-                    <SingleLineupPage />
+            <Route path="research" element={
+              <>
+                {sessionStorage.dfsTrackerToken ?
+                  <div className="page-wrapper">
+                    <Navbar />
+                    <div className="page-wrapper-inner"> 
+                      <SideNav />
+                      <ResearchPage />
+                    </div>
+                    <Footer />
                   </div>
-                  <Footer />
-                </div>
-              : 
-                <LoginPage setToken={setToken} />
-              }
-            </>
-          } />
+                : 
+                  <LoginPage setToken={setToken} />
+                }
+              </>
+            } />
 
-          <Route path="/upcoming" element={
-            <>
-              {sessionStorage.dfsTrackerToken ?
-                <div className="page-wrapper">
-                  <Navbar />
-                  <div className="page-wrapper-inner"> 
-                    <SideNav />
-                    <UpcomingPage week={18} year={2021} />
+            <Route path="history" element={
+              <>
+                {sessionStorage.dfsTrackerToken ?
+                  <div className="page-wrapper">
+                    <Navbar />
+                    <div className="page-wrapper-inner"> 
+                      <SideNav />
+                      <HistoryPage />
+                    </div>
+                    <Footer />
                   </div>
-                  <Footer />
-                </div>
-              : 
-                <LoginPage setToken={setToken} />
-              }
-            </>
-          } />
-
-          <Route path="/research" element={
-            <>
-              {sessionStorage.dfsTrackerToken ?
-                <div className="page-wrapper">
-                  <Navbar />
-                  <div className="page-wrapper-inner"> 
-                    <SideNav />
-                    <ResearchPage />
-                  </div>
-                  <Footer />
-                </div>
-              : 
-                <LoginPage setToken={setToken} />
-              }
-            </>
-          } />
-
-          <Route path="/history" element={
-            <>
-              {sessionStorage.dfsTrackerToken ?
-                <div className="page-wrapper">
-                  <Navbar />
-                  <div className="page-wrapper-inner"> 
-                    <SideNav />
-                    <HistoryPage />
-                  </div>
-                  <Footer />
-                </div>
-              : 
-                <LoginPage setToken={setToken} />
-              }
-            </>
-          } />
-
+                : 
+                  <LoginPage setToken={setToken} />
+                }
+              </>
+            } />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

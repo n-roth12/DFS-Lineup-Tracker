@@ -8,7 +8,6 @@ const BankrollGraph = ({ graphData, year }) => {
 		if (active && payload && payload.length) {
 			return (
 				<div className="custom-tooltip">
-					<h3>{payload[0].payload.week}: </h3>
 					<span>
 						<p>{payload[0].payload.bankroll < 0 && '-'}${parseFloat(Math.abs(payload[0].payload.bankroll)).toFixed(2)}</p>
 						{Math.abs(payload[0].payload.bankroll_change) > 0 &&

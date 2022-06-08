@@ -2,8 +2,35 @@
 	display: flex;
 	width: 100%;
 	flex-direction: column;
-	margin-left: 250px;
+	margin-left: 200px;
 	margin-top: 60px;
+
+	.cards-wrapper {
+		display: flex;
+		margin-top: 10px;
+
+		.card {
+			flex: 1;
+			margin: 10px;
+			padding: 10px;
+			// box-shadow: 0px 0px 1px 0.25px lightgrey;
+
+			p {
+				margin: auto;
+			}
+			.number {
+				font-size: 14pt;
+				font-weight: 600;
+			}
+			.desc {
+				color: #656565;
+
+			}
+
+		}
+
+	}
+
 }
 
 .lineups-table {
@@ -88,7 +115,7 @@
 }
 
 .graph-btn-wrapper {
-	width: 90%;
+	width: 100%;
 	margin-bottom: 15px;
 }
 
