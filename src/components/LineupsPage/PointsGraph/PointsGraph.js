@@ -2,12 +2,15 @@ import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContai
 import './PointsGraph.css'
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
 
-const PointsGraph = ({ graphData, year }) => {
+const PointsGraph = ({ graphData, year, setGraphView }) => {
 
 	const CustomToolTip = ({ active, payload, label }) => {
 		if (active && payload && payload.length) {
+			const week = payload[0].payload.week.split('/')[1]
+			const year = payload[0].payload.week.split('/')[0]
 			return (
 				<div className="custom-tooltip">
+					<h3>Week {week}, {year}</h3>
 					<span>
 						<p>{parseFloat(payload[0].payload.points).toFixed(2)} PTS</p>
 						{Math.abs(payload[0].payload.points_change) > 0 &&
@@ -28,7 +31,16 @@ const PointsGraph = ({ graphData, year }) => {
   return (
     <div className="graph-wrapper">
     	<div className="points-graph">
-				<h1 className="graph-label">{year} Points (Average Per Lineup):</h1>
+				<div className="graph-btn-wrapper">
+					<button 
+						className={`graph-btn`} 
+						onClick={() => setGraphView('bankroll')}>Bankroll
+					</button>
+					<button 
+						className={`graph-btn-active`} 
+						onClick={() => setGraphView('points')}>Points
+					</button>
+				</div>
 				<ResponsiveContainer aspect={3}>
 		      <LineChart
 		        width={400}
@@ -41,11 +53,11 @@ const PointsGraph = ({ graphData, year }) => {
 		          bottom: 10,
 		        }}>
 		        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" vertical={false}/>
-		        <XAxis dataKey="week" tick={{fill:"#000000"}}/>
+		        <XAxis dataKey="week" tick={{fill:"#000000"}} minTickGap={30} />
 		        <YAxis tick={{fill:"#000000"}}>
-{/*		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>
-		        		Fantasy Points Scored
-		        	</Label>*/}
+		        	<Label angle={270} position={'left'} style={{ textAnchor: 'middle' }}>
+		        		Average Lineup Points
+		        	</Label>
 		        </YAxis>
 		        <Line 
 		        	dataKey="points" 

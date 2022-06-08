@@ -39,10 +39,10 @@ const LineupsPage = () => {
 	const [graphView, setGraphView] = useState('bankroll')
 	const [showImportDialog, setShowImportDialog] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null)
-	const [lineupCount, setLineupCount] = useState()
-	const [maxScore, setMaxScore] = useState()
-	const [highestWin, setHighestWin] = useState()
-	const [highestPercentile, setHighestPercentile] = useState()
+	const [lineupCount, setLineupCount] = useState(0)
+	const [maxScore, setMaxScore] = useState(0)
+	const [highestWin, setHighestWin] = useState(0)
+	const [highestPercentile, setHighestPercentile] = useState(0)
   
   useEffect(() => {
   	loadPage()
@@ -51,7 +51,6 @@ const LineupsPage = () => {
   useEffect(() => {
   	getYears()
   	loadGraphData()
-  	getExtras()
   }, [loadingLineups])
 
   useEffect(() => {
@@ -89,6 +88,9 @@ const LineupsPage = () => {
  		var data = []
  		var bankRollSum = 0
  		var lineups_copy = [...lineups]
+ 		var max_percentile = 0
+ 		var max_points = 0
+ 		var max_win = 0
  		lineups_copy.reverse()
 
  		lineups_copy.length > 0 && lineups_copy.map((lineup) => {
@@ -96,6 +98,9 @@ const LineupsPage = () => {
 	 			bankRollSum += (lineup.winnings - lineup.bet)
 	 			var week_string = `${lineup.year}/${lineup.week}`
 	 			var sameWeeks =  data.filter(week => week.week === week_string)
+	 			max_points = Math.max(max_points, lineup.points)
+	 			max_win = Math.max(max_win, lineup.winnings - lineup.bet)
+	 			max_percentile = Math.max(max_percentile, lineup.percentile)
 	 			if (sameWeeks.length > 0) {
 	 				sameWeeks[0]["bankroll"] = bankRollSum
 	 				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1)
@@ -117,6 +122,10 @@ const LineupsPage = () => {
 		 			data.push(lineup_data)
 		 		}
 		 	}
+		 	setLineupCount(data.length)
+		 	setHighestWin(max_win)
+		 	setMaxScore(max_points)
+		 	setHighestPercentile(max_percentile)
 	 	})	
 
 		setPointsGraphData(data)
@@ -203,6 +212,13 @@ const LineupsPage = () => {
   		{!loadingLineups ?
   		<>
   			<div className="main container">
+					<div className="filter-btn-wrapper">
+						<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
+						{years.length > 0 && years.map((year) => 
+							<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
+								onClick={() => setFilteredYears(year)}>{year}</button>
+						)}
+					</div>
   				<div className="cards-wrapper">
   					<div className="card">
   						<p className="number">{lineupCount}</p>
@@ -222,23 +238,14 @@ const LineupsPage = () => {
   					</div>
   				</div>
 			  	<div className="graphs-wrapper row">
-						<div className="graph-btn-wrapper">
-							<button 
-								className={`graph-btn${graphView === 'bankroll' ? '-active' : ''}`} 
-								onClick={() => setGraphView('bankroll')}>Bankroll
-							</button>
-							<button 
-								className={`graph-btn${graphView === 'points' ? '-active' : ''}`} 
-								onClick={() => setGraphView('points')}>Points
-							</button>
-						</div>
 
 						{ graphView === 'points' &&
 						<>
 					    { !loadingPointsGraph ? 
 					    	<PointsGraph 
 					    		graphData={pointsGraphData} 
-					    		year={filteredYears} 
+					    		year={filteredYears}
+					    		setGraphView={setGraphView}
 					    	/> 
 					    : 
 					    	<>
@@ -253,6 +260,7 @@ const LineupsPage = () => {
 					    	<BankrollGraph 
 					    		graphData={bankrollGraphData} 
 					    		year={filteredYears}
+					    		setGraphView={setGraphView}
 					    	/> 
 					    : 
 					    	<>
@@ -264,19 +272,11 @@ const LineupsPage = () => {
 				  </div>
 		    </div>
 
-				<div className="filter-btn-wrapper">
-					<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
-					{years.length > 0 && years.reverse().map((year) => 
-						<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
-							onClick={() => setFilteredYears(year)}>{year}</button>
-					)}
-				</div>
-
 		    <div className="lineupform-wrapper">
-				  <button className="toggle-lineupform-btn" 
+				  <button className="search-btn" 
 				  	onClick={() => setShowNewLineupForm(true)}
 				  	>Create New Lineup</button>
-				  <button className="toggle-lineupform-btn"
+				  <button className="search-btn"
 				  	onClick={() => setShowImportDialog(true)}
 				  	>Import Lineups</button>
 				 </div>

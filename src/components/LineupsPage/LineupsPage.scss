@@ -7,7 +7,6 @@
 
 	.cards-wrapper {
 		display: flex;
-		margin-top: 10px;
 
 		.card {
 			flex: 1;
@@ -24,13 +23,9 @@
 			}
 			.desc {
 				color: #656565;
-
 			}
-
 		}
-
 	}
-
 }
 
 .lineups-table {
@@ -162,16 +157,16 @@
 
 .toggle-lineupform-btn {
   padding: 10px;
-  background-color: #ffffff;
+  background-color: #0069ed;
   border-radius: 3px;
   border: 1px solid lightgrey;
-  color: #0069ed;
+  color: white;
   margin: 10px;
 	box-shadow: 0px 0px 3px 1px lightgrey;
 }
 
 .toggle-lineupform-btn:hover {
-  color: #202033;
+  color: #d3d3d3;
 }
 
 
