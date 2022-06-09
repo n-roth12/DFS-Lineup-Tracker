@@ -335,7 +335,11 @@ const LineupsPage = () => {
 				  </Dialog>
 
 				<div className="lineups-wrapper container">
-					<LineupsTable lineups={lineups} filteredYears={filteredYears} />
+					<LineupsTable 
+						lineups={lineups.filter(lineup => {
+							return filteredYears === null || lineup.year === filteredYears
+						})} 
+						filteredYears={filteredYears} />
 				</div>
 		  </> 
 		 : 
