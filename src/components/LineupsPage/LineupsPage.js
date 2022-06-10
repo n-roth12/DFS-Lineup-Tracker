@@ -214,12 +214,14 @@ const LineupsPage = () => {
   		<>
   			<div className="main container">
 					<div className="filter-btn-wrapper">
+						<h2>Filter: </h2>
 						<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
 						{years.length > 0 && years.map((year) => 
 							<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
 								onClick={() => setFilteredYears(year)}>{year}</button>
 						)}
-					</div>
+  				</div>
+
   				<div className="cards-wrapper">
   					<div className="card">
   						<p className="number">{lineupCount}</p>

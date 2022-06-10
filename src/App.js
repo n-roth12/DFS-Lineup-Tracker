@@ -8,6 +8,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage'
 import UpcomingPage from './components/UpcomingPage/UpcomingPage'
 import HistoryPage from './components/HistoryPage/HistoryPage'
 import ResearchPage from './components/ResearchPage/ResearchPage'
+import PlayerPage from './components/PlayerPage/PlayerPage'
 import Navbar from './components/Navbar/Navbar'
 import SideNav from './components/SideNav/SideNav'
 import Footer from './components/Footer/Footer'
@@ -140,6 +141,24 @@ function App() {
                 }
               </>
             } />
+
+            <Route path="player/:name" element={
+              <>
+                {sessionStorage.dfsTrackerToken ?
+                  <div className="page-wrapper">
+                    <Navbar />
+                    <div className="page-wrapper-inner"> 
+                      <SideNav />
+                      <PlayerPage />
+                    </div>
+                    <Footer />
+                  </div>
+                : 
+                  <LoginPage setToken={setToken} />
+                }
+              </>
+            } />
+
           </Route>
         </Routes>
       </BrowserRouter>

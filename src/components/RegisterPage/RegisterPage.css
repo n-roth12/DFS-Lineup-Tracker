@@ -61,10 +61,7 @@ input:focus {
 
 h1 {
 	color: #000000;
-}
-
-.website-title {
-	margin-bottom: 50px;
+	font-size: 16pt;
 }
 
 .show-password {

@@ -41,14 +41,16 @@ const LoginPage = ({ setToken, setUserId }) => {
 
 	return (
 		<div className="login-page">
-			<h1 className="website-title">DFSTracker</h1>
+			<h1 className="website-title">MainSlater</h1>
 			<div className="login-form-wrapper">
 				<h1>Login</h1>
 				<form className="login-form" onSubmit={handleSubmit}>
 			    	<div>
-			    		<input className="form-control" type="text" placeholder="Username" value={username}
+			    		<label>Username</label>
+			    		<input className="form-control" type="text" placeholder="Enter Username" value={username}
 			    			onChange={(e) => setUsername(e.target.value)} />
-			    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Password" value={password}
+			    		<label>Password</label>
+			    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter Password" value={password}
 			    		onChange={(e) => setPassword(e.target.value)} />
 			    		<div className="show-password">
 			    			<input className="checkbox" type="checkbox" checked={showPassword} onClick={toggle} />

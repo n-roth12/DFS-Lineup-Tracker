@@ -8,6 +8,11 @@ const Navbar = () => {
     sessionStorage.clear();
   }
 
+  const splitName = (pathname) => {
+    const temp = pathname.split('/')[2]
+    return temp.replace('_', ' ')
+  }
+
   return (
   	<nav className="top-nav">
       {(window.location.pathname === '/' || window.location.pathname === '/lineups')&& 
@@ -24,6 +29,9 @@ const Navbar = () => {
       }
       {window.location.pathname === '/research' &&
         <h1>Research</h1>
+      }
+      {window.location.pathname.startsWith('/player') &&
+        <h1>{splitName(window.location.pathname)}</h1>
       }
       <ul className="top-nav-links">
         <li>

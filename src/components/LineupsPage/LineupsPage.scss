@@ -5,6 +5,15 @@
 	margin-left: 200px;
 	margin-top: 60px;
 
+	.filter-btn-wrapper {
+		h2 {
+			height: fit-content;
+			margin-top: auto;
+			margin-bottom: auto;
+			margin-right: 20px;
+		}
+	}
+
 	.cards-wrapper {
 		display: flex;
 

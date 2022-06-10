@@ -367,11 +367,12 @@ def upcoming_players(current_user: User):
 	return
 
 
-@app.route('/history/search', methods=['GET'])
+@app.route('/history/search/week', methods=['GET'])
 @token_required
 def research_search(current_user: User):
 	year = request.args.get('year')
 	week = request.args.get('week')
+
 	if (not year or not week):
 		return jsonify({ 'Error': 'Missing year or week!' }), 400
 
@@ -430,6 +431,46 @@ def research_search(current_user: User):
 	games = json.loads(games_from_cache)
 
 	return jsonify({ 'players': players, 'games': games}), 200
+
+
+@app.route('/history/search/year', methods=['GET'])
+@token_required
+def research_year(current_user: User):
+	year = request.args.get('year')
+	if not year:
+		return jsonify({ 'Error': 'Year not specified.' }), 400
+
+	key = f'players_{year}'
+	players_from_cache = redis_client.get(key)
+	if players_from_cache == None:
+		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}')
+		players_from_api = res.json()
+		qbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=QB')
+		qbs_from_api = qbs_res.json()
+		rbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=RB')
+		rbs_from_api = rbs_res.json()
+		wrs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=WR')
+		wrs_from_api = wrs_res.json()
+		tes_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=TE')
+		tes_from_api = tes_res.json()
+		def_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=dst')
+		defenses_from_api = def_res.json()		
+
+		result = {
+			"All": players_from_api, 
+			"QB": qbs_from_api,
+			"RB": rbs_from_api,
+			"WR": wrs_from_api,
+			"TE": tes_from_api,
+			"DST": defenses_from_api 
+		}
+
+		redis_client.set(key, json.dumps(result))
+		players_from_cache = redis_client.get(key)
+
+	players = json.loads(players_from_cache)
+
+	return jsonify({ 'players': players, 'games': [] }), 200
 
 
 @app.route('/history/player', methods=['GET'])

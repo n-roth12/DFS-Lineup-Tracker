@@ -41,16 +41,19 @@ const LandingPage = ({ setToken }) => {
 
 	return (
 		<div className="register-page">
-			<h1 className="website-title">DFSTracker</h1>
+			<h1 className="website-title">MainSlater</h1>
 			<div className="register-form-wrapper">
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>
 		    	<div>
-		    		<input className="form-control" type="text" placeholder="Enter a username" value={username}
+		    		<label>Username</label>
+		    		<input className="form-control" type="text" placeholder="Create Username" value={username}
 		    			onChange={(e) => setUsername(e.target.value)} />
-		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter a password" value={password}
+		    		<label>Password</label>
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Create Password" value={password}
 		    		onChange={(e) => setPassword(e.target.value)} />
-		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Re-enter password" value={passwordCheck}
+		    		<label>Re-enter Password</label>
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Create Password" value={passwordCheck}
 		    		onChange={(e) => setPasswordCheck(e.target.value)} />
 		    		<div className="show-password">
 		    			<input className="checkbox" type="checkbox" checked={showPassword} onClick={toggle} />
