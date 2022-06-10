@@ -97,7 +97,6 @@
 	}
 
 	.tabs {
-
 		li {
 		  display: inline-block;
 		  list-style: none;
@@ -106,12 +105,30 @@
 		  margin-bottom: 0;
 		  cursor: pointer;
 		}
-
 		.active {
 		  background-color: white;
 		  border: solid #ccc;
 		  border-width: 1px 1px 1px 1px;
 		}
-
+	}
+	
+	.popular-players {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		ul {
+			list-style: None;
+			padding-left: 0;
+			background-color: white;
+			padding: 5px 15px 5px 15px;
+			li {
+				margin: 5px 0px 10px 0px;
+			}
+			.player-link {
+				color: blue;
+				text-decoration: none;
+				cursor: pointer;
+			}
+		}	
 	}
 }

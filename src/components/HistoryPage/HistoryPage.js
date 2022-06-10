@@ -22,10 +22,23 @@ const ResearchPage = () => {
   const [nameSearch, setNameSearch] = useState("")
   const [teams, setTeams] = useState([])
   const [loading, setLoading] = useState(false)
+  const [topSearches, setTopSearches] = useState([])
 
   useEffect(() => {
     weekSearch(selectedWeek, selectedYear)
+    getTopSearches()
   }, [])
+
+  const getTopSearches = async () => {
+    const res = await fetch(`/history/search/top_searches`, {
+      method: "GET",
+      headers: {
+        "x-access-token": sessionStorage.dfsTrackerToken
+      },
+    })
+    const result = await res.json()
+    setTopSearches(result["names"])
+  }
 
   const weekSearch = async (week, year) => {
     setLoading(true)
@@ -193,8 +206,26 @@ const ResearchPage = () => {
             <PlayersTable players={playerData} />
           </div>
         }
-        { activeTab === "player" && playerSearchData &&
-          <PlayerSearch playerSearchData={playerSearchData} />
+        { activeTab === "player" && 
+          <>
+            {Object.keys(playerSearchData).length !== 0 ?
+              <PlayerSearch playerSearchData={playerSearchData} />
+            :
+            <>
+              {topSearches.length > 0 &&
+                <div className="popular-players">
+                  <h2>Popular Searches:</h2>
+                  <ul>
+                    {topSearches.map((player) => 
+                      <li className="player-link"
+                        onClick={() => playerSearch(player)}>{player}</li>
+                    )}
+                  </ul>
+                </div>
+              }
+            </>
+            }
+          </>
         }
       </>
       } 

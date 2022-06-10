@@ -473,6 +473,16 @@ def research_year(current_user: User):
 	return jsonify({ 'players': players, 'games': [] }), 200
 
 
+@app.route('/history/search/top_searches', methods=['GET'])
+@token_required
+def top_searches(current_user: User):
+	players = ['Jonathan Taylor', 
+		'Justin Jefferson', 
+		'Joe Mixon',
+		'Joe Burrow']
+	return jsonify({ 'names': players }), 200
+
+
 @app.route('/history/player', methods=['GET'])
 @token_required
 def research_player(current_user: User):
