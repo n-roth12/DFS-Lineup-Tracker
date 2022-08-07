@@ -35,3 +35,9 @@
 	border-radius: 5px;
 	margin: 3px;
 }
+
+.game-block {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}

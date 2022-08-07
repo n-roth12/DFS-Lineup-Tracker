@@ -46,13 +46,13 @@ const LandingPage = ({ setToken }) => {
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>
 		    	<div>
-		    		<label>Username</label>
+		    		<label><strong>Username</strong></label>
 		    		<input className="form-control" type="text" placeholder="Create Username" value={username}
 		    			onChange={(e) => setUsername(e.target.value)} />
-		    		<label>Password</label>
+		    		<label><strong>Password</strong></label>
 		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Create Password" value={password}
 		    		onChange={(e) => setPassword(e.target.value)} />
-		    		<label>Re-enter Password</label>
+		    		<label><strong>Re-enter Password</strong></label>
 		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Create Password" value={passwordCheck}
 		    		onChange={(e) => setPasswordCheck(e.target.value)} />
 		    		<div className="show-password">
