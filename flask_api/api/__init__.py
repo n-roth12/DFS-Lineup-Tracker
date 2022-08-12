@@ -16,6 +16,7 @@ app.config['SECRET_KEY'] = config.app_secret_key
 app.config['SQLALCHEMY_DATABASE_URI'] = config.dev_database_uri
 app.config['FFB_API_URL'] = config.ffb_api_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['MONGODB_URI'] = config.dev_mongodb_uri
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)

@@ -19,6 +19,7 @@ from sqlalchemy import func
 from pymongo import MongoClient
 from pprint import pprint
 import certifi
+from bson import json_util
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
@@ -372,7 +373,6 @@ def upcoming_players(current_user: User):
 
 # @app.route('/fetchDraftkingsData', methods=['POST'])
 # def get_data():
-# 	client = MongoClient("mongodb+srv://nroth12:scblackhawk12@cluster0.g0sucn4.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
 # 	db = client['test_db']
 # 	collection = db['test_collection']
 
@@ -398,7 +398,7 @@ def upcoming_players(current_user: User):
 
 @app.route('/test2', methods=['GET'])
 def test2():
-	client = MongoClient("mongodb+srv://nroth12:scblackhawk12@cluster0.g0sucn4.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	res = requests.get("https://www.draftkings.com/lobby/getcontests?sport=nfl&format=json")
 	contests = res.json()["Contests"]
 	draft_groups = {contest["dg"] for contest in contests if not ('Madden' in contest['gameType'] or 'Showdown' in contest['gameType'] or 'Best Ball' in contest['gameType'] or 'Snake' in contest['gameType'])}
@@ -419,6 +419,18 @@ def test2():
 		collection.insert_many(result)
 
 	return 'success', 200
+
+
+@app.route('/upcoming/slates', methods=['GET'])
+@token_required
+def get_slates(current_user: User):
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["draftGroups"]
+	result = []
+	for item in collection.find():
+		result.append(json.loads(json_util.dumps(item)))
+	return jsonify(result), 200
 
 
 @app.route('/history/search/week', methods=['GET'])

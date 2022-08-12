@@ -13,17 +13,34 @@ import { Link } from 'react-router-dom'
 const UpcomingPage = ({ week, year }) => {
 
 	const [games, setGames] = useState([])
+	const [slates, setSlates] = useState([])
 	const [players, setPlayers] = useState([])
-	const [contests, setContests] = useState([])
+	const [activeSlate, setActiveSlate] = useState()
 
 	useEffect(() => {
-		// getGames()
-		getDraftkingsPlayers()
 		getScoreboard()
 		getUpcomingSlates()
-		// getSlates()
 	}, [])
 
+	useEffect(() => {
+		const temp = slates.find((slate) => {
+			return slate["draftGroup"]["draftGroupId"] === activeSlate
+		})
+		setPlayers(temp["draftables"])
+	}, [activeSlate])
+
+	const getUpcomingSlates = async () => {
+		const res = await fetch('/upcoming/slates', {
+			method: 'GET',
+			headers: {
+				'x-access-token': sessionStorage.dfsTrackerToken
+			}
+		})
+
+		const data = await res.json()
+		setSlates(data)
+		setActiveSlate(data[0]["draftGroup"]["draftGroupId"])
+	}
 
 	// const getGames = async () => {
 	// 	const res = await fetch('/upcoming/games', {
@@ -62,12 +79,12 @@ const UpcomingPage = ({ week, year }) => {
 		
 	// }
 
-	const getUpcomingSlates = async () => {
-		const url = "https://www.draftkings.com/lobby/getcontests?sport=nfl"
-		const res = await fetch(url)
-		const data = res.json()
-		console.log(data["Contests"].length)
-	}
+	// const getUpcomingSlates = async () => {
+	// 	const url = "https://www.draftkings.com/lobby/getcontests?sport=nfl"
+	// 	const res = await fetch(url)
+	// 	const data = res.json()
+	// 	console.log(data["Contests"].length)
+	// }
 
 	const getScoreboard = async () => {
 		// url for current week scoreboard
@@ -78,14 +95,6 @@ const UpcomingPage = ({ week, year }) => {
 		const res = await fetch(url)
 		const data = await res.json()
 		setGames(data["sports"][0]["leagues"][0]["events"])
-	}
-
-	const getDraftkingsPlayers = async () => {
-		// get unix time from https://www.draftkings.com/time/current
-		const url = 'https://api.draftkings.com/draftgroups/v1/draftgroups/71429/draftables?format=json'
-		const res = await fetch(url)
-		const data = await res.json()
-		setPlayers(data["draftables"])
 	}
 
 	const getFanduelPlayers = async () => {
@@ -169,6 +178,11 @@ const UpcomingPage = ({ week, year }) => {
 			{/* {players['All'] && players['All'].length > 0 &&
 				<PlayersList players={players} />
 			} */}
+			<select>
+				{slates.length > 0 && slates.map((slate) => (
+					<option>{slate["draftGroup"]["minStartTime"]} ({slate["draftGroup"]["games"].length} games)</option>
+				))}
+			</select>
 			<Link className="search-btn" to={`/`}>Create Lineup</Link>
 			{players.length > 0 && 
 				<div className='players-outer'>
