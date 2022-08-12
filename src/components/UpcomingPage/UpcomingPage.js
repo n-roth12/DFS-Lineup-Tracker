@@ -23,10 +23,12 @@ const UpcomingPage = ({ week, year }) => {
 	}, [])
 
 	useEffect(() => {
-		const temp = slates.find((slate) => {
-			return slate["draftGroup"]["draftGroupId"] === activeSlate
+		const slateMatchingId = slates.find((slate) => {
+			return String(slate["draftGroup"]["draftGroupId"]) === activeSlate
 		})
-		setPlayers(temp["draftables"])
+		if (slateMatchingId) {
+			setPlayers(slateMatchingId["draftables"])
+		}
 	}, [activeSlate])
 
 	const getUpcomingSlates = async () => {
@@ -178,9 +180,13 @@ const UpcomingPage = ({ week, year }) => {
 			{/* {players['All'] && players['All'].length > 0 &&
 				<PlayersList players={players} />
 			} */}
-			<select>
+			<select value={activeSlate} onChange={(e) => setActiveSlate(e.target.value)}>
 				{slates.length > 0 && slates.map((slate) => (
-					<option>{slate["draftGroup"]["minStartTime"]} ({slate["draftGroup"]["games"].length} games)</option>
+					<option 
+						value={slate["draftGroup"]["draftGroupId"]}
+						key={slate["draftGroup"]["draftGroupId"]}>
+						{slate["draftGroup"]["minStartTime"]} ({slate["draftGroup"]["games"].length} games)
+					</option>
 				))}
 			</select>
 			<Link className="search-btn" to={`/`}>Create Lineup</Link>

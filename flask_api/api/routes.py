@@ -404,6 +404,7 @@ def test2():
 	draft_groups = {contest["dg"] for contest in contests if not ('Madden' in contest['gameType'] or 'Showdown' in contest['gameType'] or 'Best Ball' in contest['gameType'] or 'Snake' in contest['gameType'])}
 
 	result = []
+	print(draft_groups)
 	for draft_group in draft_groups:
 		draft_group_res = requests.get(f'https://api.draftkings.com/draftgroups/v1/{draft_group}')
 		draft_group_data = draft_group_res.json()
@@ -414,9 +415,11 @@ def test2():
 
 		result.append(draft_group_data)
 
-		db = client["DFSDatabase"]
-		collection = db["draftGroups"]
-		collection.insert_many(result)
+	print(len(result))
+	db = client["DFSDatabase"]
+	collection = db["draftGroups"]
+	x = collection.insert_many(result)
+	print(x.inserted_ids)
 
 	return 'success', 200
 
