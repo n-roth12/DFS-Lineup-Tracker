@@ -1,0 +1,124 @@
+.upcoming-page {
+	margin-top: 60px;
+	margin-left: 200px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+    
+    .lineups-table {
+        font-size: 10pt;
+        width: 80%;
+        max-width: 1100px;
+    
+        .col-labels {
+            border-bottom: None;
+    
+            .col-label {
+                border-left: 1px solid gray;
+                border-right: 1px solid gray;
+            }
+        }
+    
+        .table-header {
+            background-color: #d3d3d3;
+            border-top: none;
+        }
+    
+        tbody {
+            tr:hover {
+                background-color: #d5d8dc;
+            }
+        }
+    
+        .player-link {
+            color: blue;
+            text-decoration: none;
+        }
+    
+    }
+}
+
+.upcoming-games {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 10px;
+}
+
+.upcoming-games > h2 {
+	height: 100%;
+	font-size: 16pt;
+	display: flex;
+	align-items: center;
+}
+
+.games-list {
+	display: flex;
+	flex-direction: row;
+	list-style-type: None;
+	flex-wrap: wrap;
+}
+
+.games-list li {
+	background-color: white;
+	border: 1px solid lightgray;
+	padding: 5px;
+	border-radius: 5px;
+	margin: 3px;
+}
+
+
+.games-outer {
+	overflow-x: auto;
+}
+
+.games-inner {
+	display: flex;
+	overflow-x: auto;
+}
+
+.games-inner div {
+	width: 200px;
+	margin: 10px;
+}
+
+.game-block { 
+    display: flex;
+    flex-direction: column;
+    img {
+        width: 30px;
+    }
+}
+
+.lineups-table {
+	font-size: 10pt;
+	width: 80%;
+	max-width: 1100px;
+
+	.col-labels {
+		border-bottom: None;
+
+		.col-label {
+			border-left: 1px solid gray;
+			border-right: 1px solid gray;
+		}
+	}
+
+	.table-header {
+		background-color: #d3d3d3;
+		border-top: none;
+	}
+
+	tbody {
+		tr:hover {
+			background-color: #d5d8dc;
+		}
+	}
+
+	.player-link {
+		color: blue;
+		text-decoration: none;
+	}
+
+}

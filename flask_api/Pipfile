@@ -46,6 +46,7 @@ urllib3 = "==1.26.9"
 werkzeug = "==2.1.2"
 wrapt = "==1.14.1"
 zipp = "==3.8.0"
+pymongo = {extras = ["srv"], version = "*"}
 
 [dev-packages]
 

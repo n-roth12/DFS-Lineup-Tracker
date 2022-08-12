@@ -16,6 +16,9 @@ from .date_services import parseDate
 from pandas import read_csv
 from sqlalchemy import desc
 from sqlalchemy import func
+from pymongo import MongoClient
+from pprint import pprint
+import certifi
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
@@ -367,6 +370,57 @@ def upcoming_players(current_user: User):
 	return
 
 
+# @app.route('/fetchDraftkingsData', methods=['POST'])
+# def get_data():
+# 	client = MongoClient("mongodb+srv://nroth12:scblackhawk12@cluster0.g0sucn4.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+# 	db = client['test_db']
+# 	collection = db['test_collection']
+
+# 	# mydict = { "name": "John", "position": "Justin Jefferson", "team": "Vikings" }
+# 	# x = collection.insert_one(mydict)
+# 	# print(x.inserted_id)
+
+# 	# mylist = [
+# 	# 	{ 
+# 	# 		"_id": 1, "name": "Dalvin Cook", "position": "RB", "team": "Vikings",
+# 	# 		"name": "Deebo Samuel", "position": "WR", "team": "49ers"
+# 	# 	}
+# 	# ]
+
+# 	# x = collection.insert_many(mylist)
+# 	# print(x.inserted_ids)
+
+# 	for x in collection.find():
+# 		print(x)
+
+
+# 	return 'test', 200
+
+@app.route('/test2', methods=['GET'])
+def test2():
+	client = MongoClient("mongodb+srv://nroth12:scblackhawk12@cluster0.g0sucn4.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+	res = requests.get("https://www.draftkings.com/lobby/getcontests?sport=nfl&format=json")
+	contests = res.json()["Contests"]
+	draft_groups = {contest["dg"] for contest in contests if not ('Madden' in contest['gameType'] or 'Showdown' in contest['gameType'] or 'Best Ball' in contest['gameType'] or 'Snake' in contest['gameType'])}
+
+	result = []
+	for draft_group in draft_groups:
+		draft_group_res = requests.get(f'https://api.draftkings.com/draftgroups/v1/{draft_group}')
+		draft_group_data = draft_group_res.json()
+
+		res = requests.get(f'https://api.draftkings.com/draftgroups/v1/draftgroups/{draft_group}/draftables?format=json')
+		players = res.json()["draftables"]
+		draft_group_data["draftables"] = players
+
+		result.append(draft_group_data)
+
+		db = client["DFSDatabase"]
+		collection = db["draftGroups"]
+		collection.insert_many(result)
+
+	return 'success', 200
+
+
 @app.route('/history/search/week', methods=['GET'])
 @token_required
 def research_search(current_user: User):
@@ -585,6 +639,7 @@ def get_temp(current_user: User):
 	players = requests.get(f'{app.config["FFB_API_URL"]}/api/players?limit=10').json()
 	print(players)
 	return jsonify(players), 200
+
 
 
 

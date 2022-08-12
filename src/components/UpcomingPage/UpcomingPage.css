@@ -36,8 +36,17 @@
 	margin: 3px;
 }
 
-.game-block {
+
+.games-outer {
+	overflow-x: auto;
+}
+
+.games-inner {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	overflow-x: auto;
+}
+
+.games-inner div {
+	width: 200px;
+	margin: 10px;
 }
