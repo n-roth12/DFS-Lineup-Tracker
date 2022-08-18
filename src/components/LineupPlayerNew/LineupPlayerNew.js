@@ -1,5 +1,6 @@
 import React from 'react'
 import './LineupPlayerNew.scss'
+import { FaPlus } from 'react-icons/fa'
 
 function LineupPlayerNew({ player }) {
  
@@ -72,13 +73,13 @@ function LineupPlayerNew({ player }) {
               <span className='label'>SAL</span>
             </p>
           </div>
-        </div>
-        <div className='icon'>
-          <div>
-
+          <div className='icon'>
+            <div>
+              <FaPlus className='addIcon' />
+            </div>
           </div>
-        </div>
-      </div> 
+        </div> 
+      </div>
     </div>
   )
 }
