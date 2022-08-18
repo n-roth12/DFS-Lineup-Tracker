@@ -9,6 +9,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 import { Link } from 'react-router-dom'
+import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -190,6 +191,15 @@ const UpcomingPage = ({ week, year }) => {
 				))}
 			</select>
 			<Link className="search-btn" to={`/`}>Create Lineup</Link>
+			{players.length > 0 &&
+				<div>
+					{players.map((player) => (
+						<LineupPlayerNew player={player} />
+					))}
+				</div>	
+			}
+
+
 			{players.length > 0 && 
 				<div className='players-outer'>
 					<h2>Players</h2>
