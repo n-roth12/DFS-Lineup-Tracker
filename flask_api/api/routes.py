@@ -20,6 +20,7 @@ from pymongo import MongoClient
 from pprint import pprint
 import certifi
 from bson import json_util
+from bson.objectid import ObjectId
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
@@ -427,13 +428,41 @@ def test2():
 @app.route('/upcoming/slates', methods=['GET'])
 @token_required
 def get_slates(current_user: User):
+
+	key = f'current_slates'
+	slates_from_cache = redis_client.get(key)
+	if slates_from_cache is None:
+		client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+		db = client["DFSDatabase"]
+		collection = db["draftGroups"]
+		result = []
+		
+		for item in collection.find():
+			result.append(json.loads(json_util.dumps(item)))
+
+		redis_client.set(key, json.dumps(result))
+		slates = result
+	else:
+		slates = json.loads(slates_from_cache)
+	
+	return jsonify(slates), 200
+
+
+
+@app.route('/upcoming/suggestions/generateLineup/<slateId>', methods=['GET'])
+def get_recommendation(slateId: str):
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["draftGroups"]
-	result = []
-	for item in collection.find():
-		result.append(json.loads(json_util.dumps(item)))
-	return jsonify(result), 200
+	draft_group = collection.find_one({"_id": ObjectId(slateId)})
+	
+	# create a random lineup
+	lineup = {}
+
+	
+
+	return 'Success', 200
+
 
 
 @app.route('/history/search/week', methods=['GET'])
