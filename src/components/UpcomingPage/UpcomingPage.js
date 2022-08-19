@@ -10,6 +10,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 import { Link } from 'react-router-dom'
 import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
+import PlayerNew from '../PlayerNew/PlayerNew'
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -194,7 +195,7 @@ const UpcomingPage = ({ week, year }) => {
 			{players.length > 0 &&
 				<div>
 					{players.map((player) => (
-						<LineupPlayerNew player={player} />
+						<PlayerNew player={player} />
 					))}
 				</div>	
 			}
