@@ -23,29 +23,29 @@ function PlayerNew({ player }) {
         </div>
         <div className='playerData'>
           <div className='playerName'>
-          <p>
-              {player.firstName} {player.lastName}
-          </p>
+            <p>
+                {player.firstName} {player.lastName}
+            </p>
           </div>
           <div className='playerInfo'>
             <div className='infoBlock'>
                 <p>
-                <span className='value'>
+                  <span className='value'>
                     {player['draftStatAttributes'].find((stat) => 
                     stat["id"] === 90
                     )["value"]}
-                </span>
-                <span className='label'>
-                    FPPG
-                </span>
+                  </span>
+                  <span className='label'>
+                      FPPG
+                  </span>
                 </p>
             </div>
             <div className='infoBlock'>
                 <p>
                 <span className='value'>
-                    {player['draftStatAttributes'].find((stat) => 
-                    stat['id'] === -2
-                    )["value"]}
+                  {player['draftStatAttributes'].find((stat) => 
+                  stat['id'] === -2
+                  )["value"]} ({makeOpponentDisplay(player['competition']['nameDisplay'])})
                 </span>
                 <br />
                 <span className='label'>
@@ -55,20 +55,9 @@ function PlayerNew({ player }) {
             </div>
             <div className='infoBlock'>
                 <p>
-                <span className='value'>
-                    {makeOpponentDisplay(player['competition']['nameDisplay'])}
-                </span>
-                <br />
-                <span className='label'>
-                    OPP
-                </span>
-                </p>
-            </div>
-            <div className='infoBlock'>
-                <p>
-                <span className='value'>${player.salary}</span>
-                <br />
-                <span className='label'>SAL</span>
+                  <span className='value'>${player.salary}</span>
+                  <br />
+                  <span className='label'>SAL</span>
                 </p>
             </div>
           </div>

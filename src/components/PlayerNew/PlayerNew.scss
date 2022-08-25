@@ -4,7 +4,7 @@
     border: 1px solid grey;
     display: flex;
     flex-direction: row;
-    width: 600px;
+    width: 500px;
     padding: 8px;
 
     .playerImage {
@@ -62,11 +62,11 @@
             display: flex;
             flex-direction: row;
             justify-content: space-around;
-            width: 60%;
-            flex: 1;
+            width: fit-content;
+            flex: 100%;
 
             .infoBlock {
-                width: 100%;
+                margin-right: 10px;
 
                 p {
                     line-height: 6pt;
@@ -79,6 +79,7 @@
                     .value {
                         font-size: 10pt;
                         font-weight: 600;
+                        margin-right: 4px;
                     }
 
                     .label {
@@ -89,20 +90,20 @@
                 }
             }
         }
-
-        .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex: 1;
-
-            .addIcon {
-                color: #0069ed;
-                font-size: 16pt;
-                cursor: pointer;
-            }
-        }
-
     }
+
+    .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+
+        .addIcon {
+            color: #0069ed;
+            font-size: 14pt;
+            cursor: pointer;
+        }
+    }
+
 
 }
