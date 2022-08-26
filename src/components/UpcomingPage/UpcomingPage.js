@@ -24,14 +24,14 @@ const UpcomingPage = ({ week, year }) => {
 		getUpcomingSlates()
 	}, [])
 
-	useEffect(() => {
-		const slateMatchingId = slates.find((slate) => {
-			return String(slate["draftGroup"]["draftGroupId"]) === activeSlate
-		})
-		if (slateMatchingId) {
-			setPlayers(slateMatchingId["draftables"])
-		}
-	}, [activeSlate])
+	// useEffect(() => {
+	// 	const slateMatchingId = slates.find((slate) => {
+	// 		return String(slate["draftGroup"]["draftGroupId"]) === activeSlate
+	// 	})
+	// 	if (slateMatchingId) {
+	// 		setPlayers(slateMatchingId["draftables"])
+	// 	}
+	// }, [activeSlate])
 
 	const getUpcomingSlates = async () => {
 		const res = await fetch('/upcoming/slates', {
@@ -43,7 +43,7 @@ const UpcomingPage = ({ week, year }) => {
 
 		const data = await res.json()
 		setSlates(data)
-		setActiveSlate(data[0]["draftGroup"]["draftGroupId"])
+		// setActiveSlate(data[0]["draftGroup"]["draftGroupId"])
 	}
 
 	// const getGames = async () => {
@@ -148,18 +148,13 @@ const UpcomingPage = ({ week, year }) => {
 
 	return (
 		<div className="upcoming-page">
-			{games.length &&
-				<h2>
-					{games[0]["group"]["name"]} - Week {games[0]["week"]}
-				</h2>
-			}
 			{/* {games.length > 0 &&
 				<GamesSlider
 					games={games}
 					selectedWeek={week}
 					selectedYear={year} />
 			} */}
-			{games.length > 0 && 
+			{/* {games.length > 0 && 
 				<div className='games-outer' >
 					<h2>Games</h2>
 					<div className="games-inner">
@@ -178,19 +173,33 @@ const UpcomingPage = ({ week, year }) => {
 						))}
 					</div>
 				</div>
-			}
+			} */}
 			{/* {players['All'] && players['All'].length > 0 &&
 				<PlayersList players={players} />
 			} */}
-			<select value={activeSlate} onChange={(e) => setActiveSlate(e.target.value)}>
+			{/* <select value={activeSlate} onChange={(e) => setActiveSlate(e.target.value)}>
 				{slates.length > 0 && slates.map((slate) => (
 					<option 
-						value={slate["draftGroup"]["draftGroupId"]}
-						key={slate["draftGroup"]["draftGroupId"]}>
-						{slate["draftGroup"]["minStartTime"]} ({slate["draftGroup"]["games"].length} games)
+						value={slate["draftGroupId"]}
+						key={slate["draftGroupId"]}>
+						{slate["minStartTime"]} ({slate["games"].length} games)
 					</option>
 				))}
-			</select>
+			</select> */}
+			<h2>Choose a slate:</h2>
+			{slates.length ? 
+				<div className="slatesWrapper">
+					{slates.map((slate) => (
+						<Link className="slate" to={`/upcoming/createLineup/${slate["draftGroupId"]}`} >
+							<p>{slate["minStartTime"].split("T")[0]}</p>
+							<p>{slate["minStartTime"].split("T")[1]}</p>
+							<p>{slate["games"].length} Games</p>
+						</Link>
+					))}
+				</div>
+			:
+				<h3>Loading Slates...</h3>
+			}
 			<Link className="search-btn" to={`/`}>Create Lineup</Link>
 			{players.length > 0 &&
 				<div>
@@ -199,7 +208,6 @@ const UpcomingPage = ({ week, year }) => {
 					))}
 				</div>	
 			}
-
 
 			{players.length > 0 && 
 				<div className='players-outer'>

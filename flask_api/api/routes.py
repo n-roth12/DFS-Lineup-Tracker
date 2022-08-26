@@ -346,6 +346,16 @@ def upload_file(current_user: User):
 
 	return jsonify(already_exists), 200
 
+@app.route('/upcoming/slates', methods=["GET"])
+@token_required
+def upcoming_slates(current_user: User):
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["draftGroups"]
+	cursor = collection.find({})
+
+	return jsonify([group["draftGroup"] for group in cursor]), 200
+	
 
 @app.route('/upcoming/games', methods=['GET'])
 @token_required
@@ -369,6 +379,7 @@ def upcoming_games(current_user: User):
 @app.route('/upcoming/players', methods=['GET'])
 @token_required
 def upcoming_players(current_user: User):
+
 	return
 
 
