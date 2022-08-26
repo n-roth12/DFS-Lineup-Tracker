@@ -190,7 +190,7 @@ const UpcomingPage = ({ week, year }) => {
 			{slates.length ? 
 				<div className="slatesWrapper">
 					{slates.map((slate) => (
-						<Link className="slate" to={`/upcoming/createLineup/${slate["draftGroupId"]}`} >
+						<Link className="slate" to={`/createLineup/${slate["draftGroupId"]}`} >
 							<p>{slate["minStartTime"].split("T")[0]}</p>
 							<p>{slate["minStartTime"].split("T")[1]}</p>
 							<p>{slate["games"].length} Games</p>
