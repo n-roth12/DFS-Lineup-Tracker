@@ -397,32 +397,54 @@ def upcoming_players(current_user: User):
 
 # 	return 'test', 200
 
-@app.route('/test2', methods=['GET'])
-def test2():
+
+@app.route("/test/scrape1", methods=["POST"])
+def test():
+	print("Scraping upcoming draft groups...")
+	draft_groups = fetch_draftkings_draft_groups()
+	print("Finished scraping upcoming draft groups!")
+
+	print("Scraping upcoming draftables...")
+	for draft_group in draft_groups:
+		fetch_draftkings_draft_group_data(draft_group["draftGroup"]["draftGroupId"])
+		print(f"Finished draft group {draft_group['draftGroup']['draftGroupId']}.")
+
+	print("Finished scraping upcoming draftables!")
+
+	return "success", 200
+
+
+def fetch_draftkings_draft_groups():
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	res = requests.get("https://www.draftkings.com/lobby/getcontests?sport=nfl&format=json")
 	contests = res.json()["Contests"]
-	draft_groups = {contest["dg"] for contest in contests if not ('Madden' in contest['gameType'] or 'Showdown' in contest['gameType'] or 'Best Ball' in contest['gameType'] or 'Snake' in contest['gameType'])}
+	draft_group_ids = {contest["dg"] for contest in contests if not ('Madden' in contest['gameType'] or 'Showdown' in contest['gameType'] or 'Best Ball' in contest['gameType'] or 'Snake' in contest['gameType'])}
 
 	result = []
-	print(draft_groups)
-	for draft_group in draft_groups:
-		draft_group_res = requests.get(f'https://api.draftkings.com/draftgroups/v1/{draft_group}')
-		draft_group_data = draft_group_res.json()
+	for draft_group_id in draft_group_ids:
+		draft_group_res = requests.get(f'https://api.draftkings.com/draftgroups/v1/{draft_group_id}')
+		result.append(draft_group_res.json())
 
-		res = requests.get(f'https://api.draftkings.com/draftgroups/v1/draftgroups/{draft_group}/draftables?format=json')
-		players = res.json()["draftables"]
-		draft_group_data["draftables"] = players
-
-		result.append(draft_group_data)
-
-	print(len(result))
 	db = client["DFSDatabase"]
 	collection = db["draftGroups"]
-	x = collection.insert_many(result)
-	print(x.inserted_ids)
+	collection.insert_many(result)
 
-	return 'success', 200
+	return result
+
+
+def fetch_draftkings_draft_group_data(draft_group_id: str):
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	res = requests.get(f'https://api.draftkings.com/draftgroups/v1/draftgroups/{draft_group_id}/draftables?format=json')
+	players = {"draftables": res.json()["draftables"]}
+
+	db = client["DFSDatabase"]
+	collection = db["draftables"]
+	collection.insert_one(players)
+
+	return "success", 200
+
+
+
 
 
 @app.route('/upcoming/slates', methods=['GET'])

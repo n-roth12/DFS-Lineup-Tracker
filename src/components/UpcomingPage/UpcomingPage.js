@@ -20,7 +20,7 @@ const UpcomingPage = ({ week, year }) => {
 	const [activeSlate, setActiveSlate] = useState()
 
 	useEffect(() => {
-		getScoreboard()
+		// getScoreboard()
 		getUpcomingSlates()
 	}, [])
 
