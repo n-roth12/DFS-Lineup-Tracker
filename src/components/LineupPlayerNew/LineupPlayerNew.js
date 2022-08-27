@@ -5,27 +5,31 @@ import { FaPlus } from 'react-icons/fa'
 function LineupPlayerNew({ player }) {
  
   const makeOpponentDisplay = (game) => {
-    if (game[0].isEmphasized) {
-      return `@ ${game[2]['value']}`
+    if (game && game["nameDisplay"]) {
+      if (game["nameDisplay"][0].isEmphasized) {
+        return `@ ${game["nameDisplay"][2]['value']}`
+      }
+      return game["nameDisplay"][0]['value']
+    } else {
+      return "-"
     }
-    return game[0]['value']
   }
 
   return (
     <div>
       <div className='lineupPlayerNew'>
         <div className='playerImage'>
-          <img src={player.playerImage50} />
+          <img src={player["playerImage50"]} />
         </div>
         <div className='positionAndNumber'>
-          <div className='playerPosition'>{player.position}</div>
-          <div className='playerNumber'>{player.teamAbbreviation}</div>
+          <div className='playerPosition'>{player["position"]}</div>
+          <div className='playerNumber'>{player["teamAbbreviation"]}</div>
         </div>
         <div className='playerName'>
           <p>
-            <span className='firstName'>{player.firstName}</span>
+            <span className='firstName'>{player["firstName"]}</span>
             <br />
-            <span className='lastName'>{player.lastName}</span>
+            <span className='lastName'>{player["lastName"]}</span>
           </p>
         </div>
         <div className='playerInfo'>
@@ -58,7 +62,7 @@ function LineupPlayerNew({ player }) {
           <div className='infoBlock'>
             <p>
               <span className='value'>
-                {makeOpponentDisplay(player['competition']['nameDisplay'])}
+                {makeOpponentDisplay(player['competition'])}
               </span>
               <br />
               <span className='label'>
@@ -68,7 +72,7 @@ function LineupPlayerNew({ player }) {
           </div>
           <div className='infoBlock'>
             <p>
-              <span className='value'>${player.salary}</span>
+              <span className='value'>${player["salary"]}</span>
               <br />
               <span className='label'>SAL</span>
             </p>

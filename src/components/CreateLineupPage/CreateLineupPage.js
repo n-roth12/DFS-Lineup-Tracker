@@ -20,17 +20,24 @@ const CreateLineupPage = () => {
                 'x-access-token': sessionStorage.dfsTrackerToken
             }
         })
-
         const data = await res.json()
-        setDraftables(data)
+        var mySet = new Set()
+        var draftables = []
+        data.forEach((player) => {
+            if (!mySet.has(player["playerId"])) {
+                draftables.push(player)
+                mySet.add(player["playerId"])
+            }
+        })
+        setDraftables(draftables)
     }
 
   return (
     <div className="createLineupPage">
         {draftables.length > 0 ?
             <div>
-                {draftables.map((player) => 
-                    <LineupPlayerNew player={player} />
+                {draftables.map((player, index) => 
+                    <LineupPlayerNew player={player} key={index} />
                 )}
             </div>
         :
