@@ -379,8 +379,15 @@ def upcoming_games(current_user: User):
 @app.route('/upcoming/players', methods=['GET'])
 @token_required
 def upcoming_players(current_user: User):
+	args = request.args
+	draft_group_id = args["draftGroup"]
+	
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["draftables"]
+	result = collection.find_one({ "draft_group_id": int(draft_group_id) })
 
-	return
+	return jsonify(result["draftables"]), 200
 
 
 # @app.route('/fetchDraftkingsData', methods=['POST'])
@@ -446,7 +453,7 @@ def fetch_draftkings_draft_groups():
 def fetch_draftkings_draft_group_data(draft_group_id: str):
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	res = requests.get(f'https://api.draftkings.com/draftgroups/v1/draftgroups/{draft_group_id}/draftables?format=json')
-	players = {"draftables": res.json()["draftables"]}
+	players = {"draftables": res.json()["draftables"], "draft_group_id": draft_group_id}
 
 	db = client["DFSDatabase"]
 	collection = db["draftables"]
