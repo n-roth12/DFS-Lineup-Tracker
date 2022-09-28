@@ -16,7 +16,7 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.0.2",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "react-table": "^7.7.0",
     "recharts": "^2.1.8",
     "redis-cli": "^2.1.2",

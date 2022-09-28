@@ -203,6 +203,7 @@ def edit_lineup(current_user: User, id: int):
 		return jsonify({ 'Error': 'No lineup with specified id.' })
 	
 	data = json.loads(request.data)
+	del data["percentile"]
 	lineup.update(data)
 	db.session.commit()
 
