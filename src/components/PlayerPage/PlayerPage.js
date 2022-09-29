@@ -30,7 +30,7 @@ const PlayerPage = () => {
   }
 
   return (
-    <div className="player-page">
+    <div className="player-page page">
       {loading ?
         <h1>Loading...</h1>
       :

@@ -40,7 +40,7 @@ const ResearchPage = () => {
 
 
   return (
-    <div className="research-page">
+    <div className="research-page page">
     		{lineupsCount &&
     			<>
 		    		<div className="research-section">

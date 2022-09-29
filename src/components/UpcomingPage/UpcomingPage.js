@@ -147,7 +147,7 @@ const UpcomingPage = ({ week, year }) => {
 
 
 	return (
-		<div className="upcoming-page">
+		<div className="upcoming-page page">
 			{/* {games.length > 0 &&
 				<GamesSlider
 					games={games}

@@ -111,7 +111,7 @@ const ResearchPage = () => {
   }
 
   return (
-    <div className="history-page">
+    <div className="history-page page">
       <div className="research-header">
         <div className="filter-btn-wrapper">
           <button className={`filter-btn${activeTab === "week" ? "-active": ""}`} onClick={() => setActiveTab("week")}>Week</button>

@@ -282,7 +282,7 @@ function SingleLineupPage() {
   return (
     <>
       {!loading ? 
-      <div className="single-lineup-page">
+      <div className="single-lineup-page page">
         <div className="lineup-header-wrapper">
           <div className="lineup-header">
             <div className="lineup-details">

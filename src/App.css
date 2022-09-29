@@ -18,6 +18,10 @@ body {
   font-weight: 500;
 }
 
+.page {
+  margin-top: 100px
+}
+
 .page-wrapper {
   display: flex;
   flex-direction: column;

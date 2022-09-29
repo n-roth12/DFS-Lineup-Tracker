@@ -209,7 +209,7 @@ const LineupsPage = () => {
   }
 
   return (
-  	<div className="lineups-page">
+  	<div className="lineups-page page">
   		{!loadingLineups ?
   		<>
   			<div className="main container">
