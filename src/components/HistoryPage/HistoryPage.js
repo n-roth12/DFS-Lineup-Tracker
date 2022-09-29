@@ -5,7 +5,7 @@ import PlayersTable from './PlayersTable/PlayersTable'
 import GamesSlider from './GamesSlider/GamesSlider'
 import PlayerSearch from './PlayerSearch/PlayerSearch'
 import { Roller } from 'react-awesome-spinners'
-
+import { FaSearch } from 'react-icons/fa'
 const ResearchPage = () => {
 
   const years = [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021]
@@ -28,6 +28,10 @@ const ResearchPage = () => {
     weekSearch(selectedWeek, selectedYear)
     getTopSearches()
   }, [])
+
+  useEffect(() => {
+    weekSearch(selectedWeek, selectedYear)
+  }, [selectedWeek, selectedYear])
 
   const getTopSearches = async () => {
     const res = await fetch(`/history/search/top_searches`, {
@@ -106,126 +110,52 @@ const ResearchPage = () => {
   }
 
   const changeYear = (year) => {
-    setSelectedWeek("1")
+    setSelectedWeek("All")
     setSelectedYear(year)
   }
 
   return (
     <div className="history-page page">
-      <div className="research-header">
-        <div className="filter-btn-wrapper">
-          <button className={`filter-btn${activeTab === "week" ? "-active": ""}`} onClick={() => setActiveTab("week")}>Week</button>
-          <button className={`filter-btn${activeTab === "player" ? "-active": ""}`} onClick={() => setActiveTab("player")}>Player</button>
-          <button className={`filter-btn${activeTab === "team" ? "-active": ""}`} onClick={() =>  setActiveTab("team")}>Team</button>
+      <div className="header">
+        <div className="header-inner">
+          <div className="selectors">
+            <select 
+              className="year-select" 
+              value={selectedYear} 
+              onChange={(e) => changeYear(e.target.value) }>
+              {years.map((year) => 
+                <option value={year} key={year}>{year}</option>
+              )}
+            </select>
+            <select 
+              className="week-select" 
+              value={selectedWeek}
+              onChange={(e) => setSelectedWeek(e.target.value)}>
+              {weeks.map((week) =>
+                !(week > 17 && selectedYear < 2021) &&
+                  <option value={week} key={week}>Week {week}</option>
+              )}
+              <option value={"All"} key={"All"}>Season</option>
+            </select>
+          </div>
+          <div className="player-search">
+            <div>
+              <FaSearch />
+              <input type="text" placeholder="Search Player" className="search-input"></input>
+            </div>
+            <button type="button" className="search-btn" onClick={() => weekSearch(selectedWeek, selectedYear)}>Search</button>
+          </div>
         </div>
-        {activeTab === "week" &&
-          <div className="week-search">
-            <div className="week-search-inner">
-              <div>
-                <label>Year:</label>
-                <select 
-                  className="year-select" 
-                  value={selectedYear} 
-                  onChange={(e) => changeYear(e.target.value) }>
-                  {years.map((year) => 
-                    <option value={year} key={year}>{year}</option>
-                  )}
-                </select>
-              </div>
-              <div>
-                <label>Week:</label>
-                <select 
-                  className="week-select" 
-                  value={selectedWeek}
-                  onChange={(e) => setSelectedWeek(e.target.value)}>
-                  {weeks.map((week) =>
-                    !(week > 17 && selectedYear < 2021) &&
-                      <option value={week} key={week}>{week}</option>
-                  )}
-                  <option value={"All"} key={"All"}>All</option>
-                </select>
-              </div>
-              <div>
-                <button type="button" className="search-btn" onClick={() => weekSearch(selectedWeek, selectedYear)}>Search</button>
-              </div>
-            </div>
-          </div>
-        }
-        { activeTab === "player" &&
-          <div className="week-search">
-            <div className="week-search-inner">
-              <div>
-                <label>Name:</label>
-                <input 
-                  type="text" 
-                  placeholder="Enter Name" 
-                  value={nameSearch}
-                  onChange={(e) => setNameSearch(e.target.value)} />
-              </div>
-              <div>
-                <button type="button" className="search-btn" onClick={() => playerSearch(nameSearch)}>Search</button>
-              </div>
-            </div>
-          </div>
-        }
-        { activeTab === "team" &&
-          <div className="week-search">
-            <div className="week-search-inner">
-              <div>
-                <label>Team:</label>
-                <select 
-                  className="week-select" 
-                  value={selectedTeam}
-                  onChange={(e) => setSelectedTeam(e.target.value)}>
-                  {teams.length > 0 && teams.map((team) =>
-                    <option value={team} key={team}>{team}</option>
-                  )}
-                </select>
-                </div>
-              <div>  
-                <button type="button" className="search-btn" onClick={() => teamSearch(selectedTeam)}>Search</button>
-              </div>
-            </div>
-          </div>
-        }
-
       </div>
 
       {loading ? 
         <h1>Loading...</h1>
       :
       <>
-        {activeTab === "week" && playerData["All"] &&
+        {playerData["All"] &&
           <div className="search-results">
-            {gamesData.length > 0 &&
-              <GamesSlider 
-                games={gamesData} 
-                selectedWeek={selectedWeek} 
-                selectedYear={selectedYear} />
-            }
             <PlayersTable players={playerData} />
           </div>
-        }
-        { activeTab === "player" && 
-          <>
-            {Object.keys(playerSearchData).length !== 0 ?
-              <PlayerSearch playerSearchData={playerSearchData} />
-            :
-            <>
-              {topSearches.length > 0 &&
-                <div className="popular-players">
-                  <h2>Popular Searches:</h2>
-                  <ul>
-                    {topSearches.map((player) => 
-                      <li className="player-link"
-                        onClick={() => playerSearch(player)}>{player}</li>
-                    )}
-                  </ul>
-                </div>
-              }
-            </>
-            }
-          </>
         }
       </>
       } 

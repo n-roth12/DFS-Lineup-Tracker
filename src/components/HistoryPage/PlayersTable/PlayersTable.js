@@ -21,7 +21,6 @@ const PlayersTable = ({ players }) => {
 
   return (
     <div className="players-results">
-      <h1>Players:</h1>
       <div className="filter-btn-wrapper-outer">
         <div className="filter-btn-wrapper">
           <button 

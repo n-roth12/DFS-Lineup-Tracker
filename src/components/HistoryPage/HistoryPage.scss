@@ -5,128 +5,63 @@
 	flex-direction: column;
 	overflow: hidden;
 
-	.research-header {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding-bottom: 20px;
-		margin-bottom: 20px;
-		background-color: white;
-
-	  	.filter-btn, .filter-btn-active {
-	  		padding: 8px;
-	  	}
-
-	  	.week-search {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-
-			.week-search-inner {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-			}
-
-			label {
-				margin-right: 10px;
-			}
-
-			select {
-				margin-right: 20px;
-			}
-		}
-
-		.year-select {
-			width: fit-content;
-		}
-
-		.week-select {
-			width: fit-content;
-		}
-
-		.tabs {
-
-			.active {
-				background-color: white;
-				border: solid #ccc;
-				border-width: 1px 1px 1px 1px;
-			}
-
-			li {
-				display: inline-block;
-				list-style: none;
-				padding: 5px;
-				margin-top: 3px;
-				margin-bottom: 0;
-				cursor: pointer;
-			}
-		}
-	}
-
-	.week-search {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-
-		label {
-			margin-right: 10px;
-		}
-
-		select {
-			margin-right: 20px;
-		}
-
-		.year-select {
-			width: fit-content;
-		}
-
-		.week-select {
-			width: fit-content;
-		}
-	}
-
-	.search-results {
+	.header {
 		width: 100%;
 		display: flex;
-		flex-direction: column;
-	}
+		justify-content: center;
+		background-color: white;
 
-	.tabs {
-		li {
-		  display: inline-block;
-		  list-style: none;
-		  padding: 5px;
-		  margin-top: 3px;
-		  margin-bottom: 0;
-		  cursor: pointer;
+		.header-inner {
+			width: 100%;
+			max-width: 1200px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			margin: 10px;
 		}
-		.active {
-		  background-color: white;
-		  border: solid #ccc;
-		  border-width: 1px 1px 1px 1px;
+
+		.selectors {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+
+			select {
+				margin-right: 10px;
+				padding: 4px 16px 4px 8px;
+				font-size: 11pt;
+			}
+
+			.week-select {
+				width: 120px;
+			}
+
+			.year-select {
+				width: 100px;
+			}
 		}
-	}
-	
-	.popular-players {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		ul {
-			list-style: None;
-			padding-left: 0;
-			background-color: white;
-			padding: 5px 15px 5px 15px;
-			li {
-				margin: 5px 0px 10px 0px;
+
+		.player-search {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+
+			.search-input {
+				font-size: 11pt;
+				padding: 2px 20px 2px 8px;
+				margin: 0px 10px 0px 10px;
 			}
-			.player-link {
-				color: blue;
-				text-decoration: none;
-				cursor: pointer;
+
+			.search-btn {
+				font-size: 11pt;
+				border-radius: 2px;
+				padding: 4px 12px 4px 12px;
+				height: fit-content;
+				margin: 0;
 			}
-		}	
+
+		}
 	}
 }
