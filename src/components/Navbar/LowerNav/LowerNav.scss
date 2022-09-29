@@ -1,0 +1,36 @@
+.lower-nav {
+	background-color: #202033;
+	width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .lower-nav-inner {
+        max-width: 1200px;
+        width: 100%;
+        height: fit-content;
+
+        .lower-nav-links {
+            display: flex;
+            flex-direction: row;
+            list-style-type: none;
+            margin: 0;
+
+            .nav-link {
+                font-size: 13pt;
+                color: white;
+                padding: 8px 14px 8px 14px;
+                margin: 0;
+            }
+
+            .nav-link:hover {
+                color: #d3d3d3;
+                background-color: black;
+            }
+
+            .active {
+                color: #d3d3d3;
+                background-color: black;;
+            }
+        }
+    }
+}

@@ -11,7 +11,6 @@ import ResearchPage from './components/ResearchPage/ResearchPage'
 import CreateLineupPage from './components/CreateLineupPage/CreateLineupPage'
 import PlayerPage from './components/PlayerPage/PlayerPage'
 import Navbar from './components/Navbar/Navbar'
-import SideNav from './components/SideNav/SideNav'
 import Footer from './components/Footer/Footer'
 import './App.css';
 import { FaAngleLeft } from 'react-icons/fa'
@@ -37,7 +36,6 @@ function App() {
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
-                      <SideNav />
                       <LineupsPage />
                     </div>
                     <Footer />
@@ -63,7 +61,6 @@ function App() {
                     <div className="page-wrapper">
                       <Navbar />
                       <div className="page-wrapper-inner"> 
-                        <SideNav />
                         <LineupsPage />
                       </div>
                       <Footer />
@@ -80,7 +77,6 @@ function App() {
                     <div className="page-wrapper">
                       <Navbar />
                       <div className="page-wrapper-inner"> 
-                        <SideNav />
                         <SingleLineupPage  />
                       </div>
                       <Footer />
@@ -98,7 +94,6 @@ function App() {
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
-                      <SideNav />
                       <UpcomingPage week={18} year={2021} />
                     </div>
                     <Footer />
@@ -115,7 +110,6 @@ function App() {
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
-                      <SideNav />
                       <CreateLineupPage />
                     </div>
                     <Footer />
@@ -132,7 +126,6 @@ function App() {
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
-                      <SideNav />
                       <ResearchPage />
                     </div>
                     <Footer />
@@ -149,7 +142,6 @@ function App() {
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
-                      <SideNav />
                       <HistoryPage />
                     </div>
                     <Footer />
@@ -166,7 +158,6 @@ function App() {
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
-                      <SideNav />
                       <PlayerPage />
                     </div>
                     <Footer />

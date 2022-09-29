@@ -8,7 +8,6 @@ const SideNav = () => {
 
   return (
     <div className="side-nav">
-    	<h1>DFSTracker</h1>
     	<div>
     		<ul className="side-nav-links">
     			<li className={(window.location.pathname === '/' || window.location.pathname === '/lineups') ? 'active' : ''}>
