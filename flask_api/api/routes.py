@@ -13,6 +13,7 @@ from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 from api.models.user import User
 import csv
 from .date_services import parseDate
+from .redis_service import RedisService
 from pandas import read_csv
 from sqlalchemy import desc
 from sqlalchemy import func
@@ -26,6 +27,7 @@ from bson.objectid import ObjectId
 # starts the flask api and redis server
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
+redis_service = RedisService(host='localhost', port=6379, db=0)
 
 def token_required(f):
 	"""
@@ -53,6 +55,16 @@ def token_required(f):
 def get_test():
 	return jsonify({ 'Message': 'Test GET succeeded!' })
 
+@app.route('/redis/ping', methods=['GET'])
+def ping_redis():
+	result = redis_service.ping_cache()
+	return jsonify({ "message": result }), 200
+
+@app.route('/redis/fail', methods=['GET'])
+def fail_cache():
+	result = redis_service.fail_cache()
+	return jsonify({ "message": result }), 200
+	
 
 @app.route('/players', methods=['GET'])
 def get_players():
@@ -60,19 +72,10 @@ def get_players():
 	year = request.args.get('year')
 	week = request.args.get('week')
 
-	key = f'players_{year}_{week}'
-	players_from_cache = redis_client.get(key)
+	players = redis_service.get_players(year, week)
+	if not players:
+		players = redis_service.set_players(year, week)
 
-	if players_from_cache is None:
-		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}')
-		players_from_api = res.json()
-		res2 = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=dst')
-		defenses_from_api = res2.json()
-		players_from_api.extend(defenses_from_api)
-		redis_client.set(key, json.dumps(players_from_api))
-		players_from_cache = redis_client.get(key)
-
-	players = json.loads(players_from_cache)
 	return jsonify({ 'players': players }), 200
 
 
@@ -172,23 +175,12 @@ def team_info(current_user: User):
 	week = request.args.get('week')
 	if not year or not week:
 		return jsonify({ 'Error': 'Year or week not specified.' }), 400
-	key = f'team_info_{year}_{week}'
-	team_info_from_cache = redis_client.get(key)
-	if team_info_from_cache is None:
-		res = requests.get(f'{app.config["FFB_API_URL"]}api/teamstats?year={year}&week={week}')
-		data = res.json()
-		result = []
-		for team, players in data.items():
-			if len(players):
-				team_result = {'team': team}
-				point_total = sum([player['stats']['fantasy_points'] for player in players])
-				team_result['points'] = point_total
-				result.append(team_result)
-		result = sorted(result, key=lambda x: x['points'], reverse=True)
-		redis_client.set(key, json.dumps(result))
-		return jsonify(result), 200
 
-	return jsonify(json.loads(team_info_from_cache)), 200
+	teams_info = redis_service.get_teams_info(year, week)
+	if not teams_info:
+		teams_info = redis_service.set_teams_info(year, week)
+
+	return jsonify(teams_info), 200
 
 
 @app.route('/lineups/<id>', methods=['PUT'])

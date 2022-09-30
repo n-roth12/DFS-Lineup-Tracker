@@ -1,8 +1,6 @@
-import React from 'react';
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './LineupsPage.scss';
-import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 import LineupCard from './LineupCard/LineupCard'
 import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
@@ -10,7 +8,6 @@ import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
 import PlacementGraph from './PlacementGraph/PlacementGraph'
 import LineupsTable from './LineupsTable/LineupsTable'
-import SideNav from '../SideNav/SideNav'
 import { Roller } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake } from 'react-icons/fa'
 import axios from 'axios'

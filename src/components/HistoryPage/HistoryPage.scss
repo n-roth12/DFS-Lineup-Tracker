@@ -47,19 +47,28 @@
 			flex-direction: row;
 			align-items: center;
 			justify-content: center;
+			height: fit-content;
+			border-radius: 3px;
 
 			.search-input {
 				font-size: 11pt;
 				padding: 2px 20px 2px 8px;
-				margin: 0px 10px 0px 10px;
+				margin: 0;
+				border: 1px solid black;
+				border-radius: 0;
+				outline: none;
+				height: 35px;
+				border-radius: 2px 0px 0px 2px;
 			}
 
 			.search-btn {
 				font-size: 11pt;
 				border-radius: 2px;
-				padding: 4px 12px 4px 12px;
-				height: fit-content;
+				padding-left: 15px;
+				padding-right: 15px;
 				margin: 0;
+				border-radius: 0px 2px 2px 0px;
+				height: 35px;
 			}
 
 		}

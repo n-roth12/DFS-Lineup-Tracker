@@ -140,10 +140,9 @@ const ResearchPage = () => {
           </div>
           <div className="player-search">
             <div>
-              <FaSearch />
               <input type="text" placeholder="Search Player" className="search-input"></input>
             </div>
-            <button type="button" className="search-btn" onClick={() => weekSearch(selectedWeek, selectedYear)}>Search</button>
+            <button className="search-btn" type="button" onClick={() => weekSearch(selectedWeek, selectedYear)}><FaSearch /></button>
           </div>
         </div>
       </div>
