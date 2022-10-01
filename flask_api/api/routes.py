@@ -22,18 +22,13 @@ from pprint import pprint
 import certifi
 from bson import json_util
 from bson.objectid import ObjectId
-from .ownership_service import scrape_ownership
+from .ownership_service import OwnershipService
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 redis_service = RedisService(host='localhost', port=6379, db=0)
-
-@app.route('/t')
-def t():
-	scrape_ownership()
-	return
 
 
 def token_required(f):
@@ -270,10 +265,6 @@ def get_lineup_data(lineup_id: int):
 
 @app.route('/users/register', methods=['POST'])
 def register_user():
-	"""
-		Registers a User.
-		Returns a JSON web token in order to authorize further requests from the User.
-	"""
 	data = json.loads(request.data)
 
 	user_exists = db.session.query(User.id).filter(User.username == data['username']).first()
@@ -346,6 +337,9 @@ def upload_file(current_user: User):
 
 	return jsonify(already_exists), 200
 
+
+@app.route('/')
+
 @app.route('/upcoming/slates', methods=["GET"])
 @token_required
 def upcoming_slates(current_user: User):
@@ -390,6 +384,17 @@ def upcoming_players(current_user: User):
 	return jsonify(result["draftables"]), 200
 
 
+@app.route('/upcoming/ownership', methods=["GET"])
+@token_required
+def upcoming_projections(current_user: User):
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSOwnershipProjections"]
+	collection = db["projections"]
+	projections = collection.find({})[0]
+	
+	return jsonify(json.loads(json_util.dumps(projections))), 200
+
+
 # @app.route('/fetchDraftkingsData', methods=['POST'])
 # def get_data():
 # 	db = client['test_db']
@@ -414,6 +419,22 @@ def upcoming_players(current_user: User):
 
 
 # 	return 'test', 200
+
+@app.route('/ownership', methods=["POST"])
+def set_projections():
+	print("Scraping ownership projections...")
+	projections = OwnershipService.scrape_ownership()
+	print(projections)
+	
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSOwnershipProjections"]
+	collection = db["projections"]
+	collection.insert_one(json.loads(json_util.dumps(projections)))
+	print("Finished scraping ownership projections.")
+
+	return jsonify(projections), 200
+	
+
 
 
 @app.route("/test/scrape1", methods=["POST"])
