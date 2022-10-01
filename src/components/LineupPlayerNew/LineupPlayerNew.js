@@ -19,7 +19,7 @@ function LineupPlayerNew({ player }) {
     <div>
       <div className='lineupPlayerNew'>
         <div className='playerImage'>
-          <img src={player["playerImage50"]} />
+          <img src={player["playerImage160"]} />
         </div>
         <div className='positionAndNumber'>
           <div className='playerPosition'>{player["position"]}</div>

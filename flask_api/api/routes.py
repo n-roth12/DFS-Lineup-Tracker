@@ -22,12 +22,19 @@ from pprint import pprint
 import certifi
 from bson import json_util
 from bson.objectid import ObjectId
+from .ownership_service import scrape_ownership
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 redis_service = RedisService(host='localhost', port=6379, db=0)
+
+@app.route('/t')
+def t():
+	scrape_ownership()
+	return
+
 
 def token_required(f):
 	"""
