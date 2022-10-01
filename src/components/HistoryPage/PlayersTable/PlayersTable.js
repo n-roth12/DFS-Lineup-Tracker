@@ -21,8 +21,8 @@ const PlayersTable = ({ players }) => {
 
   return (
     <div className="players-results">
-      <div className="filter-btn-wrapper-outer">
-        <div className="filter-btn-wrapper">
+      <div className="pos-filter-wrapper">
+        <div>
           <button 
             className={`filter-btn${posFilter === "All" ? "-active" : ""}`} 
             onClick={() => changeFilter("All")}>All
@@ -43,9 +43,7 @@ const PlayersTable = ({ players }) => {
             className={`filter-btn${posFilter === "TE" ? "-active" : ""}`} 
             onClick={() => changeFilter("TE")}>TE
           </button>
-        </div>
-        <div className="filter-btn-wrapper">
-          <button 
+          <button
             className={`filter-btn${posFilter === "DST" ? "-active" : ""}`} 
             onClick={() => changeFilter("DST")}>DST
           </button>

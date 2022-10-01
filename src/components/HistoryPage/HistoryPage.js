@@ -117,6 +117,9 @@ const ResearchPage = () => {
   return (
     <div className="history-page page">
       <div className="header">
+        <div className="header-label-wrapper">
+          <p className="header-label">Historical Stats</p>
+        </div>
         <div className="header-inner">
           <div className="selectors">
             <select 

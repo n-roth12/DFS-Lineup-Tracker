@@ -8,8 +8,23 @@
 	.header {
 		width: 100%;
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+		align-items: center;
 		background-color: white;
+		padding-top: 5px;
+
+		.header-label-wrapper {
+			display: flex;
+			align-items: left;
+			width: 80%;
+
+			.header-label {
+				font-size: 16pt;
+				margin: 0;
+				font-weight: 600;
+			}
+
+		}
 
 		.header-inner {
 			width: 100%;
