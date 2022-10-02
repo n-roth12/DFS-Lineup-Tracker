@@ -20,7 +20,7 @@ const UpcomingPage = ({ week, year }) => {
 	const [activeSlate, setActiveSlate] = useState()
 
 	useEffect(() => {
-		// getScoreboard()
+		getPlayers()
 		getUpcomingSlates()
 	}, [])
 
@@ -134,16 +134,16 @@ const UpcomingPage = ({ week, year }) => {
 
 	}
 
-	// const getPlayers = async () => {
-	// 	const res = await fetch('/players?week=18&year=2021', {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'x-access-token': sessionStorage.dfsTrackerToken
-	// 		}
-	// 	})
-	// 	const result = await res.json()
-	// 	setPlayers(result['players'])
-	// }
+	const getPlayers = async () => {
+		const res = await fetch('/upcoming/ownership', {
+			method: 'GET',
+			headers: {
+				'x-access-token': sessionStorage.dfsTrackerToken
+			}
+		})
+		const result = await res.json()
+		setPlayers(result)
+	}
 
 
 	return (
@@ -209,7 +209,7 @@ const UpcomingPage = ({ week, year }) => {
 				</div>	
 			}
 
-			{players.length > 0 && 
+			{Object.keys(players).length > 0 && 
 				<div className='players-outer'>
 					<h2>Players</h2>
 					<div className='players-inner'>
@@ -218,21 +218,24 @@ const UpcomingPage = ({ week, year }) => {
 								{/* <th></th> */}
 								<th>Name</th>
 								<th>Pos</th>
-								<th>Game</th>
-								<th>FPPG</th>
-								<th>OPRK</th>
-								<th>DK Salary</th>
+								<th>Team</th>
+								<th>Opp</th>
+								<th>Salary</th>
+								<th>Own Proj</th>
+								<th>Salary</th>
+								<th>Own Proj</th>
 							</thead>
 							<tbody>
-								{players.map((player) => (
+								{Object.entries(players).map(([player, data]) => (
 									<tr>
-										{/* <td><img src={player['playerImage50']}/></td> */}
-										<td><strong>{player['firstName']} {player['lastName']}</strong> ({player['teamAbbreviation']})</td>
-										<td>{player['position']}</td>
-										<td>{player['competition']['name']}</td>
-										<td>{player['draftStatAttributes'][0]['value']}</td>
-										<td>{player['draftStatAttributes'][1]['value']}</td>
-										<td>${player['salary']} ({player['salary']/50000})</td>
+										<td><strong>{player}</strong></td>
+										<td>{data["fanduel"] ? data["fanduel"]["position"] : data["draftkings"]["position"] }</td>
+										<td>{data["fanduel"] ? data["fanduel"]["team"] : data["draftkings"]["team"]}</td>
+										<td>{data["fanduel"] ? data["fanduel"]["opponent"] : data["draftkings"]["opponent"]}</td>
+										<td>{data["fanduel"] ? data["fanduel"]["salary"] : null}</td>
+										<td>{data["fanduel"] ? data["fanduel"]["ownership_projection"] : null}</td>
+										<td>{data["draftkings"] ? data["draftkings"]["salary"] : null}</td>
+										<td>{data["draftkings"] ? data["draftkings"]["ownership_projection"] : null}</td>
 									</tr>
 								))}
 								<tr></tr>

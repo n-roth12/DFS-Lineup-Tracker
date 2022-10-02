@@ -391,6 +391,7 @@ def upcoming_projections(current_user: User):
 	db = client["DFSOwnershipProjections"]
 	collection = db["projections"]
 	projections = collection.find({})[0]
+	del projections["_id"]
 	
 	return jsonify(json.loads(json_util.dumps(projections))), 200
 
