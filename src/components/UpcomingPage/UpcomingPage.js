@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import { Link } from 'react-router-dom'
 import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
 import PlayerNew from '../PlayerNew/PlayerNew'
+import PlayerLink from '../PlayerLink/PlayerLink';
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -24,15 +25,6 @@ const UpcomingPage = ({ week, year }) => {
 		getUpcomingSlates()
 	}, [])
 
-	// useEffect(() => {
-	// 	const slateMatchingId = slates.find((slate) => {
-	// 		return String(slate["draftGroup"]["draftGroupId"]) === activeSlate
-	// 	})
-	// 	if (slateMatchingId) {
-	// 		setPlayers(slateMatchingId["draftables"])
-	// 	}
-	// }, [activeSlate])
-
 	const getUpcomingSlates = async () => {
 		const res = await fetch('/upcoming/slates', {
 			method: 'GET',
@@ -45,50 +37,6 @@ const UpcomingPage = ({ week, year }) => {
 		setSlates(data)
 		// setActiveSlate(data[0]["draftGroup"]["draftGroupId"])
 	}
-
-	// const getGames = async () => {
-	// 	const res = await fetch('/upcoming/games', {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'x-access-token': sessionStorage.dfsTrackerToken
-	// 		}
-	// 	})
-	// 	const result = await res.json()
-	// 	var games_data = []
-	// 	result["games"].map((game) => {
-	// 		games_data.push(
-	// 			{
-	// 				"game": `${game["away_team"]}@${game["home_team"]}`,
-	// 				"away": game["away_team"],
-	// 				"home": game["home_team"],
-
-	// 			})
-	// 	})
-	// 	setGames(games_data)
-	// }
-
-	// const getSlates = async () => {
-	// 	const url = "https://www.draftkings.com/lineup/getupcomingcontestinfo"
-	// 	const res = await fetch(`${url}`, {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'origin': "https://www.draftkings.com"
-	// 		}
-	// 	})
-	// 	const contests = await res.json()
-	// 	const nflContests = contests.filter((contest) => {
-	// 		return contest["Sport"] === "NFL"
-	// 	})
-	// 	setContests(nflContests)
-		
-	// }
-
-	// const getUpcomingSlates = async () => {
-	// 	const url = "https://www.draftkings.com/lobby/getcontests?sport=nfl"
-	// 	const res = await fetch(url)
-	// 	const data = res.json()
-	// 	console.log(data["Contests"].length)
-	// }
 
 	const getScoreboard = async () => {
 		// url for current week scoreboard
@@ -186,28 +134,23 @@ const UpcomingPage = ({ week, year }) => {
 					</option>
 				))}
 			</select> */}
-			<h2>Choose a slate:</h2>
-			{slates.length ? 
-				<div className="slatesWrapper">
-					{slates.map((slate) => (
-						<Link className="slate" to={`/createLineup/${slate["draftGroupId"]}`} >
-							<p>{slate["minStartTime"].split("T")[0]}</p>
-							<p>{slate["minStartTime"].split("T")[1]}</p>
-							<p>{slate["games"].length} Games</p>
-						</Link>
-					))}
-				</div>
-			:
-				<h3>Loading Slates...</h3>
-			}
-			<Link className="search-btn" to={`/`}>Create Lineup</Link>
-			{players.length > 0 &&
-				<div>
-					{players.map((player) => (
-						<PlayerNew player={player} />
-					))}
-				</div>	
-			}
+			<div className='slatesWrapper-outer'>
+				<h2>Choose a slate:</h2>
+				{slates.length ? 
+					<div className="slatesWrapper">
+						{slates.map((slate) => (
+							<Link className="slate" to={`/createLineup/${slate["draftGroupId"]}`} >
+								<p>{slate["minStartTime"].split("T")[0]}</p>
+								<p>{slate["games"].length} Games</p>
+								<p>{slate["minStartTime"].split("T")[1]}</p>
+							</Link>
+						))}
+					</div>
+				:
+					<h3>Loading Slates...</h3>
+				}
+				<Link className="search-btn" to={`/`}>Create Lineup</Link>
+			</div>
 
 			{Object.keys(players).length > 0 && 
 				<div className='players-outer'>
@@ -215,20 +158,26 @@ const UpcomingPage = ({ week, year }) => {
 					<div className='players-inner'>
 						<table className='lineups-table'>
 							<thead>
-								{/* <th></th> */}
-								<th>Name</th>
-								<th>Pos</th>
-								<th>Team</th>
-								<th>Opp</th>
-								<th>Salary</th>
-								<th>Own Proj</th>
-								<th>Salary</th>
-								<th>Own Proj</th>
+								<tr className="col-labels">
+									<th colspan="4"></th>
+									<th className="col-label" colspan="2">Fanduel</th>
+									<th className="col-label" colspan="2">Draftkings</th>
+								</tr>
+								<tr>
+									<th>Name</th>
+									<th>Pos</th>
+									<th>Team</th>
+									<th>Opp</th>
+									<th>Salary</th>
+									<th>Own Proj</th>
+									<th>Salary</th>
+									<th>Own Proj</th>
+								</tr>
 							</thead>
 							<tbody>
 								{Object.entries(players).map(([player, data]) => (
 									<tr>
-										<td><strong>{player}</strong></td>
+										<td><strong><PlayerLink playerName={player} /></strong></td>
 										<td>{data["fanduel"] ? data["fanduel"]["position"] : data["draftkings"]["position"] }</td>
 										<td>{data["fanduel"] ? data["fanduel"]["team"] : data["draftkings"]["team"]}</td>
 										<td>{data["fanduel"] ? data["fanduel"]["opponent"] : data["draftkings"]["opponent"]}</td>
@@ -249,3 +198,59 @@ const UpcomingPage = ({ week, year }) => {
 }
 
 export default UpcomingPage
+
+
+
+
+	// useEffect(() => {
+	// 	const slateMatchingId = slates.find((slate) => {
+	// 		return String(slate["draftGroup"]["draftGroupId"]) === activeSlate
+	// 	})
+	// 	if (slateMatchingId) {
+	// 		setPlayers(slateMatchingId["draftables"])
+	// 	}
+	// }, [activeSlate])
+
+		// const getGames = async () => {
+	// 	const res = await fetch('/upcoming/games', {
+	// 		method: 'GET',
+	// 		headers: {
+	// 			'x-access-token': sessionStorage.dfsTrackerToken
+	// 		}
+	// 	})
+	// 	const result = await res.json()
+	// 	var games_data = []
+	// 	result["games"].map((game) => {
+	// 		games_data.push(
+	// 			{
+	// 				"game": `${game["away_team"]}@${game["home_team"]}`,
+	// 				"away": game["away_team"],
+	// 				"home": game["home_team"],
+
+	// 			})
+	// 	})
+	// 	setGames(games_data)
+	// }
+
+	// const getSlates = async () => {
+	// 	const url = "https://www.draftkings.com/lineup/getupcomingcontestinfo"
+	// 	const res = await fetch(`${url}`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'origin': "https://www.draftkings.com"
+	// 		}
+	// 	})
+	// 	const contests = await res.json()
+	// 	const nflContests = contests.filter((contest) => {
+	// 		return contest["Sport"] === "NFL"
+	// 	})
+	// 	setContests(nflContests)
+		
+	// }
+
+	// const getUpcomingSlates = async () => {
+	// 	const url = "https://www.draftkings.com/lobby/getcontests?sport=nfl"
+	// 	const res = await fetch(url)
+	// 	const data = res.json()
+	// 	console.log(data["Contests"].length)
+	// }

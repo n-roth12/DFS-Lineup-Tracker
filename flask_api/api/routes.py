@@ -12,7 +12,7 @@ from api.models.player import Player, PlayerSchema
 from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 from api.models.user import User
 import csv
-from .date_services import parseDate
+from .date_services import parseDate, getCurrentWeek
 from .redis_service import RedisService
 from pandas import read_csv
 from sqlalchemy import desc
@@ -387,13 +387,8 @@ def upcoming_players(current_user: User):
 @app.route('/upcoming/ownership', methods=["GET"])
 @token_required
 def upcoming_projections(current_user: User):
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSOwnershipProjections"]
-	collection = db["projections"]
-	projections = collection.find({})[0]
-	del projections["_id"]
-	
-	return jsonify(json.loads(json_util.dumps(projections))), 200
+
+	return jsonify(OwnershipService.getOwnershipProjections()), 200
 
 
 # @app.route('/fetchDraftkingsData', methods=['POST'])
@@ -423,6 +418,7 @@ def upcoming_projections(current_user: User):
 
 @app.route('/ownership', methods=["POST"])
 def set_projections():
+
 	print("Scraping ownership projections...")
 	projections = OwnershipService.scrape_ownership()
 	print(projections)
@@ -520,8 +516,6 @@ def get_recommendation(slateId: str):
 	
 	# create a random lineup
 	lineup = {}
-
-	
 
 	return 'Success', 200
 
@@ -748,7 +742,10 @@ def get_temp(current_user: User):
 
 
 
-
+@app.route('/current/week', methods=['GET'])
+def get_current_week():
+	result = getCurrentWeek()
+	return jsonify(result), 200
 
 
 

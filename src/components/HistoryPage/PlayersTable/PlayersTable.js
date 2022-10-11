@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import PlayerLink from '../../PlayerLink/PlayerLink'
 import './PlayersTable.scss'
 
 const PlayersTable = ({ players }) => {
@@ -82,7 +83,7 @@ const PlayersTable = ({ players }) => {
           { players[posFilter].slice(0, 50 + (currPage * 50)).map((player) => 
             <tr>
               <td>{player.rank}</td>
-              <td><strong><Link className="player-link" to={`/player/${player.name.replace(" ", "_")}`}>{player.name}</Link></strong></td>
+              <td><strong><PlayerLink playerName={player.name} /></strong></td>
               <td>{player.position}</td>
               <td>{player.stats.team}</td>
               <td className="points-col"><strong>{truncPoints(player)}</strong></td>

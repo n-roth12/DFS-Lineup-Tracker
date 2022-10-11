@@ -100,6 +100,16 @@ week_dict = {
 			'day': 9,
 			'month': 1
 		}
+	},
+	2022: {
+		'start': {
+			'day': 8,
+			'month': 9
+		},
+		'stop': {
+			'day': 1,
+			'month': 9
+		}
 	}
 }
 
@@ -112,8 +122,8 @@ days_of_months = {
 	1: 31
 }
 
-
-def parseDate(date):
+# parses date in the text form "year/month/day"
+def parseDate(date: str):
 	date_split = date.split('/')
 	year = int(date_split[0])
 	month = int(date_split[1])
@@ -121,12 +131,18 @@ def parseDate(date):
 	if year < 2012 or year > 2022:
 		return -1
 
+	return getWeek(year, month, day)
+
+
+# TODO make this able to handle preseason and offseason
+def getWeek(year, month, day):
 	lineup_date = datetime.date(year, month, day)
 
 	start = week_dict[year - 1 if month < 3 else year]['start']
 	stop = week_dict[year - 1 if month < 3 else year]['stop']
 	start_date = datetime.date(year - 1 if month < 3 else year, start['month'], start['day'])
 	stop_date = datetime.date(year + 1 if stop['month'] <= 3 else year, stop['month'], stop['day'])
+	
 	if lineup_date < start_date:
 		return -1
 
@@ -136,3 +152,24 @@ def parseDate(date):
 		return -1
 
 	return result
+
+
+# TODO make this more specific to whatever the season start is
+def getYear(year, month, day):
+	if month < 8:
+		return year - 1
+	return year
+
+def getCurrentWeek():
+	today = datetime.date.today()
+
+	schedule_week = getWeek(today.year, today.month, today.day)
+	if schedule_week == -1: 
+		return -1
+	
+	schedule_year = getYear(today.year, today.month, today.day)
+	return { "week": schedule_week, "year": schedule_year }
+
+	
+
+	

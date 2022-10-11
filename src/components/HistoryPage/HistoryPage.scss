@@ -17,6 +17,7 @@
 			display: flex;
 			align-items: left;
 			width: 80%;
+			max-width: 1100px;
 
 			.header-label {
 				font-size: 16pt;
@@ -27,8 +28,8 @@
 		}
 
 		.header-inner {
-			width: 100%;
-			max-width: 1200px;
+			width: 80%;
+			max-width: 1100px;
 			display: flex;
 			flex-direction: row;
 			align-items: center;

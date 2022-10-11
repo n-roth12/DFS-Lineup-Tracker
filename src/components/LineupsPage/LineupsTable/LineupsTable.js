@@ -18,7 +18,7 @@ const LineupsTable = ({ lineups, filteredYears }) => {
   }
 
   return (
-    <>
+    <div className='lineups-table-wrapper'>
       <span className="page-btn-wrapper">
         <span className="page-label">{1 + (currPage * 50)} - {Math.min((currPage + 1) * 50, lineups.length)} of {lineups.length}</span>
         {currPage > 0 &&
@@ -74,7 +74,7 @@ const LineupsTable = ({ lineups, filteredYears }) => {
           </>
         }
       </span>
-    </>
+    </div>
   )
 }
 

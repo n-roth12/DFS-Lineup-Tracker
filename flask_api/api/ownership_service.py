@@ -1,9 +1,18 @@
+from api import app
 import requests
 import time
 import json
+from bson import json_util
+import certifi
 from bs4 import BeautifulSoup
+from pymongo import MongoClient
+from random import uniform
 
 class OwnershipService:
+
+
+    def scramble_ownership(ownership_projection):
+        return round(ownership_projection + uniform(-0.2, 0.2), 2)
 
     def scrape_ownership():
         url = "https://www.pff.com/dfs/ownership"
@@ -35,7 +44,7 @@ class OwnershipService:
                 "opponent": row_data[3].text,
                 "position": row_data[4].text,
                 "salary": row_data[5].text,
-                "ownership_projection": row_data[6].text
+                "ownership_projection": scramble_ownership(float(row_data[6].text))
             }
 
         draftkings_tbody = ownership_containers[1].find('tbody')
@@ -51,8 +60,24 @@ class OwnershipService:
                 "opponent": row_data[3].text,
                 "position": row_data[4].text,
                 "salary": row_data[5].text,
-                "ownership_projection": row_data[6].text
+                "ownership_projection": scramble_ownership(float(row_data[6].text))
             }
 
         return(result)
+
+    
+    def getOwnershipProjections():
+        client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+        db = client["DFSOwnershipProjections"]
+        collection = db["projections"]
+        projections = collection.find({})[0]
+        del projections["_id"]
+
+        # players = json.loads(json_util.dumps(projections))
+        # players_list = [{key: value} for key, value in players.items()]
+        # print(players_list)
+        
+        # return jsonify(players_list), 200
+        return json.loads(json_util.dumps(projections))
+
     

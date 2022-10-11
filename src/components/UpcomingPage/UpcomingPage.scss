@@ -11,23 +11,45 @@
 		font-size: 16pt;
 	}
 
-	.slatesWrapper {
+	.players-inner {
+		width: 100%;
 		display: flex;
-		flex-direction: row;
-		margin: 10px 20px 20px 20px;
-		
-		.slate {
-			width: fit-content;
-			border: 1px solid black;
-			padding: 6px;
-			margin: 6px;
-			border-radius: 4px;
-			background-color: white;
-			cursor: pointer;
-		}
-		.slate:hover {
-			border: 1px solid grey;
-			text-decoration: None;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.slatesWrapper-outer {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.slatesWrapper {
+			display: flex;
+			flex-direction: row;
+			margin: 10px 20px 20px 20px;
+			width: 1100px;
+			align-items: center;
+			overflow-x: auto;
+			
+			.slate {
+				min-width: 180px;
+				height: 100px;
+				padding: 12px;
+				margin: 6px;
+				border-radius: 12px;
+				background-color: #e2e2e2;
+				cursor: pointer;
+				text-align: center;
+				text-decoration: none;
+				font-weight: 600;
+				line-height: 10pt;
+			}
+			.slate:hover {
+				border: 1px solid grey;
+				text-decoration: None;
+			}
 		}
 	}
 
