@@ -28,7 +28,27 @@ DraftGroups Collection:
         draftGroupId: int,
         draftables: [
             draftablePlayer: {
-
+                fistName: String, 
+                lastName: String,
+                displayName: String,
+                team: {
+                    teamId: int,
+                    city: String,
+                    abbreviation: String,
+                    name: String
+                },
+                position: String,
+                ownershipProjection: int,
+                pointProjection: int,
+                salary: int,
+                competition: {
+                    competitionId: int,
+                    name: String,
+                    competitionDisplay: {}
+                    startTime: datetime
+                },
+                shortName: String,
+                playerDkId: int
             }
         ]
     }

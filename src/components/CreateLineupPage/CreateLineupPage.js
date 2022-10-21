@@ -3,12 +3,29 @@ import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
 import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
 import PlayerNew from '../PlayerNew/PlayerNew'
+import { FaPlus } from 'react-icons/fa'
+import PlayerLink from './../PlayerLink/PlayerLink'
+import Lineup from '../SingleLineupPage/Lineup/Lineup'
 
 const CreateLineupPage = () => {
 
   const { draftGroupId } = useParams()
   const [draftables, setDraftables] = useState([])
   const [activeOption, setActiveOption] = useState("custom")
+  const [editingPos, setEditingPos] = useState()
+  const [lineup, setLineup] = useState({
+    "qb": null,
+    "wr1": null,
+    "wr2": null,
+    "wr3": null,
+    "rb1": null,
+    "rb2": null,
+    "te": null,
+    "flex": null,
+    "dst": null
+  })
+  
+  const lineupSlots = ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
 
   useEffect(() => {
     getDraftables()
@@ -31,6 +48,22 @@ const CreateLineupPage = () => {
       }
     })
     setDraftables(draftables)
+  }
+
+  const deleteFromLineup = () => {
+    return
+  }
+
+  const editLineup = () => {
+    return
+  }
+
+  const cancelEdit = () => {
+    return 
+  }
+
+  const openDialog = () => {
+    return
   }
 
   return (
@@ -60,15 +93,12 @@ const CreateLineupPage = () => {
         </div>
       </div>
       <div className='createLineupPage-inner'>
-        {draftables.length > 0 ?
-          <div className='lineup-players'>
-            {draftables.map((player, index) =>
-              <LineupPlayerNew player={player} key={index} />
-            )}
-          </div>
-          :
-          <h2>Loading...</h2>
-        }
+        <Lineup lineup={lineup} 
+          onDelete={deleteFromLineup} 
+          onAdd={editLineup}
+          editingPos={editingPos}
+          cancelEdit={cancelEdit} 
+          onOpenDialog={openDialog} />
         {draftables.length > 0 &&
           <div>
             <table className='lineups-table'>
@@ -78,21 +108,31 @@ const CreateLineupPage = () => {
                 <th>Team</th>
                 <th>Salary</th>
                 <th>Status</th>
+                <th></th>
               </thead>
               <tbody>
                 {draftables.map((player, index) => 
                   <tr>
-                    <td>{player.displayName}</td>
+                    <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
                     <td>{player.position}</td>
                     <td>{player.teamAbbreviation}</td>
                     <td>{player.salary}</td>
                     <td>{player.status}</td>
-
+                    <td><FaPlus className='addIcon' /></td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
+        }
+        {draftables.length > 0 ?
+          <div className='lineup-players'>
+            {draftables.map((player, index) =>
+              <LineupPlayerNew player={player} key={index} />
+            )}
+          </div>
+          :
+          <h2>Loading...</h2>
         }
       </div>
     </div>

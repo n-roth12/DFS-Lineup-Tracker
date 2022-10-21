@@ -38,7 +38,6 @@ function SingleLineupPage() {
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
   const [lineupInfo, setLineupInfo] = useState({})
 
-  // Get lineup and players on page load
   useEffect(() => {
     setLoading("Loading Lineup Data...")
     loadPage()
@@ -53,7 +52,6 @@ function SingleLineupPage() {
     getLineupPercentages()
   }, [lineupData])
 
-  // Listens for change in position being edited
   useEffect(() => {
     setViewPlayers(true)
   }, [editingPos])
@@ -66,7 +64,6 @@ function SingleLineupPage() {
     setLoading(null)
   }
 
-  // Fetch Players
   const fetchPlayers = async () => {
     const res = await fetch(`/players?year=${lineupYear}&week=${lineupWeek}`, {
       method: 'GET',

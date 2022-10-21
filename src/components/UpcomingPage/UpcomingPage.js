@@ -104,7 +104,6 @@ const UpcomingPage = ({ week, year }) => {
 										<td>{data["draftkings"] ? data["draftkings"]["ownership_projection"] : null}</td>
 									</tr>
 								))}
-								<tr></tr>
 							</tbody>
 						</table>
 					</div>
@@ -113,7 +112,6 @@ const UpcomingPage = ({ week, year }) => {
 		</div>
 	)
 }
-
 export default UpcomingPage
 
 
