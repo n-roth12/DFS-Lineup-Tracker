@@ -59,15 +59,42 @@ const CreateLineupPage = () => {
           </div>
         </div>
       </div>
-      {draftables.length > 0 ?
-        <div>
-          {draftables.map((player, index) =>
-            <LineupPlayerNew player={player} key={index} />
-          )}
-        </div>
-        :
-        <h2>Loading...</h2>
-      }
+      <div className='createLineupPage-inner'>
+        {draftables.length > 0 ?
+          <div className='lineup-players'>
+            {draftables.map((player, index) =>
+              <LineupPlayerNew player={player} key={index} />
+            )}
+          </div>
+          :
+          <h2>Loading...</h2>
+        }
+        {draftables.length > 0 &&
+          <div>
+            <table className='lineups-table'>
+              <thead>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Team</th>
+                <th>Salary</th>
+                <th>Status</th>
+              </thead>
+              <tbody>
+                {draftables.map((player, index) => 
+                  <tr>
+                    <td>{player.displayName}</td>
+                    <td>{player.position}</td>
+                    <td>{player.teamAbbreviation}</td>
+                    <td>{player.salary}</td>
+                    <td>{player.status}</td>
+
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
     </div>
   )
 }

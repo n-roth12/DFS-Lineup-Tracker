@@ -10,7 +10,6 @@ from random import uniform
 
 class OwnershipService:
 
-
     def scramble_ownership(ownership_projection):
         return round(ownership_projection + uniform(-0.2, 0.2), 2)
 
@@ -81,3 +80,4 @@ class OwnershipService:
         return json.loads(json_util.dumps(projections))
 
     
+# https://www.fantasypros.com/daily-fantasy/nfl/draftkings-salary-changes.php another website I can use to check against for salary data    

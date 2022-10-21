@@ -1,0 +1,41 @@
+Players Collection:
+
+    Player: {
+        id: int,
+        name: String,
+        firstName: String,
+        lastName: String,
+        team: {
+            teamId: int
+            city: String,
+            abbreviation: String,
+            name: String
+        }
+        position: String,
+        playerGameStats: [
+            {
+                gameId,
+
+
+            }
+        ]        
+    }
+
+
+DraftGroups Collection:
+
+    DraftGroup: {
+        draftGroupId: int,
+        draftables: [
+            draftablePlayer: {
+
+            }
+        ]
+    }
+
+
+Scrape point projections -> save in its own collection?
+...wait... 
+Get draftGroup from draftkings API -> pair them with their projections -> save draftGroup in Collection
+Create current week config Collection: stores the current week and draftgroup ids
+      -> we can change this each week, then any changes to this causes us to refetch current draftgroups

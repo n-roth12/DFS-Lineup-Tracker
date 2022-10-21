@@ -4,6 +4,12 @@
 	flex-direction: column;
 	overflow: hidden;
 
+	.createLineupPage-inner {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
 	.header {
 		width: 100%;
 		display: flex;

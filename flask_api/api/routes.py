@@ -296,6 +296,7 @@ def login_user():
 		return jsonify({ 'Error': 'Unable to login.' }), 403
 
 
+# TODO check if it is a bestball lineup, maybe allow filtering or dont show it
 @app.route('/lineups/upload', methods=['POST'])
 @token_required
 def upload_file(current_user: User):
@@ -338,8 +339,6 @@ def upload_file(current_user: User):
 	return jsonify(already_exists), 200
 
 
-@app.route('/')
-
 @app.route('/upcoming/slates', methods=["GET"])
 @token_required
 def upcoming_slates(current_user: User):
@@ -347,8 +346,10 @@ def upcoming_slates(current_user: User):
 	db = client["DFSDatabase"]
 	collection = db["draftGroups"]
 	cursor = collection.find({})
+	slates = sorted([group["draftGroup"] for group in cursor], key=lambda x: len(x["games"]), reverse=True)
+	print(slates)
 
-	return jsonify([group["draftGroup"] for group in cursor]), 200
+	return jsonify(slates), 200
 	
 
 @app.route('/upcoming/games', methods=['GET'])
@@ -480,9 +481,6 @@ def fetch_draftkings_draft_group_data(draft_group_id: str):
 	return "success", 200
 
 
-
-
-
 @app.route('/upcoming/slates', methods=['GET'])
 @token_required
 def get_slates(current_user: User):
@@ -504,7 +502,6 @@ def get_slates(current_user: User):
 		slates = json.loads(slates_from_cache)
 	
 	return jsonify(slates), 200
-
 
 
 @app.route('/upcoming/suggestions/generateLineup/<slateId>', methods=['GET'])
@@ -749,7 +746,9 @@ def get_current_week():
 
 
 
-
-
-
+# @app.route('/scrape/projections', methods=['GET'])
+# def scrape_projections():
+# 	print('test2')
+# 	result = PointProjectionScraper.scrape()
+# 	print(result)
 
