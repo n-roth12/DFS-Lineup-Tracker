@@ -2,7 +2,7 @@ import React from 'react'
 import './LineupPlayerNew.scss'
 import { FaPlus } from 'react-icons/fa'
 
-function LineupPlayerNew({ player }) {
+function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpenDialog }) {
  
   const makeOpponentDisplay = (game) => {
     if (game && game["nameDisplay"]) {

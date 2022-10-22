@@ -3,7 +3,7 @@ import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
 import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
 import PlayerNew from '../PlayerNew/PlayerNew'
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaSearch } from 'react-icons/fa'
 import PlayerLink from './../PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 
@@ -13,6 +13,7 @@ const CreateLineupPage = () => {
   const [draftables, setDraftables] = useState([])
   const [activeOption, setActiveOption] = useState("custom")
   const [editingPos, setEditingPos] = useState()
+  const [playerFilter, setPlayerFilter] = useState()
   const [lineup, setLineup] = useState({
     "qb": null,
     "wr1": null,
@@ -25,7 +26,62 @@ const CreateLineupPage = () => {
     "dst": null
   })
   
-  const lineupSlots = ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
+  const lineupSlots = [
+    {
+      "position": "qb",
+      "label": "QB",
+      "allowedPositions": ["qb"],
+      "lineupIndex": 0
+    },
+    {
+      "position": "rb1",
+      "label": "RB",
+      "allowedPositions": ["rb"],
+      "lineupIndex": 1
+    },
+    {
+      "position": "rb2",
+      "label": "RB",
+      "allowedPositions": ["rb"],
+      "lineupIndex": 2
+    },
+    {
+      "position": "wr1",
+      "label": "WR",
+      "allowedPositions": ["wr"],
+      "lineupIndex": 3
+    },
+    {
+      "position": "wr2",
+      "label": "WR",
+      "allowedPositions": ["wr"],
+      "lineupIndex": 4
+    },
+    {
+      "position": "wr3",
+      "label": "WR",
+      "allowedPositions": ["wr"],
+      "lineupIndex": 5
+    },
+    {
+      "position": "te",
+      "label": "TE",
+      "allowedPositions": ["te"],
+      "lineupIndex": 6
+    },
+    {
+      "position": "flex",
+      "label": "FLEX",
+      "allowedPositions": ["rb", "wr", "te"],
+      "lineupIndex": 7
+    },
+    {
+      "position": "dst",
+      "label": "DEF",
+      "allowedPositions": ["dst"],
+      "lineupIndex": 8
+    }
+  ]
 
   useEffect(() => {
     getDraftables()
@@ -50,20 +106,33 @@ const CreateLineupPage = () => {
     setDraftables(draftables)
   }
 
+  const toggleEditingPos = (position) => {
+    if (editingPos === position) {
+      setEditingPos(null)
+    } else {
+      setEditingPos(position)
+    }
+  }
+
   const deleteFromLineup = () => {
     return
   }
 
-  const editLineup = () => {
-    return
+  const editLineup = (pos) => {
+    setEditingPos(pos)
   }
 
   const cancelEdit = () => {
-    return 
+    setEditingPos(null)
   }
 
   const openDialog = () => {
     return
+  }
+
+  const addToLineup = (pos, player) => {
+    lineup[pos] = player
+    setEditingPos(null)
   }
 
   return (
@@ -93,46 +162,54 @@ const CreateLineupPage = () => {
         </div>
       </div>
       <div className='createLineupPage-inner'>
-        <Lineup lineup={lineup} 
-          onDelete={deleteFromLineup} 
-          onAdd={editLineup}
-          editingPos={editingPos}
-          cancelEdit={cancelEdit} 
-          onOpenDialog={openDialog} />
-        {draftables.length > 0 &&
-          <div>
+        <div className='lineup-outer'>
+          <div className='lineup-header'>
+            <h2>Lineup</h2>
+          </div>
+          <Lineup lineup={lineup} 
+            onDelete={deleteFromLineup} 
+            onAdd={editLineup}
+            editingPos={editingPos}
+            cancelEdit={cancelEdit} 
+            onOpenDialog={openDialog}
+            toggleEditingPos={toggleEditingPos} />
+        </div>
+        {draftables.length > 0 ?
+          <div className='players-table-wrapper'>
+            <div className='players-table-header'>
+              <h2>Players</h2>
+              <div className="player-search">
+                <div>
+                  <input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
+                  onChange={(e) => setPlayerFilter(e.target.value)}></input>
+                </div>
+                <button className="search-btn" type="button"><FaSearch /></button>
+              </div>
+            </div>
             <table className='lineups-table'>
               <thead>
+                <th></th>
                 <th>Name</th>
-                <th>Position</th>
+                <th>Pos</th>
                 <th>Team</th>
                 <th>Salary</th>
                 <th>Status</th>
-                <th></th>
               </thead>
               <tbody>
                 {draftables.map((player, index) => 
                   <tr>
+                    <td><FaPlus className='addIcon' onClick={() => addToLineup(editingPos, player)}/></td>
                     <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
                     <td>{player.position}</td>
                     <td>{player.teamAbbreviation}</td>
-                    <td>{player.salary}</td>
+                    <td>${player.salary}</td>
                     <td>{player.status}</td>
-                    <td><FaPlus className='addIcon' /></td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
-        }
-        {draftables.length > 0 ?
-          <div className='lineup-players'>
-            {draftables.map((player, index) =>
-              <LineupPlayerNew player={player} key={index} />
-            )}
-          </div>
-          :
-          <h2>Loading...</h2>
+        : <h2>Loading Players...</h2>
         }
       </div>
     </div>

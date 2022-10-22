@@ -1,7 +1,10 @@
 import LineupPlayer from './LineupPlayer/LineupPlayer'
+import LineupPlayerNew from '../../LineupPlayerNew/LineupPlayerNew'
 import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
+import './Lineup.scss'
 
-const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog }) => {
+
+const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos }) => {
 
   const checkBeingEdited = (pos) => {
     return pos === editingPos
@@ -9,8 +12,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
 
   return (
     <div className="lineup">
-        {lineup.qb ? 
-          <LineupPlayer 
+        {lineup["qb"] !== null ? 
+          <LineupPlayerNew 
             player={lineup.qb} 
             position={'qb'} 
             beingEdited={checkBeingEdited('qb')} 
@@ -22,10 +25,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'qb'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('qb')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.rb1 ? 
-          <LineupPlayer 
+        {lineup["rb1"] !== null ? 
+          <LineupPlayerNew
             player={lineup.rb1} 
             position={'rb1'} 
             beingEdited={checkBeingEdited('rb1')} 
@@ -37,10 +41,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'rb1'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('rb1')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.rb2 ? 
-          <LineupPlayer 
+        {lineup["rb2"] !== null ? 
+          <LineupPlayerNew
           player={lineup.rb2} 
           position={'rb2'} 
           beingEdited={checkBeingEdited('rb2')} 
@@ -52,10 +57,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'rb2'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('rb2')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.wr1 ? 
-          <LineupPlayer 
+        {lineup["wr1"] !== null ? 
+          <LineupPlayerNew
             player={lineup.wr1} 
             position={'wr1'} 
             beingEdited={checkBeingEdited('wr1')} 
@@ -67,10 +73,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'wr1'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('wr1')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.wr2 ? 
-          <LineupPlayer 
+        {lineup["wr2"] !== null ? 
+          <LineupPlayerNew
             player={lineup.wr2} 
             position={'wr2'} 
             beingEdited={checkBeingEdited('wr2')} 
@@ -82,10 +89,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'wr2'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('wr2')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.wr3 ? 
-          <LineupPlayer 
+        {lineup["wr3"] !== null ? 
+          <LineupPlayerNew
             player={lineup.wr3} 
             position={'wr3'} 
             beingEdited={checkBeingEdited('wr3')} 
@@ -97,10 +105,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'wr3'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('wr3')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.te ? 
-          <LineupPlayer 
+        {lineup["te"] !== null ? 
+          <LineupPlayerNew
             player={lineup.te} 
             position={'te'} 
             beingEdited={checkBeingEdited('te')} 
@@ -112,10 +121,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'te'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('te')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.flex ? 
-          <LineupPlayer 
+        {lineup["flex"] !== null ? 
+          <LineupPlayerNew
             player={lineup.flex} 
             position={'flex'} 
             beingEdited={checkBeingEdited('flex')} 
@@ -127,10 +137,11 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'flex'} 
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('flex')} 
-            cancelEdit={cancelEdit} />
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} />
         }
-        {lineup.dst ?
-          <LineupPlayer
+        {lineup["dst"] !== null ?
+          <LineupPlayerNew
             player={lineup.dst}
             position={'dst'}
             beingEdited={checkBeingEdited('dst')}
@@ -142,7 +153,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             position={'dst'}
             onAdd={onAdd}
             beingEdited={checkBeingEdited('dst')}
-            cancelEdit={cancelEdit} /> 
+            cancelEdit={cancelEdit}
+            toggleEditingPos={toggleEditingPos} /> 
         }
     </div>
   )

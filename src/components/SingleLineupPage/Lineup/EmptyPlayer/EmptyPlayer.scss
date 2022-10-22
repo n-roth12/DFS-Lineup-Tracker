@@ -1,0 +1,12 @@
+.empty-player:hover {
+    cursor: pointer;
+}
+
+.empty-player {
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 5px;
+    border: 1px solid #d3d3d3;
+}
