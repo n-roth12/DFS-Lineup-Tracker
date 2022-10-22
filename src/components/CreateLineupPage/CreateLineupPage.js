@@ -13,7 +13,8 @@ const CreateLineupPage = () => {
   const [draftables, setDraftables] = useState([])
   const [activeOption, setActiveOption] = useState("custom")
   const [editingPos, setEditingPos] = useState()
-  const [playerFilter, setPlayerFilter] = useState()
+  const [playerFilter, setPlayerFilter] = useState("")
+  const [allowedPositions, setAllowedPositions] = useState([])
   const [lineup, setLineup] = useState({
     "qb": null,
     "wr1": null,
@@ -26,62 +27,64 @@ const CreateLineupPage = () => {
     "dst": null
   })
   
-  const lineupSlots = [
-    {
-      "position": "qb",
-      "label": "QB",
-      "allowedPositions": ["qb"],
-      "lineupIndex": 0
-    },
-    {
-      "position": "rb1",
-      "label": "RB",
-      "allowedPositions": ["rb"],
-      "lineupIndex": 1
-    },
-    {
-      "position": "rb2",
-      "label": "RB",
-      "allowedPositions": ["rb"],
-      "lineupIndex": 2
-    },
-    {
-      "position": "wr1",
-      "label": "WR",
-      "allowedPositions": ["wr"],
-      "lineupIndex": 3
-    },
-    {
-      "position": "wr2",
-      "label": "WR",
-      "allowedPositions": ["wr"],
-      "lineupIndex": 4
-    },
-    {
-      "position": "wr3",
-      "label": "WR",
-      "allowedPositions": ["wr"],
-      "lineupIndex": 5
-    },
-    {
-      "position": "te",
-      "label": "TE",
-      "allowedPositions": ["te"],
-      "lineupIndex": 6
-    },
-    {
-      "position": "flex",
-      "label": "FLEX",
-      "allowedPositions": ["rb", "wr", "te"],
-      "lineupIndex": 7
-    },
-    {
-      "position": "dst",
-      "label": "DEF",
-      "allowedPositions": ["dst"],
-      "lineupIndex": 8
+  const lineupSlots = {
+    "qb": 
+      {
+        "label": "QB",
+        "allowedPositions": ["qb"],
+        "lineupIndex": 0
+      }
+    ,
+      "rb1": 
+      {
+        "label": "RB",
+        "allowedPositions": ["rb"],
+        "lineupIndex": 1
+      }
+      ,
+      "rb2": 
+      {
+        "label": "RB",
+        "allowedPositions": ["rb"],
+        "lineupIndex": 2
+      },
+      "wr1": 
+      {
+        "label": "WR",
+        "allowedPositions": ["wr"],
+        "lineupIndex": 3
+      },
+      "wr2": 
+      {
+        "label": "WR",
+        "allowedPositions": ["wr"],
+        "lineupIndex": 4
+      },
+      "wr3":
+      {
+        "label": "WR",
+        "allowedPositions": ["wr"],
+        "lineupIndex": 5
+      },
+      "te":
+      {
+        "label": "TE",
+        "allowedPositions": ["te"],
+        "lineupIndex": 6
+      },
+      "flex":
+      {
+        "label": "FLEX",
+        "allowedPositions": ["rb", "wr", "te"],
+        "lineupIndex": 7
+      },
+      "dst":
+      {
+        "label": "DEF",
+        "allowedPositions": ["dst"],
+        "lineupIndex": 8
+      }
     }
-  ]
 
   useEffect(() => {
     getDraftables()
@@ -106,12 +109,19 @@ const CreateLineupPage = () => {
     setDraftables(draftables)
   }
 
+  const filterPlayers = (players) => {
+    const results =  players.filter((player) => {
+      return (playerFilter == "" || player.name.toLowerCase().startsWith(playerFilter.toLowerCase()))
+    })
+  }
+
   const toggleEditingPos = (position) => {
     if (editingPos === position) {
       setEditingPos(null)
     } else {
       setEditingPos(position)
     }
+    setAllowedPositions(lineupSlots[position]["allowedPositions"])
   }
 
   const deleteFromLineup = () => {
@@ -197,14 +207,16 @@ const CreateLineupPage = () => {
               </thead>
               <tbody>
                 {draftables.map((player, index) => 
-                  <tr>
-                    <td><FaPlus className='addIcon' onClick={() => addToLineup(editingPos, player)}/></td>
-                    <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
-                    <td>{player.position}</td>
-                    <td>{player.teamAbbreviation}</td>
-                    <td>${player.salary}</td>
-                    <td>{player.status}</td>
-                  </tr>
+                  (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
+                  (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
+                    <tr>
+                      <td><FaPlus className='addIcon' onClick={() => addToLineup(editingPos, player)}/></td>
+                      <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
+                      <td>{player.position}</td>
+                      <td>{player.teamAbbreviation}</td>
+                      <td>${player.salary}</td>
+                      <td>{player.status}</td>
+                    </tr>
                 )}
               </tbody>
             </table>
