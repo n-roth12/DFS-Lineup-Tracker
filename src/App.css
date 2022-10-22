@@ -18,6 +18,13 @@ body {
   font-weight: 500;
 }
 
+:root {
+  --btn-blue: #0069ed;
+  --grey-1: #5d6f7a;
+  --grey-2: lightgrey;
+  --grey-3: #f2f2f2;
+}
+
 .page {
   margin-top: 100px
 }
@@ -140,7 +147,6 @@ a {
 .player {
   height: 80px;
   display: flex;
-  flex-direction: column;
   background-color: #ffffff;
   padding: 5px;
   border: 1px solid #d3d3d3;

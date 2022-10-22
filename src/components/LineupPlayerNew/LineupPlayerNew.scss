@@ -1,7 +1,7 @@
 .lineupPlayerNew {
 
     background-color: white;
-    border: 1px solid grey;
+    border: 1px solid #d3d3d3;
     display: flex;
     flex-direction: row;
     max-width: 500px;
@@ -83,7 +83,6 @@
                     font-size: 8pt;
                     color: gray;
                 }
-
             }
         }
 
@@ -92,11 +91,16 @@
             justify-content: center;
             align-items: center;
             flex: 1;
+            cursor: pointer;
+            margin: 0;
 
-            .addIcon {
-                color: #0069ed;
-                font-size: 16pt;
-                cursor: pointer;
+            .add-icon {
+                color: var(--btn-blue);
+                font-size: 27pt;
+            }
+            .delete-icon {
+                color: red;
+                font-size: 20pt
             }
         }
 

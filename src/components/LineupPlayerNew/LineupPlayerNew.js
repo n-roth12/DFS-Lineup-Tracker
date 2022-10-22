@@ -1,8 +1,9 @@
 import React from 'react'
 import './LineupPlayerNew.scss'
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaTimes } from 'react-icons/fa'
+import { CgArrowsExchange } from 'react-icons/cg'
 
-function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpenDialog }) {
+function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpenDialog, toggleEditingPos, editingPos }) {
  
   const makeOpponentDisplay = (game) => {
     if (game && game["nameDisplay"]) {
@@ -17,7 +18,7 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
 
   return (
     <div>
-      <div className='lineupPlayerNew'>
+      <div className={`lineupPlayerNew player ${beingEdited ? 'selected': ''}`}>
         <div className='playerImage'>
           <img src={player["playerImage160"]} />
         </div>
@@ -77,11 +78,19 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
               <span className='label'>SAL</span>
             </p>
           </div>
-          <div className='icon'>
+          {!beingEdited ?
+            <div className='icon' onClick={() => toggleEditingPos(position)}>
+              <div>
+                <CgArrowsExchange className='add-icon' />
+              </div>
+            </div>
+          :
+          <div className='icon' onClick={() => onDelete(position)}>
             <div>
-              <FaPlus className='addIcon' />
+              <FaTimes className='delete-icon' />
             </div>
           </div>
+          }
         </div> 
       </div>
     </div>

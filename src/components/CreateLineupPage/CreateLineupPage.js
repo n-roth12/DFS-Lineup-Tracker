@@ -14,6 +14,7 @@ const CreateLineupPage = () => {
   const [activeOption, setActiveOption] = useState("custom")
   const [editingPos, setEditingPos] = useState()
   const [playerFilter, setPlayerFilter] = useState("")
+  const [posFilter, setPosFilter] = useState(new Set())
   const [allowedPositions, setAllowedPositions] = useState([])
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -90,6 +91,17 @@ const CreateLineupPage = () => {
     getDraftables()
   }, [])
 
+  const togglePosFilter = (position) => {
+    if (posFilter.has(position)) {
+      const filterCopy = new Set(posFilter)
+      filterCopy.delete(position)
+      setPosFilter(filterCopy)
+    } else {
+      setPosFilter(new Set(posFilter.add(position)))
+    }
+    setEditingPos(null)
+  }
+
   const getDraftables = async () => {
     const res = await fetch(`/upcoming/players?draftGroup=${draftGroupId}`, {
       method: 'GET',
@@ -118,14 +130,19 @@ const CreateLineupPage = () => {
   const toggleEditingPos = (position) => {
     if (editingPos === position) {
       setEditingPos(null)
+      setPosFilter(new Set())
     } else {
       setEditingPos(position)
     }
     setAllowedPositions(lineupSlots[position]["allowedPositions"])
+    setPosFilter(new Set(lineupSlots[position]["allowedPositions"]))
   }
 
-  const deleteFromLineup = () => {
-    return
+  const deleteFromLineup = (position) => {
+    var lineupCopy = {...lineup}
+    lineupCopy[`${position}`] = null
+    setLineup(lineupCopy)
+    setEditingPos(null)
   }
 
   const editLineup = (pos) => {
@@ -134,6 +151,7 @@ const CreateLineupPage = () => {
 
   const cancelEdit = () => {
     setEditingPos(null)
+    setPosFilter(new Set([]))
   }
 
   const openDialog = () => {
@@ -188,6 +206,34 @@ const CreateLineupPage = () => {
           <div className='players-table-wrapper'>
             <div className='players-table-header'>
               <h2>Players</h2>
+              <div className="pos-filter-wrapper">
+                <div>
+                  <button 
+                    className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`} 
+                    onClick={() => setPosFilter(new Set())}>All
+                  </button>
+                  <button 
+                    className={`filter-btn${posFilter.has("qb") ? "-active" : ""}`} 
+                    onClick={() => togglePosFilter("qb")}>QB
+                  </button>
+                  <button 
+                    className={`filter-btn${posFilter.has("rb") ? "-active" : ""}`} 
+                    onClick={() => togglePosFilter("rb")}>RB
+                  </button>
+                  <button 
+                    className={`filter-btn${posFilter.has("wr") ? "-active" : ""}`} 
+                    onClick={() => togglePosFilter("wr")}>WR
+                  </button>
+                  <button 
+                    className={`filter-btn${posFilter.has("te") ? "-active" : ""}`} 
+                    onClick={() => togglePosFilter("te")}>TE
+                  </button>
+                  <button
+                    className={`filter-btn${posFilter.has("dst") ? "-active" : ""}`} 
+                    onClick={() => togglePosFilter("dst")}>DST
+                  </button>
+                </div>
+              </div>
               <div className="player-search">
                 <div>
                   <input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
@@ -209,8 +255,9 @@ const CreateLineupPage = () => {
                 {draftables.map((player, index) => 
                   (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
+                  (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
                     <tr>
-                      <td><FaPlus className='addIcon' onClick={() => addToLineup(editingPos, player)}/></td>
+                      <td className='add-icon-outer'onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
                       <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
                       <td>{player.position}</td>
                       <td>{player.teamAbbreviation}</td>

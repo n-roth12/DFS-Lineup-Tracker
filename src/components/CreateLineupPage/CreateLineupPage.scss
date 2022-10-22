@@ -82,10 +82,31 @@
 			thead {
 				display: block;
 			}
+			thead th:first-child {
+				width: 60px;
+			}
 			tbody {
 				height: 70vh;
 				overflow-y: auto;
 				display: block;
+
+				.add-icon-outer {
+					background-color: var(--btn-blue);
+					height: 40px;
+					width: 50px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					.add-icon {
+						color: white;
+						width: 15px;
+						height: 15px;
+					}
+				}
+				.add-icon-outer:hover {
+					cursor: pointer;
+					background-color: #0a58ca;
+				}
 			}
 			tbody td, thead th {
 				width: 200px;
