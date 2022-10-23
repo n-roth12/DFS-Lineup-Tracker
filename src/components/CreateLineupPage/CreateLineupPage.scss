@@ -20,6 +20,10 @@
 					font-size: 18pt;
 					margin-left: 10px;
 				}
+				strong {
+					font-size: 13pt;
+					font-weight: 600;
+				}
 			}
 		}
 
@@ -103,12 +107,12 @@
 			thead {
 				display: block;
 			}
-			thead th:first-child {
-				width: 50px;
-			}
-			thead th:nth-child(2), tbody td:nth-child(2) {
-				width: 30px;
-			}
+			// thead th:first-child {
+			// 	width: 50px;
+			// }
+			// thead th:nth-child(2), tbody td:nth-child(2) {
+			// 	width: 30px;
+			// }
 			tbody {
 				height: 70vh;
 				overflow-y: auto;
@@ -116,16 +120,21 @@
 
 				.add-icon-outer {
 					background-color: var(--btn-blue);
+				}
+				.add-icon-outer, .no-add-icon-outer {
 					height: 40px;
 					width: 50px;
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					.add-icon {
-						color: white;
-						width: 15px;
-						height: 15px;
-					}
+				}
+				.no-add-icon-outer {
+					background-color: var(--grey-2);
+				}
+				.add-icon, .no-add-icon {
+					color: white;
+					width: 15px;
+					height: 15px;
 				}
 				.add-icon-outer:hover {
 					cursor: pointer;

@@ -23,6 +23,9 @@ body {
   --grey-1: #5d6f7a;
   --grey-2: lightgrey;
   --grey-3: #f2f2f2;
+  --roboto: 'Nunito', sans-serif;
+  --inter: 'Inter', serif;
+  --source-sans: 'Source Sans Pro', sans-serif;
 }
 
 .page {
@@ -148,7 +151,6 @@ a {
   height: 80px;
   display: flex;
   background-color: #ffffff;
-  padding: 5px;
   border: 1px solid #d3d3d3;
 }
 

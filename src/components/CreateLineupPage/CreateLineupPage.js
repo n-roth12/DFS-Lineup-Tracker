@@ -83,12 +83,16 @@ const CreateLineupPage = () => {
         "label": "DEF",
         "allowedPositions": ["dst"],
         "lineupIndex": 8
-      }
     }
+  }
 
   useEffect(() => {
     getDraftables()
   }, [])
+
+  useEffect(() => {
+    getRemainingSalary()
+  }, [lineup])
 
   const togglePosFilter = (position) => {
     if (posFilter.has(position)) {
@@ -158,12 +162,13 @@ const CreateLineupPage = () => {
 
   const addToLineup = (pos, player) => {
     if (pos) {
-      lineup[pos] = player
+      var lineupCopy = {...lineup}
+      lineupCopy[pos] = player
+      setLineup(lineupCopy)
       setEditingPos(null)
     } else {
       for (const [k, v] of Object.entries(lineup)) {
         if (v === null && lineupSlots[k]["allowedPositions"].includes(player["position"].toLowerCase())) {
-          console.log('tes')
           var lineupCopy = { ...lineup }
           lineupCopy[`${k}`] = player
           setLineup(lineupCopy)
@@ -173,12 +178,32 @@ const CreateLineupPage = () => {
     }
   }
 
-  const getAttr = (draftStatAttributes, index) => {
-    for (const att of draftStatAttributes) {
-      if (att["id"] == index) {
-        return att["sortValue"]  
+  const canQuickAdd = (position) => {
+    for (const [k, v] of Object.entries(lineup)) {
+      if (v === null && lineupSlots[k]["allowedPositions"].includes(position.toLowerCase())) {
+        return true
       }
     }
+    return false
+  }
+
+  const getAttr = (draftStatAttributes, index) => {
+    return draftStatAttributes.find((stat) => stat['id'] === index)["value"]
+  }
+
+  const getRemainingSalary = () => {
+    var remaining = 60000
+    for (const [k,  lineupSlot] of Object.entries(lineup)) {
+      if (lineupSlot !== null) {
+        remaining -= lineupSlot["salary"]
+      }
+    }
+    return remaining
+  }
+
+  const getRemainingSalaryPerPlayer = () => {
+    const remaining = getRemainingSalary()
+    return Math.round(remaining / (Object.values(lineup).filter((lineupSlot) => lineupSlot == null).length))
   }
 
   return (
@@ -211,6 +236,8 @@ const CreateLineupPage = () => {
         <div className='lineup-outer'>
           <div className='lineup-header'>
             <h2>Lineup</h2>
+            <p>Remaining Salary: <strong>${getRemainingSalary()}</strong></p>
+            <p>Rem. Average Salary: <strong>${getRemainingSalaryPerPlayer()}</strong></p>
           </div>
           <Lineup lineup={lineup} 
             onDelete={deleteFromLineup} 
@@ -269,12 +296,10 @@ const CreateLineupPage = () => {
                 <th></th>
                 <th>Pos</th>
                 <th>Name</th>
-                <th>Team</th>
                 <th>Salary</th>
-                <th>Status</th>
                 <th>Game</th>
                 <th>OPRK</th>
-                <th>PPG</th>
+                <th>FPPG</th>
               </thead>
               <tbody>
                 {draftables.map((player, index) => 
@@ -282,12 +307,14 @@ const CreateLineupPage = () => {
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
                     <tr>
-                      <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
+                      {canQuickAdd(player.position) ?
+                        <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
+                      :
+                        <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
+                      }
                       <td>{player.position}</td>
-                      <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
-                      <td>{player.teamAbbreviation}</td>
+                      <td><strong><PlayerLink playerName={player.displayName} /></strong> {player.status !== "None" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
-                      <td>{player.status}</td>
                       <td>{player.competition ? player.competition.name : ''}</td>
                       <td>{player.draftStatAttributes && getAttr(player.draftStatAttributes, -2)}</td>
                       <td>{player.draftStatAttributes && getAttr(player.draftStatAttributes, 90)}</td>
