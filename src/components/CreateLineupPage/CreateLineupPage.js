@@ -15,7 +15,6 @@ const CreateLineupPage = () => {
   const [editingPos, setEditingPos] = useState()
   const [playerFilter, setPlayerFilter] = useState("")
   const [posFilter, setPosFilter] = useState(new Set())
-  const [allowedPositions, setAllowedPositions] = useState([])
   const [lineup, setLineup] = useState({
     "qb": null,
     "wr1": null,
@@ -133,9 +132,8 @@ const CreateLineupPage = () => {
       setPosFilter(new Set())
     } else {
       setEditingPos(position)
+      setPosFilter(new Set(lineupSlots[position]["allowedPositions"]))
     }
-    setAllowedPositions(lineupSlots[position]["allowedPositions"])
-    setPosFilter(new Set(lineupSlots[position]["allowedPositions"]))
   }
 
   const deleteFromLineup = (position) => {
@@ -151,7 +149,7 @@ const CreateLineupPage = () => {
 
   const cancelEdit = () => {
     setEditingPos(null)
-    setPosFilter(new Set([]))
+    setPosFilter(new Set())
   }
 
   const openDialog = () => {
@@ -159,8 +157,28 @@ const CreateLineupPage = () => {
   }
 
   const addToLineup = (pos, player) => {
-    lineup[pos] = player
-    setEditingPos(null)
+    if (pos) {
+      lineup[pos] = player
+      setEditingPos(null)
+    } else {
+      for (const [k, v] of Object.entries(lineup)) {
+        if (v === null && lineupSlots[k]["allowedPositions"].includes(player["position"].toLowerCase())) {
+          console.log('tes')
+          var lineupCopy = { ...lineup }
+          lineupCopy[`${k}`] = player
+          setLineup(lineupCopy)
+          return
+        } 
+      }
+    }
+  }
+
+  const getAttr = (draftStatAttributes, index) => {
+    for (const att of draftStatAttributes) {
+      if (att["id"] == index) {
+        return att["sortValue"]  
+      }
+    }
   }
 
   return (
@@ -205,51 +223,58 @@ const CreateLineupPage = () => {
         {draftables.length > 0 ?
           <div className='players-table-wrapper'>
             <div className='players-table-header'>
-              <h2>Players</h2>
-              <div className="pos-filter-wrapper">
-                <div>
-                  <button 
-                    className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`} 
-                    onClick={() => setPosFilter(new Set())}>All
-                  </button>
-                  <button 
-                    className={`filter-btn${posFilter.has("qb") ? "-active" : ""}`} 
-                    onClick={() => togglePosFilter("qb")}>QB
-                  </button>
-                  <button 
-                    className={`filter-btn${posFilter.has("rb") ? "-active" : ""}`} 
-                    onClick={() => togglePosFilter("rb")}>RB
-                  </button>
-                  <button 
-                    className={`filter-btn${posFilter.has("wr") ? "-active" : ""}`} 
-                    onClick={() => togglePosFilter("wr")}>WR
-                  </button>
-                  <button 
-                    className={`filter-btn${posFilter.has("te") ? "-active" : ""}`} 
-                    onClick={() => togglePosFilter("te")}>TE
-                  </button>
-                  <button
-                    className={`filter-btn${posFilter.has("dst") ? "-active" : ""}`} 
-                    onClick={() => togglePosFilter("dst")}>DST
-                  </button>
-                </div>
+              <div className='players-table-header-upper'>
+                <h2>Players</h2>
               </div>
-              <div className="player-search">
-                <div>
-                  <input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
-                  onChange={(e) => setPlayerFilter(e.target.value)}></input>
+              <div className='players-table-header-lower'>
+                <div className="pos-filter-wrapper">
+                  <div>
+                    <button 
+                      className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`} 
+                      onClick={() => setPosFilter(new Set())}>All
+                    </button>
+                    <button 
+                      className={`filter-btn${posFilter.has("qb") ? "-active" : ""}`} 
+                      onClick={() => togglePosFilter("qb")}>QB
+                    </button>
+                    <button 
+                      className={`filter-btn${posFilter.has("rb") ? "-active" : ""}`} 
+                      onClick={() => togglePosFilter("rb")}>RB
+                    </button>
+                    <button 
+                      className={`filter-btn${posFilter.has("wr") ? "-active" : ""}`} 
+                      onClick={() => togglePosFilter("wr")}>WR
+                    </button>
+                    <button 
+                      className={`filter-btn${posFilter.has("te") ? "-active" : ""}`} 
+                      onClick={() => togglePosFilter("te")}>TE
+                    </button>
+                    <button
+                      className={`filter-btn${posFilter.has("dst") ? "-active" : ""}`} 
+                      onClick={() => togglePosFilter("dst")}>DST
+                    </button>
+                  </div>
                 </div>
-                <button className="search-btn" type="button"><FaSearch /></button>
+                <div className="player-search">
+                  <div>
+                    <input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
+                    onChange={(e) => setPlayerFilter(e.target.value)}></input>
+                  </div>
+                  <button className="search-btn" type="button"><FaSearch /></button>
+                </div>
               </div>
             </div>
             <table className='lineups-table'>
               <thead>
                 <th></th>
-                <th>Name</th>
                 <th>Pos</th>
+                <th>Name</th>
                 <th>Team</th>
                 <th>Salary</th>
                 <th>Status</th>
+                <th>Game</th>
+                <th>OPRK</th>
+                <th>PPG</th>
               </thead>
               <tbody>
                 {draftables.map((player, index) => 
@@ -257,12 +282,15 @@ const CreateLineupPage = () => {
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
                     <tr>
-                      <td className='add-icon-outer'onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
-                      <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
+                      <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
                       <td>{player.position}</td>
+                      <td><strong><PlayerLink playerName={player.displayName} /></strong></td>
                       <td>{player.teamAbbreviation}</td>
                       <td>${player.salary}</td>
                       <td>{player.status}</td>
+                      <td>{player.competition ? player.competition.name : ''}</td>
+                      <td>{player.draftStatAttributes && getAttr(player.draftStatAttributes, -2)}</td>
+                      <td>{player.draftStatAttributes && getAttr(player.draftStatAttributes, 90)}</td>
                     </tr>
                 )}
               </tbody>
