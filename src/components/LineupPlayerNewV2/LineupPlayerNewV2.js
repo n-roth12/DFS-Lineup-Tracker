@@ -8,7 +8,7 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
   const makeOpponentDisplay = (game) => {
     if (game && game["nameDisplay"]) {
       if (game["nameDisplay"][0].isEmphasized) {
-        return `@ ${game["nameDisplay"][2]['value']}`
+        return `@${game["nameDisplay"][2]['value']}`
       }
       return game["nameDisplay"][0]['value']
     } else {

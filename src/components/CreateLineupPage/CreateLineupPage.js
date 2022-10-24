@@ -3,18 +3,21 @@ import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
 import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
 import PlayerNew from '../PlayerNew/PlayerNew'
-import { FaPlus, FaSearch } from 'react-icons/fa'
+import { FaPlus, FaSearch, FaTimes } from 'react-icons/fa'
+import { GrRevert } from 'react-icons/gr'
 import PlayerLink from './../PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 
 const CreateLineupPage = () => {
 
-  const { draftGroupId } = useParams()
+  const { draftGroupId, lineupId } = useParams()
   const [draftables, setDraftables] = useState([])
   const [activeOption, setActiveOption] = useState("custom")
   const [editingPos, setEditingPos] = useState()
   const [playerFilter, setPlayerFilter] = useState("")
   const [posFilter, setPosFilter] = useState(new Set())
+  const [remainingSalary, setRemainingSalary] = useState() 
+  const [prevLineup, setPrevLineup] = useState({})
   const [lineup, setLineup] = useState({
     "qb": null,
     "wr1": null,
@@ -88,6 +91,7 @@ const CreateLineupPage = () => {
 
   useEffect(() => {
     getDraftables()
+    getDraftGroupLineups()
   }, [])
 
   useEffect(() => {
@@ -122,6 +126,18 @@ const CreateLineupPage = () => {
       }
     })
     setDraftables(draftables)
+  }
+
+  const getDraftGroupLineups = async () => {
+    const res = await fetch(`/lineups_new?draftGroup=${draftGroupId}`, {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
+    })
+    const data = await res.json()
+    setLineup(data[0].lineup)
+    setPrevLineup(data[0].lineup)
   }
 
   const filterPlayers = (players) => {
@@ -160,6 +176,31 @@ const CreateLineupPage = () => {
     return
   }
 
+  const clearLineup = () => {
+    var lineupCopy = { ...lineup }
+    Object.keys(lineup).forEach((lineupSlot) => {
+      lineupCopy[lineupSlot] = null
+    })
+    setLineup(lineupCopy)
+  }
+
+  const saveLineup = async () => {
+    const res = await fetch(`/lineups/createLineup`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify({
+        "lineup": lineup,
+        "draft-group": draftGroupId
+      })
+    })
+    .then(setPrevLineup(lineup))
+    .catch((error) => {
+      alert(error)
+    })
+  }
+
   const addToLineup = (pos, player) => {
     if (pos) {
       var lineupCopy = {...lineup}
@@ -180,7 +221,8 @@ const CreateLineupPage = () => {
 
   const canQuickAdd = (position) => {
     for (const [k, v] of Object.entries(lineup)) {
-      if (v === null && lineupSlots[k]["allowedPositions"].includes(position.toLowerCase())) {
+      if ((v === null && lineupSlots[k]["allowedPositions"].includes(position.toLowerCase()))
+        || (editingPos && lineupSlots[editingPos]["allowedPositions"].includes(position.toLowerCase()))) {
         return true
       }
     }
@@ -198,12 +240,19 @@ const CreateLineupPage = () => {
         remaining -= lineupSlot["salary"]
       }
     }
-    return remaining
+    setRemainingSalary(remaining)
   }
 
   const getRemainingSalaryPerPlayer = () => {
-    const remaining = getRemainingSalary()
-    return Math.round(remaining / (Object.values(lineup).filter((lineupSlot) => lineupSlot == null).length))
+    const emptySlotsCount = Object.values(lineup).filter((lineupSlot) => lineupSlot == null).length
+    if (emptySlotsCount < 1) {
+      return "-"
+    }
+    return remainingSalary < 0 ? "-$" + Math.round(Math.abs(remainingSalary) / emptySlotsCount) : "$" + Math.round(remainingSalary / emptySlotsCount)
+  }
+
+  const revertLineup = () => {
+    setLineup(prevLineup)
   }
 
   return (
@@ -234,10 +283,18 @@ const CreateLineupPage = () => {
       </div>
       <div className='createLineupPage-inner'>
         <div className='lineup-outer'>
+          <h2>Lineup</h2>
           <div className='lineup-header'>
-            <h2>Lineup</h2>
-            <p>Remaining Salary: <strong>${getRemainingSalary()}</strong></p>
-            <p>Rem. Average Salary: <strong>${getRemainingSalaryPerPlayer()}</strong></p>
+            <div className='lineup-header-info-wrapper'>
+              <div className='lineup-header-info'>
+                <p>Remaining Salary <strong>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</strong></p>
+                <p>Rem. Average Salary <strong>{getRemainingSalaryPerPlayer()}</strong></p>
+              </div>
+              <div className='lineup-header-info'>
+                <p><strong>159.12</strong> Proj. Points</p>
+                <p><strong>90%</strong> Proj. Own Sum</p>
+              </div>
+            </div>
           </div>
           <Lineup lineup={lineup} 
             onDelete={deleteFromLineup} 
@@ -246,6 +303,11 @@ const CreateLineupPage = () => {
             cancelEdit={cancelEdit} 
             onOpenDialog={openDialog}
             toggleEditingPos={toggleEditingPos} />
+          <div className='lineup-btns'>
+            <button className='revert-btn' onClick={revertLineup}>Revert <GrRevert/></button>
+            <button className='save-btn' onClick={saveLineup}>Save</button>
+            <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
+          </div>
         </div>
         {draftables.length > 0 ?
           <div className='players-table-wrapper'>
@@ -307,13 +369,13 @@ const CreateLineupPage = () => {
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
                     <tr>
-                      {canQuickAdd(player.position) ?
+                      {canQuickAdd(player.position) || editingPos === player.position ?
                         <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
                       :
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
                       <td>{player.position}</td>
-                      <td><strong><PlayerLink playerName={player.displayName} /></strong> {player.status !== "None" && `(${player.status})`}</td>
+                      <td className='name-col'><strong><PlayerLink playerName={player.displayName} /></strong> {player.status !== "None" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
                       <td>{player.competition ? player.competition.name : ''}</td>
                       <td>{player.draftStatAttributes && getAttr(player.draftStatAttributes, -2)}</td>

@@ -347,7 +347,6 @@ def upcoming_slates(current_user: User):
 	collection = db["draftGroups"]
 	cursor = collection.find({})
 	slates = sorted([group["draftGroup"] for group in cursor], key=lambda x: len(x["games"]), reverse=True)
-	print(slates)
 
 	return jsonify(slates), 200
 	
@@ -516,6 +515,32 @@ def get_recommendation(slateId: str):
 
 	return 'Success', 200
 
+@app.route('/lineups_new', methods=['GET'])
+@token_required
+def get_draftgroup_lineups(current_user: User):
+	draft_group = request.args.get("draftGroup")
+
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["lineups"]
+	cursor = collection.find({"draft-group": draft_group})
+	lineups = [lineup for lineup in cursor]
+
+	return jsonify(json.loads(json_util.dumps(lineups))), 200
+
+
+@app.route('/lineups/createLineup', methods=['POST'])
+@token_required
+def create_lineup_new(current_user: User):
+	data = json.loads(request.data)
+	data["user_public_id"] = current_user.public_id
+
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["lineups"]
+	lineup_id = collection.replace_one({"draft-group": data["draft-group"]}, data, upsert=True)
+
+	return jsonify({ "message": "Success" }), 200
 
 
 @app.route('/history/search/week', methods=['GET'])

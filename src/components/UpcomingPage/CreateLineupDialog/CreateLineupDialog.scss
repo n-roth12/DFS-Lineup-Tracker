@@ -1,0 +1,87 @@
+.create-lineup-dialog {
+    .content {
+        background-color: var(--grey-3);
+        max-height: 400px;
+
+        .content-inner {
+            display: flex;
+            flex-direction: row;
+
+            .games {
+                width: fit-content;
+                margin-right: 20px;
+                h3 {
+                    padding-bottom: 10px;
+                    padding-top: 10px;
+                }
+                .game {
+                    display: flex;
+                    flex-direction: row;
+                    background-color: white;
+                    margin-bottom: 5px;
+                    width: 250px;
+                    justify-content: space-between;
+                    padding: 8px;
+                    font-weight: 500;
+
+                    p {
+                        height: 100%;
+                        margin: 0;
+                        flex: 1;
+                    }
+                    p:nth-child(1) {
+                        text-align: left;
+                    }
+                    p:nth-child(2) {
+                        text-align: right;
+                    }
+                }
+            }
+            .user-lineups {
+                width: fill;
+                h3 {
+                    padding: 10px;
+                }
+                .lineups-table {
+                    margin: 0;
+                    thead {
+                        font-size: 11pt;
+                    }
+                }
+                .user-lineup {
+                    background-color: white;
+                    margin-bottom: 5px;
+                    width: 100%;
+                    
+                }
+            }
+        }
+    }
+    .title {
+        background-color: var(--grey-1);
+        p {
+            color: white;
+        }
+        .title-upper {
+            font-size: 16pt;
+            text-align: left;
+            font-weight: 500;
+
+        }
+        .title-lower {
+            font-size: 12pt;
+            text-align: left;
+            font-weight: 300;
+        }
+    }
+    .actions {
+        .create-btn {
+            border: none;
+            background-color: var(--btn-blue);
+            color: white;
+            padding: 10px 20px 10px 20px;
+            border-radius: 5px;
+            box-shadow: var(--box-shadow-1);
+        }
+    }
+}

@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom'
 import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
 import PlayerNew from '../PlayerNew/PlayerNew'
 import PlayerLink from '../PlayerLink/PlayerLink';
+import CreateLineupDialog from './CreateLineupDialog/CreateLineupDialog';
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -19,6 +20,8 @@ const UpcomingPage = ({ week, year }) => {
 	const [slates, setSlates] = useState([])
 	const [players, setPlayers] = useState([])
 	const [activeSlate, setActiveSlate] = useState()
+	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
+	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
 
 	useEffect(() => {
 		getPlayers()
@@ -37,6 +40,16 @@ const UpcomingPage = ({ week, year }) => {
 		setSlates(data)
 	}
 
+	const dialogActionWrapper = (slate) => {
+		setCreateLineupDialogContent(slate)
+		setShowCreateLineupDialog(true)
+	}
+
+	const closeDialogWrapper = () => {
+		setShowCreateLineupDialog(false)
+		setCreateLineupDialogContent({})
+	}
+
 	const getPlayers = async () => {
 		const res = await fetch('/upcoming/ownership', {
 			method: 'GET',
@@ -48,25 +61,30 @@ const UpcomingPage = ({ week, year }) => {
 		setPlayers(result)
 	}
 
-
 	return (
 		<div className="upcoming-page page">
+			<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
+				onClose={closeDialogWrapper} slate={createLineupDialogContent} />
 			<div className='slatesWrapper-outer'>
 				<h2>Choose a slate:</h2>
 				{slates.length ? 
 					<div className="slatesWrapper">
 						{slates.map((slate) => (
-							<Link className="slate" to={`/createLineup/${slate["draftGroupId"]}`} >
+							// <Link className="slate" to={`/createLineup/${slate["draftGroupId"]}`} >
+							// 	<p>{slate["minStartTime"].split("T")[0]}</p>
+							// 	<p>{slate["games"].length} Games</p>
+							// 	<p>{slate["minStartTime"].split("T")[1]}</p>
+							// </Link>
+							<div className="slate" onClick={() => dialogActionWrapper(slate)}>
 								<p>{slate["minStartTime"].split("T")[0]}</p>
 								<p>{slate["games"].length} Games</p>
 								<p>{slate["minStartTime"].split("T")[1]}</p>
-							</Link>
+							</div>
 						))}
 					</div>
 				:
 					<h3>Loading Slates...</h3>
 				}
-				<Link className="search-btn" to={`/`}>Create Lineup</Link>
 			</div>
 
 			{Object.keys(players).length > 0 && 

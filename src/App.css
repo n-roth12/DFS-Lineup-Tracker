@@ -26,6 +26,7 @@ body {
   --roboto: 'Nunito', sans-serif;
   --inter: 'Inter', serif;
   --source-sans: 'Source Sans Pro', sans-serif;
+  --box-shadow-1: 0px 0px 3px 1px lightgray;
 }
 
 .page {

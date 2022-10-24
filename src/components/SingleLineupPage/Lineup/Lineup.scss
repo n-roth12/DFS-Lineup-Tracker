@@ -1,6 +1,6 @@
 
 .lineup {
-    box-shadow: 0px 0px 3px 1px lightgray;
+    box-shadow: var(--box-shadow-1);
     max-width: 500px;
     height: fit-content;
 }
