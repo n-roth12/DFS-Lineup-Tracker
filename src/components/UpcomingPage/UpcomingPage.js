@@ -19,7 +19,6 @@ const UpcomingPage = ({ week, year }) => {
 	const [games, setGames] = useState([])
 	const [slates, setSlates] = useState([])
 	const [players, setPlayers] = useState([])
-	const [activeSlate, setActiveSlate] = useState()
 	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
 
@@ -29,13 +28,12 @@ const UpcomingPage = ({ week, year }) => {
 	}, [])
 
 	const getUpcomingSlates = async () => {
-		const res = await fetch('/upcoming/slates', {
+		const res = await fetch('/upcoming/slates_new', {
 			method: 'GET',
 			headers: {
 				'x-access-token': sessionStorage.dfsTrackerToken
 			}
 		})
-
 		const data = await res.json()
 		setSlates(data)
 	}

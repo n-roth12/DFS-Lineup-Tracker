@@ -339,7 +339,7 @@ def upload_file(current_user: User):
 	return jsonify(already_exists), 200
 
 
-@app.route('/upcoming/slates', methods=["GET"])
+@app.route('/upcoming/slates_new', methods=["GET"])
 @token_required
 def upcoming_slates(current_user: User):
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
@@ -349,7 +349,22 @@ def upcoming_slates(current_user: User):
 	slates = sorted([group["draftGroup"] for group in cursor], key=lambda x: len(x["games"]), reverse=True)
 
 	return jsonify(slates), 200
-	
+
+
+@app.route('/upcoming/draftGroup', methods=["GET"])
+@token_required
+def upcoming_draftGroups(current_user: User):
+	draftGroupId = request.args.get("draftGroup")
+	print(draftGroupId)
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["draftGroups"]
+	cursor = collection.find({})
+	draftGroup = [x for x in cursor if str(x["draftGroup"]["draftGroupId"]) == str(draftGroupId)][0]
+
+	# return jsonify(draftGroup), 200
+	return jsonify(json.loads(json_util.dumps(draftGroup))), 200
+
 
 @app.route('/upcoming/games', methods=['GET'])
 @token_required
@@ -519,7 +534,7 @@ def get_recommendation(slateId: str):
 @token_required
 def get_draftgroup_lineups(current_user: User):
 	draft_group = request.args.get("draftGroup")
-
+	
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["lineups"]
@@ -527,6 +542,18 @@ def get_draftgroup_lineups(current_user: User):
 	lineups = [lineup for lineup in cursor]
 
 	return jsonify(json.loads(json_util.dumps(lineups))), 200
+
+@app.route('/lineup_new', methods=['GET'])
+@token_required
+def get_singe_lineup(current_user: User):
+	lineupId = request.args.get("lineupId")
+
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["lineups"]
+	lineup = collection.find_one({"lineup-id": lineupId})
+
+	return jsonify(json.loads(json_util.dumps(lineup))), 200
 
 
 @app.route('/lineups/createLineup', methods=['POST'])
@@ -538,9 +565,36 @@ def create_lineup_new(current_user: User):
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["lineups"]
-	lineup_id = collection.replace_one({"draft-group": data["draft-group"]}, data, upsert=True)
+	collection.replace_one({"draft-group": data["draft-group"]}, data, upsert=True)
 
 	return jsonify({ "message": "Success" }), 200
+
+
+@app.route('/lineups/createEmptyLineup', methods=['POST'])
+@token_required
+def create_emptpy_lineup(current_user: User):
+	data = json.loads(request.data)
+	data["user_public_id"] = current_user.public_id
+	data["draft-group"] = str(data["draft-group"])
+	data["lineup-id"] = str(uuid.uuid4()).replace("-", "").replace("%7D", "")
+	data["lineup"] = {
+		"qb": None,
+		"wr1": None,
+		"wr2": None,
+		"wr3": None,
+		"rb1": None,
+		"rb2": None,
+		"te": None,
+		"flex": None,
+		"dst": None
+  	}
+
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	db = client["DFSDatabase"]
+	collection = db["lineups"]
+	collection.insert_one(data)
+
+	return jsonify({ "lineupId": data["lineup-id"] }), 200
 
 
 @app.route('/history/search/week', methods=['GET'])

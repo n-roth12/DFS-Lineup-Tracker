@@ -4,13 +4,15 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import './CreateLineupDialog.scss'
+import { Link, useNavigate } from 'react-router-dom';
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
 
   const [lineups, setLineups] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (Object.keys(slate).length > 0) {
+    if (slate && Object.keys(slate).length > 0) {
       getLineups()
     }
   }, [slate])
@@ -26,13 +28,35 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
     setLineups(data)
   }
 
-  const createLineup = () => {
-    return
+  const exportLineups = () => {
+    return 
+  }
+
+  const createLineup = async (draftGroupId) => {
+    const res = await fetch(`/lineups/createEmptyLineup`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify({
+        "draft-group": draftGroupId
+      })
+    })
+    const data = await res.json()
+    console.log(data["lineupId"])
+    return data["lineupId"]
+  }
+
+  const createLineupWrapper = async (draftGroupId) => {
+    const lineupId = await createLineup(draftGroupId)
+    onClose()
+    navigate(`/createLineup/${draftGroupId}/${lineupId}`)
+
   }
 
   return (
     <Dialog open={showCreateLineupDialog} className="create-lineup-dialog" fullWidth maxWidth="md">
-      {slate["games"] &&
+      {slate && slate["games"] &&
       <>
           <DialogTitle className="title">
             <p className='title-upper'>{slate["minStartTime"].split("T")[0]} ({slate["draftGroupState"]})</p>
@@ -55,6 +79,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                 <h3>Your Lineups ({lineups.length})</h3>
                 <table className='lineups-table'>
                   <thead>
+                    <th></th>
                     <th>Title</th>
                     <th>Salary</th>
                     <th>Proj. Pts</th>
@@ -63,6 +88,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                   {lineups.length > 0 ?
                     lineups.map((lineup) => 
                       <tr className='user-lineup'>
+                        <td><Link className='lineup-link' to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}>Edit</Link></td>
                         <td>Untitled</td>
                         <td>$59000</td>
                         <td>159.09</td>
@@ -78,7 +104,8 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
           </DialogContent>
           <DialogActions className='actions'>
             <button className="close-btn" onClick={onClose}>Close</button>
-            <button className="create-btn" onClick={createLineup}>New Lineup</button>
+            <button className='export-btn' onClick={exportLineups}>Export CSV</button>
+            <button className="create-btn" onClick={() => createLineupWrapper(slate["draftGroupId"])}>New Lineup</button>
           </DialogActions>
       </>
       }

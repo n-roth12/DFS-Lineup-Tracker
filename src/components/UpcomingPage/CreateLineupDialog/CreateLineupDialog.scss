@@ -52,7 +52,11 @@
                     background-color: white;
                     margin-bottom: 5px;
                     width: 100%;
-                    
+                    .lineup-link {
+                        color: var(--btn-blue);
+                        text-decoration: none;
+                        font-size: 11pt;
+                    }
                 }
             }
         }

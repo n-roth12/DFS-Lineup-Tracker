@@ -7,6 +7,7 @@ import { FaPlus, FaSearch, FaTimes } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 import PlayerLink from './../PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
+import CreateLineupDialog from '../UpcomingPage/CreateLineupDialog/CreateLineupDialog'
 
 const CreateLineupPage = () => {
 
@@ -18,6 +19,9 @@ const CreateLineupPage = () => {
   const [posFilter, setPosFilter] = useState(new Set())
   const [remainingSalary, setRemainingSalary] = useState() 
   const [prevLineup, setPrevLineup] = useState({})
+  const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
+  const [slate, setSlate] = useState({})
+
   const [lineup, setLineup] = useState({
     "qb": null,
     "wr1": null,
@@ -90,9 +94,11 @@ const CreateLineupPage = () => {
   }
 
   useEffect(() => {
+    setShowCreateLineupDialog(false)
     getDraftables()
-    getDraftGroupLineups()
-  }, [])
+    getLineup()
+    getDraftGroup()
+  }, [draftGroupId, lineupId])
 
   useEffect(() => {
     getRemainingSalary()
@@ -108,6 +114,7 @@ const CreateLineupPage = () => {
     }
     setEditingPos(null)
   }
+
 
   const getDraftables = async () => {
     const res = await fetch(`/upcoming/players?draftGroup=${draftGroupId}`, {
@@ -128,16 +135,28 @@ const CreateLineupPage = () => {
     setDraftables(draftables)
   }
 
-  const getDraftGroupLineups = async () => {
-    const res = await fetch(`/lineups_new?draftGroup=${draftGroupId}`, {
+  const getLineup = async () => {
+    const res = await fetch(`/lineup_new?lineupId=${lineupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       }
     })
     const data = await res.json()
-    setLineup(data[0].lineup)
-    setPrevLineup(data[0].lineup)
+    setLineup(data.lineup)
+    setPrevLineup(data.lineup)
+  }
+
+  const getDraftGroup = async () => {
+    const res = await fetch(`/upcoming/draftGroup?draftGroup=${draftGroupId}`, {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
+    })
+    const data = await res.json()
+    setSlate(data["draftGroup"])
+    console.log(data)
   }
 
   const filterPlayers = (players) => {
@@ -257,6 +276,8 @@ const CreateLineupPage = () => {
 
   return (
     <div className="createLineupPage page">
+      <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
+				onClose={() => setShowCreateLineupDialog(false)} slate={slate} />
       <div className="header">
         <div className="header-inner">
           <div className="header-label">
@@ -284,6 +305,7 @@ const CreateLineupPage = () => {
       <div className='createLineupPage-inner'>
         <div className='lineup-outer'>
           <h2>Lineup</h2>
+          <button onClick={() => setShowCreateLineupDialog(true)}>View All</button>
           <div className='lineup-header'>
             <div className='lineup-header-info-wrapper'>
               <div className='lineup-header-info'>

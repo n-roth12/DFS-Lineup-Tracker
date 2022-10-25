@@ -104,7 +104,7 @@ function App() {
               </>
             } />
 
-            <Route path="createLineup/:draftGroupId" element={
+            <Route path="createLineup/:draftGroupId/:lineupId" element={
               <>
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
