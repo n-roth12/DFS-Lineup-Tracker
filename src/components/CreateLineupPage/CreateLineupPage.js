@@ -8,6 +8,7 @@ import { GrRevert } from 'react-icons/gr'
 import PlayerLink from './../PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../UpcomingPage/CreateLineupDialog/CreateLineupDialog'
+import GamesSlider from '../HistoryPage/GamesSlider/GamesSlider'
 
 const CreateLineupPage = () => {
 
@@ -211,7 +212,8 @@ const CreateLineupPage = () => {
       },
       body: JSON.stringify({
         "lineup": lineup,
-        "draft-group": draftGroupId
+        "draft-group": draftGroupId,
+        "lineup-id": lineupId
       })
     })
     .then(setPrevLineup(lineup))
@@ -302,10 +304,21 @@ const CreateLineupPage = () => {
           </div>
         </div>
       </div>
+      <div className='games-outer'>
+        <div className='games-inner'>
+        {slate["games"] && slate["games"].length > 0 && slate["games"].map((game) => 
+          <div className='game'>
+            <p>{game["description"]}</p>
+          </div>
+        )}
+        </div>
+      </div>
       <div className='createLineupPage-inner'>
         <div className='lineup-outer'>
-          <h2>Lineup</h2>
-          <button onClick={() => setShowCreateLineupDialog(true)}>View All</button>
+          <div className='title'>
+            <h2>Lineup</h2>
+            <button className="view-all-btn" onClick={() => setShowCreateLineupDialog(true)}>View All</button>
+          </div>
           <div className='lineup-header'>
             <div className='lineup-header-info-wrapper'>
               <div className='lineup-header-info'>

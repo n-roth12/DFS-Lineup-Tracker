@@ -63,6 +63,20 @@
     }
     .title {
         background-color: var(--grey-1);
+        .title-inner {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .close-btn {
+                color: white;
+                float: right;
+                font-size: 18pt;
+            }
+            .close-btn:hover {
+                cursor: pointer;
+            }
+        }
         p {
             color: white;
         }
@@ -86,6 +100,18 @@
             padding: 10px 20px 10px 20px;
             border-radius: 5px;
             box-shadow: var(--box-shadow-1);
+        }
+        .export-btn {
+            border: None;
+            background: None;
+            color: var(--btn-blue);
+            display: flex;
+            height: 100%;
+            align-items: center;
+            margin-right: 10px;
+            .export-icon {
+                margin-left: 5px;
+            }
         }
     }
 }

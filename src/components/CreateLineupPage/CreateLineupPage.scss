@@ -3,6 +3,21 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	.games-outer {
+		display: flex;
+		flex-direction: row;
+		.games-inner {
+			display: flex;
+			flex-direction: row;
+			.game {
+				background-color: white;
+				border: 1px solid var(--grey-2);
+				border-radius: 5px;
+				padding: 10px;
+				margin: 5px;
+			}
+		}
+	}
 
 	.createLineupPage-inner {
 		display: flex;
@@ -12,15 +27,27 @@
 		.lineup-outer {
 			flex: 2;
 			margin-left: 20px;
+			margin-right: 20px;
 			margin-top: 10px;
-			h2 {
-				text-align: left;
-				font-size: 18pt;
-				margin-left: 10px;
-			}
+			max-width: 450px;
 
+			.title {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				h2 {
+					text-align: left;
+					font-size: 18pt;
+					margin-left: 10px;
+				}
+				.view-all-btn {
+					background: None;
+					border: None;
+					color: var(--btn-blue);
+				}
+			}
 			.lineup-header {
-				max-width: 500px;
+				max-width: 450px;
 				box-shadow: var(--box-shadow-1);
 				background-color: var(--grey-3);
 
@@ -47,7 +74,7 @@
 
 			.lineup-btns {
 				width: 100%;
-				max-width: 500px;
+				max-width: 450px;
 				display: flex;
 				flex-direction: row;
 				button {
@@ -278,4 +305,9 @@
 			}
 		}
 	}
+	@keyframes moveSlideshow {
+		100% { 
+		  transform: translateX(-66.6666%);  
+		}
+	  }
 }

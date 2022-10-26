@@ -5,6 +5,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import './CreateLineupDialog.scss'
 import { Link, useNavigate } from 'react-router-dom';
+import { FaTimes } from 'react-icons/fa';
+import { BiExport } from 'react-icons/bi'
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
 
@@ -59,8 +61,11 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
       {slate && slate["games"] &&
       <>
           <DialogTitle className="title">
-            <p className='title-upper'>{slate["minStartTime"].split("T")[0]} ({slate["draftGroupState"]})</p>
-            <p className='title-lower'>Start Time: {slate["minStartTime"].split("T")[1]}</p>
+            <div className='title-inner'>
+              <p><span className='title-upper'>{slate["minStartTime"].split("T")[0]} ({slate["draftGroupState"]})</span>
+              <span className='title-lower'>  Start Time: {slate["minStartTime"].split("T")[1]}</span></p>
+              <FaTimes className='close-btn' onClick={onClose}/>
+            </div>
           </DialogTitle>
           <DialogContent className="content">
             <div className='content-inner'>
@@ -103,8 +108,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
             </div>
           </DialogContent>
           <DialogActions className='actions'>
-            <button className="close-btn" onClick={onClose}>Close</button>
-            <button className='export-btn' onClick={exportLineups}>Export CSV</button>
+            <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon'/></button>
             <button className="create-btn" onClick={() => createLineupWrapper(slate["draftGroupId"])}>New Lineup</button>
           </DialogActions>
       </>

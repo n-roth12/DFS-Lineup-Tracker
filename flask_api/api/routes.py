@@ -565,7 +565,7 @@ def create_lineup_new(current_user: User):
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["lineups"]
-	collection.replace_one({"draft-group": data["draft-group"]}, data, upsert=True)
+	collection.replace_one({"draft-group": data["draft-group"], "lineup-id": data["lineup-id"]}, data, upsert=True)
 
 	return jsonify({ "message": "Success" }), 200
 
