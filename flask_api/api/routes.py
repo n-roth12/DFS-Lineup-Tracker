@@ -23,6 +23,8 @@ import certifi
 from bson import json_util
 from bson.objectid import ObjectId
 from .ownership_service import OwnershipService
+from .SportsDataAdapter import SportsDataAdapter
+from .DraftKingsAdapter import DraftKingsAdapter
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
@@ -466,28 +468,21 @@ def test():
 
 
 def fetch_draftkings_draft_groups():
+	draftKingsDraftGroups = DraftKingsAdapter.getDraftKingsDraftGoups()
+	
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	res = requests.get("https://www.draftkings.com/lobby/getcontests?sport=nfl&format=json")
-	contests = res.json()["Contests"]
-	draft_group_ids = {contest["dg"] for contest in contests if not ('Madden' in contest['gameType'] or 'Showdown' in contest['gameType'] or 'Best Ball' in contest['gameType'] or 'Snake' in contest['gameType'])}
-
-	result = []
-	for draft_group_id in draft_group_ids:
-		draft_group_res = requests.get(f'https://api.draftkings.com/draftgroups/v1/{draft_group_id}')
-		result.append(draft_group_res.json())
-
 	db = client["DFSDatabase"]
 	collection = db["draftGroups"]
-	collection.insert_many(result)
+	collection.insert_many(draftKingsDraftGroups)
 
-	return result
+	return draftKingsDraftGroups
 
 
 def fetch_draftkings_draft_group_data(draft_group_id: str):
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	res = requests.get(f'https://api.draftkings.com/draftgroups/v1/draftgroups/{draft_group_id}/draftables?format=json')
-	players = {"draftables": res.json()["draftables"], "draft_group_id": draft_group_id}
+	players = DraftKingsAdapter.getDraftKingsDraftablesByDraftGroupId(draft_group_id)
+	players = { "draftables": players, "draft_group_id": draft_group_id }
 
+	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["draftables"]
 	collection.insert_one(players)
@@ -824,10 +819,7 @@ def get_current_week():
 	return jsonify(result), 200
 
 
-
-# @app.route('/scrape/projections', methods=['GET'])
-# def scrape_projections():
-# 	print('test2')
-# 	result = PointProjectionScraper.scrape()
-# 	print(result)
-
+@app.route('/getUpcomingDfsSlateOwnershipProjections', methods=['GET'])
+def getUpcomingDfsSlateOwnershipProjections():
+	result = SportsDataAdapter.getUpcomingDfsSlateOwnershipProjections()
+	return jsonify(result), 200

@@ -1,36 +1,20 @@
-Players Collection:
-
-    Player: {
-        id: int,
-        name: String,
-        firstName: String,
-        lastName: String,
-        team: {
-            teamId: int
-            city: String,
-            abbreviation: String,
-            name: String
-        }
-        position: String,
-        playerGameStats: [
-            {
-                gameId,
-
-
-            }
-        ]        
-    }
 
 
 DraftGroups Collection:
 
     DraftGroup: {
         draftGroupId: int,
+        sportsDataSlateId: int,
+        maxSalary: int,
         draftables: [
             draftablePlayer: {
                 fistName: String, 
                 lastName: String,
                 displayName: String,
+                shortName: String,
+                sportsDataId: int,
+                draftKingsId: int,
+                fanduelId: int,
                 team: {
                     teamId: int,
                     city: String,
@@ -38,24 +22,46 @@ DraftGroups Collection:
                     name: String
                 },
                 position: String,
-                ownershipProjection: int,
-                pointProjection: int,
-                salary: int,
+                fanduelOwnershipProjection: int,
+                draftKingsOwnershipProjection: int,
+                pprPointProjection: float,
+                standardPointProjection: float,
+                halfPointProjection: float,
+                dkSalarysalary: int,
+                fanduelSalary: int,
                 competition: {
                     competitionId: int,
                     name: String,
                     competitionDisplay: {}
                     startTime: datetime
                 },
-                shortName: String,
-                playerDkId: int
             }
         ]
     }
 
+Slates Collection:
 
-Scrape point projections -> save in its own collection?
-...wait... 
+    Slate: {
+        sportsDataSlateId: int,
+        startTime: datetime,
+        endtime: datetime,
+        games: [
+            
+        ],
+        
+    }
+
+1. Get upcoming slates from SportsData API
+2. Fetch DraftGroups from MongoDB
+    1. If these are not already in MongoDB   
+        1. Parse these into DraftGroups
+        2. Get player images from DraftKings API
+        3. Get 
+        2. Add them to MongoDB
+    2. If these are already in MongoDB
+        1. Update ownership projections, point projections, news
+3. Fetch 
+
 Get draftGroup from draftkings API -> pair them with their projections -> save draftGroup in Collection
 Create current week config Collection: stores the current week and draftgroup ids
       -> we can change this each week, then any changes to this causes us to refetch current draftgroups

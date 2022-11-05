@@ -9,9 +9,9 @@ import { FaTimes } from 'react-icons/fa';
 import { BiExport } from 'react-icons/bi'
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
-
   const [lineups, setLineups] = useState([])
   const navigate = useNavigate()
+  const [selectedLineups, setSelectedLineups] = useState([])
 
   useEffect(() => {
     if (slate && Object.keys(slate).length > 0) {
@@ -31,7 +31,25 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   }
 
   const exportLineups = () => {
-    return 
+    console.log(selectedLineups)
+  }
+
+  const toggleSelectAllLineups = () => {
+    if (selectedLineups.length > 0) {
+      setSelectedLineups([])
+    } else {
+      setSelectedLineups(lineups.map((lineup) => {
+        return lineup["lineup-id"]  
+      }))
+    }
+  }
+
+  const toggleSelectedLineup = (lineupId) => {
+    if (!selectedLineups.includes(lineupId)) {
+      setSelectedLineups(selectedLineups.concat(lineupId))
+    } else {
+      setSelectedLineups(selectedLineups.filter((lineup_id) => lineup_id !== lineupId))
+    }
   }
 
   const createLineup = async (draftGroupId) => {
@@ -84,6 +102,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                 <h3>Your Lineups ({lineups.length})</h3>
                 <table className='lineups-table'>
                   <thead>
+                    <th><button className='toggle-select-btn' onClick={toggleSelectAllLineups}>Toggle All</button></th>
                     <th></th>
                     <th>Title</th>
                     <th>Salary</th>
@@ -93,6 +112,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                   {lineups.length > 0 ?
                     lineups.map((lineup) => 
                       <tr className='user-lineup'>
+                        <input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input>
                         <td><Link className='lineup-link' to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}>Edit</Link></td>
                         <td>Untitled</td>
                         <td>$59000</td>

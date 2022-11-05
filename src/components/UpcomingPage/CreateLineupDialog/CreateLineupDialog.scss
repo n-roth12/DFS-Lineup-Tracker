@@ -46,6 +46,15 @@
                     margin: 0;
                     thead {
                         font-size: 11pt;
+                        .toggle-select-btn {
+                            border: 1px solid var(--grey-1);
+                            padding: 3px;
+                            border-radius: 5px;
+                            background-color: var(--grey-3);
+                        }
+                        .toggle-select-btn:hover {
+                            background-color: white;
+                        }
                     }
                 }
                 .user-lineup {
