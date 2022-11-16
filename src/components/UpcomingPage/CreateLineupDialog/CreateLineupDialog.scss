@@ -46,6 +46,10 @@
                     margin: 0;
                     thead {
                         font-size: 11pt;
+                        th:first-child {
+                            width: 30px;
+                            margin: 0;
+                        }
                         .toggle-select-btn {
                             border: 1px solid var(--grey-1);
                             padding: 3px;

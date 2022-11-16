@@ -102,11 +102,13 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                 <h3>Your Lineups ({lineups.length})</h3>
                 <table className='lineups-table'>
                   <thead>
-                    <th><button className='toggle-select-btn' onClick={toggleSelectAllLineups}>Toggle All</button></th>
-                    <th></th>
-                    <th>Title</th>
-                    <th>Salary</th>
-                    <th>Proj. Pts</th>
+                    <tr>
+                      <th><button className='toggle-select-btn' onClick={toggleSelectAllLineups}>All</button></th>
+                      <th></th>
+                      <th>Title</th>
+                      <th>Salary</th>
+                      <th>Proj. Pts</th>
+                    </tr>
                   </thead>
                   <tbody>
                   {lineups.length > 0 ?
@@ -128,7 +130,9 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
             </div>
           </DialogContent>
           <DialogActions className='actions'>
-            <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon'/></button>
+            {selectedLineups.length > 0 &&
+              <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon'/></button>
+            }
             <button className="create-btn" onClick={() => createLineupWrapper(slate["draftGroupId"])}>New Lineup</button>
           </DialogActions>
       </>

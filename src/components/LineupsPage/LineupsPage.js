@@ -60,13 +60,14 @@ const LineupsPage = () => {
   }
 
   const getUserLineups = async () => {
-  	const res = await axios.get('/users', {
-  		headers: {
-  			'x-access-token': sessionStorage.dfsTrackerToken
-  		}
-  	})
+	const res = await fetch(`/users/`, {
+		method: 'GET',
+		headers: {
+		  'x-access-token': sessionStorage.dfsTrackerToken
+		}
+	})
     const userLineups = res.data
-    await setLineups(userLineups)
+    setLineups(userLineups)
     setLoadingLineups(false)
   }
 
@@ -207,7 +208,7 @@ const LineupsPage = () => {
 
   return (
   	<div className="lineups-page page">
-  		{!loadingLineups ?
+  		{!loadingLineups && lineups ?
   		<>
   			<div className="main container">
 					<div className="filter-btn-wrapper">

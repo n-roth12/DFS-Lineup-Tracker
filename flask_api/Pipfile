@@ -48,6 +48,7 @@ zipp = "==3.8.0"
 pymongo = {extras = ["srv"], version = "*"}
 packaging = "==21.3"
 psycopg2-binary = "==2.9.3"
+boto3 = "*"
 
 [dev-packages]
 

@@ -23,5 +23,14 @@ ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 migrate = Migrate(app, db)
+from .blueprints.LineupsBlueprint import lineups_blueprint
+from .blueprints.UsersBlueprint import users_blueprint
+from .blueprints.HistoryBlueprint import history_blueprint
+from .blueprints.UpcomingBlueprint import upcoming_blueprint
 from api import routes
+app.register_blueprint(lineups_blueprint)
+app.register_blueprint(users_blueprint)
+app.register_blueprint(history_blueprint)
+app.register_blueprint(upcoming_blueprint)
 
+print([str(p) for p in app.url_map.iter_rules()])

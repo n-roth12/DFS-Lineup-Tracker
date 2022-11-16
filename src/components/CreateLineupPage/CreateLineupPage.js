@@ -254,6 +254,10 @@ const CreateLineupPage = () => {
     return draftStatAttributes.find((stat) => stat['id'] === index)["value"]
   }
 
+  const exportLineup = () => {
+    console.log(lineup)
+  }
+
   const getRemainingSalary = () => {
     var remaining = 60000
     for (const [k,  lineupSlot] of Object.entries(lineup)) {
@@ -301,6 +305,10 @@ const CreateLineupPage = () => {
               className={`${activeOption === "import" ? "active" : ""}`}
               onClick={() => setActiveOption("import")}
             >Import</button>
+            <button
+              className={`${activeOption === "export" ? "active" : ""}`}
+              onClick={exportLineup}
+            >Export</button>
           </div>
         </div>
       </div>
