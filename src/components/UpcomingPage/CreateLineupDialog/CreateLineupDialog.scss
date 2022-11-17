@@ -126,5 +126,18 @@
                 margin-left: 5px;
             }
         }
+        .delete-btn {
+            border: None;
+            background: None;
+            color: red;
+            display: flex;
+            height: 100%;
+            align-items: center;
+            margin-right: 15px;
+            margin-bottom: 0;
+            .trash-icon {
+                margin-left: 5px;
+            }
+        }
     }
 }

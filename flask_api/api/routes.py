@@ -13,16 +13,16 @@ from pymongo import MongoClient
 import certifi
 from bson import json_util
 from .date_services import getCurrentWeek
-from .redis_service import RedisService
 from .ownership_service import OwnershipService
 from .SportsDataAdapter import SportsDataAdapter
 from .DraftKingsAdapter import DraftKingsAdapter
+from .controllers.RedisController import RedisController
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
-redis_service = RedisService(host='localhost', port=6379, db=0)
+RedisController = RedisController()
 
 # dynamodb = boto3.resource('dynamodb',
 #                           aws_access_key_id="anything",
@@ -63,9 +63,9 @@ def get_players():
 	year = request.args.get('year')
 	week = request.args.get('week')
 
-	players = redis_service.get_players(year, week)
+	players = RedisController.get_players(year, week)
 	if not players:
-		players = redis_service.set_players(year, week)
+		players = RedisController.set_players(year, week)
 
 	return jsonify({ 'players': players }), 200
 
@@ -122,9 +122,9 @@ def team_info(current_user: User):
 	if not year or not week:
 		return jsonify({ 'Error': 'Year or week not specified.' }), 400
 
-	teams_info = redis_service.get_teams_info(year, week)
+	teams_info = RedisController.get_teams_info(year, week)
 	if not teams_info:
-		teams_info = redis_service.set_teams_info(year, week)
+		teams_info = RedisController.set_teams_info(year, week)
 
 	return jsonify(teams_info), 200
 

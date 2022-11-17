@@ -48,7 +48,7 @@ const LineupsPage = () => {
 
   useEffect(() => {
   	getYears()
-  	loadGraphData()
+  	lineups && lineups.length && loadGraphData()
   }, [loadingLineups])
 
   useEffect(() => {
@@ -60,20 +60,21 @@ const LineupsPage = () => {
   }
 
   const getUserLineups = async () => {
-	const res = await fetch(`/users/`, {
+	const res = await fetch(`/users/lineups`, {
 		method: 'GET',
 		headers: {
 		  'x-access-token': sessionStorage.dfsTrackerToken
 		}
 	})
-    const userLineups = res.data
+    const userLineups = await res.json()
+	console.log(userLineups)
     setLineups(userLineups)
     setLoadingLineups(false)
   }
 
  	const getYears = () => {
  		var temp = [...years]
- 		lineups.length > 0 && lineups.map((lineup) => {
+ 		lineups && lineups.length > 0 && lineups.map((lineup) => {
  			if (!(temp.includes(lineup.year))) {
  				temp.push(lineup.year)
  			}

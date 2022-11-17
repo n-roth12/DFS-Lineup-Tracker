@@ -3,11 +3,12 @@ from api import db, app
 import json
 import jwt
 import uuid
+from bson import json_util
 
 from ..models.user import User
 from ..models.lineup import Lineup
 from ..routes import token_required
-
+from ..controllers.MongoController import MongoController
 
 users_blueprint = Blueprint('users_blueprint', __name__, url_prefix='/users')
 
@@ -50,6 +51,7 @@ def login_user():
 @users_blueprint.route('/', methods=['GET'])
 @token_required
 def get_user(current_user: User):
+	# TODO: create new query to get lineups from mongodb 
 	user_lineups = db.session.query(Lineup) \
 					.filter(Lineup.user_public_id == current_user.public_id) \
 					.order_by(Lineup.year.desc(), Lineup.week.desc()).all()
@@ -68,5 +70,15 @@ def get_user(current_user: User):
 		response["percentile"] = user_lineup.percentile
 
 		whole_response.append(response)
+	print(whole_response)
 
 	return jsonify(whole_response), 200
+
+
+@users_blueprint.route('/lineups', methods=['GET'])
+@token_required
+def get_user_lineups(current_user: User):
+	lineups = MongoController().get_user_lineups(current_user.public_id)
+
+	print(lineups)
+	return jsonify(json.loads(json_util.dumps(lineups))), 200

@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import './CreateLineupDialog.scss'
 import { Link, useNavigate } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
-import { BiExport } from 'react-icons/bi'
+import { BiExport, BiTrash } from 'react-icons/bi'
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   const [lineups, setLineups] = useState([])
@@ -31,6 +31,10 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   }
 
   const exportLineups = () => {
+    console.log(selectedLineups)
+  }
+
+  const deleteLineups = () => {
     console.log(selectedLineups)
   }
 
@@ -78,63 +82,66 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
     <Dialog open={showCreateLineupDialog} className="create-lineup-dialog" fullWidth maxWidth="md">
       {slate && slate["games"] &&
       <>
-          <DialogTitle className="title">
-            <div className='title-inner'>
-              <p><span className='title-upper'>{slate["minStartTime"].split("T")[0]} ({slate["draftGroupState"]})</span>
-              <span className='title-lower'>  Start Time: {slate["minStartTime"].split("T")[1]}</span></p>
-              <FaTimes className='close-btn' onClick={onClose}/>
+        <DialogTitle className="title">
+          <div className='title-inner'>
+            <p><span className='title-upper'>{slate["minStartTime"].split("T")[0]} ({slate["draftGroupState"]})</span>
+            <span className='title-lower'>  Start Time: {slate["minStartTime"].split("T")[1]}</span></p>
+            <FaTimes className='close-btn' onClick={onClose}/>
+          </div>
+        </DialogTitle>
+        <DialogContent className="content">
+          <div className='content-inner'>
+            <div className="games">
+              <h3>{slate["games"].length} Games</h3>
+              {slate["games"].length > 0 &&
+                slate["games"].map((game) => 
+                <div className="game">
+                  <p>{game["description"]}</p>
+                  <p>{game["startDate"].split("T")[0]}</p>
+                </div>
+                )
+              }
             </div>
-          </DialogTitle>
-          <DialogContent className="content">
-            <div className='content-inner'>
-              <div className="games">
-                <h3>{slate["games"].length} Games</h3>
-                {slate["games"].length > 0 &&
-                  slate["games"].map((game) => 
-                  <div className="game">
-                    <p>{game["description"]}</p>
-                    <p>{game["startDate"].split("T")[0]}</p>
-                  </div>
-                  )
-                }
-              </div>
-              <div className="user-lineups">
-                <h3>Your Lineups ({lineups.length})</h3>
-                <table className='lineups-table'>
-                  <thead>
-                    <tr>
-                      <th><button className='toggle-select-btn' onClick={toggleSelectAllLineups}>All</button></th>
-                      <th></th>
-                      <th>Title</th>
-                      <th>Salary</th>
-                      <th>Proj. Pts</th>
+            <div className="user-lineups">
+              <h3>Your Lineups ({lineups.length})</h3>
+              <table className='lineups-table'>
+                <thead>
+                  <tr>
+                    <th><button className='toggle-select-btn' onClick={toggleSelectAllLineups}>All</button></th>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Salary</th>
+                    <th>Proj. Pts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {lineups.length > 0 ?
+                  lineups.map((lineup) => 
+                    <tr className='user-lineup'>
+                      <input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input>
+                      <td><Link className='lineup-link' to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}>Edit</Link></td>
+                      <td>Untitled</td>
+                      <td>$59000</td>
+                      <td>159.09</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                  {lineups.length > 0 ?
-                    lineups.map((lineup) => 
-                      <tr className='user-lineup'>
-                        <input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input>
-                        <td><Link className='lineup-link' to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}>Edit</Link></td>
-                        <td>Untitled</td>
-                        <td>$59000</td>
-                        <td>159.09</td>
-                      </tr>
-                    )
-                  :
-                    <p>No Lineups Created</p>
-                  }
-                  </tbody>
-                </table>
-              </div>
+                  )
+                :
+                  <p>No Lineups Created</p>
+                }
+                </tbody>
+              </table>
             </div>
-          </DialogContent>
-          <DialogActions className='actions'>
-            {selectedLineups.length > 0 &&
+          </div>
+        </DialogContent>
+        <DialogActions className='actions'>
+          {selectedLineups.length > 0 &&
+            <>
+              <button className='delete-btn' onClick={deleteLineups}>Delete <BiTrash className='trash-icon' /></button>
               <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon'/></button>
-            }
-            <button className="create-btn" onClick={() => createLineupWrapper(slate["draftGroupId"])}>New Lineup</button>
-          </DialogActions>
+            </>
+          }
+          <button className="create-btn" onClick={() => createLineupWrapper(slate["draftGroupId"])}>New Lineup</button>
+        </DialogActions>
       </>
       }
     </Dialog>

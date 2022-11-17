@@ -32,5 +32,3 @@ app.register_blueprint(lineups_blueprint)
 app.register_blueprint(users_blueprint)
 app.register_blueprint(history_blueprint)
 app.register_blueprint(upcoming_blueprint)
-
-print([str(p) for p in app.url_map.iter_rules()])

@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify, request
 from api import app, db
 import json
-from pymongo import MongoClient
-import certifi
 import uuid
 import redis
 from pandas import read_csv
@@ -11,14 +9,12 @@ from ..routes import token_required
 from ..models.user import User
 from ..models.lineup import Lineup, LineupSchema
 from ..date_services import parseDate
+from ..controllers.MongoController import MongoController
 
 lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineups')
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
-@lineups_blueprint.route('/test', methods=['GET'])
-def test():
-    return 'success', 200
 
 @lineups_blueprint.route('/', defaults={'id': None}, methods=['GET'])
 @app.route('/lineups/<id>', methods=['GET'])
@@ -70,11 +66,8 @@ def create_lineup(current_user: User):
 def create_lineup_new(current_user: User):
 	data = json.loads(request.data)
 	data["user_public_id"] = current_user.public_id
-
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSDatabase"]
-	collection = db["lineups"]
-	collection.replace_one({"draft-group": data["draft-group"], "lineup-id": data["lineup-id"]}, data, upsert=True)
+	
+	MongoController.updateLineup(data)
 
 	return jsonify({ "message": "Success" }), 200
 
@@ -98,12 +91,10 @@ def create_emptpy_lineup(current_user: User):
 		"dst": None
   	}
 
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSDatabase"]
-	collection = db["lineups"]
-	collection.insert_one(data)
+	MongoController.createLineup(data)
 
 	return jsonify({ "lineupId": data["lineup-id"] }), 200
+
 
 @lineups_blueprint.route('/<id>', methods=['PUT'])
 @token_required

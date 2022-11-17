@@ -1,15 +1,14 @@
 from flask import jsonify, Blueprint, request
 from api import app
 import json
-import redis
 import requests
 
 from ..routes import token_required
 from ..models.user import User
-
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
+from ..controllers.RedisController import RedisController
 
 history_blueprint = Blueprint('history_blueprint', __name__, url_prefix='/history')
+RedisController = RedisController()
 
 @history_blueprint.route('/search/week', methods=['GET'])
 @token_required
@@ -26,53 +25,17 @@ def research_search(current_user: User):
 	except ValueError:
 		return jsonify({ 'Error': 'Year and week must be integers!' }), 400
 
-	key1 = f'players_{year}_{week}'
-	players_from_cache = redis_client.get(key1)
+	players_from_cache = RedisController.get_players(year, week)
 
 	if players_from_cache is None:
-		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}')
-		players_from_api = res.json()
-		qbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=QB')
-		qbs_from_api = qbs_res.json()
-		rbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=RB')
-		rbs_from_api = rbs_res.json()
-		wrs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=WR')
-		wrs_from_api = wrs_res.json()
-		tes_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=TE')
-		tes_from_api = tes_res.json()
-		def_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&week={week}&pos=dst')
-		defenses_from_api = def_res.json()
+		players_from_cache = RedisController.set_players(year, week)
 
-		result = {
-			"All": players_from_api, 
-			"QB": qbs_from_api,
-			"RB": rbs_from_api,
-			"WR": wrs_from_api,
-			"TE": tes_from_api,
-			"DST": defenses_from_api 
-		}
+	players = players_from_cache
 
-		redis_client.set(key1, json.dumps(result))
-		players_from_cache = redis_client.get(key1)
+	games = RedisController.get_games(year, week)
 
-	players = json.loads(players_from_cache)
-
-	key2 = f'games_{year}_{week}'
-	games_from_cache = redis_client.get(key2)
-
-	if games_from_cache is None:
-		data = requests.get(f'{app.config["FFB_API_URL"]}/api/teamstats?week={week}&year={year}').json()
-		games = []
-
-		for team, team_data in data.items():
-			if len(team_data):
-				game = team_data[0]['stats']['game']
-				if game not in games:
-					games.append(game)
-		redis_client.set(key2, json.dumps(games))
-		games_from_cache = redis_client.get(key2)
-
-	games = json.loads(games_from_cache)
+	if games is None:
+		games = RedisController.set_games(year, week)
 
 	return jsonify({ 'players': players, 'games': games}), 200
 
@@ -84,35 +47,10 @@ def research_year(current_user: User):
 	if not year:
 		return jsonify({ 'Error': 'Year not specified.' }), 400
 
-	key = f'players_{year}'
-	players_from_cache = redis_client.get(key)
-	if players_from_cache == None:
-		res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}')
-		players_from_api = res.json()
-		qbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=QB')
-		qbs_from_api = qbs_res.json()
-		rbs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=RB')
-		rbs_from_api = rbs_res.json()
-		wrs_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=WR')
-		wrs_from_api = wrs_res.json()
-		tes_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=TE')
-		tes_from_api = tes_res.json()
-		def_res = requests.get(f'{app.config["FFB_API_URL"]}api/top?year={year}&pos=dst')
-		defenses_from_api = def_res.json()		
+	players = RedisController.get_year(year)
 
-		result = {
-			"All": players_from_api, 
-			"QB": qbs_from_api,
-			"RB": rbs_from_api,
-			"WR": wrs_from_api,
-			"TE": tes_from_api,
-			"DST": defenses_from_api 
-		}
-
-		redis_client.set(key, json.dumps(result))
-		players_from_cache = redis_client.get(key)
-
-	players = json.loads(players_from_cache)
+	if players == None:
+		players = RedisController.set_players(year)
 
 	return jsonify({ 'players': players, 'games': [] }), 200
 
