@@ -1,16 +1,5 @@
 import { useState, useEffect } from 'react'
-import GamesSlider from '../HistoryPage/GamesSlider/GamesSlider'
-import PlayersList from './PlayersList/PlayersList'
 import './UpcomingPage.scss'
-import Dialog from "@material-ui/core/Dialog";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import Button from "@material-ui/core/Button";
-import { Link } from 'react-router-dom'
-import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
-import PlayerNew from '../PlayerNew/PlayerNew'
 import PlayerLink from '../PlayerLink/PlayerLink';
 import CreateLineupDialog from './CreateLineupDialog/CreateLineupDialog';
 
@@ -64,7 +53,7 @@ const UpcomingPage = ({ week, year }) => {
 			<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={closeDialogWrapper} slate={createLineupDialogContent} />
 			<div className='slatesWrapper-outer'>
-				<h2>Choose a slate:</h2>
+				<h2>Slates</h2>
 				{slates.length ? 
 					<div className="slatesWrapper">
 						{slates.map((slate) => (

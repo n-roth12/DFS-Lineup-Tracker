@@ -10,10 +10,11 @@ import { BiExport, BiTrash, BiDownload } from 'react-icons/bi'
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   const [lineups, setLineups] = useState([])
-  const navigate = useNavigate()
   const [selectedLineups, setSelectedLineups] = useState([])
   const [file, setFile] = useState()
-  const [download, setDownload] = useState()
+  const [lineupsLoading, setLineupsLoading] = useState(false)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (slate && Object.keys(slate).length > 0) {
@@ -22,6 +23,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   }, [slate])
 
   const getLineups = async () => {
+    setLineupsLoading(true)
     const res = await fetch(`/lineups_new?draftGroup=${slate["draftGroupId"]}`, {
       method: 'GET',
       headers: {
@@ -30,6 +32,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
     })
     const data = await res.json()
     setLineups(data)
+    setLineupsLoading(false)
   }
 
   const exportLineups = async () => {
@@ -48,7 +51,6 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   const downloadFile = (blob) => {
     const url = window.URL.createObjectURL(blob)
     setFile(url)
-    setDownload("test.csv")
     setSelectedLineups([])
   }
 
@@ -58,7 +60,6 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
 
   const toggleSelectAllLineups = () => {
     setFile(null)
-    setDownload(null)
     if (selectedLineups.length > 0) {
       setSelectedLineups([])
     } else {
@@ -70,7 +71,6 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
 
   const toggleSelectedLineup = (lineupId) => {
     setFile(null)
-    setDownload(null)
     if (!selectedLineups.includes(lineupId)) {
       setSelectedLineups(selectedLineups.concat(lineupId))
     } else {
@@ -99,7 +99,6 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   }
 
   const closeDialog = () => {
-    setDownload(null)
     setFile(null)
     onClose()
   }
@@ -141,7 +140,10 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                   </tr>
                 </thead>
                 <tbody>
-                {lineups.length > 0 ?
+                {lineupsLoading ?
+                  <tr><td colSpan={5}><h3 className='loading'>Loading...</h3></td></tr>
+                :
+                lineups.length > 0 ?
                   lineups.map((lineup) => 
                     <tr className='user-lineup'>
                       <input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input>
@@ -152,8 +154,9 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                     </tr>
                   )
                 :
-                  <p>No Lineups Created</p>
+                  <tr><td colSpan={5}><h3>No Lineups Created</h3></td></tr>
                 }
+              
                 </tbody>
               </table>
             </div>
@@ -161,7 +164,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
         </DialogContent>
         <DialogActions className='actions'>
           {file !== null &&
-            <a className='download-btn' href={file} download={download}>{download} <BiDownload className='download-icon'/></a>
+            <a className='download-btn' href={file} download={`lineups_${slate["draftGroupId"]}.csv`}>lineups_{slate["draftGroupId"]}.csv <BiDownload className='download-icon'/></a>
           }
           {selectedLineups.length > 0 &&
             <>

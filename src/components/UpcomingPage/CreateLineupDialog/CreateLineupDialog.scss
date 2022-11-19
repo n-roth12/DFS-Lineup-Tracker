@@ -2,11 +2,9 @@
     .content {
         background-color: var(--grey-3);
         max-height: 400px;
-
         .content-inner {
             display: flex;
             flex-direction: row;
-
             .games {
                 width: fit-content;
                 margin-right: 20px;
@@ -59,6 +57,9 @@
                         .toggle-select-btn:hover {
                             background-color: white;
                         }
+                    }
+                    h3 {
+                        font-size: 12pt;
                     }
                 }
                 .user-lineup {
@@ -145,7 +146,7 @@
             height: 100%;
             align-items: center;
             margin-right: 10px;
-            font-size: 13pt;
+            font-size: 12pt;
             .download-icon {
                 margin-left: 5px;
             }
