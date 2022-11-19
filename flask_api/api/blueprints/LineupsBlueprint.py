@@ -1,9 +1,11 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_file, Response
 from api import app, db
 import json
 import uuid
 import redis
 from pandas import read_csv
+import csv
+from io import StringIO
 
 from ..routes import token_required
 from ..models.user import User
@@ -14,6 +16,8 @@ from ..controllers.MongoController import MongoController
 lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineups')
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
+
+MongoController = MongoController()
 
 
 @lineups_blueprint.route('/', defaults={'id': None}, methods=['GET'])
@@ -167,3 +171,31 @@ def upload_file(current_user: User):
 				already_exists += 1
 
 	return jsonify(already_exists), 200
+
+
+@lineups_blueprint.route('/export', methods=['POST'])
+@token_required
+def export_lineups(current_user: User):
+	data = json.loads(request.data)
+	
+	file = StringIO()
+	writer = csv.writer(file)
+	writer.writerow(["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"])
+	print(len(data))
+	for entry in data:
+		lineup = entry["lineup"]
+		writer.writerow([lineup["qb"]["draftableId"] if lineup.get("qb") else None,
+			lineup["rb1"]["draftableId"] if lineup.get("rb1") else None,
+			lineup["rb2"]["draftableId"] if lineup.get("rb2") else None,
+			lineup["wr1"]["draftableId"] if lineup.get("wr1") else None,
+			lineup["wr2"]["draftableId"] if lineup.get("wr2") else None,
+			lineup["wr3"]["draftableId"] if lineup.get("wr3") else None,
+			lineup["te"]["draftableId"] if lineup.get("te") else None,
+			lineup["flex"]["draftableId"] if lineup.get("flex") else None,
+			lineup["dst"]["draftableId"] if lineup.get("dst") else None,
+		])
+		
+	return Response(
+		file.getvalue(),
+		mimetype="text/csv",
+		headers={"Content-disposition": "attachment; filename=myplot.csv"})

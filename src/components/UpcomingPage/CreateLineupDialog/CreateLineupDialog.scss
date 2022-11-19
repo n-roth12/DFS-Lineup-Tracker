@@ -139,5 +139,16 @@
                 margin-left: 5px;
             }
         }
+        .download-btn {
+            color: var(--btn-blue);
+            display: flex;
+            height: 100%;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 13pt;
+            .download-icon {
+                margin-left: 5px;
+            }
+        }
     }
 }

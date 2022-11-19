@@ -6,12 +6,14 @@ import DialogContent from "@material-ui/core/DialogContent";
 import './CreateLineupDialog.scss'
 import { Link, useNavigate } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
-import { BiExport, BiTrash } from 'react-icons/bi'
+import { BiExport, BiTrash, BiDownload } from 'react-icons/bi'
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   const [lineups, setLineups] = useState([])
   const navigate = useNavigate()
   const [selectedLineups, setSelectedLineups] = useState([])
+  const [file, setFile] = useState()
+  const [download, setDownload] = useState()
 
   useEffect(() => {
     if (slate && Object.keys(slate).length > 0) {
@@ -30,8 +32,24 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
     setLineups(data)
   }
 
-  const exportLineups = () => {
-    console.log(selectedLineups)
+  const exportLineups = async () => {
+    const lineupsToExport = lineups.filter((lineup) => selectedLineups.includes(lineup["lineup-id"]))
+    const res = await fetch(`/lineups/export`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify(lineupsToExport)
+    })
+    const data = await res.blob()
+    downloadFile(data)
+  }
+
+  const downloadFile = (blob) => {
+    const url = window.URL.createObjectURL(blob)
+    setFile(url)
+    setDownload("test.csv")
+    setSelectedLineups([])
   }
 
   const deleteLineups = () => {
@@ -39,6 +57,8 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   }
 
   const toggleSelectAllLineups = () => {
+    setFile(null)
+    setDownload(null)
     if (selectedLineups.length > 0) {
       setSelectedLineups([])
     } else {
@@ -49,6 +69,8 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
   }
 
   const toggleSelectedLineup = (lineupId) => {
+    setFile(null)
+    setDownload(null)
     if (!selectedLineups.includes(lineupId)) {
       setSelectedLineups(selectedLineups.concat(lineupId))
     } else {
@@ -67,7 +89,6 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
       })
     })
     const data = await res.json()
-    console.log(data["lineupId"])
     return data["lineupId"]
   }
 
@@ -75,7 +96,12 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
     const lineupId = await createLineup(draftGroupId)
     onClose()
     navigate(`/createLineup/${draftGroupId}/${lineupId}`)
+  }
 
+  const closeDialog = () => {
+    setDownload(null)
+    setFile(null)
+    onClose()
   }
 
   return (
@@ -86,7 +112,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
           <div className='title-inner'>
             <p><span className='title-upper'>{slate["minStartTime"].split("T")[0]} ({slate["draftGroupState"]})</span>
             <span className='title-lower'>  Start Time: {slate["minStartTime"].split("T")[1]}</span></p>
-            <FaTimes className='close-btn' onClick={onClose}/>
+            <FaTimes className='close-btn' onClick={closeDialog}/>
           </div>
         </DialogTitle>
         <DialogContent className="content">
@@ -134,6 +160,9 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
           </div>
         </DialogContent>
         <DialogActions className='actions'>
+          {file !== null &&
+            <a className='download-btn' href={file} download={download}>{download} <BiDownload className='download-icon'/></a>
+          }
           {selectedLineups.length > 0 &&
             <>
               <button className='delete-btn' onClick={deleteLineups}>Delete <BiTrash className='trash-icon' /></button>
