@@ -34,6 +34,15 @@
 						border-right: 1px solid gray;
 					}
 				}
+				.header-labels th:hover {
+					cursor: pointer;
+					background-color: var(--grey-2);
+				}
+				.header-labels .selected {
+					background-color: var(--grey-2);
+					border: None;
+					outline: None;
+				}
 			
 				.table-header {
 					background-color: #d3d3d3;
@@ -77,6 +86,7 @@
 			width: 100%;
 			align-items: left;
 			overflow-x: auto;
+			padding: 6px;
 			
 			.slate {
 				min-width: 180px;
@@ -84,12 +94,14 @@
 				padding: 12px;
 				margin-right: 12px;
 				border-radius: 12px;
-				background-color: #e2e2e2;
+				background-color: white;
 				cursor: pointer;
 				text-align: center;
 				text-decoration: none;
 				font-weight: 600;
 				line-height: 10pt;
+				overflow: visible;
+				box-shadow: var(--box-shadow-1);
 			}
 			.slate:hover {
 				border: 1px solid grey;

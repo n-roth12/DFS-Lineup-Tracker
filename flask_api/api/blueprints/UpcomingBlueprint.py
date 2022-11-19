@@ -10,8 +10,11 @@ import requests
 from ..routes import token_required
 from ..models.user import User
 from ..ownership_service import OwnershipService
+from ..controllers.MongoController import MongoController
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
+MongoController = MongoController()
+OwnershipService = OwnershipService()
 
 upcoming_blueprint = Blueprint('upcoming_blueprint', __name__, url_prefix='/upcoming')
 
@@ -78,8 +81,9 @@ def upcoming_players(current_user: User):
 @upcoming_blueprint.route('/ownership', methods=["GET"])
 @token_required
 def upcoming_projections(current_user: User):
+	projections = OwnershipService.getOwnershipProjections()
 
-	return jsonify(OwnershipService.getOwnershipProjections()), 200
+	return jsonify(projections), 200
 
 
 @upcoming_blueprint.route('/slates', methods=['GET'])
@@ -103,3 +107,15 @@ def get_slates(current_user: User):
 		slates = json.loads(slates_from_cache)
 	
 	return jsonify(slates), 200
+
+
+@upcoming_blueprint.route('/ownership', methods=["POST"])
+def set_projections():
+
+	print("Scraping ownership projections...")
+	projections = OwnershipService.scrape_ownership()
+	print("Finished scraping ownership projections.")
+
+	MongoController.addProjections(projections)
+
+	return jsonify(projections), 200

@@ -173,22 +173,6 @@ def get_lineup_data(lineup_id: int):
 
 # 	return 'test', 200
 
-@app.route('/ownership', methods=["POST"])
-def set_projections():
-
-	print("Scraping ownership projections...")
-	projections = OwnershipService.scrape_ownership()
-	print(projections)
-	
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSOwnershipProjections"]
-	collection = db["projections"]
-	collection.insert_one(json.loads(json_util.dumps(projections)))
-	print("Finished scraping ownership projections.")
-
-	return jsonify(projections), 200
-	
-
 
 
 @app.route("/test/scrape1", methods=["POST"])

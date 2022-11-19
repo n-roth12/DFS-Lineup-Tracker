@@ -1,4 +1,5 @@
 from api import app
+from flask import jsonify
 import requests
 import time
 import json
@@ -10,16 +11,18 @@ from random import uniform
 
 class OwnershipService:
 
-    def scramble_ownership(ownership_projection):
-        return round(ownership_projection + uniform(-0.2, 0.2), 2)
+    def __init__(self) -> None:
+        self.pff_url = "https://www.pff.com/dfs/ownership"
 
-    def scrape_ownership():
-        url = "https://www.pff.com/dfs/ownership"
+    def scramble_ownership(self, ownership_projection):
+        return abs(round(ownership_projection + uniform(-0.2, 0.2), 2))
+
+    def scrape_ownership(self):
 
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'}
         for i in range(100):
             try:
-                results = requests.get(url, headers=headers)
+                results = requests.get(self.pff_url, headers=headers)
             except requests.exceptions.ConnectionError:
                 time.sleep(1)
             else:
@@ -43,7 +46,7 @@ class OwnershipService:
                 "opponent": row_data[3].text,
                 "position": row_data[4].text,
                 "salary": row_data[5].text,
-                "ownership_projection": scramble_ownership(float(row_data[6].text))
+                "ownership_projection": self.scramble_ownership(float(row_data[6].text.replace("%", "")))
             }
 
         draftkings_tbody = ownership_containers[1].find('tbody')
@@ -59,25 +62,28 @@ class OwnershipService:
                 "opponent": row_data[3].text,
                 "position": row_data[4].text,
                 "salary": row_data[5].text,
-                "ownership_projection": scramble_ownership(float(row_data[6].text))
+                "ownership_projection": self.scramble_ownership(float(row_data[6].text.replace("%", "")))
             }
 
-        return(result)
+        result_list = [{"name": k, "stats": v} for k, v in result.items()]
+
+        return(result_list)
 
     
-    def getOwnershipProjections():
+    def getOwnershipProjections(self):
         client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
         db = client["DFSOwnershipProjections"]
         collection = db["projections"]
         projections = collection.find({})[0]
         del projections["_id"]
+        print(projections)
 
         # players = json.loads(json_util.dumps(projections))
-        # players_list = [{key: value} for key, value in players.items()]
+        # players_list = [{key: value} for key, value in projections.items()]
         # print(players_list)
         
-        # return jsonify(players_list), 200
-        return json.loads(json_util.dumps(projections))
+        return projections
+        # return json.loads(json_util.dumps(projections))
 
     
 # https://www.fantasypros.com/daily-fantasy/nfl/draftkings-salary-changes.php another website I can use to check against for salary data    

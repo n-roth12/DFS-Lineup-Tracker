@@ -10,6 +10,8 @@ const UpcomingPage = ({ week, year }) => {
 	const [players, setPlayers] = useState([])
 	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
+	const [sortColumn, setSortColumn] = useState(["", "name"])
+	const [isSortUp, setIsSortUp] = useState(false)
 
 	useEffect(() => {
 		getPlayers()
@@ -45,8 +47,18 @@ const UpcomingPage = ({ week, year }) => {
 			}
 		})
 		const result = await res.json()
-		setPlayers(result)
+		setPlayers(result["players"])
 	}
+
+	const sortRows = (site, attribute) => {
+		if (attribute === "name") {
+			setPlayers([...players].sort((a, b) => a[attribute] >= b[attribute] ? (isSortUp ? 1 : -1) : (isSortUp ? -1 : 1)))
+		} else {
+			setPlayers([...players].sort((a, b) => a["stats"][site][attribute] >= b["stats"][site][attribute] ? (isSortUp ? 1 : -1) : (isSortUp ? -1 : 1)))
+		}
+		setIsSortUp(!isSortUp)
+		setSortColumn([site, attribute])
+	} 
 
 	return (
 		<div className="upcoming-page page">
@@ -57,11 +69,6 @@ const UpcomingPage = ({ week, year }) => {
 				{slates.length ? 
 					<div className="slatesWrapper">
 						{slates.map((slate) => (
-							// <Link className="slate" to={`/createLineup/${slate["draftGroupId"]}`} >
-							// 	<p>{slate["minStartTime"].split("T")[0]}</p>
-							// 	<p>{slate["games"].length} Games</p>
-							// 	<p>{slate["minStartTime"].split("T")[1]}</p>
-							// </Link>
 							<div className="slate" onClick={() => dialogActionWrapper(slate)}>
 								<p>{slate["minStartTime"].split("T")[0]}</p>
 								<p>{slate["games"].length} Games</p>
@@ -85,28 +92,36 @@ const UpcomingPage = ({ week, year }) => {
 									<th className="col-label" colspan="2">Fanduel</th>
 									<th className="col-label" colspan="2">Draftkings</th>
 								</tr>
-								<tr>
-									<th>Name</th>
-									<th>Pos</th>
-									<th>Team</th>
-									<th>Opp</th>
-									<th>Salary</th>
-									<th>Own Proj</th>
-									<th>Salary</th>
-									<th>Own Proj</th>
+								<tr className='header-labels'>
+									<th className={sortColumn[1] === "name" && "selected"}
+										onClick={() => sortRows("", "name")}>Name</th>
+									<th className={sortColumn[1] === "position" && "selected"}
+										onClick={() => sortRows("fanduel", "position")}>Pos</th>
+									<th className={sortColumn[1] === "team" && "selected"}
+										onClick={() => sortRows("fanduel" , "team")}>Team</th>
+									<th className={sortColumn[1] == "opponent" && "selected"}
+										onClick={() => sortRows("fanduel", "opponent")}>Opp</th>
+									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "salary" && "selected"}
+										onClick={() => sortRows("fanduel", "salary")}>Salary</th>
+									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "ownership_projection" && "selected"}
+										onClick={() => sortRows("fanduel", "ownership_projection")}>Own Proj</th>
+									<th className={sortColumn[0] === "draftkings" && sortColumn[1] === "salary" && "selected"}
+										onClick={() => sortRows("draftkings", "salary")}>Salary</th>
+									<th className={sortColumn[0] === "draftkings" && sortColumn[1] == "ownership_projection" && "selected"}
+										onClick={() => sortRows("draftkings", "ownership_projection")}>Own Proj</th>
 								</tr>
 							</thead>
 							<tbody>
-								{Object.entries(players).map(([player, data]) => (
+								{players.map((data) => (
 									<tr>
-										<td><strong><PlayerLink playerName={player} /></strong></td>
-										<td>{data["fanduel"] ? data["fanduel"]["position"] : data["draftkings"]["position"] }</td>
-										<td>{data["fanduel"] ? data["fanduel"]["team"] : data["draftkings"]["team"]}</td>
-										<td>{data["fanduel"] ? data["fanduel"]["opponent"] : data["draftkings"]["opponent"]}</td>
-										<td>{data["fanduel"] ? data["fanduel"]["salary"] : null}</td>
-										<td>{data["fanduel"] ? data["fanduel"]["ownership_projection"] : null}</td>
-										<td>{data["draftkings"] ? data["draftkings"]["salary"] : null}</td>
-										<td>{data["draftkings"] ? data["draftkings"]["ownership_projection"] : null}</td>
+										<td><strong><PlayerLink playerName={data["name"]} /></strong></td>
+										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["position"] : data["stats"]["draftkings"]["position"] }</td>
+										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["team"] : data["stats"]["draftkings"]["team"]}</td>
+										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["opponent"] : data["stats"]["draftkings"]["opponent"]}</td>
+										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["salary"] : null}</td>
+										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["ownership_projection"] : null}</td>
+										<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["salary"] : null}</td>
+										<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["ownership_projection"] : null}</td>
 									</tr>
 								))}
 							</tbody>
