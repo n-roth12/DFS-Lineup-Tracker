@@ -35,11 +35,9 @@ const LineupsTable = ({ lineups, filteredYears }) => {
       <table className="lineups-table">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Points</th>
-            <th>Wager</th>
-            <th>Winnings</th>
-            <th>Profit</th>
+            <th>DraftGroup</th>
+            <th>Salary</th>
+            <th>Proj. Pts</th>
             <th>Details</th>
           </tr>
         </thead>
@@ -47,15 +45,11 @@ const LineupsTable = ({ lineups, filteredYears }) => {
           {lineups.length > 0 && lineups.slice((currPage * 50), 50 + ((currPage) * 50)).map((lineup) => 
             <>
               <tr>
-                <td>Week {lineup.week}, {lineup.year}</td>
-                <td >{lineup.points > 140 && <FaFire className="icon fire-icon"/>} 
-                  {lineup.points < 90 && <FaSnowflake className="icon ice-icon"/>}
-                  {lineup.points} PTS</td>
-                <td>${lineup.bet}</td>
-                <td>${lineup.winnings}</td>
-                <td style={{color:lineup.bet > lineup.winnings ? "red" : "green"}}>{`${lineup.bet > lineup.winnings ? "-" : "+"}\$${Math.abs(lineup.winnings - lineup.bet)}`}</td>
-                <td><Link to={`/lineups/${lineup.id}/${lineup.week}/${lineup.year}`}
-                  className="view-lineup-btn">Edit Lineup<FaAngleRight/></Link></td>
+                <td>{lineup["draft-group"]}</td>
+                <td>${lineup["salary"]}</td>
+                <td>{lineup["projected-points"]} Pts</td>
+                <td><Link to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}
+                  className="view-lineup-btn">Edit<FaAngleRight/></Link></td>
               </tr>
             </>
           )}

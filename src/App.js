@@ -14,6 +14,7 @@ import Navbar from './components/Navbar/Navbar'
 import Footer from './components/Footer/Footer'
 import './App.css';
 import { FaAngleLeft } from 'react-icons/fa'
+import ScrollToTop from './ScrollToTop';
 
 function App() {
 
@@ -138,6 +139,7 @@ function App() {
 
             <Route path="history" element={
               <>
+                <ScrollToTop/>
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar />
@@ -154,6 +156,7 @@ function App() {
 
             <Route path="player/:name" element={
               <>
+                <ScrollToTop />
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar />

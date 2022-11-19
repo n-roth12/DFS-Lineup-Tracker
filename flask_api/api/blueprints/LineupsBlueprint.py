@@ -70,6 +70,7 @@ def create_lineup(current_user: User):
 def create_lineup_new(current_user: User):
 	data = json.loads(request.data)
 	data["user_public_id"] = current_user.public_id
+	print(data)
 	
 	MongoController.updateLineup(data)
 

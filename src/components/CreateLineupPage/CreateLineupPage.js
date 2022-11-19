@@ -22,6 +22,7 @@ const CreateLineupPage = () => {
   const [prevLineup, setPrevLineup] = useState({})
   const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
   const [slate, setSlate] = useState({})
+  const [teamProjectedPoints, setTeamProjectedPoints] = useState(0)
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -103,6 +104,7 @@ const CreateLineupPage = () => {
 
   useEffect(() => {
     getRemainingSalary()
+    getTeamProjPoints()
   }, [lineup])
 
   const togglePosFilter = (position) => {
@@ -205,6 +207,7 @@ const CreateLineupPage = () => {
   }
 
   const saveLineup = async () => {
+    const projectedPoints = getTeamProjPoints()
     const res = await fetch(`/lineups/createLineup`, {
       method: 'POST',
       headers: {
@@ -213,7 +216,10 @@ const CreateLineupPage = () => {
       body: JSON.stringify({
         "lineup": lineup,
         "draft-group": draftGroupId,
-        "lineup-id": lineupId
+        "lineup-id": lineupId,
+        "salary": 60000 - remainingSalary,
+        "projected-points": teamProjectedPoints,
+        "projected_own": 120
       })
     })
     .then(setPrevLineup(lineup))
@@ -238,6 +244,16 @@ const CreateLineupPage = () => {
         } 
       }
     }
+  }
+
+  const getTeamProjPoints = () => {
+    var projectedPoints = 0
+    for (const [k,  lineupSlot] of Object.entries(lineup)) {
+      if (lineupSlot !== null) {
+        projectedPoints += parseFloat(lineupSlot["draftStatAttributes"] && getAttr(lineupSlot["draftStatAttributes"], 90))
+      }
+    }
+    setTeamProjectedPoints(projectedPoints.toFixed(2))
   }
 
   const canQuickAdd = (position) => {
@@ -334,7 +350,7 @@ const CreateLineupPage = () => {
                 <p>Rem. Average Salary <strong>{getRemainingSalaryPerPlayer()}</strong></p>
               </div>
               <div className='lineup-header-info'>
-                <p><strong>159.12</strong> Proj. Points</p>
+                <p><strong>{teamProjectedPoints}</strong> Proj. Points</p>
                 <p><strong>90%</strong> Proj. Own Sum</p>
               </div>
             </div>
