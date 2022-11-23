@@ -44,7 +44,6 @@ def get_lineup(current_user: User, id: int):
 @token_required
 def create_lineup(current_user: User):
 	data = json.loads(request.data)
-	print(data)
 	try:
 		year = int(data['year'])
 		week = int(data['week'])
@@ -70,7 +69,6 @@ def create_lineup(current_user: User):
 def create_lineup_new(current_user: User):
 	data = json.loads(request.data)
 	data["user_public_id"] = current_user.public_id
-	print(data)
 	
 	MongoController.updateLineup(data)
 
@@ -182,7 +180,6 @@ def export_lineups(current_user: User):
 	file = StringIO()
 	writer = csv.writer(file)
 	writer.writerow(["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"])
-	print(len(data))
 	for entry in data:
 		lineup = entry["lineup"]
 		writer.writerow([lineup["qb"]["draftableId"] if lineup.get("qb") else None,

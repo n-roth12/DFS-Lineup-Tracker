@@ -76,7 +76,6 @@ class OwnershipService:
         collection = db["projections"]
         projections = collection.find({})[0]
         del projections["_id"]
-        print(projections)
 
         # players = json.loads(json_util.dumps(projections))
         # players_list = [{key: value} for key, value in projections.items()]

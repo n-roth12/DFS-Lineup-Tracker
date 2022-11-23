@@ -22,11 +22,6 @@ const LowerNav = () => {
               style={{textDecoration: "none"}} 
               className="nav-link">History</Link>
           </li>
-          <li className={window.location.pathname === '/research' ? 'active' : ''}>
-            <Link to={'/research'} 
-              style={{textDecoration: "none"}} 
-              className="nav-link">Research</Link>
-          </li>
         </ul>
       </div>
     </div>

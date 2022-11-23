@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './UpcomingPage.scss'
 import PlayerLink from '../PlayerLink/PlayerLink';
 import CreateLineupDialog from './CreateLineupDialog/CreateLineupDialog';
+import { Roller } from 'react-awesome-spinners';
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -10,8 +11,9 @@ const UpcomingPage = ({ week, year }) => {
 	const [players, setPlayers] = useState([])
 	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
-	const [sortColumn, setSortColumn] = useState(["", "name"])
+	const [sortColumn, setSortColumn] = useState(["fanduel", "salary"])
 	const [isSortUp, setIsSortUp] = useState(false)
+	const [selectedSite, setSelectedSite] = useState("draftkings")
 
 	useEffect(() => {
 		getPlayers()
@@ -47,7 +49,8 @@ const UpcomingPage = ({ week, year }) => {
 			}
 		})
 		const result = await res.json()
-		setPlayers(result["players"])
+		const players = result["players"].sort((a, b) => a["stats"]["fanduel"]["salary"] >= b["stats"]["fanduel"]["salary"] ? -1 : 1)
+		setPlayers(players)
 	}
 
 	const sortRows = (site, attribute) => {
@@ -58,15 +61,22 @@ const UpcomingPage = ({ week, year }) => {
 		}
 		setIsSortUp(!isSortUp)
 		setSortColumn([site, attribute])
-	} 
+	}
 
 	return (
 		<div className="upcoming-page page">
 			<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={closeDialogWrapper} slate={createLineupDialogContent} />
 			<div className='slatesWrapper-outer'>
-				<h2>Slates</h2>
 				{slates.length ? 
+				<>
+					<div className='site-filter-wrapper'>
+						<h2>Slates</h2>
+						<button className={selectedSite === "draftkings" && "selected"}
+							onClick={() => setSelectedSite("draftkings")}>DraftKings</button>
+						<button className={selectedSite === "fanduel" && "selected"}
+							onClick={() => setSelectedSite("fanduel")}>Fanduel</button>
+					</div>
 					<div className="slatesWrapper">
 						{slates.map((slate) => (
 							<div className="slate" onClick={() => dialogActionWrapper(slate)}>
@@ -76,8 +86,9 @@ const UpcomingPage = ({ week, year }) => {
 							</div>
 						))}
 					</div>
+				</>
 				:
-					<h3>Loading Slates...</h3>
+					<h3><Roller />Loading Slates</h3>
 				}
 			</div>
 

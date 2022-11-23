@@ -39,7 +39,6 @@ function App() {
                     <div className="page-wrapper-inner"> 
                       <LineupsPage />
                     </div>
-                    <Footer />
                   </div>
                 : 
                   <LoginPage setToken={setToken} />
@@ -64,7 +63,6 @@ function App() {
                       <div className="page-wrapper-inner"> 
                         <LineupsPage />
                       </div>
-                      <Footer />
                     </div>
                   : 
                     <LoginPage setToken={setToken} />
@@ -80,7 +78,6 @@ function App() {
                       <div className="page-wrapper-inner"> 
                         <SingleLineupPage  />
                       </div>
-                      <Footer />
                     </div>
                   : 
                     <LoginPage setToken={setToken} />
@@ -97,7 +94,6 @@ function App() {
                     <div className="page-wrapper-inner"> 
                       <UpcomingPage week={18} year={2021} />
                     </div>
-                    <Footer />
                   </div>
                 : 
                   <LoginPage setToken={setToken} />
@@ -113,7 +109,6 @@ function App() {
                     <div className="page-wrapper-inner"> 
                       <CreateLineupPage />
                     </div>
-                    <Footer />
                   </div>
                 : 
                   <LoginPage setToken={setToken} />
@@ -129,7 +124,6 @@ function App() {
                     <div className="page-wrapper-inner"> 
                       <ResearchPage />
                     </div>
-                    <Footer />
                   </div>
                 : 
                   <LoginPage setToken={setToken} />
@@ -146,7 +140,6 @@ function App() {
                     <div className="page-wrapper-inner"> 
                       <HistoryPage />
                     </div>
-                    <Footer />
                   </div>
                 : 
                   <LoginPage setToken={setToken} />
@@ -163,7 +156,6 @@ function App() {
                     <div className="page-wrapper-inner"> 
                       <PlayerPage />
                     </div>
-                    <Footer />
                   </div>
                 : 
                   <LoginPage setToken={setToken} />

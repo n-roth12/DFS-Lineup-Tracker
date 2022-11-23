@@ -3,9 +3,13 @@ import redis
 import json
 import requests
 
-class RedisController:
+from .MongoController import MongoController
 
-    redis_client = redis.Redis(host='localhost', port=6379, db=0)
+class RedisController:
+    def __init__(self):
+        self.redis_client = redis.Redis(host='localhost', port=6379, db=0)
+        self.mongoController = MongoController()
+
 
     def get_players(self, year, week):
         key = f'players_{year}_{week}'
@@ -127,3 +131,15 @@ class RedisController:
         except Exception as e:
             print(e)
             return None
+
+    
+    def get_draft_groups(self):
+        key = f'draftgroups'
+        draft_groups = self.redis_client.get(key)
+        return json.load(draft_groups) if draft_groups else None
+
+    def set_draft_groups(self):
+        key = f'draft_groups'
+        draft_groups = self.mongoController.getDraftGroupsAll()
+        self.redis_client.set(key, json.dumps(draft_groups))
+        return draft_groups

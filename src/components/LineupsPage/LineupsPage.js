@@ -345,7 +345,7 @@ const LineupsPage = () => {
 		  </> 
 		 : 
 		 	<div className="loading-screen">
-		 		<Roller />
+		 		<h3><Roller />Loading lineups</h3>
 		  </div>}
 	</div>
   )

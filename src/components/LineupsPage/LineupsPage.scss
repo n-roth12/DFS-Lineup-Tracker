@@ -2,6 +2,7 @@
 	display: flex;
 	width: 100%;
 	flex-direction: column;
+	margin-bottom: 70px;
 
 	.filter-btn-wrapper {
 		h2 {
@@ -44,6 +45,12 @@
 
 .loading-screen {
 	min-height: 100vh;
+	h3 {
+		margin-top: 50px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 }
 
 .lineups-table thead {

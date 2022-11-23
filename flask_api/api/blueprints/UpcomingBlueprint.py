@@ -11,37 +11,46 @@ from ..routes import token_required
 from ..models.user import User
 from ..ownership_service import OwnershipService
 from ..controllers.MongoController import MongoController
+from ..controllers.RedisController import RedisController
+from ..controllers.DraftKingsController import DraftKingsController
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
-MongoController = MongoController()
-OwnershipService = OwnershipService()
 
 upcoming_blueprint = Blueprint('upcoming_blueprint', __name__, url_prefix='/upcoming')
+
+mongoController = MongoController()
+redisController = RedisController()
+draftKingsController = DraftKingsController()
+ownershipService = OwnershipService()
 
 @upcoming_blueprint.route('/slates_new', methods=["GET"])
 @token_required
 def upcoming_slates(current_user: User):
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSDatabase"]
-	collection = db["draftGroups"]
-	cursor = collection.find({})
-	slates = sorted([group["draftGroup"] for group in cursor], key=lambda x: len(x["games"]), reverse=True)
+	# client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+	# db = client["DFSDatabase"]
+	# collection = db["draftGroups"]
+	# cursor = collection.find({})
+	# slates = sorted([group["draftGroup"] for group in cursor], key=lambda x: len(x["games"]), reverse=True)
+	draft_groups = redisController.get_draft_groups()
+	if not draft_groups:
+		print("cache hit")
+		draft_groups = redisController.set_draft_groups()
+	else:
+		print("cache miss")
 
-	return jsonify(slates), 200
+	return jsonify(draft_groups), 200
 
 
 @upcoming_blueprint.route('/draftGroup', methods=["GET"])
 @token_required
 def upcoming_draftGroups(current_user: User):
 	draftGroupId = request.args.get("draftGroup")
-	print(draftGroupId)
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["draftGroups"]
 	cursor = collection.find({})
 	draftGroup = [x for x in cursor if str(x["draftGroup"]["draftGroupId"]) == str(draftGroupId)][0]
 
-	# return jsonify(draftGroup), 200
 	return jsonify(json.loads(json_util.dumps(draftGroup))), 200
 
 
@@ -67,21 +76,17 @@ def upcoming_games(current_user: User):
 @upcoming_blueprint.route('/players', methods=['GET'])
 @token_required
 def upcoming_players(current_user: User):
-	args = request.args
-	draft_group_id = args["draftGroup"]
-	
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSDatabase"]
-	collection = db["draftables"]
-	result = collection.find_one({ "draft_group_id": int(draft_group_id) })
+	draft_group_id = request.args.get("draftGroup")
 
-	return jsonify(result["draftables"]), 200
+	draftables = mongoController.getDraftablesByDraftGroupId(draft_group_id)
+
+	return jsonify(draftables["draftables"]), 200
 
 
 @upcoming_blueprint.route('/ownership', methods=["GET"])
 @token_required
 def upcoming_projections(current_user: User):
-	projections = OwnershipService.getOwnershipProjections()
+	projections = ownershipService.getOwnershipProjections()
 
 	return jsonify(projections), 200
 
@@ -116,6 +121,28 @@ def set_projections():
 	projections = OwnershipService.scrape_ownership()
 	print("Finished scraping ownership projections.")
 
-	MongoController.addProjections(projections)
+	mongoController.addProjections(projections)
 
 	return jsonify(projections), 200
+
+
+@upcoming_blueprint.route('/draftkings_draftgroups_and_draftables', methods=["POST"])
+def draftkings_upcoming():
+	print("Fetching draftkings upcoming draftgroups...")
+	draftGroupIds = draftKingsController.getDraftKingsDraftGroupIds()
+	draftGroups = []
+	draftGroupsDraftables = []
+	for draftGroupId in draftGroupIds:
+		draftGroup = draftKingsController.getDraftKingsDraftGroupById(draftGroupId)
+		draftGroups.append({"draftGroup" : draftGroup, "site": "draftkings"})
+		draftGroupDraftables = draftKingsController.getDraftKingsDraftablesByDraftGroupId(draftGroupId)
+
+		draftGroupsDraftables.append({"draftGroupId" : draftGroupId, "draftables": draftGroupDraftables})
+
+	# print("draftables", draftGroupsDraftables)
+	# return jsonify(draftGroupsDraftables), 200
+
+	mongoController.addDraftGroups(draftGroups)
+	mongoController.addDraftables(draftGroupsDraftables)
+
+	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200

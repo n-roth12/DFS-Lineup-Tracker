@@ -11,6 +11,7 @@ from ..routes import token_required
 from ..controllers.MongoController import MongoController
 
 users_blueprint = Blueprint('users_blueprint', __name__, url_prefix='/users')
+mongoController = MongoController()
 
 @users_blueprint.route('/register', methods=['POST'])
 def register_user():
@@ -70,7 +71,6 @@ def get_user(current_user: User):
 		response["percentile"] = user_lineup.percentile
 
 		whole_response.append(response)
-	print(whole_response)
 
 	return jsonify(whole_response), 200
 
@@ -78,7 +78,6 @@ def get_user(current_user: User):
 @users_blueprint.route('/lineups', methods=['GET'])
 @token_required
 def get_user_lineups(current_user: User):
-	lineups = MongoController().get_user_lineups(current_user.public_id)
+	lineups = mongoController.get_user_lineups(current_user.public_id)
 
-	print(lineups)
 	return jsonify(json.loads(json_util.dumps(lineups))), 200
