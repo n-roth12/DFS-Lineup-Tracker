@@ -36,8 +36,10 @@ class MongoController:
 
     def getDraftGroupsAll(self):
         cursor = self.draftgroups_collection.find({})
-        # TODO: change this to add the whole response, instead of group["draftGroup"], change logic in UpcomingPage
-        draftgroups = sorted([group["draftGroup"] for group in cursor], key=lambda x: len(x["games"]), reverse=True)
+        # TODO: change this to add the whole response, instead of group["draftGroup"], change logic in
+        draftgroups = sorted([group for group in cursor], key=lambda x: len(x["games"]), reverse=True)
+        for draftGroup in draftgroups:
+            del(draftGroup["_id"])
         return draftgroups
 
     def addDraftables(self, data):

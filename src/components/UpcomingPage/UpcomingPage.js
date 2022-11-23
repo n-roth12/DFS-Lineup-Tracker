@@ -79,8 +79,10 @@ const UpcomingPage = ({ week, year }) => {
 					</div>
 					<div className="slatesWrapper">
 						{slates.map((slate) => (
+							slate["site"] === selectedSite &&
 							<div className="slate" onClick={() => dialogActionWrapper(slate)}>
-								<p>{slate["minStartTime"].split("T")[0]}</p>
+								{/* <p>{slate["minStartTime"].split("T")[0]}</p> */}
+								<p>{slate["startTimeSuffix"] ? slate["startTimeSuffix"] : "Main"}</p>
 								<p>{slate["games"].length} Games</p>
 								<p>{slate["minStartTime"].split("T")[1]}</p>
 							</div>

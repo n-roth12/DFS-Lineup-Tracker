@@ -134,10 +134,12 @@ def draftkings_upcoming():
 	draftGroupsDraftables = []
 	for draftGroupId in draftGroupIds:
 		draftGroup = draftKingsController.getDraftKingsDraftGroupById(draftGroupId)
-		draftGroups.append({"draftGroup" : draftGroup, "site": "draftkings"})
-		draftGroupDraftables = draftKingsController.getDraftKingsDraftablesByDraftGroupId(draftGroupId)
+		draftGroup["site"] = "draftkings"
+		draftGroups.append(draftGroup)
 
-		draftGroupsDraftables.append({"draftGroupId" : draftGroupId, "draftables": draftGroupDraftables})
+		draftGroupDraftables = draftKingsController.getDraftKingsDraftablesByDraftGroupId(draftGroupId)
+		draftGroupsDraftables.append({"draftGroupId" : draftGroupId, 
+			"draftables": draftGroupDraftables, "site": "draftkings"})
 
 	# print("draftables", draftGroupsDraftables)
 	# return jsonify(draftGroupsDraftables), 200

@@ -143,3 +143,6 @@ class RedisController:
         draft_groups = self.mongoController.getDraftGroupsAll()
         self.redis_client.set(key, json.dumps(draft_groups))
         return draft_groups
+
+    def flush_cache(self):
+        self.redis_client.flushall()

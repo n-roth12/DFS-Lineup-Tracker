@@ -247,3 +247,8 @@ def getUpcomingDfsSlateOwnershipProjections():
 def get_slates():
 	result = DraftKingsController.getDraftKingsSlates()
 	return jsonify(result)
+
+@app.route('/cache/flush', methods=['POST'])
+def flush_cache():
+	RedisController.flush_cache()
+	return "success", 200
