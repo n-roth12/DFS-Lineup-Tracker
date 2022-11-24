@@ -6,6 +6,7 @@ import redis
 from pandas import read_csv
 import csv
 from io import StringIO
+import datetime
 
 from ..routes import token_required
 from ..models.user import User
@@ -69,6 +70,7 @@ def create_lineup(current_user: User):
 def create_lineup_new(current_user: User):
 	data = json.loads(request.data)
 	data["user_public_id"] = current_user.public_id
+	data["last_update"] = datetime.datetime.now()
 	
 	MongoController.updateLineup(data)
 
@@ -82,6 +84,7 @@ def create_emptpy_lineup(current_user: User):
 	data["user_public_id"] = current_user.public_id
 	data["draft-group"] = str(data["draft-group"])
 	data["lineup-id"] = str(uuid.uuid4()).replace("-", "").replace("%7D", "")
+	data["last_update"] = datetime.datetime.now()
 	data["lineup"] = {
 		"qb": None,
 		"wr1": None,

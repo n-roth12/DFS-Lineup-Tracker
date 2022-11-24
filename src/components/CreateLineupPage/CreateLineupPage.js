@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react'
 import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
-import LineupPlayerNew from '../LineupPlayerNew/LineupPlayerNew'
-import PlayerNew from '../PlayerNew/PlayerNew'
 import { FaPlus, FaSearch, FaTimes } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 import PlayerLink from './../PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../UpcomingPage/CreateLineupDialog/CreateLineupDialog'
-import GamesSlider from '../HistoryPage/GamesSlider/GamesSlider'
 
 const CreateLineupPage = () => {
 
@@ -146,8 +143,9 @@ const CreateLineupPage = () => {
       }
     })
     const data = await res.json()
-    setLineup(data.lineup)
-    setPrevLineup(data.lineup)
+    setLineup(data["lineup"])
+    setPrevLineup(data["lineup"])
+    setSlate(data)
   }
 
   const getDraftGroup = async () => {
@@ -158,8 +156,7 @@ const CreateLineupPage = () => {
       }
     })
     const data = await res.json()
-    setSlate(data["draftGroup"])
-    console.log(data)
+    setSlate(data)
   }
 
   const filterPlayers = (players) => {
@@ -219,7 +216,9 @@ const CreateLineupPage = () => {
         "lineup-id": lineupId,
         "salary": 60000 - remainingSalary,
         "projected-points": teamProjectedPoints,
-        "projected_own": 120
+        "projected_own": 120,
+        "minStartTime": slate["minStartTime"],
+        "startTimeSuffix": slate["startTimeSuffix"]
       })
     })
     .then(setPrevLineup(lineup))
@@ -330,7 +329,7 @@ const CreateLineupPage = () => {
       </div>
       <div className='games-outer'>
         <div className='games-inner'>
-        {slate["games"] && slate["games"].length > 0 && slate["games"].map((game) => 
+        {slate && slate["games"] && slate["games"].length > 0 && slate["games"].map((game) => 
           <div className='game'>
             <p>{game["description"]}</p>
           </div>

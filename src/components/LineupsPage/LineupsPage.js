@@ -1,22 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './LineupsPage.scss';
-import Footer from '../Footer/Footer'
-import LineupCard from './LineupCard/LineupCard'
-import SingleLineupPage from '../SingleLineupPage/SingleLineupPage'
 import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
-import PlacementGraph from './PlacementGraph/PlacementGraph'
 import LineupsTable from './LineupsTable/LineupsTable'
 import { Roller } from 'react-awesome-spinners'
-import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake } from 'react-icons/fa'
-import axios from 'axios'
+import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus } from 'react-icons/fa'
 import Dialog from "@material-ui/core/Dialog";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import Button from "@material-ui/core/Button";
 
 const LineupsPage = () => {
 
@@ -67,7 +60,6 @@ const LineupsPage = () => {
 		}
 	})
     const userLineups = await res.json()
-	console.log(userLineups)
     setLineups(userLineups)
     setLoadingLineups(false)
   }
@@ -209,9 +201,22 @@ const LineupsPage = () => {
 
   return (
   	<div className="lineups-page page">
+		<div className='lineup-wrapper container' >
+			<div className='lineup-wrapper-header'>
+				<h3>Upcoming Lineups:</h3>
+				<Link to='/upcoming' className='submit-btn'>Create Lineup <FaPlus /></Link>
+			</div>
+			<LineupsTable
+				lineups={lineups.filter((lineup) => {
+					const currentTime = new Date()
+					const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
+					return Date.parse(lineup["minStartTime"].split("T")[0]) >= Date.parse(timeConv)
+				})}
+			/>
+		</div>
   		{!loadingLineups && lineups ?
   		<>
-  			<div className="main container">
+  			{/* <div className="main container">
 					<div className="filter-btn-wrapper">
 						<h2>Filter: </h2>
 						<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
@@ -281,68 +286,70 @@ const LineupsPage = () => {
 				  <button className="search-btn"
 				  	onClick={() => setShowImportDialog(true)}
 				  	>Import Lineups</button>
-				 </div>
+			</div> */}
 
-				  <Dialog
-				  	open={showNewLineupForm}>
-				  	<DialogTitle>New Lineup</DialogTitle>
-				  	<DialogContent>
-				    	<div>
-				    		<label>Year: </label>
-				    		<input className="form-control" type="text" placeholder="Enter Lineup Year" value={newLineupYear}
-				    			onChange={(e) => setNewLineupYear(e.target.value)} />
-				    		<hr />
-				    		<label>Week: </label>
-				    		<input className="form-control" type="text" placeholder="Enter Lineup Week" value={newLineupWeek}
-				    		onChange={(e) => setNewLineupWeek(e.target.value)} />
-				    		<hr />
-				    	</div>
-				    	<div>
-				    		<label>Bet: </label>
-				    		<input className="form-control" type="text" placeholder="Enter Bet Amount" value={newLineupBet}
-				    		onChange={(e) => setNewLineupBet(e.target.value)} />
-				    		<hr />
-				    		<label>Winings: </label>
-				    		<input className="form-control" type="text" placeholder="Enter Winnings Amount" value={newLineupWinnings}
-				    		onChange={(e) => setNewLineupWinnings(e.target.value)} />
-				    		<hr />
-				    	</div>
-				  	</DialogContent>
-				  	<DialogActions className="dialog-actions">
-				  		<button className="close-btn btn" onClick={() => setShowNewLineupForm(false)}>Close</button>
-				  		<button className="submit-btn btn" onClick={() => submitNewLineupForm()}>Submit</button>
-				  	</DialogActions>
-				  </Dialog>
+				<Dialog
+				open={showNewLineupForm}>
+				<DialogTitle>New Lineup</DialogTitle>
+				<DialogContent>
+					<div>
+						<label>Year: </label>
+						<input className="form-control" type="text" placeholder="Enter Lineup Year" value={newLineupYear}
+							onChange={(e) => setNewLineupYear(e.target.value)} />
+						<hr />
+						<label>Week: </label>
+						<input className="form-control" type="text" placeholder="Enter Lineup Week" value={newLineupWeek}
+						onChange={(e) => setNewLineupWeek(e.target.value)} />
+						<hr />
+					</div>
+					<div>
+						<label>Bet: </label>
+						<input className="form-control" type="text" placeholder="Enter Bet Amount" value={newLineupBet}
+						onChange={(e) => setNewLineupBet(e.target.value)} />
+						<hr />
+						<label>Winings: </label>
+						<input className="form-control" type="text" placeholder="Enter Winnings Amount" value={newLineupWinnings}
+						onChange={(e) => setNewLineupWinnings(e.target.value)} />
+						<hr />
+					</div>
+				</DialogContent>
+				<DialogActions className="dialog-actions">
+					<button className="close-btn btn" onClick={() => setShowNewLineupForm(false)}>Close</button>
+					<button className="submit-btn btn" onClick={() => submitNewLineupForm()}>Submit</button>
+				</DialogActions>
+				</Dialog>
 
-				  <Dialog
-				  	open={showImportDialog}>
-				  	<DialogTitle>Import Lineup Data</DialogTitle>
-				  	<DialogContent>
-				    	<div>
-							  <p>Upload a CSV file to create new lineups.</p>
-				    	</div>
-				  		<div>
-					  		<input 
-					  			type="file" 
-					  			onChange={onFileChange}
-					  			accept=".csv"
-					  		/>
-					  	</div> 
-				  	</DialogContent>
-				  	<DialogActions className="dialog-actions">
-				  		<button className="close-btn btn" onClick={() => setShowImportDialog(false)}>Close</button>
-				  		<button className="submit-btn btn" onClick={onFileUpload}>Upload</button>
-				  	</DialogActions>
-				  </Dialog>
-
+				<Dialog
+				open={showImportDialog}>
+				<DialogTitle>Import Lineup Data</DialogTitle>
+				<DialogContent>
+					<div>
+							<p>Upload a CSV file to create new lineups.</p>
+					</div>
+					<div>
+						<input 
+							type="file" 
+							onChange={onFileChange}
+							accept=".csv"
+						/>
+					</div> 
+				</DialogContent>
+				<DialogActions className="dialog-actions">
+					<button className="close-btn btn" onClick={() => setShowImportDialog(false)}>Close</button>
+					<button className="submit-btn btn" onClick={onFileUpload}>Upload</button>
+				</DialogActions>
+				</Dialog>
 				<div className="lineups-wrapper container">
+					<h3>Past Lineups:</h3>
 					<LineupsTable 
 						lineups={lineups.filter(lineup => {
-							return filteredYears === null || lineup.year === filteredYears
+							const currentTime = new Date()
+							const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
+							return Date.parse(lineup["minStartTime"].split("T")[0]) < Date.parse(timeConv)
 						})} 
 						filteredYears={filteredYears} />
 				</div>
-		  </> 
+		  	</> 
 		 : 
 		 	<div className="loading-screen">
 		 		<h3><Roller />Loading lineups</h3>

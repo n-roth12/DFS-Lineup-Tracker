@@ -5,24 +5,22 @@ import requests
 import redis
 import jwt
 from functools import wraps
-from api.models.player import Player, PlayerSchema
-from api.models.lineup import Lineup, LineupSchema, FullLineupSchema
 from api.models.user import User
 from sqlalchemy import func
 from pymongo import MongoClient
 import certifi
 from bson import json_util
 from .date_services import getCurrentWeek
-from .ownership_service import OwnershipService
-from .controllers.SportsDataController import SportsDataController
 from .controllers.DraftKingsController import DraftKingsController
 from .controllers.RedisController import RedisController
+from .controllers.MongoController import MongoController
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 RedisController = RedisController()
+MongoController = MongoController()
 
 # dynamodb = boto3.resource('dynamodb',
 #                           aws_access_key_id="anything",
@@ -170,25 +168,7 @@ def get_lineup_data(lineup_id: int):
 # 	for x in collection.find():
 # 		print(x)
 
-
 # 	return 'test', 200
-
-
-
-@app.route("/test/scrape1", methods=["POST"])
-def test():
-	print("Scraping upcoming draft groups...")
-	draft_groups = fetch_draftkings_draft_groups()
-	print("Finished scraping upcoming draft groups!")
-
-	print("Scraping upcoming draftables...")
-	for draft_group in draft_groups:
-		fetch_draftkings_draft_group_data(draft_group["draftGroup"]["draftGroupId"])
-		print(f"Finished draft group {draft_group['draftGroup']['draftGroupId']}.")
-
-	print("Finished scraping upcoming draftables!")
-
-	return "success", 200
 
 
 @app.route('/lineups_new', methods=['GET'])
@@ -251,4 +231,19 @@ def get_slates():
 @app.route('/cache/flush', methods=['POST'])
 def flush_cache():
 	RedisController.flush_cache()
+	return "success", 200
+
+@app.route('/delete/lineups', methods=['POST'])
+def delete_all_lineups():
+	MongoController.deleteAllLineups()
+	return "success", 200
+
+@app.route('/delete/draftgroups', methods=['POST'])
+def delete_all_draftgroups():
+	MongoController.deleteAllDraftGroups()
+	return "success", 200
+
+@app.route('/delete/draftables', methods=['POST'])
+def delete_all_draftables():
+	MongoController.deleteAllDraftables()
 	return "success", 200

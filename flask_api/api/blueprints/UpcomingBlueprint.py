@@ -45,11 +45,11 @@ def upcoming_slates(current_user: User):
 @token_required
 def upcoming_draftGroups(current_user: User):
 	draftGroupId = request.args.get("draftGroup")
+	print(draftGroupId)
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["draftGroups"]
-	cursor = collection.find({})
-	draftGroup = [x for x in cursor if str(x["draftGroup"]["draftGroupId"]) == str(draftGroupId)][0]
+	draftGroup = collection.find_one({"draftGroupId": draftGroupId})
 
 	return jsonify(json.loads(json_util.dumps(draftGroup))), 200
 
@@ -77,6 +77,7 @@ def upcoming_games(current_user: User):
 @token_required
 def upcoming_players(current_user: User):
 	draft_group_id = request.args.get("draftGroup")
+	print(draft_group_id)
 
 	draftables = mongoController.getDraftablesByDraftGroupId(draft_group_id)
 

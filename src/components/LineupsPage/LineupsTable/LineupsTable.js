@@ -35,21 +35,25 @@ const LineupsTable = ({ lineups, filteredYears }) => {
       <table className="lineups-table">
         <thead>
           <tr>
+            <th></th>
             <th>DraftGroup</th>
+            <th>Date</th>
+            <th>Start Time</th>
             <th>Salary</th>
             <th>Proj. Pts</th>
-            <th>Details</th>
           </tr>
         </thead>
         <tbody>
           {lineups.length > 0 && lineups.slice((currPage * 50), 50 + ((currPage) * 50)).map((lineup) => 
             <>
               <tr>
-                <td>{lineup["draft-group"]}</td>
-                <td>${lineup["salary"]}</td>
-                <td>{lineup["projected-points"]} Pts</td>
                 <td><Link to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}
                   className="view-lineup-btn">Edit<FaAngleRight/></Link></td>
+                <td>{lineup["draft-group"]}</td>
+                <td>{lineup["startTimeSuffix"]}</td>
+                <td>{lineup["minStartTime"]}</td>
+                <td>${lineup["salary"] ? lineup["salary"] : 0}</td>
+                <td>{lineup["projected-points"] ? lineup["projected-points"] : 0} Pts</td>
               </tr>
             </>
           )}

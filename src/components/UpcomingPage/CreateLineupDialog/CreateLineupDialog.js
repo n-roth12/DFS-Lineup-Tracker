@@ -78,24 +78,28 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
     }
   }
 
-  const createLineup = async (draftGroupId) => {
+  const createLineup = async (slate) => {
     const res = await fetch(`/lineups/createEmptyLineup`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       },
       body: JSON.stringify({
-        "draft-group": draftGroupId
+        "draft-group": slate["draftGroupId"],
+        "minStartTime": slate["minStartTime"],
+        "maxStartTime": slate["maxStartTime"],
+        "site": slate["site"],
+        "startTimeSuffix": slate["startTimeSuffix"]
       })
     })
     const data = await res.json()
     return data["lineupId"]
   }
 
-  const createLineupWrapper = async (draftGroupId) => {
-    const lineupId = await createLineup(draftGroupId)
+  const createLineupWrapper = async (slate) => {
+    const lineupId = await createLineup(slate)
     onClose()
-    navigate(`/createLineup/${draftGroupId}/${lineupId}`)
+    navigate(`/createLineup/${slate["draftGroupId"]}/${lineupId}`)
   }
 
   const closeDialog = () => {
@@ -172,7 +176,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
               <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon'/></button>
             </>
           }
-          <button className="create-btn" onClick={() => createLineupWrapper(slate["draftGroupId"])}>New Lineup</button>
+          <button className="create-btn" onClick={() => createLineupWrapper(slate)}>New Lineup</button>
         </DialogActions>
       </>
       }
