@@ -4,12 +4,14 @@ import './LineupsPage.scss';
 import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
 import LineupsTable from './LineupsTable/LineupsTable'
+import ImportLineupsDialog from '../Dialogs/ImportLineupsDialog/ImportLineupsDialog'
 import { Roller } from 'react-awesome-spinners'
-import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus } from 'react-icons/fa'
+import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus, FaUpload, FaFileImport } from 'react-icons/fa'
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import { BiImport } from 'react-icons/bi'
 
 const LineupsPage = () => {
 
@@ -136,6 +138,33 @@ const LineupsPage = () => {
  		setMaxScore(c)
  	}
 
+	 const onFileChange = (e) => {
+        setSelectedFile(e.target.files[0])
+    }
+  
+    const onFileUpload = async () => {
+        var data = new FormData()
+        data.append("myFile", selectedFile, selectedFile.name)
+        const res = await fetch('/lineups/upload', {
+            method: 'POST',
+            headers: {
+                'x-access-token': sessionStorage.dfsTrackerToken
+            },
+            body: data
+        })
+        if (res.status === 200) {
+            alert('Lineup successfully uploaded!')
+            setShowImportDialog(false)
+            setSelectedFile(null)
+        } else {
+            alert('Failed to upload lineups!')
+        }
+    }
+
+	const closeImportDialog = () => {
+		setShowImportDialog(false)
+	}
+
 
   const createLineup = async (year, week, bet, winnings) => {
  		var data = {}
@@ -175,36 +204,13 @@ const LineupsPage = () => {
   	setNewLineupWinnings('')
   }
 
-  const onFileChange = (e) => {
-  	setSelectedFile(e.target.files[0])
-  }
-
-  const onFileUpload = async () => {
-  	var data = new FormData()
-  	data.append("myFile", selectedFile, selectedFile.name)
-  	const res = await fetch('/lineups/upload', {
-  		method: 'POST',
-  		headers: {
-  			'x-access-token': sessionStorage.dfsTrackerToken
-  		},
-  		body: data
-  	})
-  	if (res.status === 200) {
-  		alert('Lineup successfully uploaded!')
-  		setShowImportDialog(false)
-  		setSelectedFile(null)
-  	} else {
-  		alert('Failed to upload lineups!')
-  	}
-  	getUserLineups()
-  }
-
   return (
   	<div className="lineups-page page">
 		<div className='lineup-wrapper container' >
 			<div className='lineup-wrapper-header'>
 				<h3>Upcoming Lineups:</h3>
-				<Link to='/upcoming' className='submit-btn'>Create Lineup <FaPlus /></Link>
+				<Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus /></Link>
+				<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport /></button>
 			</div>
 			<LineupsTable
 				lineups={lineups.filter((lineup) => {
@@ -319,26 +325,8 @@ const LineupsPage = () => {
 				</DialogActions>
 				</Dialog>
 
-				<Dialog
-				open={showImportDialog}>
-				<DialogTitle>Import Lineup Data</DialogTitle>
-				<DialogContent>
-					<div>
-							<p>Upload a CSV file to create new lineups.</p>
-					</div>
-					<div>
-						<input 
-							type="file" 
-							onChange={onFileChange}
-							accept=".csv"
-						/>
-					</div> 
-				</DialogContent>
-				<DialogActions className="dialog-actions">
-					<button className="close-btn btn" onClick={() => setShowImportDialog(false)}>Close</button>
-					<button className="submit-btn btn" onClick={onFileUpload}>Upload</button>
-				</DialogActions>
-				</Dialog>
+				<ImportLineupsDialog showImportDialog={showImportDialog} onClose={closeImportDialog} />
+
 				<div className="lineups-wrapper container">
 					<h3>Past Lineups:</h3>
 					<LineupsTable 

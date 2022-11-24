@@ -184,9 +184,19 @@
 }
 
 .lineup-wrapper-header {
-	.submit-btn {
+	.lineup-options-btn {
 		text-decoration: None;
+		background-color: var(--btn-blue);
+		color: white;
+		border: 1px solid var(--grey-1);
+		margin: 10px;
+		padding: 8px;
+		border-radius: 10px;
 	}
+}
+
+h3 {
+	color: black;
 }
 
 
