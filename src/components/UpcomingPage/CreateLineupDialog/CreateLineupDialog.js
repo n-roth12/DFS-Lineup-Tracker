@@ -1,36 +1,37 @@
 import { useState, useEffect } from 'react'
+import './CreateLineupDialog.scss'
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import './CreateLineupDialog.scss'
 import { Link, useNavigate } from 'react-router-dom';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaAngleRight } from 'react-icons/fa';
 import { BiExport, BiTrash, BiDownload } from 'react-icons/bi'
 
-const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
+const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => {
   const [lineups, setLineups] = useState([])
   const [selectedLineups, setSelectedLineups] = useState([])
-  const [file, setFile] = useState()
+  const [file, setFile] = useState(null)
   const [lineupsLoading, setLineupsLoading] = useState(false)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (slate && Object.keys(slate).length > 0) {
+    if (draftGroup && Object.keys(draftGroup).length > 0) {
       getLineups()
     }
-  }, [slate])
+  }, [draftGroup])
 
   const getLineups = async () => {
     setLineupsLoading(true)
-    const res = await fetch(`/lineups_new?draftGroup=${slate["draftGroupId"]}`, {
+    const res = await fetch(`/users/lineups/draftGroup?draftGroup=${draftGroup["draftGroupId"]}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       }
     })
     const data = await res.json()
+    console.log(data)
     setLineups(data)
     setLineupsLoading(false)
   }
@@ -78,52 +79,54 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
     }
   }
 
-  const createLineup = async (slate) => {
+  const createLineup = async () => {
     const res = await fetch(`/lineups/createEmptyLineup`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       },
       body: JSON.stringify({
-        "draft-group": slate["draftGroupId"],
-        "minStartTime": slate["minStartTime"],
-        "maxStartTime": slate["maxStartTime"],
-        "site": slate["site"],
-        "startTimeSuffix": slate["startTimeSuffix"]
+        "draft-group": draftGroup["draftGroupId"],
+        "minStartTime": draftGroup["minStartTime"],
+        "maxStartTime": draftGroup["maxStartTime"],
+        "site": draftGroup["site"],
+        "startTimeSuffix": draftGroup["startTimeSuffix"]
       })
     })
     const data = await res.json()
     return data["lineupId"]
   }
 
-  const createLineupWrapper = async (slate) => {
-    const lineupId = await createLineup(slate)
+  const createLineupWrapper = async () => {
+    const lineupId = await createLineup()
     onClose()
-    navigate(`/createLineup/${slate["draftGroupId"]}/${lineupId}`)
+    navigate(`/createLineup/${draftGroup["draftGroupId"]}/${lineupId}`)
   }
 
   const closeDialog = () => {
     setFile(null)
+    setLineups([])
+    setSelectedLineups([])
     onClose()
   }
 
   return (
     <Dialog open={showCreateLineupDialog} className="create-lineup-dialog" fullWidth maxWidth="md">
-      {slate && slate["games"] &&
+      {draftGroup && draftGroup["games"] &&
       <>
         <DialogTitle className="title">
           <div className='title-inner'>
-            <p><span className='title-upper'>{slate["minStartTime"].split("T")[0]} ({slate["draftGroupState"]})</span>
-            <span className='title-lower'>  Start Time: {slate["minStartTime"].split("T")[1]}</span></p>
+            <p className='title-upper'>{draftGroup["startTimeSuffix"] && draftGroup["startTimeSuffix"].replace('(', '').replace(')', '')} ({draftGroup["draftGroupState"]})</p>
             <FaTimes className='close-btn' onClick={closeDialog}/>
           </div>
+          <p className='title-lower'>  Start Time: {draftGroup["minStartTime"].split("T")[0]} {draftGroup["minStartTime"].split("T")[1]}</p>
         </DialogTitle>
         <DialogContent className="content">
           <div className='content-inner'>
             <div className="games">
-              <h3>{slate["games"].length} Games</h3>
-              {slate["games"].length > 0 &&
-                slate["games"].map((game) => 
+              <h3>{draftGroup["games"].length} Games</h3>
+              {draftGroup["games"].length > 0 &&
+                draftGroup["games"].map((game) => 
                 <div className="game">
                   <p>{game["description"]}</p>
                   <p>{game["startDate"].split("T")[0]}</p>
@@ -136,7 +139,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
               <table className='lineups-table'>
                 <thead>
                   <tr>
-                    <th><button className='toggle-select-btn' onClick={toggleSelectAllLineups}>All</button></th>
+                    <th><input type="checkbox" checked={selectedLineups.length === lineups.length} onChange={toggleSelectAllLineups} /></th>
                     <th></th>
                     <th>Title</th>
                     <th>Salary</th>
@@ -151,10 +154,10 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
                   lineups.map((lineup) => 
                     <tr className='user-lineup'>
                       <input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input>
-                      <td><Link className='lineup-link' to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}>Edit</Link></td>
+                      <td><Link className='lineup-link' to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}>Edit <FaAngleRight /></Link></td>
                       <td>Untitled</td>
-                      <td>$59000</td>
-                      <td>159.09</td>
+                      <td>{lineup["salary"]}</td>
+                      <td>{lineup["projected-points"]}</td>
                     </tr>
                   )
                 :
@@ -168,7 +171,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
         </DialogContent>
         <DialogActions className='actions'>
           {file !== null &&
-            <a className='download-btn' href={file} download={`lineups_${slate["draftGroupId"]}.csv`}>lineups_{slate["draftGroupId"]}.csv <BiDownload className='download-icon'/></a>
+            <a className='download-btn' href={file} download={`lineups_${draftGroup["draftGroupId"]}.csv`}>lineups_{draftGroup["draftGroupId"]}.csv <BiDownload className='download-icon'/></a>
           }
           {selectedLineups.length > 0 &&
             <>
@@ -176,7 +179,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, slate }) => {
               <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon'/></button>
             </>
           }
-          <button className="create-btn" onClick={() => createLineupWrapper(slate)}>New Lineup</button>
+          <button className="create-btn" onClick={() => createLineupWrapper()}>New Lineup</button>
         </DialogActions>
       </>
       }

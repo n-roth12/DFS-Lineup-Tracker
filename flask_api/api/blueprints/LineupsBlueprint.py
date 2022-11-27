@@ -131,6 +131,14 @@ def delete_lineup(id: int):
 	db.session.commit()
 	return jsonify({ 'Message': 'Lineup successfully deleted!' })
 
+@lineups_blueprint.route('/delete', methods=['POST'])
+@token_required
+def delete_lineups(current_user: User):
+	lineup_ids = json.loads(request.data)["lineups"]
+	MongoController.batchDeleteLineups(current_user.public_id, lineup_ids)
+
+	return jsonify(lineup_ids), 200
+
 
 # TODO check if it is a bestball lineup, maybe allow filtering or dont show it
 @lineups_blueprint.route('/upload', methods=['POST'])

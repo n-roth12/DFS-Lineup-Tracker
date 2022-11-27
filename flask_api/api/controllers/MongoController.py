@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import certifi
 import json
 from bson import json_util
+import datetime
 
 from api import app
 
@@ -22,13 +23,22 @@ class MongoController:
     def updateLineup(self, data):
         self.lineups_collection.replace_one({"draft-group": data["draft-group"], "lineup-id": data["lineup-id"]}, data, upsert=True)
 
+    def getUserLineupsByDraftGroup(self, draftGroupId, userId):
+        cursor = self.lineups_collection.find({"draft-group": draftGroupId, "user_public_id": userId})
+        lineups = [lineup for lineup in cursor]
+        return lineups
+
     def get_user_lineups(self, userPublicId):
         cursor = self.lineups_collection.find({"user_public_id": userPublicId})
         lineups = [lineup for lineup in cursor]
         return lineups
 
+    def batchDeleteLineups(self, userPublicId, lineupIds):
+        for lineupId in lineupIds:
+            self.lineups_collection.delete_one({ "user_public_id": userPublicId, "lineup-id": lineupId })
+
     def addProjections(self, data):
-        projections = {"players": data}
+        projections = {"players": data, "last-update": str(datetime.date.today())}
         self.projections_collection.insert_one(json.loads(json_util.dumps(projections)))
 
     def addDraftGroups(self, data):
@@ -57,4 +67,5 @@ class MongoController:
 
     def deleteAllDraftables(self):
         self.draftables_collection.delete_many({})
+
 

@@ -26,11 +26,6 @@ ownershipService = OwnershipService()
 @upcoming_blueprint.route('/slates_new', methods=["GET"])
 @token_required
 def upcoming_slates(current_user: User):
-	# client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	# db = client["DFSDatabase"]
-	# collection = db["draftGroups"]
-	# cursor = collection.find({})
-	# slates = sorted([group["draftGroup"] for group in cursor], key=lambda x: len(x["games"]), reverse=True)
 	draft_groups = redisController.get_draft_groups()
 	if not draft_groups:
 		print("cache hit")
@@ -45,11 +40,10 @@ def upcoming_slates(current_user: User):
 @token_required
 def upcoming_draftGroups(current_user: User):
 	draftGroupId = request.args.get("draftGroup")
-	print(draftGroupId)
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
 	collection = db["draftGroups"]
-	draftGroup = collection.find_one({"draftGroupId": draftGroupId})
+	draftGroup = collection.find_one({"draftGroupId": int(draftGroupId)})
 
 	return jsonify(json.loads(json_util.dumps(draftGroup))), 200
 
@@ -119,7 +113,7 @@ def get_slates(current_user: User):
 def set_projections():
 
 	print("Scraping ownership projections...")
-	projections = OwnershipService.scrape_ownership()
+	projections = ownershipService.scrape_ownership()
 	print("Finished scraping ownership projections.")
 
 	mongoController.addProjections(projections)

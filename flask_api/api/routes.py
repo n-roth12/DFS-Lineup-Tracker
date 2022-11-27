@@ -170,20 +170,6 @@ def get_lineup_data(lineup_id: int):
 
 # 	return 'test', 200
 
-
-@app.route('/lineups_new', methods=['GET'])
-@token_required
-def get_draftgroup_lineups(current_user: User):
-	draft_group = request.args.get("draftGroup")
-	
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSDatabase"]
-	collection = db["lineups"]
-	cursor = collection.find({"draft-group": draft_group, "user_public_id": current_user.public_id})
-	lineups = [lineup for lineup in cursor]
-
-	return jsonify(json.loads(json_util.dumps(lineups))), 200
-
 @app.route('/lineup_new', methods=['GET'])
 @token_required
 def get_singe_lineup(current_user: User):
@@ -215,12 +201,6 @@ def nfl_teams(current_user: User):
 @app.route('/current/week', methods=['GET'])
 def get_current_week():
 	result = getCurrentWeek()
-	return jsonify(result), 200
-
-
-@app.route('/getUpcomingDfsSlateOwnershipProjections', methods=['GET'])
-def getUpcomingDfsSlateOwnershipProjections():
-	result = SportsDataAdapter.getUpcomingDfsSlateOwnershipProjections()
 	return jsonify(result), 200
 
 @app.route('/draftkings_slates', methods=['GET'])

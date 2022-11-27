@@ -189,7 +189,16 @@
 		background-color: var(--btn-blue);
 		color: white;
 		border: 1px solid var(--grey-1);
-		margin: 10px;
+		margin: 6px;
+		padding: 8px;
+		border-radius: 10px;
+	}
+	.lineup-delete-btn {
+		background-color: red;
+		text-decoration: None;
+		color: white;
+		border: 1px solid var(--grey-1);
+		margin: 6px;
 		padding: 8px;
 		border-radius: 10px;
 	}

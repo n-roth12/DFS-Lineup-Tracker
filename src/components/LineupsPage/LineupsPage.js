@@ -5,6 +5,7 @@ import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
 import LineupsTable from './LineupsTable/LineupsTable'
 import ImportLineupsDialog from '../Dialogs/ImportLineupsDialog/ImportLineupsDialog'
+import DeleteLineupsDialog from '../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog';
 import { Roller } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus, FaUpload, FaFileImport } from 'react-icons/fa'
 import Dialog from "@material-ui/core/Dialog";
@@ -32,23 +33,12 @@ const LineupsPage = () => {
 	const [graphView, setGraphView] = useState('bankroll')
 	const [showImportDialog, setShowImportDialog] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null)
-	const [lineupCount, setLineupCount] = useState(0)
-	const [maxScore, setMaxScore] = useState(0)
-	const [highestWin, setHighestWin] = useState(0)
-	const [highestPercentile, setHighestPercentile] = useState(0)
+	const [selectedLineups, setSelectedLineups] = useState([])
+	const [showDeleteLineupsDialog, setShowDeleteLineupsDialog] = useState(false)
   
   useEffect(() => {
   	loadPage()
   }, [])
-
-  useEffect(() => {
-  	getYears()
-  	lineups && lineups.length && loadGraphData()
-  }, [loadingLineups])
-
-  useEffect(() => {
-  	loadGraphData()
-  }, [filteredYears])
 
   const loadPage = async () => {
   	await getUserLineups()
@@ -76,68 +66,6 @@ const LineupsPage = () => {
  		setYears(temp.sort().reverse())
  	}
 
- 	const loadGraphData = () => {
- 		setLoadingPointsGraph(true)
- 		setLoadingBankrollGraph(true)
- 		var data = []
- 		var bankRollSum = 0
- 		var lineups_copy = [...lineups]
- 		var max_percentile = 0
- 		var max_points = 0
- 		var max_win = 0
- 		lineups_copy.reverse()
-
- 		lineups_copy.length > 0 && lineups_copy.map((lineup) => {
- 			if (filteredYears == null || filteredYears == lineup.year) {
-	 			bankRollSum += (lineup.winnings - lineup.bet)
-	 			var week_string = `${lineup.year}/${lineup.week}`
-	 			var sameWeeks =  data.filter(week => week.week === week_string)
-	 			max_points = Math.max(max_points, lineup.points)
-	 			max_win = Math.max(max_win, lineup.winnings - lineup.bet)
-	 			max_percentile = Math.max(max_percentile, lineup.percentile)
-	 			if (sameWeeks.length > 0) {
-	 				sameWeeks[0]["bankroll"] = bankRollSum
-	 				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1)
-	 				sameWeeks[0]["lineup_count"] += 1
-	 				if (data.length > 1) {
-	 					sameWeeks[0]["points_change"] = sameWeeks[0]["points"] - data[data.length - 2]["points"]
-	 					sameWeeks[0]["bankroll_change"] = bankRollSum - data[data.length - 2]["bankroll"]
-	 				}
-	 			} else {
-		 			var lineup_data = {}
-		 			lineup_data["points"] = lineup.points
-		 			lineup_data["lineup_count"] = 1
-		 			lineup_data["bankroll"] = bankRollSum
-		 			lineup_data["week"] = week_string
-		 			if (data.length > 0) {
-		 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"])
-		 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"])
-		 			}
-		 			data.push(lineup_data)
-		 		}
-		 	}
-		 	setLineupCount(data.length)
-		 	setHighestWin(max_win)
-		 	setMaxScore(max_points)
-		 	setHighestPercentile(max_percentile)
-	 	})	
-
-		setPointsGraphData(data)
-		setBankrollGraphData(data)
-		setLoadingPointsGraph(false)
-		setLoadingBankrollGraph(false)
- 	}
-
- 	const getExtras = () => {
- 		setLineupCount(lineups.length)
- 		const a = Math.max(...lineups.map(lineup => (lineup.winnings - lineup.bet)))
- 		setHighestWin(a)
- 		const b = Math.max(...lineups.map(lineup => (lineup.percentile)))
- 		setHighestPercentile(b)
- 		const c = Math.max(...lineups.map(lineup => (lineup.points)))
- 		setMaxScore(c)
- 	}
-
 	 const onFileChange = (e) => {
         setSelectedFile(e.target.files[0])
     }
@@ -163,6 +91,22 @@ const LineupsPage = () => {
 
 	const closeImportDialog = () => {
 		setShowImportDialog(false)
+	}
+
+	const deleteSelectedLineups = async (lineupsToDelete) => {
+		console.log(lineupsToDelete)
+		const res = await fetch('/lineups/delete', {
+			method: 'POST',
+			headers: {
+				'x-access-token': sessionStorage.dfsTrackerToken
+			},
+			body: JSON.stringify({
+				"lineups": lineupsToDelete
+			  })
+		})
+		const data = await res.json()
+		console.log(data)
+		setShowDeleteLineupsDialog(false)
 	}
 
 
@@ -211,8 +155,13 @@ const LineupsPage = () => {
 				<h3>Upcoming Lineups:</h3>
 				<Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus /></Link>
 				<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport /></button>
+				{selectedLineups.length > 0 &&
+					<button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete Lineups ({selectedLineups.length})</button>
+				}
 			</div>
 			<LineupsTable
+				selectedLineups={selectedLineups}
+				setSelectedLineups={setSelectedLineups}
 				lineups={lineups.filter((lineup) => {
 					const currentTime = new Date()
 					const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
@@ -222,79 +171,7 @@ const LineupsPage = () => {
 		</div>
   		{!loadingLineups && lineups ?
   		<>
-  			{/* <div className="main container">
-					<div className="filter-btn-wrapper">
-						<h2>Filter: </h2>
-						<button className={`filter-btn${filteredYears == null ? "-active" : ""}`} onClick={() => setFilteredYears(null)}>All</button>
-						{years.length > 0 && years.map((year) => 
-							<button className={`filter-btn${filteredYears == year ? "-active" : ""}`} 
-								onClick={() => setFilteredYears(year)}>{year}</button>
-						)}
-  				</div>
-
-  				<div className="cards-wrapper">
-  					<div className="card">
-  						<p className="number">{lineupCount}</p>
-  						<p className="desc">Total Lineups</p>
-  					</div>
-  					<div className="card">
-  						<p className="number">{maxScore} Pts</p>
-  						<p className="desc">Max Score</p>
-  					</div>
-  					<div className="card">
-  						<p className="number">${highestWin}</p>
-  						<p className="desc">Highest Win</p>
-  					</div>
-  					<div className="card">
-  						<p className="number">{highestPercentile.toFixed(2)}%</p>
-  						<p className="desc">Highest Percentile Finish</p>
-  					</div>
-  				</div>
-			  	<div className="graphs-wrapper row">
-
-						{ graphView === 'points' &&
-						<>
-					    { !loadingPointsGraph ? 
-					    	<PointsGraph 
-					    		graphData={pointsGraphData} 
-					    		year={filteredYears}
-					    		setGraphView={setGraphView}
-					    	/> 
-					    : 
-					    	<>
-					    		<Roller /> 
-					    	</>
-					   	}
-					  </>
-					  }
-					  { graphView === 'bankroll' &&
-					  <>
-					    { !loadingBankrollGraph ? 
-					    	<BankrollGraph 
-					    		graphData={bankrollGraphData} 
-					    		year={filteredYears}
-					    		setGraphView={setGraphView}
-					    	/> 
-					    : 
-					    	<>
-					    		<Roller />
-					    	</>
-					    }
-					  </>
-					 	}
-				  </div>
-		    </div>
-
-		    <div className="lineupform-wrapper">
-				  <button className="search-btn" 
-				  	onClick={() => setShowNewLineupForm(true)}
-				  	>Create New Lineup</button>
-				  <button className="search-btn"
-				  	onClick={() => setShowImportDialog(true)}
-				  	>Import Lineups</button>
-			</div> */}
-
-				<Dialog
+			<Dialog
 				open={showNewLineupForm}>
 				<DialogTitle>New Lineup</DialogTitle>
 				<DialogContent>
@@ -327,6 +204,11 @@ const LineupsPage = () => {
 
 				<ImportLineupsDialog showImportDialog={showImportDialog} onClose={closeImportDialog} />
 
+				<DeleteLineupsDialog showDeleteLineupsDialog={showDeleteLineupsDialog} 
+					onClose={() => setShowDeleteLineupsDialog(false)} 
+					lineupsToDelete={selectedLineups} 
+					deleteLineups={() => deleteSelectedLineups(selectedLineups)} />
+
 				<div className="lineups-wrapper container">
 					<h3>Past Lineups:</h3>
 					<LineupsTable 
@@ -347,3 +229,67 @@ const LineupsPage = () => {
 }
 
 export default LineupsPage
+
+
+// DEPRECATED CODE
+ 	// const loadGraphData = () => {
+ 	// 	setLoadingPointsGraph(true)
+ 	// 	setLoadingBankrollGraph(true)
+ 	// 	var data = []
+ 	// 	var bankRollSum = 0
+ 	// 	var lineups_copy = [...lineups]
+ 	// 	var max_percentile = 0
+ 	// 	var max_points = 0
+ 	// 	var max_win = 0
+ 	// 	lineups_copy.reverse()
+
+ 	// 	lineups_copy.length > 0 && lineups_copy.map((lineup) => {
+ 	// 		if (filteredYears == null || filteredYears == lineup.year) {
+	//  			bankRollSum += (lineup.winnings - lineup.bet)
+	//  			var week_string = `${lineup.year}/${lineup.week}`
+	//  			var sameWeeks =  data.filter(week => week.week === week_string)
+	//  			max_points = Math.max(max_points, lineup.points)
+	//  			max_win = Math.max(max_win, lineup.winnings - lineup.bet)
+	//  			max_percentile = Math.max(max_percentile, lineup.percentile)
+	//  			if (sameWeeks.length > 0) {
+	//  				sameWeeks[0]["bankroll"] = bankRollSum
+	//  				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1)
+	//  				sameWeeks[0]["lineup_count"] += 1
+	//  				if (data.length > 1) {
+	//  					sameWeeks[0]["points_change"] = sameWeeks[0]["points"] - data[data.length - 2]["points"]
+	//  					sameWeeks[0]["bankroll_change"] = bankRollSum - data[data.length - 2]["bankroll"]
+	//  				}
+	//  			} else {
+	// 	 			var lineup_data = {}
+	// 	 			lineup_data["points"] = lineup.points
+	// 	 			lineup_data["lineup_count"] = 1
+	// 	 			lineup_data["bankroll"] = bankRollSum
+	// 	 			lineup_data["week"] = week_string
+	// 	 			if (data.length > 0) {
+	// 	 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"])
+	// 	 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"])
+	// 	 			}
+	// 	 			data.push(lineup_data)
+	// 	 		}
+	// 	 	}
+	// 	 	setLineupCount(data.length)
+	// 	 	setHighestWin(max_win)
+	// 	 	setMaxScore(max_points)
+	// 	 	setHighestPercentile(max_percentile)
+	//  	})	
+
+	// 	setPointsGraphData(data)
+	// 	setBankrollGraphData(data)
+	// 	setLoadingPointsGraph(false)
+	// 	setLoadingBankrollGraph(false)
+ 	// }
+
+	//  const getExtras = () => {
+	// 	setLineupCount(lineups.length)
+	// 	const a = Math.max(...lineups.map(lineup => (lineup.winnings - lineup.bet)))
+	// 	setHighestWin(a)
+	// 	const b = Math.max(...lineups.map(lineup => (lineup.percentile)))
+	// 	setHighestPercentile(b)
+	// 	const c = Math.max(...lineups.map(lineup => (lineup.points)))
+	// 	setMaxScore(c)
+	// }

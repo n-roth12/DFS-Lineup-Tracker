@@ -7,7 +7,7 @@ import PlayerLink from './../PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../UpcomingPage/CreateLineupDialog/CreateLineupDialog'
 
-const CreateLineupPage = () => {
+const CreateLineupPage = ({ setAlertMessage }) => {
 
   const { draftGroupId, lineupId } = useParams()
   const [draftables, setDraftables] = useState([])
@@ -18,8 +18,10 @@ const CreateLineupPage = () => {
   const [remainingSalary, setRemainingSalary] = useState() 
   const [prevLineup, setPrevLineup] = useState({})
   const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
-  const [slate, setSlate] = useState({})
+  const [draftGroup, setDraftGroup] = useState()
   const [teamProjectedPoints, setTeamProjectedPoints] = useState(0)
+  const [draftGroupLineups, setDraftGroupLineups] = useState([])
+  const [lineupPlayerIds, setLineupPlayerIds] = useState(new Set())
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -97,11 +99,13 @@ const CreateLineupPage = () => {
     getDraftables()
     getLineup()
     getDraftGroup()
+    getDraftGroupLineups()
   }, [draftGroupId, lineupId])
 
   useEffect(() => {
     getRemainingSalary()
     getTeamProjPoints()
+    getLineupPlayerIds()
   }, [lineup])
 
   const togglePosFilter = (position) => {
@@ -115,6 +119,15 @@ const CreateLineupPage = () => {
     setEditingPos(null)
   }
 
+  const getLineupPlayerIds = () => {
+    const temp = new Set()
+    for (const [k,  lineupSlot] of Object.entries(lineup)) {
+      if (lineupSlot !== null) {
+        temp.add(lineupSlot["playerId"])
+      }
+    }
+    setLineupPlayerIds(temp)
+  }
 
   const getDraftables = async () => {
     const res = await fetch(`/upcoming/players?draftGroup=${draftGroupId}`, {
@@ -145,7 +158,6 @@ const CreateLineupPage = () => {
     const data = await res.json()
     setLineup(data["lineup"])
     setPrevLineup(data["lineup"])
-    setSlate(data)
   }
 
   const getDraftGroup = async () => {
@@ -156,7 +168,18 @@ const CreateLineupPage = () => {
       }
     })
     const data = await res.json()
-    setSlate(data)
+    setDraftGroup(data)
+  }
+
+  const getDraftGroupLineups = async () => {
+    const res = await fetch(`/users/lineups/draftGroup?draftGroup=${draftGroupId}`, {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
+    })
+    const data = await res.json()
+    setDraftGroupLineups(data)
   }
 
   const filterPlayers = (players) => {
@@ -217,13 +240,20 @@ const CreateLineupPage = () => {
         "salary": 60000 - remainingSalary,
         "projected-points": teamProjectedPoints,
         "projected_own": 120,
-        "minStartTime": slate["minStartTime"],
-        "startTimeSuffix": slate["startTimeSuffix"]
+        "minStartTime": draftGroup["minStartTime"],
+        "startTimeSuffix": draftGroup["startTimeSuffix"]
       })
     })
-    .then(setPrevLineup(lineup))
+    .then(() => {
+      setPrevLineup(lineup)
+      if (remainingSalary < 0) {
+        setAlertMessage("Lineup Saved with Warning: Lineup over the salary cap!")
+      } else {
+        setAlertMessage("Lineup Saved")
+      }    
+    })
     .catch((error) => {
-      alert(error)
+      setAlertMessage("Error while saving lineup!")
     })
   }
 
@@ -255,10 +285,13 @@ const CreateLineupPage = () => {
     setTeamProjectedPoints(projectedPoints.toFixed(2))
   }
 
-  const canQuickAdd = (position) => {
+  const canQuickAdd = (player) => {
+    if (lineupPlayerIds.has(player.playerId)) {
+      return false
+    }
     for (const [k, v] of Object.entries(lineup)) {
-      if ((v === null && lineupSlots[k]["allowedPositions"].includes(position.toLowerCase()))
-        || (editingPos && lineupSlots[editingPos]["allowedPositions"].includes(position.toLowerCase()))) {
+      if ((v === null && lineupSlots[k]["allowedPositions"].includes(player.position.toLowerCase() ))
+        || (editingPos && lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase()))) {
         return true
       }
     }
@@ -293,12 +326,15 @@ const CreateLineupPage = () => {
 
   const revertLineup = () => {
     setLineup(prevLineup)
+    setLineupPlayerIds([])
   }
 
   return (
     <div className="createLineupPage page">
-      <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
-				onClose={() => setShowCreateLineupDialog(false)} slate={slate} />
+      {draftGroup !== null &&
+        <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
+				onClose={() => setShowCreateLineupDialog(false)} draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
+      }
       <div className="header">
         <div className="header-inner">
           <div className="header-label">
@@ -329,7 +365,7 @@ const CreateLineupPage = () => {
       </div>
       <div className='games-outer'>
         <div className='games-inner'>
-        {slate && slate["games"] && slate["games"].length > 0 && slate["games"].map((game) => 
+        {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
           <div className='game'>
             <p>{game["description"]}</p>
           </div>
@@ -427,7 +463,7 @@ const CreateLineupPage = () => {
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
                     <tr>
-                      {canQuickAdd(player.position) || editingPos === player.position ?
+                      {canQuickAdd(player) || editingPos === player.position ?
                         <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
                       :
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>

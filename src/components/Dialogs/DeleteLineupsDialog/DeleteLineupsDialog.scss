@@ -1,0 +1,45 @@
+.delete-lineups-dialog {
+    .title {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        text-align: right;
+        float: right;
+        .close-btn {
+            color: red;
+            font-size: 18pt;
+        }
+        .close-btn:hover {
+            cursor: pointer;
+        }
+    }
+    .content {
+        h2 {
+            font-size: 14pt;
+        }
+    }
+    .actions {
+        .delete-btn {
+            border: None;
+            color: white;
+            background-color: red;
+            display: flex;
+            height: 100%;
+            padding: 8px 14px 8px 16px;
+            border-radius: 8px;
+            align-items: center;
+            margin-bottom: 0;
+            .trash-icon {
+                margin-left: 5px;
+            }
+        }
+        .cancel-btn {
+            border: None;
+            background-color: var(--grey-1);
+            color: white;
+            margin-right: 10px;
+            padding: 8px 14px 8px 16px;
+            border-radius: 8px;
+        }
+    }
+}

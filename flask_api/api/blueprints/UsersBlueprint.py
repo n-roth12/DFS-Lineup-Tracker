@@ -81,3 +81,12 @@ def get_user_lineups(current_user: User):
 	lineups = mongoController.get_user_lineups(current_user.public_id)
 
 	return jsonify(json.loads(json_util.dumps(lineups))), 200
+
+
+@users_blueprint.route('/lineups/draftGroup', methods=['GET'])
+@token_required
+def get_draftgroup_lineups(current_user: User):
+	draftGroupId = request.args.get("draftGroup")
+	lineups = mongoController.getUserLineupsByDraftGroup(draftGroupId, current_user.public_id)
+
+	return jsonify(json.loads(json_util.dumps(lineups))), 200

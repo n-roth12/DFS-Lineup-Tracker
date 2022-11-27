@@ -11,9 +11,10 @@ const UpcomingPage = ({ week, year }) => {
 	const [players, setPlayers] = useState([])
 	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
-	const [sortColumn, setSortColumn] = useState(["fanduel", "salary"])
+	const [sortColumn, setSortColumn] = useState(["draftkings", "salary"])
 	const [isSortUp, setIsSortUp] = useState(false)
 	const [selectedSite, setSelectedSite] = useState("draftkings")
+	const [lastUpdate, setLastUpdate] = useState("")
 
 	useEffect(() => {
 		getPlayers()
@@ -49,15 +50,18 @@ const UpcomingPage = ({ week, year }) => {
 			}
 		})
 		const result = await res.json()
-		const players = result["players"].sort((a, b) => a["stats"]["fanduel"]["salary"] >= b["stats"]["fanduel"]["salary"] ? -1 : 1)
-		setPlayers(players)
+		setPlayers(result["players"])
+		setLastUpdate(result["last-update"])
 	}
 
 	const sortRows = (site, attribute) => {
 		if (attribute === "name") {
 			setPlayers([...players].sort((a, b) => a[attribute] >= b[attribute] ? (isSortUp ? 1 : -1) : (isSortUp ? -1 : 1)))
 		} else {
-			setPlayers([...players].sort((a, b) => a["stats"][site][attribute] >= b["stats"][site][attribute] ? (isSortUp ? 1 : -1) : (isSortUp ? -1 : 1)))
+			setPlayers([...players].sort((a, b) => 
+				(a["stats"][site] && b["stats"][site] && a["stats"][site][attribute] >= b["stats"][site][attribute]) || !b["stats"][site] 
+					? (isSortUp ? 1 : -1) 
+					: (isSortUp ? -1 : 1)))
 		}
 		setIsSortUp(!isSortUp)
 		setSortColumn([site, attribute])
@@ -66,7 +70,7 @@ const UpcomingPage = ({ week, year }) => {
 	return (
 		<div className="upcoming-page page">
 			<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
-				onClose={closeDialogWrapper} slate={createLineupDialogContent} />
+				onClose={closeDialogWrapper} draftGroup={createLineupDialogContent} />
 			<div className='slatesWrapper-outer'>
 				{slates.length ? 
 				<>
@@ -96,7 +100,10 @@ const UpcomingPage = ({ week, year }) => {
 
 			{Object.keys(players).length > 0 && 
 				<div className='players-outer'>
-					<h2>Players</h2>
+					<div className='players-outer-header'>
+						<h2>Players</h2>
+						<p>Last update: {lastUpdate}</p>
+					</div>
 					<div className='players-inner'>
 						<table className='lineups-table'>
 							<thead>

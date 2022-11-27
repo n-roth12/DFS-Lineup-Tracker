@@ -48,6 +48,9 @@
                             width: 30px;
                             margin: 0;
                         }
+                        input {
+                            margin: 0;
+                        }
                         .toggle-select-btn {
                             border: 1px solid var(--grey-1);
                             padding: 3px;
@@ -101,9 +104,10 @@
 
         }
         .title-lower {
-            font-size: 12pt;
+            font-size: 13pt;
             text-align: left;
-            font-weight: 300;
+            font-weight: 400;
+            margin-bottom: 0;
         }
     }
     .actions {

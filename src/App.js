@@ -17,6 +17,16 @@ import { FaAngleLeft } from 'react-icons/fa'
 import ScrollToTop from './ScrollToTop';
 
 function App() {
+  
+  const [alertMessage, setAlertMessage] = useState()
+
+  useEffect(() =>{
+    document.title = "Mainslater"
+  })
+
+  useEffect(() => {
+      setTimeout(() => { if (alertMessage) { setAlertMessage() }} , 4000)
+  }, [alertMessage])
 
   const setToken = (userToken) => {
     sessionStorage.setItem('dfsTrackerToken', JSON.stringify(userToken))
@@ -24,6 +34,10 @@ function App() {
 
   const setUserId = (userId) => {
     sessionStorage.setItem('dfsTrackerUserId', JSON.stringify(userId))
+  }
+
+  const closeAlertMessage = () => {
+    setAlertMessage(null)
   }
 
   return (
@@ -105,9 +119,9 @@ function App() {
               <>
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
-                    <Navbar />
+                    <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} />
                     <div className="page-wrapper-inner"> 
-                      <CreateLineupPage />
+                      <CreateLineupPage setAlertMessage={setAlertMessage}/>
                     </div>
                   </div>
                 : 

@@ -3,7 +3,7 @@ import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaA
 import { Link } from 'react-router-dom'
 import './LineupsTable.scss'
 
-const LineupsTable = ({ lineups, filteredYears }) => {
+const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups }) => {
 
   const [currPage, setCurrPage] = useState(0)
 
@@ -15,6 +15,14 @@ const LineupsTable = ({ lineups, filteredYears }) => {
   const prevPage = () => {
     if (currPage <= 0) return
     setCurrPage(currPage - 1)
+  }
+
+  const toggleSelectedLineup = (lineupId) => {
+    if (!selectedLineups.includes(lineupId)) {
+      setSelectedLineups(selectedLineups.concat(lineupId))
+    } else {
+      setSelectedLineups(selectedLineups.filter((lineup_id) => lineup_id !== lineupId))
+    }
   }
 
   return (
@@ -36,9 +44,9 @@ const LineupsTable = ({ lineups, filteredYears }) => {
         <thead>
           <tr>
             <th></th>
-            <th>DraftGroup</th>
+            <th></th>
+            <th>Slate</th>
             <th>Date</th>
-            <th>Start Time</th>
             <th>Salary</th>
             <th>Proj. Pts</th>
           </tr>
@@ -47,11 +55,11 @@ const LineupsTable = ({ lineups, filteredYears }) => {
           {lineups.length > 0 && lineups.slice((currPage * 50), 50 + ((currPage) * 50)).map((lineup) => 
             <>
               <tr>
+                <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input></td>
                 <td><Link to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}
                   className="view-lineup-btn">Edit<FaAngleRight/></Link></td>
-                <td>{lineup["draft-group"]}</td>
-                <td>{lineup["startTimeSuffix"]}</td>
-                <td>{lineup["minStartTime"]}</td>
+                <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"] : "Main"}</td>
+                <td>{lineup["minStartTime"].split("T")[0]} @ {lineup["minStartTime"].split("T")[1].split(".")[0]}</td>
                 <td>${lineup["salary"] ? lineup["salary"] : 0}</td>
                 <td>{lineup["projected-points"] ? lineup["projected-points"] : 0} Pts</td>
               </tr>
