@@ -13,6 +13,7 @@ from ..ownership_service import OwnershipService
 from ..controllers.MongoController import MongoController
 from ..controllers.RedisController import RedisController
 from ..controllers.DraftKingsController import DraftKingsController
+from ..controllers.YahooController import YahooController
 
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -22,6 +23,7 @@ mongoController = MongoController()
 redisController = RedisController()
 draftKingsController = DraftKingsController()
 ownershipService = OwnershipService()
+yahooController = YahooController()
 
 @upcoming_blueprint.route('/slates_new', methods=["GET"])
 @token_required
@@ -123,7 +125,6 @@ def set_projections():
 
 @upcoming_blueprint.route('/draftkings_draftgroups_and_draftables', methods=["POST"])
 def draftkings_upcoming():
-	print("Fetching draftkings upcoming draftgroups...")
 	draftGroupIds = draftKingsController.getDraftKingsDraftGroupIds()
 	draftGroups = []
 	draftGroupsDraftables = []
@@ -136,10 +137,28 @@ def draftkings_upcoming():
 		draftGroupsDraftables.append({"draftGroupId" : draftGroupId, 
 			"draftables": draftGroupDraftables, "site": "draftkings"})
 
-	# print("draftables", draftGroupsDraftables)
-	# return jsonify(draftGroupsDraftables), 200
-
 	mongoController.addDraftGroups(draftGroups)
 	mongoController.addDraftables(draftGroupsDraftables)
 
 	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200
+
+
+@upcoming_blueprint.route('/yahoo_series_and_draftables', methods=['POST'])
+def yahoo_upcoming():
+	series = yahooController.getYahooUpcomingSeries()
+	# return jsonify(series)
+	seriesDraftables = []
+
+	for series in series:
+		draftables = yahooController.getYahooContestPlayersByContestId(series["draftGroupId"])
+		print(draftables)
+
+		seriesDraftables.append(draftables)
+
+	# mongoController.addDraftGroups(contests)
+	# mongoController.addDraftables(contestDraftables)
+
+	return jsonify(seriesDraftables)
+
+	# return jsonify({"draft_groups": len(series), "draftables": len(seriesDraftables)}), 200
+

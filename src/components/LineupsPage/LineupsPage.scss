@@ -4,6 +4,15 @@
 	flex-direction: column;
 	margin-bottom: 70px;
 
+	.filter-btn {
+		border: None;
+		color: #0069ed;
+		padding: 5px;
+		background: none;
+		font-weight: 600;
+		color: black;
+	}
+
 	.filter-btn-wrapper {
 		h2 {
 			height: fit-content;
@@ -40,7 +49,6 @@
 	background: #ffffff;
 	box-shadow: 0px 0px 10px 1px lightgrey;
 	width: 100%;
-	margin: 10px;
 }
 
 .loading-screen {
@@ -106,13 +114,6 @@
   border: 1px solid #0069ed;
   background-color: #0069ed;
   color: #ffffff;
-  padding: 5px;
-}
-
-.filter-btn {
-  border: 1px solid #0069ed;
-  color: #0069ed;
-  background-color: #ffffff;
   padding: 5px;
 }
 
@@ -183,6 +184,11 @@
   color: #d3d3d3;
 }
 
+.lineup-wrapper {
+	max-width: 1100px;
+	display: flex;
+	flex-direction: column;
+}
 .lineup-wrapper-header {
 	.lineup-options-btn {
 		text-decoration: None;
@@ -207,5 +213,4 @@
 h3 {
 	color: black;
 }
-
 

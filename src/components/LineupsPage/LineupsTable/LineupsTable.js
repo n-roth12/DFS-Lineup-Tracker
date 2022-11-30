@@ -8,7 +8,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const [currPage, setCurrPage] = useState(0)
 
   const nextPage = () => {
-    if ((currPage + 1) * 50 >= lineups.length) return
+    if ((currPage + 1) * 20 >= lineups.length) return
     setCurrPage(currPage + 1)
   }
 
@@ -27,14 +27,15 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
 
   return (
     <div className='lineups-table-wrapper'>
+      <div className='lineups-table-wrapper-inner'>
       <span className="page-btn-wrapper">
-        <span className="page-label">{1 + (currPage * 50)} - {Math.min((currPage + 1) * 50, lineups.length)} of {lineups.length}</span>
+        <span className="page-label">{1 + (currPage * 20)} - {Math.min((currPage + 1) * 20, lineups.length)} of {lineups.length}</span>
         {currPage > 0 &&
           <>
             <span className="view-lineup-btn" onClick={prevPage}> <FaAngleLeft /> Prev </span>
           </>
         }
-        {(currPage + 1) * 50 < lineups.length &&
+        {(currPage + 1) * 20 < lineups.length &&
           <>
             <span className="view-lineup-btn" onClick={nextPage}> Next <FaAngleRight /></span>
           </>
@@ -52,7 +53,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
           </tr>
         </thead>
         <tbody>
-          {lineups.length > 0 && lineups.slice((currPage * 50), 50 + ((currPage) * 50)).map((lineup) => 
+          {lineups.length > 0 && lineups.slice((currPage * 20), 20 + ((currPage) * 20)).map((lineup) => 
             <>
               <tr>
                 <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input></td>
@@ -68,18 +69,19 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
         </tbody>
       </table>
       <span className="page-btn-wrapper">
-        <span className="page-label">{1 + (currPage * 50)} - {Math.min((currPage + 1) * 50, lineups.length)} of {lineups.length}</span>
+        <span className="page-label">{1 + (currPage * 20)} - {Math.min((currPage + 1) * 20, lineups.length)} of {lineups.length}</span>
         {currPage > 0 &&
           <>
             <span className="view-lineup-btn" onClick={prevPage}> <FaAngleLeft /> Prev </span>
           </>
         }
-        {(currPage + 1) * 50 < lineups.length &&
+        {(currPage + 1) * 20 < lineups.length &&
           <>
             <span className="view-lineup-btn" onClick={nextPage}> Next <FaAngleRight /></span>
           </>
         }
       </span>
+      </div>
     </div>
   )
 }

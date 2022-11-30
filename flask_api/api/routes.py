@@ -14,6 +14,7 @@ from .date_services import getCurrentWeek
 from .controllers.DraftKingsController import DraftKingsController
 from .controllers.RedisController import RedisController
 from .controllers.MongoController import MongoController
+from .controllers.YahooController import YahooController
 
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
@@ -21,6 +22,7 @@ from .controllers.MongoController import MongoController
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 RedisController = RedisController()
 MongoController = MongoController()
+YahooController = YahooController()
 
 # dynamodb = boto3.resource('dynamodb',
 #                           aws_access_key_id="anything",
@@ -227,3 +229,5 @@ def delete_all_draftgroups():
 def delete_all_draftables():
 	MongoController.deleteAllDraftables()
 	return "success", 200
+
+	

@@ -35,6 +35,7 @@ const LineupsPage = () => {
 	const [selectedFile, setSelectedFile] = useState(null)
 	const [selectedLineups, setSelectedLineups] = useState([])
 	const [showDeleteLineupsDialog, setShowDeleteLineupsDialog] = useState(false)
+	const [lineupFilter, setLineupsFilter] = useState("upcoming")
   
   useEffect(() => {
   	loadPage()
@@ -151,6 +152,10 @@ const LineupsPage = () => {
   return (
   	<div className="lineups-page page">
 		<div className='lineup-wrapper container' >
+			<div className='filter-btn-wrapper'>
+				<button onClick={() => setLineupsFilter("upcoming")} className='filter-btn'>Upcoming</button>
+				<button onClick={() => setLineupsFilter("past")} className='filter-btn'>Past</button>
+			</div>
 			<div className='lineup-wrapper-header'>
 				<h3>Upcoming Lineups:</h3>
 				<Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus /></Link>
@@ -163,9 +168,7 @@ const LineupsPage = () => {
 				selectedLineups={selectedLineups}
 				setSelectedLineups={setSelectedLineups}
 				lineups={lineups.filter((lineup) => {
-					const currentTime = new Date()
-					const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
-					return Date.parse(lineup["minStartTime"].split("T")[0]) >= Date.parse(timeConv)
+					return Date.parse(lineup["minStartTime"].split("T")[0]) > new Date()
 				})}
 			/>
 		</div>
@@ -211,13 +214,15 @@ const LineupsPage = () => {
 
 				<div className="lineups-wrapper container">
 					<h3>Past Lineups:</h3>
-					<LineupsTable 
+					<LineupsTable
+						selectedLineups={selectedLineups}
+						setSelectedLineups={setSelectedLineups} 
 						lineups={lineups.filter(lineup => {
-							const currentTime = new Date()
-							const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
-							return Date.parse(lineup["minStartTime"].split("T")[0]) < Date.parse(timeConv)
-						})} 
-						filteredYears={filteredYears} />
+							// const currentTime = new Date()
+							// const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
+							// console.log(t)
+							return Date.parse(lineup["minStartTime"].split("T")[0]) <= new Date()
+						})} /> 
 				</div>
 		  	</> 
 		 : 
