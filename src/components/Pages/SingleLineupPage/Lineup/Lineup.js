@@ -1,5 +1,4 @@
-import LineupPlayer from './LineupPlayer/LineupPlayer'
-import LineupPlayerNew from '../../LineupPlayerNewV2/LineupPlayerNewV2'
+import LineupPlayerNew from '../../../LineupPlayerNewV2/LineupPlayerNewV2'
 import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
 import './Lineup.scss'
 

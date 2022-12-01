@@ -13,7 +13,7 @@
 }
 
 body {
-  background-color: #f8f9fd;
+  background-color: var(--white-1);
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
 }
@@ -27,6 +27,12 @@ body {
   --inter: 'Inter', serif;
   --source-sans: 'Source Sans Pro', sans-serif;
   --box-shadow-1: 0px 0px 3px 1px lightgray;
+  --black-1: #141414;
+  --black-2: #161B22;
+  --space-blue: #2A2F44;
+  --slate: #788A95; 
+  --white-1: #f8f9fd;
+  --dark-blue: #202033;
 }
 
 .page {
@@ -66,10 +72,6 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.lineup-wrapper {
-  margin-top: 50px;
 }
 
 .players-wrapper {

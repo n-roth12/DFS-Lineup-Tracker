@@ -3,9 +3,9 @@ import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
 import { FaPlus, FaSearch, FaTimes } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
-import PlayerLink from './../PlayerLink/PlayerLink'
+import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
-import CreateLineupDialog from '../UpcomingPage/CreateLineupDialog/CreateLineupDialog'
+import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
 
 const CreateLineupPage = ({ setAlertMessage }) => {
 

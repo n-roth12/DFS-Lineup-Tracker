@@ -148,17 +148,18 @@ def yahoo_upcoming():
 	series = yahooController.getYahooUpcomingSeries()
 	# return jsonify(series)
 	seriesDraftables = []
+	print(series)
 
 	for series in series:
 		draftables = yahooController.getYahooContestPlayersByContestId(series["draftGroupId"])
-		print(draftables)
 
 		seriesDraftables.append(draftables)
-
-	# mongoController.addDraftGroups(contests)
-	# mongoController.addDraftables(contestDraftables)
-
-	return jsonify(seriesDraftables)
+	
+	print(len(series))
+	print(len(seriesDraftables))
+	return jsonify(series)
+	# mongoController.addDraftGroups(series)
+	# mongoController.addDraftables(seriesDraftables)
 
 	# return jsonify({"draft_groups": len(series), "draftables": len(seriesDraftables)}), 200
 

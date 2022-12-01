@@ -2,21 +2,15 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Players from './Players/Players'
 import Lineup from './Lineup/Lineup'
-import Navbar from '../Navbar/Navbar'
-import Footer from '../Footer/Footer'
 import LineupInfo from './LineupInfo/LineupInfo'
 import TeamInfo from './TeamInfo/TeamInfo'
-import PlayerDialog from './PlayerDialog/PlayerDialog'
-import { FaAngleLeft } from 'react-icons/fa'
+import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { Roller } from 'react-awesome-spinners'
-import '../../App.css';
 import './SingleLineupPage.css'
 import Dialog from "@material-ui/core/Dialog";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import Button from "@material-ui/core/Button";
 
 function SingleLineupPage() {
   const { lineupId, lineupWeek, lineupYear } = useParams()

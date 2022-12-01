@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import './LineupsPage.scss';
 import PointsGraph from './PointsGraph/PointsGraph'
 import BankrollGraph from './BankrollGraph/BankrollGraph'
-import LineupsTable from './LineupsTable/LineupsTable'
-import ImportLineupsDialog from '../Dialogs/ImportLineupsDialog/ImportLineupsDialog'
-import DeleteLineupsDialog from '../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog';
+import LineupsTable from '../../TablesLists/LineupsTable/LineupsTable'
+import ImportLineupsDialog from '../../Dialogs/ImportLineupsDialog/ImportLineupsDialog'
+import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog';
 import { Roller } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus, FaUpload, FaFileImport } from 'react-icons/fa'
 import Dialog from "@material-ui/core/Dialog";
@@ -13,6 +13,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { BiImport } from 'react-icons/bi'
+import RoundButtonV1 from '../../Buttons/RoundButtonV1/RoundButtonV1';
 
 const LineupsPage = () => {
 
@@ -35,7 +36,8 @@ const LineupsPage = () => {
 	const [selectedFile, setSelectedFile] = useState(null)
 	const [selectedLineups, setSelectedLineups] = useState([])
 	const [showDeleteLineupsDialog, setShowDeleteLineupsDialog] = useState(false)
-	const [lineupFilter, setLineupsFilter] = useState("upcoming")
+	const [stateFilter, setStateFilter] = useState("past")
+	const [siteFilter, setSiteFilter] = useState()
   
   useEffect(() => {
   	loadPage()
@@ -153,17 +155,17 @@ const LineupsPage = () => {
   	<div className="lineups-page page">
 		<div className='lineup-wrapper container' >
 			<div className='filter-btn-wrapper'>
-				<button onClick={() => setLineupsFilter("upcoming")} className='filter-btn'>Upcoming</button>
-				<button onClick={() => setLineupsFilter("past")} className='filter-btn'>Past</button>
+				<button onClick={() => setStateFilter("upcoming")} className={`underline-btn${stateFilter === "upcoming" ? " active" : ""}`}>Upcoming</button>
+				<button onClick={() => setStateFilter("past")} className={`underline-btn${stateFilter === "past" ? " active" : ""}`}>History</button>
 			</div>
 			<div className='lineup-wrapper-header'>
-				<h3>Upcoming Lineups:</h3>
-				<Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus /></Link>
-				<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport /></button>
+				<Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon'/></Link>
+				<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport className='icon'/></button>
 				{selectedLineups.length > 0 &&
 					<button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete Lineups ({selectedLineups.length})</button>
 				}
 			</div>
+			{stateFilter === "upcoming" &&
 			<LineupsTable
 				selectedLineups={selectedLineups}
 				setSelectedLineups={setSelectedLineups}
@@ -171,6 +173,7 @@ const LineupsPage = () => {
 					return Date.parse(lineup["minStartTime"].split("T")[0]) > new Date()
 				})}
 			/>
+			}
 		</div>
   		{!loadingLineups && lineups ?
   		<>
@@ -212,8 +215,8 @@ const LineupsPage = () => {
 					lineupsToDelete={selectedLineups} 
 					deleteLineups={() => deleteSelectedLineups(selectedLineups)} />
 
+				{ stateFilter === "past" &&
 				<div className="lineups-wrapper container">
-					<h3>Past Lineups:</h3>
 					<LineupsTable
 						selectedLineups={selectedLineups}
 						setSelectedLineups={setSelectedLineups} 
@@ -224,6 +227,7 @@ const LineupsPage = () => {
 							return Date.parse(lineup["minStartTime"].split("T")[0]) <= new Date()
 						})} /> 
 				</div>
+				}	
 		  	</> 
 		 : 
 		 	<div className="loading-screen">

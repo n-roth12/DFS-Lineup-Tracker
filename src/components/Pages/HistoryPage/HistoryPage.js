@@ -1,10 +1,6 @@
 import './HistoryPage.scss'
 import { useState, useEffect, useRef } from 'react'
-import PlayerDialog from '../SingleLineupPage/PlayerDialog/PlayerDialog'
-import PlayersTable from './PlayersTable/PlayersTable'
-import GamesSlider from './GamesSlider/GamesSlider'
-import PlayerSearch from './PlayerSearch/PlayerSearch'
-import { Roller } from 'react-awesome-spinners'
+import PlayersTable from '../../TablesLists/PlayersTable/PlayersTable'
 import { FaSearch } from 'react-icons/fa'
 const ResearchPage = () => {
 

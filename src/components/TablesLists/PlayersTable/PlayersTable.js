@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import PlayerLink from '../../PlayerLink/PlayerLink'
+import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import './PlayersTable.scss'
 
 const PlayersTable = ({ players }) => {

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import './UpcomingPage.scss'
-import PlayerLink from '../PlayerLink/PlayerLink';
-import CreateLineupDialog from './CreateLineupDialog/CreateLineupDialog';
+import PlayerLink from '../../Buttons/PlayerLink/PlayerLink';
+import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { Roller } from 'react-awesome-spinners';
+import { FaAngleRight } from 'react-icons/fa';
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -15,6 +16,7 @@ const UpcomingPage = ({ week, year }) => {
 	const [isSortUp, setIsSortUp] = useState(false)
 	const [selectedSite, setSelectedSite] = useState("draftkings")
 	const [lastUpdate, setLastUpdate] = useState("")
+	const [activeSlate, setActiveSlate] = useState({})
 
 	useEffect(() => {
 		getPlayers()
@@ -30,6 +32,7 @@ const UpcomingPage = ({ week, year }) => {
 		})
 		const data = await res.json()
 		setSlates(data)
+		setActiveSlate(data[0]["draftGroupId"])
 	}
 
 	const dialogActionWrapper = (slate) => {
@@ -84,11 +87,12 @@ const UpcomingPage = ({ week, year }) => {
 					<div className="slatesWrapper">
 						{slates.map((slate) => (
 							slate["site"] === selectedSite &&
-							<div className="slate" onClick={() => dialogActionWrapper(slate)}>
+							<div className={`slate${activeSlate === slate["draftGroupId"] ? " active" : ""}`} onClick={() => setActiveSlate(slate["draftGroupId"])}>
 								{/* <p>{slate["minStartTime"].split("T")[0]}</p> */}
 								<p>{slate["startTimeSuffix"] ? slate["startTimeSuffix"] : "Main"}</p>
 								<p>{slate["games"].length} Games</p>
-								<p>{slate["minStartTime"].split("T")[1]}</p>
+								{/* <p>{slate["minStartTime"].split("T")[1]}</p> */}
+								<p onClick={(e) => {e.stopPropagation(); dialogActionWrapper(slate)}} className='link-btn'>Details <FaAngleRight /></p>
 							</div>
 						))}
 					</div>

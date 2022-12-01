@@ -3,22 +3,25 @@
 	width: 100%;
 	flex-direction: column;
 	margin-bottom: 70px;
-
-	.filter-btn {
-		border: None;
-		color: #0069ed;
-		padding: 5px;
-		background: none;
-		font-weight: 600;
-		color: black;
-	}
-
 	.filter-btn-wrapper {
-		h2 {
-			height: fit-content;
-			margin-top: auto;
-			margin-bottom: auto;
-			margin-right: 20px;
+		display: flex;
+		justify-content: left;
+		.underline-btn {
+			border: None;
+			padding: 5px;
+			background: none;
+			font-weight: 600;
+			font-size: 14pt;
+			color: black;
+			margin: 10px;
+			padding: 0px 0px 5px 0px;
+			border-bottom: 3px solid transparent;
+		}
+		.underline-btn:hover:not(.active) {
+			border-bottom: 3px solid var(--grey-2);
+		}
+		.active {
+			border-bottom: 3px solid var(--dark-blue);
 		}
 	}
 
@@ -117,13 +120,6 @@
   padding: 5px;
 }
 
-.filter-btn-wrapper {
-  padding: 10px;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .graph-btn-wrapper {
 	width: 100%;
 	margin-bottom: 15px;
@@ -196,8 +192,14 @@
 		color: white;
 		border: 1px solid var(--grey-1);
 		margin: 6px;
-		padding: 8px;
-		border-radius: 10px;
+		padding: 7px 13px 7px 15px;
+		border-radius: 20px;
+		.icon {
+			height: 10px;
+		}
+	}
+	.lineup-options-btn:hover {
+		background-color: var(--grey-1);
 	}
 	.lineup-delete-btn {
 		background-color: red;
@@ -213,4 +215,5 @@
 h3 {
 	color: black;
 }
+
 

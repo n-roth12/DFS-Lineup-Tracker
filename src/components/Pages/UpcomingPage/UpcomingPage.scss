@@ -128,16 +128,30 @@
 				border-radius: 12px;
 				background-color: white;
 				cursor: pointer;
-				text-align: center;
+				text-align: left;
 				text-decoration: none;
 				font-weight: 600;
 				line-height: 10pt;
 				overflow: visible;
 				box-shadow: var(--box-shadow-1);
+				border: 2px solid transparent;
+				p:first-child {
+					font-weight: 600;
+					font-size: 11pt;
+				}
 			}
-			.slate:hover {
-				border: 1px solid grey;
+			.slate:hover:not(.active) {
+				border: 2px solid var(--grey-2);
 				text-decoration: None;
+			}
+			.active {
+				border: 2px solid var(--dark-blue);
+			}
+			.link-btn {
+				color: var(--btn-blue);
+			}
+			.link-btn:hover {
+				color: var(--dark-blue);
 			}
 		}
 	}
