@@ -25,4 +25,10 @@
             font-size: 13pt;
         }
     }
+    .logout-btn {
+        cursor: pointer;
+    }
+    .logout-btn:hover {
+        color: var(--dark-blue);
+    }
 }

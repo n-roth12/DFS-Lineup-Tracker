@@ -119,7 +119,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
             <p className='title-upper'>{draftGroup["startTimeSuffix"] && draftGroup["startTimeSuffix"].replace('(', '').replace(')', '')} ({draftGroup["draftGroupState"]})</p>
             <FaTimes className='close-btn' onClick={closeDialog}/>
           </div>
-          <p className='title-lower'>  Start Time: {draftGroup["minStartTime"].split("T")[0]} {draftGroup["minStartTime"].split("T")[1]}</p>
+          <p className='title-lower'>{draftGroup["minStartTime"] && "Start Time: " + draftGroup["minStartTime"].split("T")[0] + draftGroup["minStartTime"].split("T")[1]}</p>
         </DialogTitle>
         <DialogContent className="content">
           <div className='content-inner'>
@@ -129,7 +129,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
                 draftGroup["games"].map((game) => 
                 <div className="game">
                   <p>{game["description"]}</p>
-                  <p>{game["startDate"].split("T")[0]}</p>
+                  <p>{game["startDate"] && game["startDate"].split("T")[0]}</p>
                 </div>
                 )
               }

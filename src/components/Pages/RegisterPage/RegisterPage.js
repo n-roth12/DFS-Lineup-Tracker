@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './RegisterPage.css'
+import UpperNav from '../../Navbar/UpperNav/UpperNav'
 
 const LandingPage = ({ setToken }) => {
 
@@ -40,8 +41,9 @@ const LandingPage = ({ setToken }) => {
 	}
 
 	return (
+		<>
+		<UpperNav />
 		<div className="register-page">
-			<h1 className="website-title">MainSlater</h1>
 			<div className="register-form-wrapper">
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>
@@ -73,6 +75,7 @@ const LandingPage = ({ setToken }) => {
 		    </div>
 		  </div>
 		</div>
+		</>
 	)
 }
 

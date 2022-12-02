@@ -13,17 +13,42 @@
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: flex-end;
+			.btn-wrapper {
+				display: flex;
+				flex-direction: row;
+				.lineup-options-btn {
+					text-decoration: None;
+					background-color: var(--btn-blue);
+					color: white;
+					border: 1px solid var(--grey-1);
+					margin: 6px;
+					padding: 4px 13px 4px 15px;
+					border-radius: 20px;
+					transition: all 0.3s;
+					height: fit-content;
+					.icon {
+						height: 10px;
+					}
+				}
+				.lineup-options-btn:hover {
+					background-color: var(--grey-1);
+				}
+			}
 			h2 {
 				text-align: left;
 				margin: 20px 20px 10px 5px;
 				font-weight: 600;
 				font-size: 18pt;
+				.slate-title {
+					font-size: 15pt;
+					font-weight: 500;
+				}
 			}
 			p {
 				margin-bottom: 0;
 			}
 		}
-
+		
 		.players-inner {
 			width: 100%;
 			display: flex;
@@ -47,6 +72,9 @@
 					cursor: pointer;
 					background-color: var(--grey-2);
 				}
+				th {
+					transition: all 0.1s;
+				}
 				.header-labels .selected {
 					background-color: var(--grey-2);
 					border: None;
@@ -61,6 +89,10 @@
 				tbody {
 					tr:hover {
 						background-color: #d5d8dc;
+					}
+					tr {
+						transition: all 0.1s;
+						font-weight: 600;
 					}
 				}
 			
@@ -88,17 +120,21 @@
 				font-weight: 600;
 				font-size: 18pt;
 			}
-			button {
-				border: 1px solid var(--grey-2);
-				background-color: None;
+			.underline-btn {
+				border: None;
+				background: None;
 				padding: 5px 15px 5px 15px;
-				margin-right: 20px;
-				border-radius: 25px;
-				height: fit-content;
+				font-weight: 600;
+				font-size: 14pt;
+				margin: 5px;
+				border-bottom: 3px solid transparent;
+				transition: all 0.2s;
 			}
-			.selected {
-				outline: None;
-				background-color: var(--grey-2);
+			.underline-btn:hover:not(.active) {
+				border-bottom: 3px solid var(--grey-2);
+			}
+			.active {
+				border-bottom: 3px solid var(--dark-blue);
 			}
 		}
 		h3 {
@@ -135,9 +171,14 @@
 				overflow: visible;
 				box-shadow: var(--box-shadow-1);
 				border: 2px solid transparent;
+				transition: all 0.2s;
 				p:first-child {
 					font-weight: 600;
 					font-size: 11pt;
+				}
+				.link-btn {
+					width: fit-content;
+					transition: all 0.2s;
 				}
 			}
 			.slate:hover:not(.active) {

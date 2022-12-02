@@ -1,9 +1,10 @@
 .alert-section {
-    background-color: rgba(55, 230, 78, 0.8);
+    background-color: var(--green);
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    transition: all 0.5s;
     p {
         display: flex;
         font-size: 14pt;

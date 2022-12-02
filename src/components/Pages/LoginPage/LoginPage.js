@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import './LoginPage.css'
+import './LoginPage.scss'
+import UpperNav from '../../Navbar/UpperNav/UpperNav'
 
 const LoginPage = ({ setToken, setUserId }) => {
 
@@ -40,8 +41,9 @@ const LoginPage = ({ setToken, setUserId }) => {
 	}
 
 	return (
+		<>
+		<UpperNav />
 		<div className="login-page">
-			<h1 className="website-title">MainSlater</h1>
 			<div className="login-form-wrapper">
 				<h1>Login</h1>
 				<form className="login-form" onSubmit={handleSubmit}>
@@ -70,6 +72,7 @@ const LoginPage = ({ setToken, setUserId }) => {
 			    </div>
 			</div>
 		</div>
+		</>
 	)
 }
 

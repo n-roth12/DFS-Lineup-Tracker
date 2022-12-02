@@ -70,3 +70,34 @@ class DraftKingsController:
         except:
             print(f"Error fetching DraftKings draftables from draft group: {draftGroupId}")
             return []
+
+
+    def convertDraftKingsPlayer(self, player):
+        if player["draftStatAttributes"]:
+            fppg = [x["value"] for x in player["draftStatAttributes"] if x["id"] == 90]
+            oprk = [x["value"] for x in player["draftStatAttributes"] if x["id"] == -2]
+            
+            player["fppg"] = fppg[0] if len(fppg) else None
+            player["oprk"] = oprk[0] if len(oprk) else None
+
+        if player["game"]:
+            player["game"] = {
+                "homeTeam": player["competition"]["nameDisplay"][0]["value"],
+                "awayTeam": player["competition"]["nameDisplay"][2]["value"],
+                "competitionId": player["competition"]["competitionId"],
+                "startTime": player["competition"]["startTime"]
+            }
+        
+        player["team"] = player.pop("teamAbbreviation", "")
+        player["site"] = "draftkings"
+
+        del(player["teamAbbreviation"])
+        del(player["competition"])
+        del(player["draftStatAttributes"])
+        del(player["rosterSlotId"])
+        del(player["isSwappable"])
+        del(player["teamLeagueSeasonAttributes"])
+        del(player["externalRequirements"])
+        
+        return player
+

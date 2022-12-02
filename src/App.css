@@ -33,6 +33,9 @@ body {
   --slate: #788A95; 
   --white-1: #f8f9fd;
   --dark-blue: #202033;
+  --dark-red: #282119;
+  --dark-other: #15233A;
+  --green: rgba(55, 230, 78, 0.8);
 }
 
 .page {

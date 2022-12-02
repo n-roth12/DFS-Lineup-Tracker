@@ -76,8 +76,10 @@ def upcoming_players(current_user: User):
 	print(draft_group_id)
 
 	draftables = mongoController.getDraftablesByDraftGroupId(draft_group_id)
-
-	return jsonify(draftables["draftables"]), 200
+	if draftables["site"] == "draftkings":
+		return jsonify(draftables["draftables"]), 200
+	else:
+		return jsonify(draftables["players"]), 200
 
 
 @upcoming_blueprint.route('/ownership', methods=["GET"])
@@ -109,6 +111,19 @@ def get_slates(current_user: User):
 		slates = json.loads(slates_from_cache)
 	
 	return jsonify(slates), 200
+
+
+@upcoming_blueprint.route('/draftables', methods=['GET'])
+@token_required
+def get_draftables(current_user: User):
+	draftGroupId = request.args.get("draftGroupId")
+	site = request.args.get("site")
+	draftables = mongoController.getDraftablesByDraftGroupId(draftGroupId)
+
+	if site == "draftkings":
+		return jsonify(draftables["draftables"]), 200
+	elif site == "yahoo":
+		return jsonify(draftables["players"]), 200
 
 
 @upcoming_blueprint.route('/ownership', methods=["POST"])
@@ -146,20 +161,14 @@ def draftkings_upcoming():
 @upcoming_blueprint.route('/yahoo_series_and_draftables', methods=['POST'])
 def yahoo_upcoming():
 	series = yahooController.getYahooUpcomingSeries()
-	# return jsonify(series)
 	seriesDraftables = []
-	print(series)
 
-	for series in series:
-		draftables = yahooController.getYahooContestPlayersByContestId(series["draftGroupId"])
-
+	for serie in series:
+		draftables = yahooController.getYahooContestPlayersByContestId(serie["draftGroupId"])
 		seriesDraftables.append(draftables)
 	
-	print(len(series))
-	print(len(seriesDraftables))
-	return jsonify(series)
-	# mongoController.addDraftGroups(series)
-	# mongoController.addDraftables(seriesDraftables)
+	mongoController.addDraftGroups(series)
+	mongoController.addDraftables(seriesDraftables)
 
-	# return jsonify({"draft_groups": len(series), "draftables": len(seriesDraftables)}), 200
+	return jsonify({"draft_groups": len(series), "draftables": len(seriesDraftables)}), 200
 

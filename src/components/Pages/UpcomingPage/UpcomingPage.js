@@ -3,11 +3,12 @@ import './UpcomingPage.scss'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink';
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { Roller } from 'react-awesome-spinners';
-import { FaAngleRight } from 'react-icons/fa';
+import { FaAngleRight, FaPlus } from 'react-icons/fa';
+import { BiImport } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 const UpcomingPage = ({ week, year }) => {
 
-	const [games, setGames] = useState([])
 	const [slates, setSlates] = useState([])
 	const [players, setPlayers] = useState([])
 	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
@@ -17,11 +18,25 @@ const UpcomingPage = ({ week, year }) => {
 	const [selectedSite, setSelectedSite] = useState("draftkings")
 	const [lastUpdate, setLastUpdate] = useState("")
 	const [activeSlate, setActiveSlate] = useState({})
-
+	const [actieSlateDraftables, setActiveSlateDraftales] = useState([])
+	const [showImportDialog, setShowImportDialog] = useState(false)
+	const [loadingDraftables, setLoadingDraftables] = useState(false)
+	const navigate = useNavigate()
+ 
 	useEffect(() => {
 		getPlayers()
 		getUpcomingSlates()
 	}, [])
+
+	useEffect(() => {
+		getDraftables()
+	}, [activeSlate])
+
+	useEffect(() => {
+		if (slates.length) {
+			setActiveSlate(slates.filter((slate) => slate["site"] === selectedSite)[0])
+		}
+	}, [selectedSite])
 
 	const getUpcomingSlates = async () => {
 		const res = await fetch('/upcoming/slates_new', {
@@ -32,7 +47,40 @@ const UpcomingPage = ({ week, year }) => {
 		})
 		const data = await res.json()
 		setSlates(data)
-		setActiveSlate(data[0]["draftGroupId"])
+		setActiveSlate(data[0])
+	}
+
+	const getDraftables = async () => {
+		if (activeSlate && selectedSite) {
+			setLoadingDraftables(true)
+			const res = await fetch(`/upcoming/draftables?draftGroupId=${activeSlate["draftGroupId"]}&site=${selectedSite}`, {
+				method: 'GET',
+				headers: {
+					'x-access-token': sessionStorage.dfsTrackerToken
+				}
+			})
+			const data = await res.json()
+			var mySet = new Set()
+			var draftables = []
+			if (selectedSite === "draftkings") {
+				data.forEach((player) => {
+				if (!mySet.has(player["playerId"])) {
+					draftables.push(player)
+					mySet.add(player["playerId"])
+				}
+				})
+			}
+			else if (selectedSite === "yahoo") {
+				data.forEach((player) => {
+					if (!mySet.has(player["code"])) {
+					draftables.push(player)
+					mySet.add(player["playerId"])
+					}
+				})
+			}
+			setActiveSlateDraftales(draftables)
+			setLoadingDraftables(false)
+		}
 	}
 
 	const dialogActionWrapper = (slate) => {
@@ -70,31 +118,55 @@ const UpcomingPage = ({ week, year }) => {
 		setSortColumn([site, attribute])
 	}
 
+	const createLineup = async (draftGroup) => {
+		console.log(draftGroup)
+		const res = await fetch(`/lineups/createEmptyLineup`, {
+			method: 'POST',
+			headers: {
+			  'x-access-token': sessionStorage.dfsTrackerToken
+			},
+			body: JSON.stringify({
+			  "draft-group": draftGroup["draftGroupId"],
+			  "minStartTime": draftGroup["minStartTime"],
+			  "maxStartTime": draftGroup["maxStartTime"],
+			  "site": draftGroup["site"],
+			  "startTimeSuffix": draftGroup["startTimeSuffix"]
+			})
+		})
+		const data = await res.json()
+		const lineupId = data["lineupId"]
+		navigate(`/createLineup/${draftGroup["draftGroupId"]}/${lineupId}`)
+	}
+
 	return (
 		<div className="upcoming-page page">
 			<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={closeDialogWrapper} draftGroup={createLineupDialogContent} />
 			<div className='slatesWrapper-outer'>
-				{slates.length ? 
+				{slates.length ?
 				<>
 					<div className='site-filter-wrapper'>
-						<h2>Slates</h2>
-						<button className={selectedSite === "draftkings" && "selected"}
+						<button className={`underline-btn${selectedSite === "draftkings" ? " active": ""}`}
 							onClick={() => setSelectedSite("draftkings")}>DraftKings</button>
-						<button className={selectedSite === "fanduel" && "selected"}
+						<button className={`underline-btn${selectedSite === "yahoo" ? " active" : ""}`}
+							onClick={() => setSelectedSite("yahoo")}>Yahoo</button>
+						<button className={`underline-btn${selectedSite === "fanduel" ? " active" : ""}`}
 							onClick={() => setSelectedSite("fanduel")}>Fanduel</button>
 					</div>
 					<div className="slatesWrapper">
-						{slates.map((slate) => (
+						{slates.length > 0 ? slates.map((slate) => (
 							slate["site"] === selectedSite &&
-							<div className={`slate${activeSlate === slate["draftGroupId"] ? " active" : ""}`} onClick={() => setActiveSlate(slate["draftGroupId"])}>
+							<div className={`slate${activeSlate["draftGroupId"] == slate["draftGroupId"] ? " active" : ""}`} onClick={() => setActiveSlate(slate)}>
 								{/* <p>{slate["minStartTime"].split("T")[0]}</p> */}
-								<p>{slate["startTimeSuffix"] ? slate["startTimeSuffix"] : "Main"}</p>
+								<p>{slate["startTimeSuffix"] ? slate["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</p>
 								<p>{slate["games"].length} Games</p>
 								{/* <p>{slate["minStartTime"].split("T")[1]}</p> */}
 								<p onClick={(e) => {e.stopPropagation(); dialogActionWrapper(slate)}} className='link-btn'>Details <FaAngleRight /></p>
 							</div>
-						))}
+						))
+						:
+						<h3>No Slates Found</h3>
+					}
 					</div>
 				</>
 				:
@@ -102,57 +174,83 @@ const UpcomingPage = ({ week, year }) => {
 				}
 			</div>
 
-			{Object.keys(players).length > 0 && 
+			{!loadingDraftables ? <>
+			{Object.keys(actieSlateDraftables).length > 0 && 
 				<div className='players-outer'>
 					<div className='players-outer-header'>
-						<h2>Players</h2>
+						<div className='btn-wrapper'>
+							<h2><span>{selectedSite.charAt(0).toUpperCase() + selectedSite.slice(1)}</span> <span className='slate-title'>{activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
+							<button className='lineup-options-btn' onClick={() => createLineup(activeSlate)}>Create Lineup <FaPlus className='icon'/></button>
+							<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport className='icon'/></button>
+						</div>
 						<p>Last update: {lastUpdate}</p>
 					</div>
 					<div className='players-inner'>
 						<table className='lineups-table'>
 							<thead>
-								<tr className="col-labels">
+								{/* <tr className="col-labels">
 									<th colspan="4"></th>
 									<th className="col-label" colspan="2">Fanduel</th>
 									<th className="col-label" colspan="2">Draftkings</th>
-								</tr>
+								</tr> */}
 								<tr className='header-labels'>
 									<th className={sortColumn[1] === "name" && "selected"}
 										onClick={() => sortRows("", "name")}>Name</th>
 									<th className={sortColumn[1] === "position" && "selected"}
 										onClick={() => sortRows("fanduel", "position")}>Pos</th>
-									<th className={sortColumn[1] === "team" && "selected"}
-										onClick={() => sortRows("fanduel" , "team")}>Team</th>
+									{/* <th className={sortColumn[1] === "team" && "selected"}
+										onClick={() => sortRows("fanduel" , "team")}>Team</th> */}
 									<th className={sortColumn[1] == "opponent" && "selected"}
 										onClick={() => sortRows("fanduel", "opponent")}>Opp</th>
 									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "salary" && "selected"}
 										onClick={() => sortRows("fanduel", "salary")}>Salary</th>
 									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "ownership_projection" && "selected"}
-										onClick={() => sortRows("fanduel", "ownership_projection")}>Own Proj</th>
-									<th className={sortColumn[0] === "draftkings" && sortColumn[1] === "salary" && "selected"}
+										onClick={() => sortRows("fanduel", "ownership_projection")}>FPPG</th>
+									{/* <th className={sortColumn[0] === "draftkings" && sortColumn[1] === "salary" && "selected"}
 										onClick={() => sortRows("draftkings", "salary")}>Salary</th>
 									<th className={sortColumn[0] === "draftkings" && sortColumn[1] == "ownership_projection" && "selected"}
-										onClick={() => sortRows("draftkings", "ownership_projection")}>Own Proj</th>
+										onClick={() => sortRows("draftkings", "ownership_projection")}>Own Proj</th> */}
 								</tr>
 							</thead>
 							<tbody>
-								{players.map((data) => (
+								{actieSlateDraftables.map((data) => (
+									// <tr>
+									// 	<td><strong><PlayerLink playerName={data["name"]} /></strong></td>
+									// 	<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["position"] : data["stats"]["draftkings"]["position"] }</td>
+									// 	<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["team"] : data["stats"]["draftkings"]["team"]}</td>
+									// 	<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["opponent"] : data["stats"]["draftkings"]["opponent"]}</td>
+									// 	<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["salary"] : null}</td>
+									// 	<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["ownership_projection"] : null}</td>
+									// 	<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["salary"] : null}</td>
+									// 	<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["ownership_projection"] : null}</td>
+									// </tr>
+									<>
+									{selectedSite === "draftkings" &&
 									<tr>
-										<td><strong><PlayerLink playerName={data["name"]} /></strong></td>
-										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["position"] : data["stats"]["draftkings"]["position"] }</td>
-										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["team"] : data["stats"]["draftkings"]["team"]}</td>
-										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["opponent"] : data["stats"]["draftkings"]["opponent"]}</td>
-										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["salary"] : null}</td>
-										<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["ownership_projection"] : null}</td>
-										<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["salary"] : null}</td>
-										<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["ownership_projection"] : null}</td>
+										<td><strong><PlayerLink playerName={`${data["firstName"]} ${data["lastName"]}`}/></strong></td>
+										<td>{data["position"]}</td>
+										{/* <td>{data["teamAbbreviation"]}</td> */}
+										<td>{data["competition"]["name"]}</td>
+										<td>${data["salary"]}</td>
+										<td>{data["draftStatAttributes"][0]["value"]}</td>
 									</tr>
+									}
+									{selectedSite === "yahoo" &&
+										<tr>
+											<td><strong><PlayerLink playerName={`${data["firstName"]} ${data["lastName"]}`}/></strong></td>
+											<td>{data["primaryPosition"]}</td>
+											<td>{data["game"] && `${data["game"]["awayTeam"]["abbr"]} @ ${data["game"]["homeTeam"]["abbr"]}`}</td>
+											<td>${data["salary"]}</td>
+											<td>{parseFloat(data["fantasyPointsPerGame"]).toFixed(2)}</td>
+										</tr>
+									}
+									</>
 								))}
 							</tbody>
 						</table>
 					</div>
 				</div>
-			}
+			}</>:<Roller />}
 		</div>
 	)
 }

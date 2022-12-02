@@ -73,3 +73,42 @@ class YahooController:
         except Exception as e:
             print("Error retrieving yahoo series")
             print(e)
+            return
+
+
+    def convertYahooPlayer(self, player):
+        player["teamAbbreviation"] = player.pop("teamAbbr", "")
+        player["position"] = player.pop("primaryPosition", "")
+        player["fppg"] = player.pop("fantasyPointsPerGame", "")
+        player["displayName"] = f'{player["firstName"]} {player["lastName"]}'
+        player["oprk"] = plae
+
+        # if player["draftStatAttributes"]:
+        #     fppg = [x["value"] for x in player["draftStatAttributes"] if x["id"] == 90]
+        #     oprk = [x["value"] for x in player["draftStatAttributes"] if x["id"] == -2]
+            
+        #     player["fppg"] = fppg[0] if len(fppg) else None
+        #     player["oprk"] = oprk[0] if len(oprk) else None
+
+        # if player["game"]:
+        #     player["game"] = {
+        #         "homeTeam": player["competition"]["nameDisplay"][0]["value"],
+        #         "awayTeam": player["competition"]["nameDisplay"][2]["value"],
+        #         "competitionId": player["competition"]["competitionId"],
+        #         "startTime": player["competition"]["startTime"]
+        #     }
+        
+        # player["team"] = player["teamAbbreviation"]
+        # player["site"] = "draftkings"
+
+        # del(player["teamAbbreviation"])
+        # del(player["competition"])
+        # del(player["draftStatAttributes"])
+        # del(player["rosterSlotId"])
+        # del(player["isSwappable"])
+        # del(player["teamLeagueSeasonAttributes"])
+        # del(player["externalRequirements"])
+
+
+
+    def convertYahooDraftGroup(self, draftGroup):

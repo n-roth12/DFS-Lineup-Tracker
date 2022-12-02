@@ -16,6 +16,7 @@
 			margin: 10px;
 			padding: 0px 0px 5px 0px;
 			border-bottom: 3px solid transparent;
+			transition: all 0.2s;
 		}
 		.underline-btn:hover:not(.active) {
 			border-bottom: 3px solid var(--grey-2);
@@ -194,6 +195,7 @@
 		margin: 6px;
 		padding: 7px 13px 7px 15px;
 		border-radius: 20px;
+		transition: all 0.3s;
 		.icon {
 			height: 10px;
 		}

@@ -338,8 +338,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       <div className="header">
         <div className="header-inner">
           <div className="header-label">
-            <p className="site">Fanduel Lineup</p>
-            <p className="date">9/10 - 5pm ET</p>
+            <p className="site">{draftGroup && draftGroup["site"].charAt(0).toUpperCase() + draftGroup["site"].slice(1)} Lineup</p>
+            <p className="date">{draftGroup && draftGroup["startTimeSuffix"]}</p>
           </div>
           <div className="header-options">
             <button 
