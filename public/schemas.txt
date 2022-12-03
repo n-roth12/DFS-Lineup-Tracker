@@ -1,0 +1,46 @@
+draftGroup: {
+    draftGroupId: str
+    startTimeSuffix: str
+    startTime: str
+    endTime: str (nullable)
+    site: str
+    salaryCap: int
+
+    games: [
+        gameId: str
+        startTime: str
+        stadium: str (nullable)
+        homeTeam: str
+        awayTeam: str
+    ]
+}
+
+draftables: {
+    draftGroupId: str
+    site: str
+    draftables: [
+        playerSiteId: str
+        salary: int
+        position: str
+        status: str (nullable)
+        firstName: str
+        lastName: str
+        team: str
+        displayName: str (nullable)
+        playerImageSmall: str (nullable)
+        playerImageLarge: str (nullable)
+        opponent: str
+        game: {
+            gameId: str
+            homeTeam: str
+            awayTeam: str
+            starTime: str
+        }
+        oprk: int (nullable)
+        fppg: int (nullable)
+        number: int (nullable)
+        projPoints: double
+    ]
+
+
+}

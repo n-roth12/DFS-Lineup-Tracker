@@ -117,13 +117,9 @@ def get_slates(current_user: User):
 @token_required
 def get_draftables(current_user: User):
 	draftGroupId = request.args.get("draftGroupId")
-	site = request.args.get("site")
 	draftables = mongoController.getDraftablesByDraftGroupId(draftGroupId)
 
-	if site == "draftkings":
-		return jsonify(draftables["draftables"]), 200
-	elif site == "yahoo":
-		return jsonify(draftables["players"]), 200
+	return jsonify(draftables["draftables"]), 200
 
 
 @upcoming_blueprint.route('/ownership', methods=["POST"])
@@ -147,7 +143,7 @@ def draftkings_upcoming():
 		draftGroup = draftKingsController.getDraftKingsDraftGroupById(draftGroupId)
 		draftGroup["site"] = "draftkings"
 		draftGroups.append(draftGroup)
-
+	
 		draftGroupDraftables = draftKingsController.getDraftKingsDraftablesByDraftGroupId(draftGroupId)
 		draftGroupsDraftables.append({"draftGroupId" : draftGroupId, 
 			"draftables": draftGroupDraftables, "site": "draftkings"})
@@ -158,17 +154,19 @@ def draftkings_upcoming():
 	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200
 
 
-@upcoming_blueprint.route('/yahoo_series_and_draftables', methods=['POST'])
+@upcoming_blueprint.route('/yahoo_draftgroups_and_draftables', methods=['POST'])
 def yahoo_upcoming():
-	series = yahooController.getYahooUpcomingSeries()
-	seriesDraftables = []
+	draftGroups = yahooController.getYahooUpcomingSeries()    # this doesn't contain contestIds, so we have to get
+	draftGroupsDraftables = []								  # upcoming contests and pair with the seriesIds
+	upcomingContests = yahooController.getYahooUpcomingContests()
 
-	for serie in series:
-		draftables = yahooController.getYahooContestPlayersByContestId(serie["draftGroupId"])
-		seriesDraftables.append(draftables)
+	for contest in upcomingContests:
+		draftables = yahooController.getYahooDraftablesByDraftGroupId(contest["id"])
+		draftables["draftGroupId"] = contest["seriesId"]
+		draftGroupsDraftables.append(draftables)
 	
-	mongoController.addDraftGroups(series)
-	mongoController.addDraftables(seriesDraftables)
+	mongoController.addDraftGroups(draftGroups)
+	mongoController.addDraftables(draftGroupsDraftables)
 
-	return jsonify({"draft_groups": len(series), "draftables": len(seriesDraftables)}), 200
+	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200
 

@@ -18,7 +18,7 @@ const UpcomingPage = ({ week, year }) => {
 	const [selectedSite, setSelectedSite] = useState("draftkings")
 	const [lastUpdate, setLastUpdate] = useState("")
 	const [activeSlate, setActiveSlate] = useState({})
-	const [actieSlateDraftables, setActiveSlateDraftales] = useState([])
+	const [activeSlateDraftables, setActiveSlateDraftales] = useState([])
 	const [showImportDialog, setShowImportDialog] = useState(false)
 	const [loadingDraftables, setLoadingDraftables] = useState(false)
 	const navigate = useNavigate()
@@ -60,25 +60,7 @@ const UpcomingPage = ({ week, year }) => {
 				}
 			})
 			const data = await res.json()
-			var mySet = new Set()
-			var draftables = []
-			if (selectedSite === "draftkings") {
-				data.forEach((player) => {
-				if (!mySet.has(player["playerId"])) {
-					draftables.push(player)
-					mySet.add(player["playerId"])
-				}
-				})
-			}
-			else if (selectedSite === "yahoo") {
-				data.forEach((player) => {
-					if (!mySet.has(player["code"])) {
-					draftables.push(player)
-					mySet.add(player["playerId"])
-					}
-				})
-			}
-			setActiveSlateDraftales(draftables)
+			setActiveSlateDraftales(data)
 			setLoadingDraftables(false)
 		}
 	}
@@ -119,7 +101,6 @@ const UpcomingPage = ({ week, year }) => {
 	}
 
 	const createLineup = async (draftGroup) => {
-		console.log(draftGroup)
 		const res = await fetch(`/lineups/createEmptyLineup`, {
 			method: 'POST',
 			headers: {
@@ -175,7 +156,7 @@ const UpcomingPage = ({ week, year }) => {
 			</div>
 
 			{!loadingDraftables ? <>
-			{Object.keys(actieSlateDraftables).length > 0 && 
+			{Object.keys(activeSlateDraftables).length > 0 && 
 				<div className='players-outer'>
 					<div className='players-outer-header'>
 						<div className='btn-wrapper'>
@@ -194,17 +175,17 @@ const UpcomingPage = ({ week, year }) => {
 									<th className="col-label" colspan="2">Draftkings</th>
 								</tr> */}
 								<tr className='header-labels'>
-									<th className={sortColumn[1] === "name" && "selected"}
+									<th className={sortColumn[1] === "name" ? "selected": ""}
 										onClick={() => sortRows("", "name")}>Name</th>
-									<th className={sortColumn[1] === "position" && "selected"}
+									<th className={sortColumn[1] === "position" ? "selected": ""}
 										onClick={() => sortRows("fanduel", "position")}>Pos</th>
 									{/* <th className={sortColumn[1] === "team" && "selected"}
 										onClick={() => sortRows("fanduel" , "team")}>Team</th> */}
-									<th className={sortColumn[1] == "opponent" && "selected"}
+									<th className={sortColumn[1] == "opponent" ? "selected": ""}
 										onClick={() => sortRows("fanduel", "opponent")}>Opp</th>
-									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "salary" && "selected"}
+									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "salary" ? "selected": ""}
 										onClick={() => sortRows("fanduel", "salary")}>Salary</th>
-									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "ownership_projection" && "selected"}
+									<th className={sortColumn[0] === "fanduel" && sortColumn[1] === "ownership_projection" ? "selected": ""}
 										onClick={() => sortRows("fanduel", "ownership_projection")}>FPPG</th>
 									{/* <th className={sortColumn[0] === "draftkings" && sortColumn[1] === "salary" && "selected"}
 										onClick={() => sortRows("draftkings", "salary")}>Salary</th>
@@ -213,7 +194,7 @@ const UpcomingPage = ({ week, year }) => {
 								</tr>
 							</thead>
 							<tbody>
-								{actieSlateDraftables.map((data) => (
+								{activeSlateDraftables.map((data) => (
 									// <tr>
 									// 	<td><strong><PlayerLink playerName={data["name"]} /></strong></td>
 									// 	<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["position"] : data["stats"]["draftkings"]["position"] }</td>
@@ -224,27 +205,16 @@ const UpcomingPage = ({ week, year }) => {
 									// 	<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["salary"] : null}</td>
 									// 	<td>{data["stats"]["draftkings"] ? data["stats"]["draftkings"]["ownership_projection"] : null}</td>
 									// </tr>
-									<>
-									{selectedSite === "draftkings" &&
+
 									<tr>
 										<td><strong><PlayerLink playerName={`${data["firstName"]} ${data["lastName"]}`}/></strong></td>
 										<td>{data["position"]}</td>
 										{/* <td>{data["teamAbbreviation"]}</td> */}
-										<td>{data["competition"]["name"]}</td>
+										<td>{data["game"]["homeTeam"]}</td>
 										<td>${data["salary"]}</td>
-										<td>{data["draftStatAttributes"][0]["value"]}</td>
+										<td>{data["oprk"]}</td>
 									</tr>
-									}
-									{selectedSite === "yahoo" &&
-										<tr>
-											<td><strong><PlayerLink playerName={`${data["firstName"]} ${data["lastName"]}`}/></strong></td>
-											<td>{data["primaryPosition"]}</td>
-											<td>{data["game"] && `${data["game"]["awayTeam"]["abbr"]} @ ${data["game"]["homeTeam"]["abbr"]}`}</td>
-											<td>${data["salary"]}</td>
-											<td>{parseFloat(data["fantasyPointsPerGame"]).toFixed(2)}</td>
-										</tr>
-									}
-									</>
+
 								))}
 							</tbody>
 						</table>

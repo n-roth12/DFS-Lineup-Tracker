@@ -1,4 +1,7 @@
 import requests
+import datetime
+import time
+from calendar import timegm
 
 class DraftKingsController:
 
@@ -47,12 +50,8 @@ class DraftKingsController:
 
 
     def getDraftKingsDraftGroupById(self, draftGroupId):
-        try:
-            res = requests.get(f'https://api.draftkings.com/draftgroups/v1/{draftGroupId}')
-            return res.json()["draftGroup"]
-        except Exception as e:
-            print(e)
-            return
+        res = requests.get(f'https://api.draftkings.com/draftgroups/v1/{draftGroupId}').json()
+        return self.convertDraftKingsDraftGroup(res["draftGroup"])
 
     
     def getDraftKingsContestRules(self, gameTypeId):
@@ -64,40 +63,73 @@ class DraftKingsController:
         
 
     def getDraftKingsDraftablesByDraftGroupId(self, draftGroupId: str):
-        try:
-            res = requests.get(f'https://api.draftkings.com/draftgroups/v1/draftgroups/{draftGroupId}/draftables?format=json')
-            return res.json()["draftables"]
-        except:
-            print(f"Error fetching DraftKings draftables from draft group: {draftGroupId}")
-            return []
+        res = requests.get(f'https://api.draftkings.com/draftgroups/v1/draftgroups/{draftGroupId}/draftables?format=json').json()
+        return self.convertDraftKingsDraftables(res["draftables"])
+
+
+    def convertDraftKingsDraftGroup(self, draftGroup):
+        data = {}
+        data["site"] = "draftkings"
+        data["draftGroupId"] = draftGroup["draftGroupId"]
+        data["startTime"] = datetime.datetime.utcfromtimestamp(timegm(time.strptime(draftGroup["minStartTime"], "%Y-%m-%dT%H:%M:%S.%f0Z"))).strftime("%Y-%m-%dT%H:%M:%S")
+        data["endTime"] = ""
+        data["startTimeSuffix"] = draftGroup.get("startTimeSuffix") if draftGroup.get("startTimeSuffix") else "Main"
+        data["salaryCap"] = 60000
+
+        games = []
+        for game in draftGroup["games"]:
+            split_teams = game["description"].split(" @ ")
+            games.append({
+                "awayTeam": split_teams[0],
+                "homeTeam": split_teams[1],
+                "gameId": game["gameId"],
+                "startTime": datetime.datetime.utcfromtimestamp(timegm(time.strptime(game["startDate"], "%Y-%m-%dT%H:%M:%S.%f0Z"))).strftime("%Y-%m-%dT%H:%M:%S")
+            })
+
+        data["games"] = games
+        return data
+
+
+    def convertDraftKingsDraftables(self, draftables):
+        convertedDraftables = []
+        draftablesIds = set()
+
+        for player in draftables:
+            if player["playerId"] not in draftablesIds:
+                convertedDraftables.append(self.convertDraftKingsPlayer(player))
+                draftablesIds.add(player["playerId"])
+
+        return convertedDraftables
 
 
     def convertDraftKingsPlayer(self, player):
+        result = {}
         if player["draftStatAttributes"]:
-            fppg = [x["value"] for x in player["draftStatAttributes"] if x["id"] == 90]
-            oprk = [x["value"] for x in player["draftStatAttributes"] if x["id"] == -2]
+            result["fppg"] = [x["value"] for x in player["draftStatAttributes"] if x["id"] == 90][0]
+            result["oprk"] = int([x["sortValue"] for x in player["draftStatAttributes"] if x["id"] == -2][0])
             
-            player["fppg"] = fppg[0] if len(fppg) else None
-            player["oprk"] = oprk[0] if len(oprk) else None
-
-        if player["game"]:
-            player["game"] = {
+        if player["competition"]:
+            result["game"] = {
                 "homeTeam": player["competition"]["nameDisplay"][0]["value"],
                 "awayTeam": player["competition"]["nameDisplay"][2]["value"],
-                "competitionId": player["competition"]["competitionId"],
-                "startTime": player["competition"]["startTime"]
+                "gameId": player["competition"]["competitionId"],
+                "startTime": datetime.datetime.utcfromtimestamp(timegm(time.strptime(player["competition"]["startTime"], "%Y-%m-%dT%H:%M:%S.%f0Z"))).strftime("%Y-%m-%dT%H:%M:%S")
             }
         
-        player["team"] = player.pop("teamAbbreviation", "")
-        player["site"] = "draftkings"
-
-        del(player["teamAbbreviation"])
-        del(player["competition"])
-        del(player["draftStatAttributes"])
-        del(player["rosterSlotId"])
-        del(player["isSwappable"])
-        del(player["teamLeagueSeasonAttributes"])
-        del(player["externalRequirements"])
+        result["team"] = player["teamAbbreviation"]
+        result["site"] = "draftkings"
+        result["position"] = player["position"]
+        result["displayName"] = f'{player["firstName"]} {player["lastName"]}'
+        result["firstName"] = player["firstName"]
+        result["lastName"] = player["lastName"]
+        result["playerSiteId"] = player["playerId"]
+        result["salary"] = player.get("salary") if player.get("salary") else None
+        result["status"] = player["status"] if player["status"] != "None" else ""
+        result["projPoints"] = ""
+        result["playerImageSmall"] = player["playerImage50"]
+        result["playerImageLarge"] = player["playerImage160"]
+        result["number"] = ""
         
-        return player
-
+        result["opponent"] = result["game"]["homeTeam"] if result["team"] != result["game"]["homeTeam"] else result["game"]["awayTeam"]
+        
+        return result
