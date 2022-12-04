@@ -10,6 +10,7 @@ import HistoryPage from './components/Pages/HistoryPage/HistoryPage'
 import ResearchPage from './components/Pages/ResearchPage/ResearchPage'
 import CreateLineupPage from './components/Pages/CreateLineupPage/CreateLineupPage'
 import PlayerPage from './components/Pages/PlayerPage/PlayerPage'
+import CompareLineupsPage from './components/Pages/CompareLineupsPage/CompareLineupsPage';
 import Navbar from './components/Navbar/Navbar'
 import Footer from './components/Footer/Footer'
 import './App.css';
@@ -122,6 +123,21 @@ function App() {
                     <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} />
                     <div className="page-wrapper-inner"> 
                       <CreateLineupPage setAlertMessage={setAlertMessage}/>
+                    </div>
+                  </div>
+                : 
+                  <LoginPage setToken={setToken} />
+                }
+              </>
+            } />
+
+            <Route path="compareLineups/:draftGroupId" element={
+              <>
+                {sessionStorage.dfsTrackerToken ?
+                  <div className="page-wrapper">
+                    <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} />
+                    <div className="page-wrapper-inner"> 
+                      <CompareLineupsPage setAlertMessage={setAlertMessage}/>
                     </div>
                   </div>
                 : 

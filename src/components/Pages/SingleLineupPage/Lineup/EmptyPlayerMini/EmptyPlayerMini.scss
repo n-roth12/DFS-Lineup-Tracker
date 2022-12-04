@@ -1,0 +1,17 @@
+.empty-player-mini {
+    background-color: var(--grey-3);
+    border-bottom: 1px solid var(--grey-2);
+    border-left: 1px solid var(--grey-2);
+    border-right: 1px solid var(--grey-2);
+    height: 40px;
+    display: flex;
+    .empty-pos-label {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        margin-top: auto;
+        margin-bottom: auto;
+        font-style: italic;
+    }
+}

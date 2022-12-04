@@ -1,0 +1,22 @@
+.lineup-mini {
+    width: 300px;
+    box-shadow: var(--box-shadow-1);
+    border-top: 1px solid var(--grey-2);
+    .lineup-mini-header {
+        background-color: var(--grey-1);
+        border-left: 1px solid var(--grey-2);
+        border-right: 1px solid var(--grey-2);
+        border-bottom: 1px solid var(--grey-2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+        p {
+            color: white;
+            margin-top: auto;
+            margin-bottom: auto;
+            text-align: left;
+            margin-left: 5px;
+        }
+    }
+}

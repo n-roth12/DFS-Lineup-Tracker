@@ -1,0 +1,32 @@
+.lineup-player-mini {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-bottom: 1px solid var(--grey-2);
+    border-left: 1px solid var(--grey-2);
+    border-right: 1px solid var(--grey-2);
+    height: 40px;
+    .position {
+        flex: 1;
+        display: flex;
+        padding-left: 5px;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+    .playerName {
+        flex: 4;
+        display: flex;
+        font-weight: 600;
+        margin-left: 10px;
+        text-align: left;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+    .salary {
+        flex: 1;
+        margin-right: 5px;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+}

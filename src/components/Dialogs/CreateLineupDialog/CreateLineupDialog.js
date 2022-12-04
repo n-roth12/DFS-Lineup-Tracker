@@ -180,6 +180,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
               <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon'/></button>
             </>
           }
+          <Link className='create-btn' to={`/compareLineups/${draftGroup["draftGroupId"]}`}>Compare</Link>
           <button className="create-btn" onClick={() => createLineupWrapper()}>New Lineup</button>
         </DialogActions>
       </>

@@ -115,6 +115,8 @@ def get_slates(current_user: User):
 @token_required
 def get_draftables(current_user: User):
 	draftGroupId = request.args.get("draftGroupId")
+	if not draftGroupId:
+		return jsonify({ "Message": "error" }), 400
 	draftables = mongoController.getDraftablesByDraftGroupId(draftGroupId)
 
 	return jsonify(draftables["draftables"]), 200

@@ -1,0 +1,18 @@
+.compare-lineups-page {
+    width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+    .lineups-wrapper-outer {
+        overflow-x: scroll;
+        width: 100vw;
+        .lineups-wrapper {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            .lineup-mini {
+                margin: 10px;
+            }
+        }
+    }
+}
