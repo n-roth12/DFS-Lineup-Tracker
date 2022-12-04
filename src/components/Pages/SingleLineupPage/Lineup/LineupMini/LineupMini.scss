@@ -2,6 +2,7 @@
     width: 300px;
     box-shadow: var(--box-shadow-1);
     border-top: 1px solid var(--grey-2);
+    margin: 5px;
     .lineup-mini-header {
         background-color: var(--grey-1);
         border-left: 1px solid var(--grey-2);
@@ -17,6 +18,14 @@
             margin-bottom: auto;
             text-align: left;
             margin-left: 5px;
+            font-size: 12pt;
+        }
+        .edit-btn {
+            border: none;
+            background: white;
+            color: var(--btn-blue);
+            padding-left: 10px;
+            border-radius: 10px 0px 0px 10px;
         }
     }
 }

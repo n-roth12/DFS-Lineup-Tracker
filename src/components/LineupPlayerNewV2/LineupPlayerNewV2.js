@@ -3,7 +3,7 @@ import './LineupPlayerNewV2.scss'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import { CgArrowsExchange } from 'react-icons/cg'
 
-function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpenDialog, toggleEditingPos, editingPos }) {
+function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpenDialog, toggleEditingPos, editingPos, setPlayerDialogContent }) {
 
   return (
     <div>
@@ -14,7 +14,7 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
         </div>
         <div className='name-and-info'>
             <div className='playerName'>
-                <p>
+                <p onClick={() => setPlayerDialogContent(player)}>
                     {player["firstName"]} {player["lastName"]}
                 </p>
             </div>

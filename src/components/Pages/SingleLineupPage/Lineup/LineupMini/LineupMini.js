@@ -2,6 +2,7 @@ import LineupPlayerMini from '../LineupPlayerMini/LineupPlayerMini'
 import EmptyPlayerMini from '../EmptyPlayerMini/EmptyPlayerMini'
 import './LineupMini.scss'
 import { useState, useEffect } from 'react'
+import { FaAngleRight } from 'react-icons/fa'
 
 const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos }) => {
 
@@ -30,6 +31,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
         <div className='lineup-mini-header'>
             <div>
                 <p>Salary: ${lineupSalary}</p>
+            </div>
+            <div>
+              <button className='edit-btn'>Edit <FaAngleRight /></button>
             </div>
         </div>
         {lineup["qb"] !== null ? 

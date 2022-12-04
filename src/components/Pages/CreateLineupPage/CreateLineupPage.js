@@ -6,6 +6,7 @@ import { GrRevert } from 'react-icons/gr'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
+import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
 
 const CreateLineupPage = ({ setAlertMessage }) => {
@@ -23,6 +24,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [teamProjectedPoints, setTeamProjectedPoints] = useState(0)
   const [draftGroupLineups, setDraftGroupLineups] = useState([])
   const [lineupPlayerIds, setLineupPlayerIds] = useState(new Set())
+  const [playerDialogContent, setPlayerDialogContent] = useState()
+  const [showPlayerDialog, setShowPlayerDialog] = useState(false)
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -107,7 +110,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     getRemainingSalary()
     getTeamProjPoints()
     getLineupPlayerIds()
-  }, [lineup])
+  }, [lineup, draftGroup])
 
   const togglePosFilter = (position) => {
     if (posFilter.has(position)) {
@@ -157,7 +160,6 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       }
     })
     const data = await res.json()
-    console.log(data)
     setLineup(data["lineup"])
     setPrevLineup(data["lineup"])
   }
@@ -245,7 +247,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         "startTime": draftGroup["startTime"],
         "endTime": draftGroup["endTime"],
         "startTimeSuffix": draftGroup["startTimeSuffix"],
-        "site": draftGroup["site"]
+        "site": draftGroup["site"],
+        "salaryCap": draftGroup["salaryCap"]
       })
     })
     .then(() => {
@@ -307,13 +310,15 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   }
 
   const getRemainingSalary = () => {
-    var remaining = 60000
-    for (const [k,  lineupSlot] of Object.entries(lineup)) {
-      if (lineupSlot !== null) {
-        remaining -= lineupSlot["salary"]
+    if (draftGroup) {
+      var remaining = draftGroup["salaryCap"]
+      for (const [k,  lineupSlot] of Object.entries(lineup)) {
+        if (lineupSlot !== null) {
+          remaining -= lineupSlot["salary"]
+        }
       }
+      setRemainingSalary(remaining)
     }
-    setRemainingSalary(remaining)
   }
 
   const getRemainingSalaryPerPlayer = () => {
@@ -335,6 +340,10 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={() => setShowCreateLineupDialog(false)} draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
       }
+      <PlayerDialog showPlayerDialog={showPlayerDialog} 
+          onClose={() => setPlayerDialogContent({})} 
+          dialogPlayer={playerDialogContent}
+          setPlayerDialogContent={setPlayerDialogContent} />
       <div className="header">
         <div className="header-inner">
           <div className="header-label">
@@ -396,7 +405,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             editingPos={editingPos}
             cancelEdit={cancelEdit} 
             onOpenDialog={openDialog}
-            toggleEditingPos={toggleEditingPos} />
+            toggleEditingPos={toggleEditingPos}
+            setPlayerDialogContent={setPlayerDialogContent} />
           <div className='lineup-btns'>
             <button className='revert-btn' onClick={revertLineup}>Revert <GrRevert/></button>
             <button className='save-btn' onClick={saveLineup}>Save</button>

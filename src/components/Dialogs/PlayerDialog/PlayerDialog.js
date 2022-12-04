@@ -10,7 +10,7 @@ const PlayerDialog = ({ showPlayerDialog, onClose, dialogPlayer }) => {
 
   return (
 		<Dialog open={showPlayerDialog} className="player-info-dialog">
-      {dialogPlayer.stats && 
+      {/* {dialogPlayer.stats && 
       <>
       {dialogPlayer.position !== 'DST' ? 
       <>
@@ -145,7 +145,7 @@ const PlayerDialog = ({ showPlayerDialog, onClose, dialogPlayer }) => {
       </>
     }
    </>
-  }
+  } */}
     </Dialog>
   )
 }

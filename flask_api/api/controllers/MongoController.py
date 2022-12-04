@@ -25,7 +25,7 @@ class MongoController:
         self.lineups_collection.insert_one(data)
 
     def updateLineup(self, data):
-        self.lineups_collection.replace_one({"draftGroupId": int(data["draftGroupId"]), "lineupId": data["lineupId"]}, data, upsert=True)
+        self.lineups_collection.replace_one({"draftGroupId": data["draftGroupId"], "lineupId": data["lineupId"]}, data, upsert=True)
 
     def getUserLineupsByDraftGroup(self, draftGroupId, userId):
         cursor = self.lineups_collection.find({"draftGroupId": draftGroupId, "userPublicId": userId})

@@ -112,7 +112,8 @@ const UpcomingPage = ({ week, year }) => {
 			  "startTime": draftGroup["startTime"],
 			  "endTime": draftGroup["endTime"],
 			  "site": draftGroup["site"],
-			  "startTimeSuffix": draftGroup["startTimeSuffix"]
+			  "startTimeSuffix": draftGroup["startTimeSuffix"],
+			  "salaryCap": draftGroup["salaryCap"]
 			})
 		})
 		const data = await res.json()

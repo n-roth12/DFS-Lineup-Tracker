@@ -1,9 +1,12 @@
 import LineupPlayerNew from '../../../LineupPlayerNewV2/LineupPlayerNewV2'
 import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
 import './Lineup.scss'
+import { useState } from 'react'
 
 
-const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos }) => {
+const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos, setPlayerDialogContent }) => {
+
+  const [showPlayerDialog, setShowPlayerDialog] = useState(false)
 
   const checkBeingEdited = (pos) => {
     return pos === editingPos
@@ -20,7 +23,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} /> 
         : <EmptyPlayer 
             key={'qb'} 
             position={'qb'} 
@@ -39,7 +43,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} /> 
         : <EmptyPlayer 
             key={'rb1'} 
             position={'rb1'} 
@@ -58,7 +63,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} /> 
         : <EmptyPlayer 
             key={'rb2'} 
             position={'rb2'} 
@@ -77,7 +83,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} /> 
         : <EmptyPlayer 
             key={'wr1'} 
             position={'wr1'} 
@@ -96,7 +103,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} /> 
         : <EmptyPlayer 
             key={'wr2'} 
             position={'wr2'} 
@@ -115,7 +123,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent /> 
         : <EmptyPlayer 
             key={'wr3'} 
             position={'wr3'} 
@@ -134,7 +143,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} /> 
         : <EmptyPlayer 
             key={'te'} 
             position={'te'} 
@@ -153,7 +163,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} /> 
         : <EmptyPlayer 
             key={'flex'} 
             position={'flex'} 
@@ -172,7 +183,8 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
             onAdd={onAdd}
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} />
+            editingPos={editingPos}
+            setPlayerDialogContent={setPlayerDialogContent} />
         : <EmptyPlayer
             key={'dst'}
             position={'dst'}

@@ -85,7 +85,7 @@ def create_emptpy_lineup(current_user: User):
 	data["userPublicId"] = current_user.public_id
 	data["lineupId"] = str(uuid.uuid4()).replace("-", "").replace("%7D", "")
 	data["lastUpdate"] = datetime.datetime.now()
-	data["draftGroupId"] = int(data["draftGroupId"])
+	data["draftGroupId"] = str(data["draftGroupId"])
 	data["lineup"] = {
 		"qb": None,
 		"wr1": None,

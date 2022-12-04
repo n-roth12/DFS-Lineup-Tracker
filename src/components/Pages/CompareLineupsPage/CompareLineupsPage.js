@@ -31,7 +31,7 @@ const CompareLineupsPage = () => {
         <div className='lineups-wrapper'>
           {lineups.map((lineup) => 
             <div>
-              <LineupMini className="lineup-mini" lineup={lineup["lineup"]} />
+              <LineupMini lineup={lineup["lineup"]} />
             </div>
           )}
         </div>
