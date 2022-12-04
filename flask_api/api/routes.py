@@ -172,18 +172,6 @@ def get_lineup_data(lineup_id: int):
 
 # 	return 'test', 200
 
-@app.route('/lineup_new', methods=['GET'])
-@token_required
-def get_singe_lineup(current_user: User):
-	lineupId = request.args.get("lineupId")
-
-	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-	db = client["DFSDatabase"]
-	collection = db["lineups"]
-	lineup = collection.find_one({"lineup-id": lineupId})
-
-	return jsonify(json.loads(json_util.dumps(lineup))), 200
-
 
 @app.route('/nfl/teams', methods=['GET'])
 @token_required

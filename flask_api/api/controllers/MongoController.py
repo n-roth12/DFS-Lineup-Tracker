@@ -17,25 +17,29 @@ class MongoController:
         self.draftgroups_collection = self.db["draftGroups"]
         self.draftables_collection = self.db["draftables"]
 
+    def getLineupById(self, lineupId, userPublicId):
+        lineup = self.lineups_collection.find_one({"lineupId": lineupId, "userPublicId": userPublicId})
+        return lineup
+
     def createLineup(self, data):	
         self.lineups_collection.insert_one(data)
 
     def updateLineup(self, data):
-        self.lineups_collection.replace_one({"draft-group": data["draft-group"], "lineup-id": data["lineup-id"]}, data, upsert=True)
+        self.lineups_collection.replace_one({"draftGroupId": int(data["draftGroupId"]), "lineupId": data["lineupId"]}, data, upsert=True)
 
     def getUserLineupsByDraftGroup(self, draftGroupId, userId):
-        cursor = self.lineups_collection.find({"draft-group": draftGroupId, "user_public_id": userId})
+        cursor = self.lineups_collection.find({"draftGroupId": draftGroupId, "userPublicId": userId})
         lineups = [lineup for lineup in cursor]
         return lineups
 
     def get_user_lineups(self, userPublicId):
-        cursor = self.lineups_collection.find({"user_public_id": userPublicId})
+        cursor = self.lineups_collection.find({"userPublicId": userPublicId})
         lineups = [lineup for lineup in cursor]
         return lineups
 
     def batchDeleteLineups(self, userPublicId, lineupIds):
         for lineupId in lineupIds:
-            self.lineups_collection.delete_one({ "user_public_id": userPublicId, "lineup-id": lineupId })
+            self.lineups_collection.delete_one({ "userPublicId": userPublicId, "lineupId": lineupId })
 
     def addProjections(self, data):
         projections = {"players": data, "last-update": str(datetime.date.today())}

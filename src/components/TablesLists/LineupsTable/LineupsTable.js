@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaAngleLeft } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import './LineupsTable.scss'
+import { capitalize } from '@material-ui/core'
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups }) => {
 
@@ -46,6 +47,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
           <tr>
             <th></th>
             <th></th>
+            <th>Site</th>
             <th>Slate</th>
             <th>Date</th>
             <th>Salary</th>
@@ -57,10 +59,11 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             <>
               <tr>
                 <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input></td>
-                <td><Link to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}
+                <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`}
                   className="view-lineup-btn">Edit<FaAngleRight/></Link></td>
+                <td>{capitalize(lineup["site"])}</td>
                 <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"] : "Main"}</td>
-                <td>{lineup["minStartTime"].split("T")[0]} @ {lineup["minStartTime"].split("T")[1].split(".")[0]}</td>
+                <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
                 <td>${lineup["salary"] ? lineup["salary"] : 0}</td>
                 <td>{lineup["projected-points"] ? lineup["projected-points"] : 0} Pts</td>
               </tr>

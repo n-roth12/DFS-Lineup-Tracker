@@ -6,6 +6,7 @@ import { GrRevert } from 'react-icons/gr'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
+import { capitalize } from '@material-ui/core'
 
 const CreateLineupPage = ({ setAlertMessage }) => {
 
@@ -123,7 +124,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     const temp = new Set()
     for (const [k,  lineupSlot] of Object.entries(lineup)) {
       if (lineupSlot !== null) {
-        temp.add(lineupSlot["playerId"])
+        temp.add(lineupSlot["playerSiteId"])
       }
     }
     setLineupPlayerIds(temp)
@@ -140,22 +141,23 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     var mySet = new Set()
     var draftables = []
     data.forEach((player) => {
-      if (!mySet.has(player["playerId"])) {
+      if (!mySet.has(player["playeSiteId"])) {
         draftables.push(player)
-        mySet.add(player["playerId"])
+        mySet.add(player["playerSiteId"])
       }
     })
     setDraftables(draftables)
   }
 
   const getLineup = async () => {
-    const res = await fetch(`/lineup_new?lineupId=${lineupId}`, {
+    const res = await fetch(`/lineups/lineup?lineupId=${lineupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       }
     })
     const data = await res.json()
+    console.log(data)
     setLineup(data["lineup"])
     setPrevLineup(data["lineup"])
   }
@@ -228,20 +230,22 @@ const CreateLineupPage = ({ setAlertMessage }) => {
 
   const saveLineup = async () => {
     const projectedPoints = getTeamProjPoints()
-    const res = await fetch(`/lineups/createLineup`, {
+    const res = await fetch(`/lineups/updateLineup`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       },
       body: JSON.stringify({
         "lineup": lineup,
-        "draft-group": draftGroupId,
-        "lineup-id": lineupId,
-        "salary": 60000 - remainingSalary,
-        "projected-points": teamProjectedPoints,
-        "projected_own": 120,
-        "minStartTime": draftGroup["minStartTime"],
-        "startTimeSuffix": draftGroup["startTimeSuffix"]
+        "draftGroupId": draftGroupId,
+        "lineupId": lineupId,
+        "salary": draftGroup["salaryCap"] - remainingSalary,
+        "projectedPoints": teamProjectedPoints,
+        "projectedOwn": 120,
+        "startTime": draftGroup["startTime"],
+        "endTime": draftGroup["endTime"],
+        "startTimeSuffix": draftGroup["startTimeSuffix"],
+        "site": draftGroup["site"]
       })
     })
     .then(() => {
@@ -279,27 +283,23 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     var projectedPoints = 0
     for (const [k,  lineupSlot] of Object.entries(lineup)) {
       if (lineupSlot !== null) {
-        projectedPoints += parseFloat(lineupSlot["draftStatAttributes"] && getAttr(lineupSlot["draftStatAttributes"], 90))
+        projectedPoints += parseFloat(lineupSlot["fppg"])
       }
     }
-    setTeamProjectedPoints(projectedPoints.toFixed(2))
+    setTeamProjectedPoints(parseFloat(projectedPoints).toFixed(2))
   }
 
   const canQuickAdd = (player) => {
-    if (lineupPlayerIds.has(player.playerId)) {
+    if (lineupPlayerIds.has(player["playerSiteId"])) {
       return false
     }
     for (const [k, v] of Object.entries(lineup)) {
-      if ((v === null && lineupSlots[k]["allowedPositions"].includes(player.position.toLowerCase() ))
-        || (editingPos && lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase()))) {
+      if ((v === null && lineupSlots[k]["allowedPositions"].includes(player["position"].toLowerCase() ))
+        || (editingPos && lineupSlots[editingPos]["allowedPositions"].includes(player["position"].toLowerCase()))) {
         return true
       }
     }
     return false
-  }
-
-  const getAttr = (draftStatAttributes, index) => {
-    return draftStatAttributes.find((stat) => stat['id'] === index)["value"]
   }
 
   const exportLineup = () => {
@@ -338,7 +338,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       <div className="header">
         <div className="header-inner">
           <div className="header-label">
-            <p className="site">{draftGroup && draftGroup["site"].charAt(0).toUpperCase() + draftGroup["site"].slice(1)} Lineup</p>
+            <p className="site">{draftGroup && capitalize(draftGroup["site"])} Lineup</p>
             <p className="date">{draftGroup && draftGroup["startTimeSuffix"]}</p>
           </div>
           <div className="header-options">
@@ -367,7 +367,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         <div className='games-inner'>
         {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
           <div className='game'>
-            <p>{game["description"]}</p>
+            <p>{game["awayTeam"]} @ {game["homeTeam"]}</p>
           </div>
         )}
         </div>
@@ -453,7 +453,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                 <th>Pos</th>
                 <th>Name</th>
                 <th>Salary</th>
-                <th>Game</th>
+                <th>Opponent</th>
                 <th>OPRK</th>
                 <th>FPPG</th>
               </thead>
@@ -469,11 +469,11 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
                       <td>{player.position}</td>
-                      <td className='name-col'><strong><PlayerLink playerName={player.displayName} /></strong> {player.status !== "None" && `(${player.status})`}</td>
+                      <td className='name-col'><strong><PlayerLink playerName={player.displayName} /></strong> {player.status !== "" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
-                      <td>{player.competition ? player.competition.name : ''}</td>
-                      <td>{player.draftStatAttributes && getAttr(player.draftStatAttributes, -2)}</td>
-                      <td>{player.draftStatAttributes && getAttr(player.draftStatAttributes, 90)}</td>
+                      <td>{player["game"] ? player["opponent"]: ''}</td>
+                      <td>{player["oprk"]}</td>
+                      <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
                     </tr>
                 )}
               </tbody>

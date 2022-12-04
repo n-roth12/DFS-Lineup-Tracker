@@ -7,6 +7,8 @@ from pandas import read_csv
 import csv
 from io import StringIO
 import datetime
+from bson import json_util
+
 
 from ..routes import token_required
 from ..models.user import User
@@ -20,25 +22,24 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 MongoController = MongoController()
 
+# @lineups_blueprint.route('/', defaults={'id': None}, methods=['GET'])
+# @app.route('/lineups/<id>', methods=['GET'])
+# @token_required
+# def get_lineup(current_user: User, id: int):
+# 	if not id:
+# 		lineups = db.session.query(Lineup).all()
+# 		if not len(lineups):
+# 			return jsonify({ 'Error': 'No lineups in database!' })
 
-@lineups_blueprint.route('/', defaults={'id': None}, methods=['GET'])
-@app.route('/lineups/<id>', methods=['GET'])
-@token_required
-def get_lineup(current_user: User, id: int):
-	if not id:
-		lineups = db.session.query(Lineup).all()
-		if not len(lineups):
-			return jsonify({ 'Error': 'No lineups in database!' })
+# 		schema = LineupSchema(many=True)
+# 		return jsonify({ 'lineups': schema.dump(lineups) })
 
-		schema = LineupSchema(many=True)
-		return jsonify({ 'lineups': schema.dump(lineups) })
+# 	lineup = db.session.query(Lineup).filter(Lineup.id == id).first()
+# 	if not lineup:
+# 		return jsonify({ 'Error': 'No lineup with specified id.' })
 
-	lineup = db.session.query(Lineup).filter(Lineup.id == id).first()
-	if not lineup:
-		return jsonify({ 'Error': 'No lineup with specified id.' })
-
-	l = LineupSchema().dump(lineup)
-	return jsonify(LineupSchema().dump(lineup))
+# 	l = LineupSchema().dump(lineup)
+# 	return jsonify(LineupSchema().dump(lineup))
 
 
 @lineups_blueprint.route('/', methods=['POST'])
@@ -65,12 +66,12 @@ def create_lineup(current_user: User):
 	return jsonify(LineupSchema().dump(new_lineup)), 200
 
 
-@lineups_blueprint.route('/createLineup', methods=['POST'])
+@lineups_blueprint.route('/updateLineup', methods=['POST'])
 @token_required
 def create_lineup_new(current_user: User):
 	data = json.loads(request.data)
-	data["user_public_id"] = current_user.public_id
-	data["last_update"] = datetime.datetime.now()
+	data["userPublicId"] = current_user.public_id
+	data["lastUpdate"] = datetime.datetime.now()
 	
 	MongoController.updateLineup(data)
 
@@ -81,10 +82,10 @@ def create_lineup_new(current_user: User):
 @token_required
 def create_emptpy_lineup(current_user: User):
 	data = json.loads(request.data)
-	data["user_public_id"] = current_user.public_id
-	data["draft-group"] = str(data["draft-group"])
-	data["lineup-id"] = str(uuid.uuid4()).replace("-", "").replace("%7D", "")
-	data["last_update"] = datetime.datetime.now()
+	data["userPublicId"] = current_user.public_id
+	data["lineupId"] = str(uuid.uuid4()).replace("-", "").replace("%7D", "")
+	data["lastUpdate"] = datetime.datetime.now()
+	data["draftGroupId"] = int(data["draftGroupId"])
 	data["lineup"] = {
 		"qb": None,
 		"wr1": None,
@@ -99,7 +100,7 @@ def create_emptpy_lineup(current_user: User):
 
 	MongoController.createLineup(data)
 
-	return jsonify({ "lineupId": data["lineup-id"] }), 200
+	return jsonify({ "lineupId": data["lineupId"] }), 200
 
 
 @lineups_blueprint.route('/<id>', methods=['PUT'])
@@ -208,3 +209,12 @@ def export_lineups(current_user: User):
 		file.getvalue(),
 		mimetype="text/csv",
 		headers={"Content-disposition": "attachment; filename=myplot.csv"})
+
+
+@lineups_blueprint.route('/lineup', methods=['GET'])
+@token_required
+def get_singe_lineup(current_user: User):
+	lineupId = request.args.get("lineupId")
+	lineup = MongoController.getLineupById(lineupId, current_user.public_id)
+
+	return jsonify(json.loads(json_util.dumps(lineup))), 200

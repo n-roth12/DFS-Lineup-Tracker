@@ -68,7 +68,7 @@ const LineupsPage = () => {
  		})
  		setYears(temp.sort().reverse())
  	}
-
+	
 	 const onFileChange = (e) => {
         setSelectedFile(e.target.files[0])
     }
@@ -170,7 +170,7 @@ const LineupsPage = () => {
 				selectedLineups={selectedLineups}
 				setSelectedLineups={setSelectedLineups}
 				lineups={lineups.filter((lineup) => {
-					return Date.parse(lineup["minStartTime"].split("T")[0]) > new Date()
+					return Date.parse(lineup["startTime"].split("T")[0]) > new Date()
 				})}
 			/>
 			}
@@ -224,7 +224,7 @@ const LineupsPage = () => {
 							// const currentTime = new Date()
 							// const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
 							// console.log(t)
-							return Date.parse(lineup["minStartTime"].split("T")[0]) <= new Date()
+							return Date.parse(lineup["startTime"].split("T")[0]) <= new Date()
 						})} /> 
 				</div>
 				}	

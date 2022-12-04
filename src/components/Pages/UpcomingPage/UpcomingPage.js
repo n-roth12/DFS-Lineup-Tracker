@@ -6,6 +6,7 @@ import { Roller } from 'react-awesome-spinners';
 import { FaAngleRight, FaPlus } from 'react-icons/fa';
 import { BiImport } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
+import { capitalize } from '@material-ui/core';
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -107,9 +108,9 @@ const UpcomingPage = ({ week, year }) => {
 			  'x-access-token': sessionStorage.dfsTrackerToken
 			},
 			body: JSON.stringify({
-			  "draft-group": draftGroup["draftGroupId"],
-			  "minStartTime": draftGroup["minStartTime"],
-			  "maxStartTime": draftGroup["maxStartTime"],
+			  "draftGroupId": draftGroup["draftGroupId"],
+			  "startTime": draftGroup["startTime"],
+			  "endTime": draftGroup["endTime"],
 			  "site": draftGroup["site"],
 			  "startTimeSuffix": draftGroup["startTimeSuffix"]
 			})
@@ -160,7 +161,7 @@ const UpcomingPage = ({ week, year }) => {
 				<div className='players-outer'>
 					<div className='players-outer-header'>
 						<div className='btn-wrapper'>
-							<h2><span>{selectedSite.charAt(0).toUpperCase() + selectedSite.slice(1)}</span> <span className='slate-title'>{activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
+							<h2><span>{capitalize(selectedSite)}</span> <span className='slate-title'>{activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
 							<button className='lineup-options-btn' onClick={() => createLineup(activeSlate)}>Create Lineup <FaPlus className='icon'/></button>
 							<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport className='icon'/></button>
 						</div>

@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import { Link, useNavigate } from 'react-router-dom';
 import { FaTimes, FaAngleRight } from 'react-icons/fa';
 import { BiExport, BiTrash, BiDownload } from 'react-icons/bi'
+import { capitalize } from '@material-ui/core';
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => {
   const [lineups, setLineups] = useState([])
@@ -86,9 +87,9 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
         'x-access-token': sessionStorage.dfsTrackerToken
       },
       body: JSON.stringify({
-        "draft-group": draftGroup["draftGroupId"],
-        "minStartTime": draftGroup["minStartTime"],
-        "maxStartTime": draftGroup["maxStartTime"],
+        "draftGroupId": draftGroup["draftGroupId"],
+        "startTime": draftGroup["startTime"],
+        "endTime": draftGroup["endTime"],
         "site": draftGroup["site"],
         "startTimeSuffix": draftGroup["startTimeSuffix"]
       })
@@ -116,10 +117,10 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
       <>
         <DialogTitle className="title">
           <div className='title-inner'>
-            <p className='title-upper'>{draftGroup["startTimeSuffix"] && draftGroup["startTimeSuffix"].replace('(', '').replace(')', '')} ({draftGroup["draftGroupState"]})</p>
+            <p className='title-upper'>{draftGroup["startTimeSuffix"] && draftGroup["startTimeSuffix"].replace('(', '').replace(')', '')} ({capitalize(draftGroup["site"])})</p>
             <FaTimes className='close-btn' onClick={closeDialog}/>
           </div>
-          <p className='title-lower'>{draftGroup["minStartTime"] && "Start Time: " + draftGroup["minStartTime"].split("T")[0] + draftGroup["minStartTime"].split("T")[1]}</p>
+          <p className='title-lower'>{draftGroup["startTime"] && "Start Time: " + draftGroup["startTime"].split("T")[0] + draftGroup["startTime"].split("T")[1]}</p>
         </DialogTitle>
         <DialogContent className="content">
           <div className='content-inner'>
@@ -128,8 +129,8 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
               {draftGroup["games"].length > 0 &&
                 draftGroup["games"].map((game) => 
                 <div className="game">
-                  <p>{game["description"]}</p>
-                  <p>{game["startDate"] && game["startDate"].split("T")[0]}</p>
+                  <p>{game["awayTeam"]} @ {game["homeTeam"]}</p>
+                  <p>{game["startTime"] && game["startTime"].split("T")[0]}</p>
                 </div>
                 )
               }
@@ -153,11 +154,11 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
                 lineups.length > 0 ?
                   lineups.map((lineup) => 
                     <tr className='user-lineup'>
-                      <input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input>
-                      <td><Link className='lineup-link' to={`/createLineup/${lineup["draft-group"]}/${lineup["lineup-id"]}`}>Edit <FaAngleRight /></Link></td>
+                      <input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input>
+                      <td><Link className='lineup-link' to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`}>Edit <FaAngleRight /></Link></td>
                       <td>Untitled</td>
                       <td>{lineup["salary"]}</td>
-                      <td>{lineup["projected-points"]}</td>
+                      <td>{lineup["projectedPoints"]}</td>
                     </tr>
                   )
                 :

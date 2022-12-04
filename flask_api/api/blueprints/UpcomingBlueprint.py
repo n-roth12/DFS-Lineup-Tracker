@@ -76,10 +76,8 @@ def upcoming_players(current_user: User):
 	print(draft_group_id)
 
 	draftables = mongoController.getDraftablesByDraftGroupId(draft_group_id)
-	if draftables["site"] == "draftkings":
-		return jsonify(draftables["draftables"]), 200
-	else:
-		return jsonify(draftables["players"]), 200
+	
+	return jsonify(draftables["draftables"]), 200
 
 
 @upcoming_blueprint.route('/ownership', methods=["GET"])

@@ -4,27 +4,12 @@ import { FaPlus, FaTimes } from 'react-icons/fa'
 import { CgArrowsExchange } from 'react-icons/cg'
 
 function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpenDialog, toggleEditingPos, editingPos }) {
- 
-  const makeOpponentDisplay = (game) => {
-    if (game && game["nameDisplay"]) {
-      if (game["nameDisplay"][0].isEmphasized) {
-        return `@${game["nameDisplay"][2]['value']}`
-      }
-      return game["nameDisplay"][0]['value']
-    } else {
-      return "-"
-    }
-  }
 
   return (
     <div>
       <div className={`player lineupPlayerNewV2 ${beingEdited ? 'selected': ''}`}>
-        {/* <div className='positionAndNumber'>
-            <div className='playerPosition'>{player["position"]}</div>
-            <div className='playerNumber'>{player["teamAbbreviation"]}</div>
-        </div> */}
         <div className='playerImage'>
-            <img src={player["playerImage160"]} />
+            <img src={player["playerImageSmall"]} />
             <p>{position.toUpperCase()}</p>
         </div>
         <div className='name-and-info'>
@@ -37,9 +22,7 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
                 <div className='infoBlock'>
                     <p>
                     <span className='value'>
-                        {player['draftStatAttributes'].find((stat) => 
-                        stat["id"] === 90
-                        )["value"]}
+                        {parseFloat(player['fppg']).toFixed(2)}
                     </span>
                     <span className='label'>
                         FPPG
@@ -49,9 +32,7 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
                 <div className='infoBlock'>
                     <p>
                     <span className='value'>
-                        {player['draftStatAttributes'].find((stat) => 
-                        stat['id'] === -2
-                        )["value"]}
+                        {player['oprk']}
                     </span>
                     <span className='label'>
                         OPRK
@@ -61,7 +42,7 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
                 <div className='infoBlock'>
                     <p>
                     <span className='value'>
-                        {makeOpponentDisplay(player['competition'])}
+                        {player["opponent"]}
                     </span>
                     <span className='label'>
                         OPP
