@@ -100,18 +100,10 @@ h1 {
   justify-content: space-around;
 }
 
-.close-btn, .submit-btn {
-  border: None;
-  background:  None;
-}
-
 .submit-btn {
   color: blue;
 }
 
-.close-btn {
-  color: red;
-}
 
 .player-info-table {
   width: 100%;

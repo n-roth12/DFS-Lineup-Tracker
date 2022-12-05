@@ -4,150 +4,121 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
-import './PlayerDialog.css'
+import './PlayerDialog.scss'
+import { FaTimes } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaAngleRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const PlayerDialog = ({ showPlayerDialog, onClose, dialogPlayer }) => {
+const PlayerDialog = ({ showPlayerDialog, onClose, player }) => {
+
+  const [playerData, setPlayerData] = useState()
+  const [loadingPlayerData, setLoadingPlayerData] = useState(true)
+
+  useEffect(() => {
+    if (player) {
+      getPlayerData()
+    }
+  }, [player])
+
+
+  const getPlayerData = async () => {
+    if (player["displayName"]) {
+      const res = await fetch(`/history/player?name=${player["displayName"].replace(" ", "_")}&year=2021`, {
+        method: "GET",
+        headers: {
+          "x-access-token": sessionStorage.dfsTrackerToken
+        }
+      })
+      setPlayerData(await res.json())
+      setLoadingPlayerData(false)
+    }
+  }
 
   return (
-		<Dialog open={showPlayerDialog} className="player-info-dialog">
-      {/* {dialogPlayer.stats && 
-      <>
-      {dialogPlayer.position !== 'DST' ? 
-      <>
-        <DialogTitle>
-          <h3>{dialogPlayer.name}</h3>
-          <p>Week {dialogPlayer.stats.week} Rank: {dialogPlayer.position}{dialogPlayer.rank}</p>
-          <p>Game: {dialogPlayer.stats.game}</p>
+    showPlayerDialog && player &&
+		  <Dialog open={showPlayerDialog} fullWidth maxWidth="md" className="player-dialog">
+        <DialogTitle className="title section">
+          <div className="title-inner">
+            <div className="player-image">
+              <img src={player["playerImageLarge"]} />
+            </div>
+            <div className="player-info">
+              <h3>{player["position"]} <span className="name">{player["displayName"]}</span> {player["team"]}</h3>
+              <div className="player-info-inner">
+                <div className="game-info">
+                  <p>Game: {player["game"]["awayTeam"]} @ {player["game"]["homeTeam"]}</p>
+                  <p>Start Time: {player["game"]["startTime"]}</p>
+                  <Link to={"/"} className="details-link">Player Details <FaAngleRight /></Link>
+                </div>
+                <div className="draft-info">
+                  <div className="info-block">
+                    <p>{player["fppg"]}</p>
+                    <p>FPPG</p>
+                  </div>
+                  <div className="info-block">
+                    <p>${player["salary"]}</p>
+                    <p>Salary</p>
+                  </div>
+                  <div className="info-block">
+                    <p>{player["oprk"]}</p>
+                    <p>OPRK</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="icon-block">
+              <FaTimes className="close-btn" onClick={onClose} />
+            </div>
+          </div>
         </DialogTitle>
-        <DialogContent className="player-info-content">
-          <h4>Passing:</h4>
-          <table className="player-info-table">
-            <thead>
-              <tr>
-                <th>CMPs/ATTs</th>
-                <th>YRDs</th>
-                <th>TDs</th>
-                <th>INTs</th>
-                <th>2PTs</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{dialogPlayer.stats.passing_completions}/{dialogPlayer.stats.passing_attempts}</td>
-                <td>{dialogPlayer.stats.passing_yards}</td>
-                <td>{dialogPlayer.stats.passing_touchdowns}</td>
-                <td>{dialogPlayer.stats.passing_interceptions}</td>
-                <td>{dialogPlayer.stats.passing_2point_conversions}</td>
-              </tr>
-            </tbody>
-          </table>
-          <h4>Rushing:</h4>
-          <table className="player-info-table">
-            <thead>
-              <tr>
-                <th>YRDs</th>
-                <th>TDs</th>
-                <th>INTs</th>
-                <th>2PTs</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{dialogPlayer.stats.rushing_yards}</td>
-                <td>{dialogPlayer.stats.rushing_touchdowns}</td>
-                <td>{dialogPlayer.stats.fumbles_lost}</td>
-                <td>{dialogPlayer.stats.rushing_2point_conversions}</td>
-              </tr>
-            </tbody>
-          </table>
-          <h4>Recieving:</h4>
-          <table className="player-info-table">
-            <thead>
-              <tr>
-                <th>RECs</th>
-                <th>YRDs</th>
-                <th>TDs</th>
-                <th>2PTs</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{dialogPlayer.stats.receptions}</td>
-                <td>{dialogPlayer.stats.recieving_yards}</td>
-                <td>{dialogPlayer.stats.recieving_touchdowns}</td>
-                <td>{dialogPlayer.stats.recieving_2point_conversions}</td>
-              </tr>
-            </tbody>
-          </table>
-          <hr />
-          <p><strong>Fanduel Points: {dialogPlayer.stats.fantasy_points.toFixed(2)}</strong></p>
+        <DialogContent className="content section">
+          {playerData && playerData["stats"] &&
+            <table className="lineups-table">
+              <thead>
+              <tr className="col-labels">
+                  <th colspan="2"></th>
+                  <th className="col-label" colSpan="3">Passing</th>
+                  <th className="col-label" colSpan="2">Rushing</th>
+                  <th className="col-label" colSpan="3">Recieving</th>
+                  <th className="col-label" colSpan="1">Misc.</th>
+                </tr>
+                <tr className="table-header">
+                  <th>Week</th>
+                  <th>Game</th>
+                  <th>YRDs</th>
+                  <th>TDs</th>
+                  <th>INTs</th>
+                  <th>YRDs</th>
+                  <th>TDs</th>
+                  <th>RECs</th>
+                  <th>YRDs</th>
+                  <th>TDs</th>
+                  <th>FUM Lost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {playerData["stats"].reverse().map((week) => 
+                <tr>
+                  <td>{week["week"]}</td>
+                  <td>{week["game"]}</td>
+                  <td>{week["passing_yards"]}</td>
+                  <td>{week["passing_touchdowns"]}</td>
+                  <td>{week["passing_interceptions"]}</td>
+                  <td>{week["rushing_yards"]}</td>
+                  <td>{week["rushing_touchdowns"]}</td>
+                  <td>{week["receptions"]}</td>
+                  <td>{week["recieving_yards"]}</td>
+                  <td>{week["recieving_touchdowns"]}</td>
+                  <td>{week["fumbles_lost"]}</td>
+                </tr>
+                )}
+              </tbody>
+            </table>
+          }
         </DialogContent>
-        <DialogActions className="player-info-actions"> 
-          <button className="close-btn" onClick={onClose}>Close</button>
-        </DialogActions>
-      </>
-      :
-			<>
-        <DialogTitle>
-          <h3>{dialogPlayer.city} {dialogPlayer.name}</h3>
-          <p>Week {dialogPlayer.stats.week} Rank: {dialogPlayer.position}{dialogPlayer.rank}</p>
-          <p>Game: {dialogPlayer.stats.game}</p>
-        </DialogTitle>
-        <DialogContent className="player-info-content">
-          <h4>Defense:</h4>
-          <table className="player-info-table">
-            <thead>
-              <tr>
-                <th>TDs</th>
-                <th>INTs</th>
-                <th>Sacks</th>
-                <th>SFTs</th>
-                <th>FRs</th>
-                <th>BLKs</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{dialogPlayer.stats.touchdowns}</td>
-                <td>{dialogPlayer.stats.interceptions}</td>
-                <td>{dialogPlayer.stats.sacks}</td>
-                <td>{dialogPlayer.stats.safeties}</td>
-                <td>{dialogPlayer.stats.fumble_recoveries}</td>
-                <td>{dialogPlayer.stats.blocks}</td>
-              </tr>
-            </tbody>
-          </table>
-          <h4>Allowed:</h4>
-          <table className="player-info-table">
-            <thead>
-              <tr>
-                <th>Rush YRDs</th>
-                <th>Pass YRDs</th>
-                <th>Tot YRDs</th>
-                <th>PTs</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{dialogPlayer.stats.rushing_yards_against}</td>
-                <td>{dialogPlayer.stats.passing_yards_against}</td>
-                <td>{dialogPlayer.stats.rushing_yards_against + dialogPlayer.stats.passing_yards_against}</td>
-                <td>{dialogPlayer.stats.points_against}</td>
-              </tr>
-            </tbody>
-          </table>
-          <hr />
-          <p><strong>Fanduel Points: {dialogPlayer.stats.fanduel_points.toFixed(2)}</strong></p>
-        </DialogContent>
-        <DialogActions className="player-info-actions"> 
-          <button className="close-btn" onClick={onClose}>Close</button>
-        </DialogActions>
-      </>
-    }
-   </>
-  } */}
-    </Dialog>
-  )
-}
+      </Dialog>
+    )
+  }
 
 export default PlayerDialog

@@ -1,5 +1,5 @@
 .lower-nav {
-	background-color: #202033;
+	background-color: var(--grey-1);
 	width: 100%;
     display: flex;
     justify-content: center;
@@ -22,15 +22,18 @@
                 margin: 0;
                 transition: all 0.2s;
             }
-
-            .nav-link:hover {
-                color: #d3d3d3;
-                background-color: black;
+            :not(.active) {
+                .nav-link:hover {
+                    color: white;
+                    background-color: var(--slate);
+                    border-radius: 0px 0px 13px 13px;
+                }
             }
 
             .active {
-                color: #d3d3d3;
-                background-color: black;;
+                color: white;
+                background-color: var(--dark-blue);
+                border-radius: 0px 0px 13px 13px;
             }
         }
     }

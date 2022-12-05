@@ -334,6 +334,11 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     setLineupPlayerIds([])
   }
 
+  const playerWrapper = (player) => {
+    setPlayerDialogContent(player)
+    setShowPlayerDialog(true)
+  }
+
   return (
     <div className="createLineupPage page">
       {draftGroup !== null &&
@@ -341,9 +346,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
 				onClose={() => setShowCreateLineupDialog(false)} draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
       }
       <PlayerDialog showPlayerDialog={showPlayerDialog} 
-          onClose={() => setPlayerDialogContent({})} 
-          dialogPlayer={playerDialogContent}
-          setPlayerDialogContent={setPlayerDialogContent} />
+          onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
+          player={playerDialogContent} />
       <div className="header">
         <div className="header-inner">
           <div className="header-label">
@@ -406,7 +410,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             cancelEdit={cancelEdit} 
             onOpenDialog={openDialog}
             toggleEditingPos={toggleEditingPos}
-            setPlayerDialogContent={setPlayerDialogContent} />
+            setPlayerDialogContent={playerWrapper} />
           <div className='lineup-btns'>
             <button className='revert-btn' onClick={revertLineup}>Revert <GrRevert/></button>
             <button className='save-btn' onClick={saveLineup}>Save</button>
@@ -479,7 +483,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
                       <td>{player.position}</td>
-                      <td className='name-col'><strong><PlayerLink playerName={player.displayName} /></strong> {player.status !== "" && `(${player.status})`}</td>
+                      <td className='name-col'><strong className='player-name' onClick={() => playerWrapper(player)}>{player.displayName}</strong> {player.status !== "" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
                       <td>{player["game"] ? player["opponent"]: ''}</td>
                       <td>{player["oprk"]}</td>

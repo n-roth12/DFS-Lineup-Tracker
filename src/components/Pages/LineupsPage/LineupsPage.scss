@@ -25,6 +25,9 @@
 			border-bottom: 3px solid var(--dark-blue);
 		}
 	}
+	.close-btn {
+		color: red;
+	}
 
 	.cards-wrapper {
 		display: flex;
@@ -110,9 +113,6 @@
 	color: blue;
 }
 
-.close-btn {
-	color: red;
-}
 
 .filter-btn-active {
   border: 1px solid #0069ed;

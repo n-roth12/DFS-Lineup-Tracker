@@ -109,7 +109,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
     setFile(null)
     setLineups([])
     setSelectedLineups([])
-    onClose()
+    onClose() 
   }
 
   return (
