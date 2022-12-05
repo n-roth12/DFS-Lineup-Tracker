@@ -26,6 +26,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [lineupPlayerIds, setLineupPlayerIds] = useState(new Set())
   const [playerDialogContent, setPlayerDialogContent] = useState()
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
+  const [teamsFilter, setTeamsFilter] = useState([])
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -162,6 +163,14 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     const data = await res.json()
     setLineup(data["lineup"])
     setPrevLineup(data["lineup"])
+  }
+
+  const toggleGameWrapper = (team1, team2) => {
+    if (teamsFilter.includes(team1)) {
+      setTeamsFilter(teamsFilter.filter((team) => team !== team1 && team !== team2))
+    } else {
+      setTeamsFilter([...teamsFilter, team1, team2])
+    }
   }
 
   const getDraftGroup = async () => {
@@ -378,9 +387,14 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       </div>
       <div className='games-outer'>
         <div className='games-inner'>
+          <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
+            <p>All</p>
+          </div>
         {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
-          <div className='game'>
-            <p>{game["awayTeam"]} @ {game["homeTeam"]}</p>
+          <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected": ""}`} 
+            onClick={() => toggleGameWrapper(game["awayTeam"], game["homeTeam"])}>
+            <p>{game["awayTeam"]}</p>
+            <p>@{game["homeTeam"]}</p>
           </div>
         )}
         </div>
@@ -476,6 +490,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                   (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
+                  (teamsFilter.length < 1 || teamsFilter.includes(player["team"])) &&
                     <tr>
                       {canQuickAdd(player) || editingPos === player.position ?
                         <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
