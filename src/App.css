@@ -31,7 +31,7 @@ body {
   --black-2: #161B22;
   --space-blue: #2A2F44;
   --slate: #788A95; 
-  --white-1: #f8f9fd;
+  --white-1: #f7fafc;
   --dark-blue: #202033;
   --dark-red: #282119;
   --dark-other: #15233A;
@@ -235,10 +235,6 @@ a {
 
 .player-section {
   display: block;
-}
-
-input {
-  margin-left: 10px;
 }
 
 .add-player-btn {

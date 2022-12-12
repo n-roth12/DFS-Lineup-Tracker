@@ -48,10 +48,10 @@ const LoginPage = ({ setToken, setUserId }) => {
 				<h1>Login</h1>
 				<form className="login-form" onSubmit={handleSubmit}>
 			    	<div>
-			    		<label><strong>Username</strong></label>
+			    		<label>Username</label>
 			    		<input className="form-control" type="text" placeholder="Enter Username" value={username}
 			    			onChange={(e) => setUsername(e.target.value)} />
-			    		<label><strong>Password</strong></label>
+			    		<label>Password</label>
 			    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter Password" value={password}
 			    		onChange={(e) => setPassword(e.target.value)} />
 			    		<div className="show-password">

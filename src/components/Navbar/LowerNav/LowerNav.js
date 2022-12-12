@@ -8,7 +8,7 @@ const LowerNav = () => {
       <div className='lower-nav-inner'>
         <ul className='lower-nav-links'>
           <li className={(window.location.pathname === '/' || window.location.pathname === '/lineups') ? 'active' : ''}>
-            <Link to={'/'} 
+            <Link to={'/lineups'} 
               style={{textDecoration: "none"}} 
               className="nav-link">Lineups</Link>
           </li>

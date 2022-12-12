@@ -58,7 +58,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
           {lineups.length > 0 && lineups.slice((currPage * 20), 20 + ((currPage) * 20)).map((lineup) => 
             <>
               <tr>
-                <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineup-id"])} onClick={() => toggleSelectedLineup(lineup["lineup-id"])}></input></td>
+                <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
                 <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`}
                   className="view-lineup-btn">Edit<FaAngleRight/></Link></td>
                 <td>{capitalize(lineup["site"])}</td>

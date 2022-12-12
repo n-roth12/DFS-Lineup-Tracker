@@ -21,14 +21,14 @@
             font-size: 16pt;
         }
 
-        h2 {
-            font-size: 13pt;
-        }
     }
     .logout-btn {
         cursor: pointer;
+        font-size: 12pt;
+        margin: 0;
+        padding: 0;
     }
     .logout-btn:hover {
-        color: var(--dark-blue);
+        color: var(--grey-2);
     }
 }

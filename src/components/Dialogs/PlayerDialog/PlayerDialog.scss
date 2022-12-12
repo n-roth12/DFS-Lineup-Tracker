@@ -27,7 +27,7 @@
 					width: 50%;
 					.details-link {
 						margin-top: 10px;
-						font-size: 12pt;
+						font-size: 11pt;
 						color: var(--grey-3);
 					}
 				}
@@ -85,6 +85,26 @@
 	}
 
 	.content {
+		.lineups-table {
+			.col-labels {
+				th {
+					padding: 4px;
+				}
+			}
+			th {
+				font-size: 10pt;
+				height: 20px;
+				padding: 8px;
+			}
+			tbody {
+				td {
+					font-size: 10pt;
+				}
+				tr {
+					background-color: white;
+				}
+			}
+		}
 
 	}
 }

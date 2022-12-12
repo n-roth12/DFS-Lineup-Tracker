@@ -49,7 +49,7 @@ const PlayerDialog = ({ showPlayerDialog, onClose, player }) => {
                 <div className="game-info">
                   <p>Game: {player["game"]["awayTeam"]} @ {player["game"]["homeTeam"]}</p>
                   <p>Start Time: {player["game"]["startTime"]}</p>
-                  <Link to={"/"} className="details-link">Player Details <FaAngleRight /></Link>
+                  <Link to={`/player/${player["displayName"].replace(" ", "_")}`} className="details-link">Player Details <FaAngleRight /></Link>
                 </div>
                 <div className="draft-info">
                   <div className="info-block">

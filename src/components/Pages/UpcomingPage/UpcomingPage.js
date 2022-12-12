@@ -47,12 +47,15 @@ const UpcomingPage = ({ week, year }) => {
 			}
 		})
 		const data = await res.json()
-		setSlates(data)
+		const upcoming = data.filter((slate) => {
+			return Date.parse(slate["startTime"].split("T")[0]) > Date.parse(new Date())
+		})
+		setSlates(upcoming)
 		setActiveSlate(data[0])
 	}
 
 	const getDraftables = async () => {
-		if (activeSlate && selectedSite) {
+		if (activeSlate && activeSlate["draftGroupId"] != null && selectedSite) {
 			setLoadingDraftables(true)
 			const res = await fetch(`/upcoming/draftables?draftGroupId=${activeSlate["draftGroupId"]}&site=${selectedSite}`, {
 				method: 'GET',
@@ -166,7 +169,7 @@ const UpcomingPage = ({ week, year }) => {
 							<button className='lineup-options-btn' onClick={() => createLineup(activeSlate)}>Create Lineup <FaPlus className='icon'/></button>
 							<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport className='icon'/></button>
 						</div>
-						<p>Last update: {lastUpdate}</p>
+						{/* <p>Last update: {lastUpdate}</p> */}
 					</div>
 					<div className='players-inner'>
 						<table className='lineups-table'>

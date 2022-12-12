@@ -1,4 +1,4 @@
-.login-page {
+.register-page {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -6,7 +6,7 @@
 	height: 90vh;
 	width: 100vw;
 
-	.login-form-wrapper {
+	.register-form-wrapper {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -49,7 +49,7 @@
 		width: 350px;
 	}
 
-	.register-page-link-wrapper {
+	.login-page-link-wrapper {
 		margin-top: 40px;
 		width: 300px;
 		display: flex;
@@ -58,7 +58,7 @@
 		align-items: center;
 	}
 
-	.register-page-link {
+	.login-page-link {
 		margin-left: 20px;
 		text-decoration: none;
 		color: blue;
@@ -91,7 +91,7 @@
 
 	h4 {
 		font-weight: 400;
-		.register-page-link {
+		.login-page-link {
 			font-weight: 600;
 		}
 	}

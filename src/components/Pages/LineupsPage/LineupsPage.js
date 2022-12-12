@@ -165,15 +165,6 @@ const LineupsPage = () => {
 					<button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete Lineups ({selectedLineups.length})</button>
 				}
 			</div>
-			{stateFilter === "upcoming" &&
-			<LineupsTable
-				selectedLineups={selectedLineups}
-				setSelectedLineups={setSelectedLineups}
-				lineups={lineups.filter((lineup) => {
-					return Date.parse(lineup["startTime"].split("T")[0]) > new Date()
-				})}
-			/>
-			}
 		</div>
   		{!loadingLineups && lineups ?
   		<>
@@ -221,18 +212,25 @@ const LineupsPage = () => {
 						selectedLineups={selectedLineups}
 						setSelectedLineups={setSelectedLineups} 
 						lineups={lineups.filter(lineup => {
-							// const currentTime = new Date()
-							// const timeConv = "" + currentTime.getFullYear() + "-" + currentTime.getMonth() + "-" + currentTime.getDay()
-							// console.log(t)
-							return Date.parse(lineup["startTime"].split("T")[0]) <= new Date()
+							return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
 						})} /> 
 				</div>
-				}	
+				}
+				{stateFilter === "upcoming" &&
+					<LineupsTable
+						selectedLineups={selectedLineups}
+						setSelectedLineups={setSelectedLineups}
+						lineups={lineups.filter((lineup) => {
+							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
+						})}
+					/>
+				}
 		  	</> 
-		 : 
+		: 
 		 	<div className="loading-screen">
 		 		<h3><Roller />Loading lineups</h3>
-		  </div>}
+		  	</div>
+		}
 	</div>
   )
 }

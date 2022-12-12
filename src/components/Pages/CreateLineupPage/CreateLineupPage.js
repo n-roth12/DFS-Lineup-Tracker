@@ -340,7 +340,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
 
   const revertLineup = () => {
     setLineup(prevLineup)
-    setLineupPlayerIds([])
+    setLineupPlayerIds(new Set())
   }
 
   const playerWrapper = (player) => {
@@ -358,32 +358,14 @@ const CreateLineupPage = ({ setAlertMessage }) => {
           onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
           player={playerDialogContent} />
       <div className="header">
+        {draftGroup &&
         <div className="header-inner">
           <div className="header-label">
-            <p className="site">{draftGroup && capitalize(draftGroup["site"])} Lineup</p>
-            <p className="date">{draftGroup && draftGroup["startTimeSuffix"]}</p>
-          </div>
-          <div className="header-options">
-            <button 
-              className={`${activeOption === "custom" ? "active" : ""}`}
-              onClick={() => setActiveOption("custom")}
-              >Custom
-            </button>
-            <button 
-              className={`${activeOption === "generate" ? "active" : ""}`}
-              onClick={() => setActiveOption("generate")}
-              >Generate
-            </button>
-            <button 
-              className={`${activeOption === "import" ? "active" : ""}`}
-              onClick={() => setActiveOption("import")}
-            >Import</button>
-            <button
-              className={`${activeOption === "export" ? "active" : ""}`}
-              onClick={exportLineup}
-            >Export</button>
+            <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
+            <p className="date">{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}, Starts: {draftGroup["startTime"]}</p>
           </div>
         </div>
+        }
       </div>
       <div className='games-outer'>
         <div className='games-inner'>

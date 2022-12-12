@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import './RegisterPage.css'
+import './RegisterPage.scss'
 import UpperNav from '../../Navbar/UpperNav/UpperNav'
 
 const LandingPage = ({ setToken }) => {
@@ -48,23 +48,21 @@ const LandingPage = ({ setToken }) => {
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>
 		    	<div>
-		    		<label><strong>Username</strong></label>
-		    		<input className="form-control" type="text" placeholder="Create Username" value={username}
+		    		<label>Username</label>
+		    		<input className="form-control" type="text" placeholder="Enter Username" value={username}
 		    			onChange={(e) => setUsername(e.target.value)} />
-		    		<label><strong>Password</strong></label>
-		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Create Password" value={password}
+		    		<label>Password</label>
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter Password" value={password}
 		    		onChange={(e) => setPassword(e.target.value)} />
-		    		<label><strong>Re-enter Password</strong></label>
-		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Create Password" value={passwordCheck}
+		    		<label>Re-enter Password</label>
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter Password" value={passwordCheck}
 		    		onChange={(e) => setPasswordCheck(e.target.value)} />
 		    		<div className="show-password">
 		    			<input className="checkbox" type="checkbox" checked={showPassword} onClick={toggle} />
 		    			<p>Show Password</p>
 		    		</div>
 		    		{alert.length > 0 &&
-		    			<>
-		    				<p className="alert">{alert}</p>
-		    			</>
+		    			<p className="alert">{alert}</p>
 		    		}
 		    	</div>
 		    </form>
