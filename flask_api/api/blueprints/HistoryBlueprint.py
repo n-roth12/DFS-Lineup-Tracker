@@ -50,7 +50,7 @@ def research_year(current_user: User):
 	players = RedisController.get_year(year)
 
 	if players == None:
-		players = RedisController.set_players(year)
+		players = RedisController.set_year(year)
 
 	return jsonify({ 'players': players, 'games': [] }), 200
 

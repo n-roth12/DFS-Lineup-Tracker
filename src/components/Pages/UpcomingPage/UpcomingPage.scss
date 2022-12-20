@@ -8,6 +8,23 @@
 	.players-outer {
 		width: 90%;
 		max-width: 1100px;
+		.filters-outer {
+			display: flex;
+			flex-direction: row;
+			
+			.pos-filter-wrapper {
+				display: flex;
+				width: 80%;
+				max-width: 1100px;
+				justify-content: left;
+				align-items: left;
+				margin-top: 10px;
+				.filter-btn, .filter-btn-active {
+					width: 50px;
+					padding: 3px 8px 3px 8px;
+				}
+			}
+		}
 		.players-outer-header {
 			display: flex;
 			flex-direction: row;

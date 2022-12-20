@@ -156,6 +156,7 @@ const LineupsPage = () => {
 		<div className='lineup-wrapper container' >
 			<div className='filter-btn-wrapper'>
 				<button onClick={() => setStateFilter("upcoming")} className={`underline-btn${stateFilter === "upcoming" ? " active" : ""}`}>Upcoming</button>
+				<button onClick={() => setStateFilter("live")} className={`underline-btn${stateFilter === "live" ? " active" : ""}`}>Live</button>
 				<button onClick={() => setStateFilter("past")} className={`underline-btn${stateFilter === "past" ? " active" : ""}`}>History</button>
 			</div>
 			<div className='lineup-wrapper-header'>
@@ -215,6 +216,16 @@ const LineupsPage = () => {
 							return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
 						})} /> 
 				</div>
+				}
+				{stateFilter === "live" &&
+					<LineupsTable
+						selectedLineups={selectedLineups}
+						setSelectedLineups={setSelectedLineups}
+						lineups={lineups.filter((lineup) => {
+							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
+								&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date())
+						})} />
+
 				}
 				{stateFilter === "upcoming" &&
 					<LineupsTable

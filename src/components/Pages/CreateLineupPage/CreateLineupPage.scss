@@ -4,6 +4,13 @@
 	flex-direction: column;
 	overflow: hidden;
 	margin-bottom: 80px;
+	.loading-wrapper {
+		width: 100%;
+		min-height: 50vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	.games-outer {
 		display: flex;
 		flex-direction: row;

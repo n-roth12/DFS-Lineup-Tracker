@@ -11,6 +11,8 @@ function LineupPlayerMini({ player, position, beingEdited, onDelete, onAdd, onOp
             <p className='position'>{position.toUpperCase()}</p>
             <p className='playerName'>{player["firstName"]} {player["lastName"]}</p>
             <p className='salary'>${player["salary"]}</p>
+            <p className='icon-wrapper'><FaTimes className='delete-icon icon' /></p>
+            <p className='icon-wrapper'><CgArrowsExchange className='swap-icon icon' /></p>
         </div>
     </div>
   )

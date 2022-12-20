@@ -55,7 +55,7 @@ class RedisController:
     def get_year(self, year):
         key = f'players_{year}'
         players = self.redis_client.get(key)
-        return json.loads(players)
+        return json.loads(players) if players else None
 
     def set_year(self, year):
         key = f'players_{year}'

@@ -6,7 +6,28 @@
     border-bottom: 1px solid var(--grey-2);
     border-left: 1px solid var(--grey-2);
     border-right: 1px solid var(--grey-2);
-    height: 40px;
+    height: 35px;
+    .icon-wrapper {
+        height: 100%;
+        width: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .icon {
+            cursor: pointer;
+        }
+        .delete-icon {
+            color: red;
+            font-size: 10pt;
+        }
+        .swap-icon {
+            color: var(--btn-blue);
+            font-size: 15pt;
+        }
+    }
+    p {
+        font-size: 9pt;
+    }
     .position {
         flex: 1;
         display: flex;

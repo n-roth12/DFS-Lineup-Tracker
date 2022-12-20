@@ -46,7 +46,8 @@ class MongoController:
         self.projections_collection.insert_one(json.loads(json_util.dumps(projections)))
 
     def addDraftGroups(self, data):
-        self.draftgroups_collection.insert_many(data)
+        for draftGroup in data:
+            self.draftgroups_collection.replace_one({ "draftGroupId": draftGroup["draftGroupId"] }, draftGroup, upsert=True)        
 
     def getDraftGroupsAll(self):
         cursor = self.draftgroups_collection.find({})
@@ -56,10 +57,12 @@ class MongoController:
         return draftgroups
 
     def addDraftables(self, data):
-        self.draftables_collection.insert_many(data)
+        for draftables in data:
+            self.draftables_collection.replace_one({ "draftGroupId": draftables["draftGroupId"] }, draftables, upsert=True)        
 
     def getDraftablesByDraftGroupId(self, draftGroupId):
         draftables = self.draftables_collection.find_one({"draftGroupId": int(draftGroupId)})
+        print(draftables)
         return draftables
 
     def deleteAllLineups(self):
@@ -70,5 +73,3 @@ class MongoController:
 
     def deleteAllDraftables(self):
         self.draftables_collection.delete_many({})
-
-

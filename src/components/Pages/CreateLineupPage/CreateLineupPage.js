@@ -8,6 +8,7 @@ import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
+import { Roller } from 'react-awesome-spinners'
 
 const CreateLineupPage = ({ setAlertMessage }) => {
 
@@ -27,6 +28,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [playerDialogContent, setPlayerDialogContent] = useState()
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
   const [teamsFilter, setTeamsFilter] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -105,6 +107,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     getLineup()
     getDraftGroup()
     getDraftGroupLineups()
+    setTimeout(() => setLoading(false), 1000)
   }, [draftGroupId, lineupId])
 
   useEffect(() => {
@@ -350,6 +353,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
 
   return (
     <div className="createLineupPage page">
+      {loading === false ? <>
       {draftGroup !== null &&
         <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={() => setShowCreateLineupDialog(false)} draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
@@ -367,6 +371,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         </div>
         }
       </div>
+      {draftGroup["games"].length > 1 &&
       <div className='games-outer'>
         <div className='games-inner'>
           <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
@@ -381,6 +386,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         )}
         </div>
       </div>
+      }
       <div className='createLineupPage-inner'>
         <div className='lineup-outer'>
           <div className='title'>
@@ -493,6 +499,12 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         : <h2>Loading Players...</h2>
         }
       </div>
+      </>
+    :
+    <div className='loading-wrapper'>
+      <Roller />
+    </div>
+    }
     </div>
   )
 }

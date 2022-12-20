@@ -3,6 +3,7 @@ import EmptyPlayerMini from '../EmptyPlayerMini/EmptyPlayerMini'
 import './LineupMini.scss'
 import { useState, useEffect } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
+import { GrRevert } from 'react-icons/gr'
 
 const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos }) => {
 
@@ -29,16 +30,19 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
   return (
     <div className="lineup-mini">
         <div className='lineup-mini-header'>
-            <div>
-                <p>Salary: ${lineupSalary}</p>
+            <div className='header-upper'>
+                <p>Salary: ${lineup["salary"]}</p>
+                <p>Proj: {lineup["projectedPoints"]} Pts</p>
             </div>
-            <div>
-              <button className='edit-btn'>Edit <FaAngleRight /></button>
+            <div className='header-lower'>
+              <button className='revert-btn'>Revert <GrRevert /></button>
+              <button className='save-btn'>Save</button>
+              <button className='edit-btn'>Details <FaAngleRight /></button>
             </div>
         </div>
-        {lineup["qb"] !== null ? 
+        {lineup["lineup"]["qb"] !== null ? 
           <LineupPlayerMini
-            player={lineup.qb} 
+            player={lineup["lineup"]["qb"]} 
             position={'qb'} 
             beingEdited={checkBeingEdited('qb')} 
             onDelete={onDelete} 
@@ -55,9 +59,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["rb1"] !== null ? 
+        {lineup["lineup"]["rb1"] !== null ? 
           <LineupPlayerMini
-            player={lineup.rb1} 
+            player={lineup["lineup"]["rb1"]} 
             position={'rb1'} 
             beingEdited={checkBeingEdited('rb1')} 
             onDelete={onDelete} 
@@ -74,9 +78,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["rb2"] !== null ? 
+        {lineup["lineup"]["rb2"] !== null ? 
           <LineupPlayerMini
-            player={lineup.rb2} 
+            player={lineup["lineup"]["rb2"]} 
             position={'rb2'} 
             beingEdited={checkBeingEdited('rb2')} 
             onDelete={onDelete} 
@@ -93,9 +97,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["wr1"] !== null ? 
+        {lineup["lineup"]["wr1"] !== null ? 
           <LineupPlayerMini
-            player={lineup.wr1} 
+            player={lineup["lineup"]["wr1"]} 
             position={'wr1'} 
             beingEdited={checkBeingEdited('wr1')} 
             onDelete={onDelete} 
@@ -112,9 +116,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["wr2"] !== null ? 
+        {lineup["lineup"]["wr2"] !== null ? 
           <LineupPlayerMini
-            player={lineup.wr2} 
+            player={lineup["lineup"]["wr2"]} 
             position={'wr2'} 
             beingEdited={checkBeingEdited('wr2')} 
             onDelete={onDelete} 
@@ -131,9 +135,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["wr3"] !== null ? 
+        {lineup["lineup"]["wr3"] !== null ? 
           <LineupPlayerMini
-            player={lineup.wr3} 
+            player={lineup["lineup"]["wr3"]} 
             position={'wr3'} 
             beingEdited={checkBeingEdited('wr3')} 
             onDelete={onDelete} 
@@ -150,9 +154,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["te"] !== null ? 
+        {lineup["lineup"]["te"] !== null ? 
           <LineupPlayerMini
-            player={lineup.te} 
+            player={lineup["lineup"]["te"]} 
             position={'te'} 
             beingEdited={checkBeingEdited('te')} 
             onDelete={onDelete} 
@@ -169,9 +173,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["flex"] !== null ? 
+        {lineup["lineup"]["flex"] !== null ? 
           <LineupPlayerMini
-            player={lineup.flex} 
+            player={lineup["lineup"]["flex"]} 
             position={'flex'} 
             beingEdited={checkBeingEdited('flex')} 
             onDelete={onDelete} 
@@ -188,9 +192,9 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPos}
             editingPos={editingPos} />
         }
-        {lineup["dst"] !== null ?
+        {lineup["lineup"]["dst"] !== null ?
           <LineupPlayerMini
-            player={lineup.dst}
+            player={lineup["lineup"]["dst"]}
             position={'dst'}
             beingEdited={checkBeingEdited('dst')}
             onDelete={onDelete}

@@ -7,6 +7,7 @@ import { FaAngleRight, FaPlus } from 'react-icons/fa';
 import { BiImport } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { capitalize } from '@material-ui/core';
+import { FaSearch } from 'react-icons/fa';
 
 const UpcomingPage = ({ week, year }) => {
 
@@ -22,6 +23,8 @@ const UpcomingPage = ({ week, year }) => {
 	const [activeSlateDraftables, setActiveSlateDraftales] = useState([])
 	const [showImportDialog, setShowImportDialog] = useState(false)
 	const [loadingDraftables, setLoadingDraftables] = useState(false)
+	const [posFilter, setPosFilter] = useState(new Set())
+	const [playerFilter, setPlayerFilter] = useState("")
 	const navigate = useNavigate()
  
 	useEffect(() => {
@@ -34,7 +37,7 @@ const UpcomingPage = ({ week, year }) => {
 	}, [activeSlate])
 
 	useEffect(() => {
-		if (slates.length) {
+		if (slates.length > 0) {
 			setActiveSlate(slates.filter((slate) => slate["site"] === selectedSite)[0])
 		}
 	}, [selectedSite])
@@ -124,21 +127,31 @@ const UpcomingPage = ({ week, year }) => {
 		navigate(`/createLineup/${draftGroup["draftGroupId"]}/${lineupId}`)
 	}
 
+	const togglePosFilter = (position) => {
+		if (posFilter.has(position)) {
+		  const filterCopy = new Set(posFilter)
+		  filterCopy.delete(position)
+		  setPosFilter(filterCopy)
+		} else {
+		  setPosFilter(new Set(posFilter.add(position)))
+		}
+	  }
+
 	return (
 		<div className="upcoming-page page">
 			<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={closeDialogWrapper} draftGroup={createLineupDialogContent} />
 			<div className='slatesWrapper-outer'>
-				{slates.length ?
-				<>
-					<div className='site-filter-wrapper'>
-						<button className={`underline-btn${selectedSite === "draftkings" ? " active": ""}`}
-							onClick={() => setSelectedSite("draftkings")}>DraftKings</button>
-						<button className={`underline-btn${selectedSite === "yahoo" ? " active" : ""}`}
-							onClick={() => setSelectedSite("yahoo")}>Yahoo</button>
-						<button className={`underline-btn${selectedSite === "fanduel" ? " active" : ""}`}
-							onClick={() => setSelectedSite("fanduel")}>Fanduel</button>
-					</div>
+				<div className='site-filter-wrapper'>
+					<button className={`underline-btn${selectedSite === "draftkings" ? " active": ""}`}
+						onClick={() => setSelectedSite("draftkings")}>DraftKings</button>
+					<button className={`underline-btn${selectedSite === "yahoo" ? " active" : ""}`}
+						onClick={() => setSelectedSite("yahoo")}>Yahoo</button>
+					<button className={`underline-btn${selectedSite === "fanduel" ? " active" : ""}`}
+						onClick={() => setSelectedSite("fanduel")}>Fanduel</button>
+				</div>
+				{slates.length && activeSlate ?
+					<>
 					<div className="slatesWrapper">
 						{slates.length > 0 ? slates.map((slate) => (
 							slate["site"] === selectedSite &&
@@ -161,7 +174,7 @@ const UpcomingPage = ({ week, year }) => {
 			</div>
 
 			{!loadingDraftables ? <>
-			{Object.keys(activeSlateDraftables).length > 0 && 
+			{activeSlate && Object.keys(activeSlateDraftables).length > 0 && 
 				<div className='players-outer'>
 					<div className='players-outer-header'>
 						<div className='btn-wrapper'>
@@ -169,7 +182,43 @@ const UpcomingPage = ({ week, year }) => {
 							<button className='lineup-options-btn' onClick={() => createLineup(activeSlate)}>Create Lineup <FaPlus className='icon'/></button>
 							<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport className='icon'/></button>
 						</div>
-						{/* <p>Last update: {lastUpdate}</p> */}
+					</div>
+					<div className='filters-outer'>
+						<div className="pos-filter-wrapper">
+							<div>
+								<button 
+									className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`} 
+									onClick={() => setPosFilter(new Set())}>All
+								</button>
+								<button 
+									className={`filter-btn${posFilter.has("qb") ? "-active" : ""}`} 
+									onClick={() => togglePosFilter("qb")}>QB
+								</button>
+								<button 
+									className={`filter-btn${posFilter.has("rb") ? "-active" : ""}`} 
+									onClick={() => togglePosFilter("rb")}>RB
+								</button>
+								<button 
+									className={`filter-btn${posFilter.has("wr") ? "-active" : ""}`} 
+									onClick={() => togglePosFilter("wr")}>WR
+								</button>
+								<button 
+									className={`filter-btn${posFilter.has("te") ? "-active" : ""}`} 
+									onClick={() => togglePosFilter("te")}>TE
+								</button>
+								<button
+									className={`filter-btn${posFilter.has("dst") ? "-active" : ""}`} 
+									onClick={() => togglePosFilter("dst")}>DST
+								</button>
+							</div>
+						</div>
+						<div className="player-search">
+						<div>
+							<input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
+								onChange={(e) => setPlayerFilter(e.target.value)}></input>
+						</div>
+					</div>
+					<button className="search-btn" type="button"><FaSearch /></button>
 					</div>
 					<div className='players-inner'>
 						<table className='lineups-table'>
@@ -200,6 +249,8 @@ const UpcomingPage = ({ week, year }) => {
 							</thead>
 							<tbody>
 								{activeSlateDraftables.map((data) => (
+									(playerFilter.length < 1 || data["displayName"].toLowerCase().startsWith(playerFilter.toLowerCase())) &&
+									(posFilter.size < 1 || posFilter.has(data.position.toLowerCase())) &&
 									// <tr>
 									// 	<td><strong><PlayerLink playerName={data["name"]} /></strong></td>
 									// 	<td>{data["stats"]["fanduel"] ? data["stats"]["fanduel"]["position"] : data["stats"]["draftkings"]["position"] }</td>
