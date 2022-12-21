@@ -3,7 +3,7 @@ import './LineupPlayerMini.scss'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import { CgArrowsExchange } from 'react-icons/cg'
 
-function LineupPlayerMini({ player, position, beingEdited, onDelete, onAdd, onOpenDialog, toggleEditingPos, editingPos }) {
+const LineupPlayerMini = ({ player, position, beingEdited, onDelete, onAdd, onOpenDialog, toggleEditingPos, editingPos, deletePlayer, setSwapPlayer }) =>  {
 
   return (
     <div>
@@ -11,8 +11,9 @@ function LineupPlayerMini({ player, position, beingEdited, onDelete, onAdd, onOp
             <p className='position'>{position.toUpperCase()}</p>
             <p className='playerName'>{player["firstName"]} {player["lastName"]}</p>
             <p className='salary'>${player["salary"]}</p>
-            <p className='icon-wrapper'><FaTimes className='delete-icon icon' /></p>
-            <p className='icon-wrapper'><CgArrowsExchange className='swap-icon icon' /></p>
+            <p className='icon-wrapper' onClick={deletePlayer}><FaTimes className='delete-icon icon' /></p>
+            <p className='icon-wrapper' onClick={() => toggleEditingPos(position)} >
+              <CgArrowsExchange className='swap-icon icon' /></p>
         </div>
     </div>
   )

@@ -5,12 +5,16 @@ import { useState, useEffect } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 
-const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos }) => {
+const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos, setSwapPlayer }) => {
 
   const [lineupSalary, setLineupSalary] = useState()
 
   const checkBeingEdited = (pos) => {
-    return pos === editingPos
+    return editingPos && (pos === editingPos["position"]) && (editingPos["lineup"] == lineup["lineupId"])
+  }
+
+  const toggleEditingPosWrapper = (pos) => {
+    toggleEditingPos({ "lineup": lineup["lineupId"], "position": pos })
   }
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'qb'} 
@@ -56,7 +60,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('qb')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["rb1"] !== null ? 
@@ -67,7 +71,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'rb1'} 
@@ -75,7 +79,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('rb1')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["rb2"] !== null ? 
@@ -86,7 +90,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'rb2'} 
@@ -94,7 +98,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('rb2')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["wr1"] !== null ? 
@@ -105,7 +109,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'wr1'} 
@@ -113,7 +117,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('wr1')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["wr2"] !== null ? 
@@ -124,7 +128,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'wr2'} 
@@ -132,7 +136,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('wr2')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["wr3"] !== null ? 
@@ -143,7 +147,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'wr3'} 
@@ -151,7 +155,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('wr3')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["te"] !== null ? 
@@ -162,7 +166,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'te'} 
@@ -170,7 +174,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('te')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["flex"] !== null ? 
@@ -181,7 +185,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete} 
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         : <EmptyPlayerMini
             key={'flex'} 
@@ -189,7 +193,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             beingEdited={checkBeingEdited('flex')} 
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         }
         {lineup["lineup"]["dst"] !== null ?
@@ -200,7 +204,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onDelete={onDelete}
             onAdd={onAdd}
             onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} />
         : <EmptyPlayerMini
             key={'dst'}
@@ -208,7 +212,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd}
             beingEdited={checkBeingEdited('dst')}
             cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
+            toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         }
     </div>

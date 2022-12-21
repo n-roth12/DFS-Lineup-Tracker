@@ -5,7 +5,7 @@ import './EmptyPlayerMini.scss'
 const EmptyPlayerMini = ({ position, showAddPlayer, onAdd, cancelEdit, beingEdited, toggleEditingPos, editingPos }) => {
   return (
     <div className={`empty-player-mini ${beingEdited ? 'selected': ''}`} onClick={() => {toggleEditingPos(position)}}>
-      <p className='empty-pos-label'>Empty {position.toUpperCase()}</p>
+      <p className='empty-pos-label'><FaPlus className='icon'/>Empty {position.toUpperCase()}</p>
     </div>
   )
 }

@@ -65,8 +65,13 @@
                             text-align: left;
                             margin: 0;
                         }
+                        .exposure-display {
+                            cursor: pointer;
+                        }
+                        .exposure-display:hover {
+                            text-decoration: underline;
+                        }
                     }
-        
                 }
             }
             .lineups-header {
@@ -106,8 +111,9 @@
             }
         }
         .draftables-wrapper-outer {
-            width: fit-content;
+            width: 30%;
             .draftables-wrapper {
+                width: 100%;
                 h2 {
                     font-size: 14pt;
                 }
@@ -123,9 +129,24 @@
                     .player-name {
                         text-align: left;
                     }
+                    .player-opp {
+                        text-align: right;
+                    }
                     tr {
                         justify-content: space-between;
                         font-size: 9pt;
+                    }
+                    td {
+                        padding: 8px;
+                    }
+                    .swap-icon {
+                        color: var(--grey-1);
+                        height: fit-content;
+                        font-size: 15pt;
+                        cursor: pointer;
+                    }
+                    .swap-icon:active {
+                        color: blue;
                     }
                 }
             }

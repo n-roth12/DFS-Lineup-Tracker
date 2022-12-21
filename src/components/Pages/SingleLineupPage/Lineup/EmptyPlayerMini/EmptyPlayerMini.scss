@@ -13,5 +13,10 @@
         margin-top: auto;
         margin-bottom: auto;
         font-style: italic;
+        color: var(--btn-blue);
+        cursor: pointer;
+        .icon {
+            font-size: 8pt;
+        }
     }
 }

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import LineupMini from '../SingleLineupPage/Lineup/LineupMini/LineupMini'
 import { capitalize } from '@material-ui/core'
 import { GrRevert } from 'react-icons/gr'
+import { CgArrowsExchange } from 'react-icons/cg'
 
 const CompareLineupsPage = () => {
     
@@ -13,6 +14,8 @@ const CompareLineupsPage = () => {
   const [draftables, setDraftables] = useState([])
   const [favoritePlayers, setFavoritePlayers] = useState([])
   const [changedLineups] = useState({})
+  const [isShowPercentage, setIsShowPercentage] = useState(false)
+  const [swapPlayer, setSwapPlayer] = useState()
 
   useEffect(() => {
     getDraftGroup()
@@ -85,6 +88,10 @@ const CompareLineupsPage = () => {
     setFavoritePlayers(temp2)
   }
 
+  const toggleEditingPos = (data) => {
+    setSwapPlayer(data)
+  }
+
   return (
     <div className='compare-lineups-page page'>
       {draftGroup &&
@@ -119,7 +126,10 @@ const CompareLineupsPage = () => {
                 <img src={player["player"]["playerImageLarge"]} />
                 <div className='info'>
                   <p>{player["player"]["displayName"]}</p>
-                  <p>{player["count"]}/{lineups.length} ({((player["count"] / lineups.length) * 100).toFixed(2)}%)</p>
+                  <p className='exposure-display' 
+                    onClick={() => setIsShowPercentage(!isShowPercentage)}>{isShowPercentage 
+                      ? `${player["count"]}/${lineups.length} Lineups` 
+                      : `${((player["count"] / lineups.length) * 100).toFixed(0)}% Lineups`}</p>
                 </div>
               </div>
             )}
@@ -132,7 +142,9 @@ const CompareLineupsPage = () => {
           <div className='lineups-wrapper'>
             {lineups.map((lineup) => 
               <div>
-                <LineupMini lineup={lineup} />
+                <LineupMini lineup={lineup} 
+                  toggleEditingPos={toggleEditingPos}
+                  editingPos={swapPlayer} />
               </div>
             )}
           </div>
@@ -146,6 +158,7 @@ const CompareLineupsPage = () => {
               <table className='lineups-table'>
                 <thead>
                   <tr>
+                    <th></th>
                     <th>Pos</th>
                     <th>Name</th>
                     <th>Opponent</th>
@@ -156,13 +169,15 @@ const CompareLineupsPage = () => {
                   <div className='table-inner'>
                   {draftables.map((player) =>
                     <tr>
+                      <td><CgArrowsExchange className='swap-icon' 
+                        onClick={() => setSwapPlayer({ "player": player["playerSiteId"], "lineup": player["line"]})} /></td>
                       <td>{player["position"]}</td>
                       {player["position"] === "DST" ?
                       <td className='player-name'>{player["displayName"]}</td>
                       :
                       <td className='player-name'>{player["firstName"][0]}. {player["lastName"]}</td>
                       }
-                      <td>{player["game"]["awayTeam"] === player["team"] ? "@" : ""}{player["opponent"]} {player["oprk"] ? `(${player["oprk"]})` : ""}</td>
+                      <td className='player-opp'>{player["game"]["awayTeam"] === player["team"] ? "@" : ""}{player["opponent"]} {player["oprk"] ? `(${player["oprk"]})` : ""}</td>
                       <td>${player["salary"]}</td>
                     </tr>
                   )}
