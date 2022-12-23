@@ -134,6 +134,7 @@ def set_projections():
 	return jsonify(projections), 200
 
 
+# this is the code in lambda_function of DraftKingsController lambda function
 @upcoming_blueprint.route('/draftkings_draftgroups_and_draftables', methods=["POST"])
 def draftkings_upcoming():
 	draftGroupIds = draftKingsController.getDraftKingsDraftGroupIds()
@@ -154,6 +155,7 @@ def draftkings_upcoming():
 	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200
 
 
+# this is the code in the lambda_function of YahooController lambda function
 @upcoming_blueprint.route('/yahoo_draftgroups_and_draftables', methods=['POST'])
 def yahoo_upcoming():
 	draftGroups = yahooController.getYahooUpcomingSeries()    # this doesn't contain contestIds, so we have to get

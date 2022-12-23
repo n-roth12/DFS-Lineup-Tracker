@@ -5,9 +5,11 @@ import { useState, useEffect } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 
-const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos, setSwapPlayer }) => {
+const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, onOpenDialog, toggleEditingPos, setSwapPlayer, playerDialogWrapper, draftGroup, setAlertMessage, onSave }) => {
 
   const [lineupSalary, setLineupSalary] = useState()
+  const [teamProjectedPoints, setTeamProjectedPoints] = useState(0)
+  const [remainingSalary, setRemainingSalary] = useState(0)
 
   const checkBeingEdited = (pos) => {
     return editingPos && (pos === editingPos["position"]) && (editingPos["lineup"] == lineup["lineupId"])
@@ -15,6 +17,62 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
 
   const toggleEditingPosWrapper = (pos) => {
     toggleEditingPos({ "lineup": lineup["lineupId"], "position": pos })
+  }
+
+  const getTeamProjPoints = () => {
+    var projectedPoints = 0
+    for (const [k,  lineupSlot] of Object.entries(lineup)) {
+      if (lineupSlot !== null) {
+        projectedPoints += parseFloat(lineupSlot["fppg"])
+      }
+    }
+    setTeamProjectedPoints(parseFloat(projectedPoints).toFixed(2))
+  }
+
+  const getRemainingSalary = () => {
+    if (draftGroup) {
+      var remaining = draftGroup["salaryCap"]
+      for (const [k,  lineupSlot] of Object.entries(lineup)) {
+        if (lineupSlot !== null) {
+          remaining -= lineupSlot["salary"]
+        }
+      }
+      setRemainingSalary(remaining)
+    }
+  }
+
+  const saveLineup = async () => {
+    const projectedPoints = getTeamProjPoints()
+    const res = await fetch(`/lineups/updateLineup`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify({
+        "lineup": lineup,
+        "draftGroupId": lineup["draftGroupId"],
+        "lineupId": lineup["lineupId"],
+        "salary": draftGroup["salaryCap"] - remainingSalary,
+        "projectedPoints": teamProjectedPoints,
+        "projectedOwn": 120,
+        "startTime": draftGroup["startTime"],
+        "endTime": draftGroup["endTime"],
+        "startTimeSuffix": draftGroup["startTimeSuffix"],
+        "site": draftGroup["site"],
+        "salaryCap": draftGroup["salaryCap"]
+      })
+    })
+    .then(() => {
+      if (remainingSalary < 0) {
+        setAlertMessage("Lineup Saved with Warning: Lineup over the salary cap!")
+      } else {
+        setAlertMessage("Lineup Saved")
+      }    
+    })
+    .catch((error) => {
+      setAlertMessage("Error while saving lineup!")
+    })
+    onSave(lineup["lineupId"])
   }
 
   useEffect(() => {
@@ -40,7 +98,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             </div>
             <div className='header-lower'>
               <button className='revert-btn'>Revert <GrRevert /></button>
-              <button className='save-btn'>Save</button>
+              <button className='save-btn' onClick={saveLineup} >Save</button>
               <button className='edit-btn'>Details <FaAngleRight /></button>
             </div>
         </div>
@@ -53,7 +111,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'qb'} 
             position={'qb'} 
@@ -72,7 +131,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'rb1'} 
             position={'rb1'} 
@@ -91,7 +151,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'rb2'} 
             position={'rb2'} 
@@ -110,7 +171,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'wr1'} 
             position={'wr1'} 
@@ -129,7 +191,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'wr2'} 
             position={'wr2'} 
@@ -148,7 +211,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'wr3'} 
             position={'wr3'} 
@@ -167,7 +231,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'te'} 
             position={'te'} 
@@ -186,7 +251,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd} 
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} /> 
         : <EmptyPlayerMini
             key={'flex'} 
             position={'flex'} 
@@ -205,7 +271,8 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             onAdd={onAdd}
             onOpenDialog={onOpenDialog}
             toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
+            editingPos={editingPos}
+            playerDialogWrapper={playerDialogWrapper} />
         : <EmptyPlayerMini
             key={'dst'}
             position={'dst'}
@@ -215,7 +282,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
             toggleEditingPos={toggleEditingPosWrapper}
             editingPos={editingPos} /> 
         }
-    </div>
+    </div>     
   )
 }
 

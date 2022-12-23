@@ -48,7 +48,7 @@
                     display: flex;
                     flex-direction: row;
                     min-width: 160px;
-                    width: 160px;
+                    width: 180px;
                     min-height: 70px;
                     height: 70px;
                     background-color: white;
@@ -78,6 +78,13 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                justify-content: space-around;
+                .header-inner {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                }
                 button {
                     padding: 4px 12px 4px 12px;
                     border: None;
@@ -117,10 +124,15 @@
                 h2 {
                     font-size: 14pt;
                 }
-                thead tr {
+                thead {
                     display: block;
-                    display: flex;
+                }
+                thead tr {
                     justify-content: space-between;
+                    th {
+                        padding: 4px;
+                        font-size: 10pt;
+                    }
                 }
                 tbody {
                     max-height: 80vh;
@@ -133,24 +145,31 @@
                         text-align: right;
                     }
                     tr {
-                        justify-content: space-between;
+                        // justify-content: space-between;
                         font-size: 9pt;
                     }
                     td {
                         padding: 8px;
                     }
-                    .swap-icon {
-                        color: var(--grey-1);
-                        height: fit-content;
-                        font-size: 15pt;
-                        cursor: pointer;
+                    .icon-wrapper:not(.active) {
+                        background-color: var(--grey-1);
+                        .swap-icon {
+                            color: white;
+                            height: fit-content;
+                            font-size: 15pt;
+                        }
                     }
-                    .swap-icon:active {
-                        color: blue;
+                    .icon-wrapper:not(:not(.active)) {
+                        background-color: var(--btn-blue);
+                        cursor: pointer;
+                        .swap-icon {
+                            color: white;
+                            height: fit-content;
+                            font-size: 15pt;
+                        }
                     }
                 }
             }
         }
     }
-
 }

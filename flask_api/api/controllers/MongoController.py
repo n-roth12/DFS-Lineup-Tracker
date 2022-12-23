@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 import certifi
-import json
 from bson import json_util
 import datetime
 

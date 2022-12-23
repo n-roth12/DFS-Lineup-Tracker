@@ -3,10 +3,15 @@ import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaA
 import { Link } from 'react-router-dom'
 import './LineupsTable.scss'
 import { capitalize } from '@material-ui/core'
+import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
+
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups }) => {
 
   const [currPage, setCurrPage] = useState(0)
+  const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
+	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
+	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
 
   const nextPage = () => {
     if ((currPage + 1) * 20 >= lineups.length) return
@@ -26,8 +31,20 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
     }
   }
 
+  const dialogActionWrapper = (slate) => {
+		setCreateLineupDialogContent(slate)
+		setShowCreateLineupDialog(true)
+	}
+
+	const closeDialogWrapper = () => {
+		setShowCreateLineupDialog(false)
+		setCreateLineupDialogContent({})
+	}
+
   return (
     <div className='lineups-table-wrapper'>
+      	<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
+				  onClose={() => setShowCreateLineupDialog(false)} draftGroup={createLineupDialogContent} draftGroupLineups={dialogDraftGroupLineups} />
       <div className='lineups-table-wrapper-inner'>
       <span className="page-btn-wrapper">
         <span className="page-label">{1 + (currPage * 20)} - {Math.min((currPage + 1) * 20, lineups.length)} of {lineups.length}</span>

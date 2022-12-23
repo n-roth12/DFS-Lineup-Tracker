@@ -1,43 +1,29 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './LineupsPage.scss';
-import PointsGraph from './PointsGraph/PointsGraph'
-import BankrollGraph from './BankrollGraph/BankrollGraph'
 import LineupsTable from '../../TablesLists/LineupsTable/LineupsTable'
 import ImportLineupsDialog from '../../Dialogs/ImportLineupsDialog/ImportLineupsDialog'
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog';
+import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { Roller } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus, FaUpload, FaFileImport } from 'react-icons/fa'
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
 import { BiImport } from 'react-icons/bi'
-import RoundButtonV1 from '../../Buttons/RoundButtonV1/RoundButtonV1';
 
 const LineupsPage = () => {
 
 	const [lineups, setLineups] = useState([])
 	const [loadingLineups, setLoadingLineups] = useState(true)
-	const [showNewLineupForm, setShowNewLineupForm] = useState(false)
 	const [years, setYears] = useState([])
-	const [filteredYears, setFilteredYears] = useState(null)
-	const [pointsGraphData, setPointsGraphData] = useState([])
-	const [bankrollGraphData, setBankrollGraphData] = useState([])
-	const [placementGraphData, setPlacementGraphData] = useState([])
-	const [loadingPointsGraph, setLoadingPointsGraph] = useState(true)
-	const [loadingBankrollGraph, setLoadingBankrollGraph] = useState(true)
-	const [newLineupYear, setNewLineupYear] = useState('')
-	const [newLineupWeek, setNewLineupWeek] = useState('')
-	const [newLineupBet, setNewLineupBet] = useState('')
-	const [newLineupWinnings, setNewLineupWinnings] = useState('')
-	const [graphView, setGraphView] = useState('bankroll')
 	const [showImportDialog, setShowImportDialog] = useState(false)
 	const [selectedFile, setSelectedFile] = useState(null)
 	const [selectedLineups, setSelectedLineups] = useState([])
 	const [showDeleteLineupsDialog, setShowDeleteLineupsDialog] = useState(false)
 	const [stateFilter, setStateFilter] = useState("past")
 	const [siteFilter, setSiteFilter] = useState()
+	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
+	const [dialogDraftGroup, setDialogDraftGroup] = useState()
+	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
+
   
   useEffect(() => {
   	loadPage()
@@ -143,14 +129,6 @@ const LineupsPage = () => {
   	getUserLineups(sessionStorage.dfsTrackerUserId)
   }
 
-  const submitNewLineupForm = async () => {
-  	await createLineup(newLineupYear, newLineupWeek, newLineupBet, newLineupWinnings)
-  	setNewLineupWeek('')
-  	setNewLineupYear('')
-  	setNewLineupBet('')
-  	setNewLineupWinnings('')
-  }
-
   return (
   	<div className="lineups-page page">
 		<div className='lineup-wrapper container' >
@@ -167,39 +145,10 @@ const LineupsPage = () => {
 				}
 			</div>
 		</div>
+		<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
+				onClose={() => setShowCreateLineupDialog(false)} draftGroup={dialogDraftGroup} draftGroupLineups={dialogDraftGroupLineups} />
   		{!loadingLineups && lineups ?
   		<>
-			<Dialog
-				open={showNewLineupForm}>
-				<DialogTitle>New Lineup</DialogTitle>
-				<DialogContent>
-					<div>
-						<label>Year: </label>
-						<input className="form-control" type="text" placeholder="Enter Lineup Year" value={newLineupYear}
-							onChange={(e) => setNewLineupYear(e.target.value)} />
-						<hr />
-						<label>Week: </label>
-						<input className="form-control" type="text" placeholder="Enter Lineup Week" value={newLineupWeek}
-						onChange={(e) => setNewLineupWeek(e.target.value)} />
-						<hr />
-					</div>
-					<div>
-						<label>Bet: </label>
-						<input className="form-control" type="text" placeholder="Enter Bet Amount" value={newLineupBet}
-						onChange={(e) => setNewLineupBet(e.target.value)} />
-						<hr />
-						<label>Winings: </label>
-						<input className="form-control" type="text" placeholder="Enter Winnings Amount" value={newLineupWinnings}
-						onChange={(e) => setNewLineupWinnings(e.target.value)} />
-						<hr />
-					</div>
-				</DialogContent>
-				<DialogActions className="dialog-actions">
-					<button className="close-btn btn" onClick={() => setShowNewLineupForm(false)}>Close</button>
-					<button className="submit-btn btn" onClick={() => submitNewLineupForm()}>Submit</button>
-				</DialogActions>
-				</Dialog>
-
 				<ImportLineupsDialog showImportDialog={showImportDialog} onClose={closeImportDialog} />
 
 				<DeleteLineupsDialog showDeleteLineupsDialog={showDeleteLineupsDialog} 

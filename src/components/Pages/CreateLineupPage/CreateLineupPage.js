@@ -363,29 +363,29 @@ const CreateLineupPage = ({ setAlertMessage }) => {
           player={playerDialogContent} />
       <div className="header">
         {draftGroup &&
-        <div className="header-inner">
-          <div className="header-label">
-            <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
-            <p className="date">{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}, Starts: {draftGroup["startTime"]}</p>
+          <div className="header-inner">
+            <div className="header-label">
+              <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
+              <p className="date">{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}, Starts: {draftGroup["startTime"]}</p>
+            </div>
           </div>
-        </div>
         }
       </div>
-      {draftGroup["games"].length > 1 &&
-      <div className='games-outer'>
-        <div className='games-inner'>
-          <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
-            <p>All</p>
+      {draftGroup && draftGroup["games"].length > 1 &&
+        <div className='games-outer'>
+          <div className='games-inner'>
+            <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
+              <p>All</p>
+            </div>
+            {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
+              <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected": ""}`} 
+                onClick={() => toggleGameWrapper(game["awayTeam"], game["homeTeam"])}>
+                <p>{game["awayTeam"]}</p>
+                <p>@{game["homeTeam"]}</p>
+              </div>
+            )}
           </div>
-        {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
-          <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected": ""}`} 
-            onClick={() => toggleGameWrapper(game["awayTeam"], game["homeTeam"])}>
-            <p>{game["awayTeam"]}</p>
-            <p>@{game["homeTeam"]}</p>
-          </div>
-        )}
         </div>
-      </div>
       }
       <div className='createLineupPage-inner'>
         <div className='lineup-outer'>

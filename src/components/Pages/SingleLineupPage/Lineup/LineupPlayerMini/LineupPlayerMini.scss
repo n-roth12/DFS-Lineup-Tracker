@@ -35,7 +35,7 @@
         margin-top: auto;
         margin-bottom: auto;
     }
-    .playerName {
+    .player-name {
         flex: 4;
         display: flex;
         font-weight: 600;
@@ -43,6 +43,8 @@
         text-align: left;
         margin-top: auto;
         margin-bottom: auto;
+        color: blue;
+        cursor: pointer;
     }
     .salary {
         flex: 1;

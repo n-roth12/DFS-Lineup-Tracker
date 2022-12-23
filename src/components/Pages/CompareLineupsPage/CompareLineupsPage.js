@@ -1,21 +1,25 @@
 import './CompareLineupsPage.scss'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import LineupMini from '../SingleLineupPage/Lineup/LineupMini/LineupMini'
 import { capitalize } from '@material-ui/core'
 import { GrRevert } from 'react-icons/gr'
 import { CgArrowsExchange } from 'react-icons/cg'
 
-const CompareLineupsPage = () => {
+import LineupMini from '../SingleLineupPage/Lineup/LineupMini/LineupMini'
+import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
+
+const CompareLineupsPage = ({ setAlertMessage }) => {
     
   const { draftGroupId } = useParams()
   const [draftGroup, setDraftGroup] = useState()
-  const [lineups, setLineups] = useState([])
+  const [lineups, setLineups] = useState()
   const [draftables, setDraftables] = useState([])
   const [favoritePlayers, setFavoritePlayers] = useState([])
-  const [changedLineups] = useState({})
   const [isShowPercentage, setIsShowPercentage] = useState(false)
   const [swapPlayer, setSwapPlayer] = useState()
+  const [playerDialogContent, setPlayerDialogContent] = useState()
+  const [showPlayerDialog, setShowPlayerDialog] = useState(false)
+  const [editedLineups, setEditedLineups] = useState({})
 
   useEffect(() => {
     getDraftGroup()
@@ -47,7 +51,11 @@ const CompareLineupsPage = () => {
         }
       })
       const data = await res.json()
-      setLineups(data)
+      var lineupData = {}
+      data.forEach(lineup => {
+        lineupData[lineup["lineupId"]] = lineup
+      });
+      setLineups(lineupData)
     }
   }
 
@@ -72,7 +80,7 @@ const CompareLineupsPage = () => {
 
   const getFavPlayers = () => {
     var favPlayers = {}
-    lineups.map((lineup) => {
+    lineups && Object.values(lineups).map((lineup) => {
       for (const [k, player] of Object.entries(lineup["lineup"])) {
         if (player !== null) {
           if (favPlayers[player["playerSiteId"]]) {
@@ -88,12 +96,73 @@ const CompareLineupsPage = () => {
     setFavoritePlayers(temp2)
   }
 
+  const createEmptyLineup = () => {
+    return 
+  }
+
   const toggleEditingPos = (data) => {
     setSwapPlayer(data)
   }
 
+  const playerWrapper = (player) => {
+    setPlayerDialogContent(player)
+    setShowPlayerDialog(true)
+  }
+
+  const revertSingleLineup = async (lineupId) => {
+    const res = await fetch(`/lineups/lineup?lineupId=${lineupId}`, {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
+    })
+    const data = await res.json()
+    var lineupsCopy = {...lineups}
+    lineupsCopy[lineupId] = data
+    setLineups(lineupsCopy)
+  }
+
+  const revertAllLineups = async () => {
+    getLineups()
+  }
+
+  const onSaveSingleLineup = (lineupId) => {
+    console.log(lineupId)
+  }
+
+  const addPlayerToLineup = (player, lineupId, position) => {
+      var lineupsCopy = { ...lineups }
+      var lineupCopy = lineupsCopy[lineupId]
+      lineupCopy["lineup"][position] = player
+      lineupsCopy[lineupId] = lineupCopy
+      setLineups(lineupsCopy)
+      // if (editedLineups && Object.keys(editedLineups).includes(lineupId)) {
+    //   var editedLineupsCopy = { ...editedLineups }
+    //   // var temp = editedLineupsCopy[lineupId]
+    //   // temp["lineup"][position] = player
+    //   editedLineupsCopy[lineupId]["lineup"][position] = player
+    //   // setEditedLineups(editedLineupsCopy)
+    //   // setEditedLineups({ ...editedLineups, lineupId: { ...editedLineups[lineupId], `${position}`: player } })
+    // } else {
+    //   var lineupCopy = JSON.parse(JSON.stringify(lineups[lineupId]))
+    //   lineupCopy["lineup"][position] = player
+    //   var editedLineupsCopy = { ...editedLineups }
+    //   editedLineupsCopy[lineupId] = lineupCopy
+    //   // console.log(lineupsCopy)
+    //   // var temp = lineupsCopy[lineupId]
+    //   // temp["lineup"][position] = player
+    //   // editedLineups[lineupId] = temp
+    //   editedLineupsCopy[lineupId] = lineupCopy
+    //   setEditedLineups(editedLineupsCopy)
+      // setEditedLineups({ ...editedLineups, lineupId: { ...lineups[lineupId], position: player } })
+    
+  }
+
   return (
     <div className='compare-lineups-page page'>
+      <PlayerDialog showPlayerDialog={showPlayerDialog} 
+        onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
+        player={playerDialogContent} />
       {draftGroup &&
       <div className='header'>
         <div className="header-inner">
@@ -105,19 +174,6 @@ const CompareLineupsPage = () => {
         </div>
       </div>
       }
-      {/* <div className='fav-players-wrapper'>
-        <div className='fav-players'>
-          {Object.keys(favoritePlayers).length > 0 && favoritePlayers.map((player) => 
-            <div className='fav-player'>
-              <img src={player["player"]["playerImageLarge"]} />
-              <div className='info'>
-                <p>{player["player"]["displayName"]}</p>
-                <p>{player["count"]}/{lineups.length} ({((player["count"] / lineups.length) * 100).toFixed(2)}%)</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div> */}
       <div className='main-wrapper'>
         <div className='lineups-wrapper-outer'>
           <div className='fav-players'>
@@ -125,26 +181,37 @@ const CompareLineupsPage = () => {
               <div className='fav-player'>
                 <img src={player["player"]["playerImageLarge"]} />
                 <div className='info'>
-                  <p>{player["player"]["displayName"]}</p>
+                  <p>{player["player"]["firstName"]}</p>
+                  <p>{player["player"]["lastName"]}</p>
                   <p className='exposure-display' 
                     onClick={() => setIsShowPercentage(!isShowPercentage)}>{isShowPercentage 
-                      ? `${player["count"]}/${lineups.length} Lineups` 
-                      : `${((player["count"] / lineups.length) * 100).toFixed(0)}% Lineups`}</p>
+                      ? `${player["count"]}/${Object.keys(lineups).length} Lineups` 
+                      : `${((player["count"] / Object.keys(lineups).length) * 100).toFixed(0)}% Lineups`}</p>
                 </div>
               </div>
             )}
           </div>
           <div className='lineups-header'>
-            <h2>Lineups ({lineups.length})</h2>
-            <button className='save-all-btn'>Save All</button>
-            <button className='revert-all-btn'>Revert All <GrRevert className="icon" color='white'/></button>
+            <div className='header-inner'>
+              <h2>Lineups ({lineups && Object.keys(lineups).length})</h2>
+              <button className='revert-all-btn' onClick={createEmptyLineup}>New Lineup</button>
+            </div>
+            <div>
+              <button className='save-all-btn'>Save All</button>
+              <button className='revert-all-btn'>Revert All <GrRevert className="icon" color='white'/></button>
+            </div>
+
           </div>
           <div className='lineups-wrapper'>
-            {lineups.map((lineup) => 
+            {lineups && Object.values(lineups).map((lineup) => 
               <div>
-                <LineupMini lineup={lineup} 
+                <LineupMini lineup={lineup}
                   toggleEditingPos={toggleEditingPos}
-                  editingPos={swapPlayer} />
+                  editingPos={swapPlayer} 
+                  playerDialogWrapper={playerWrapper}
+                  draftGroup={draftGroup}
+                  setAlertMessage={setAlertMessage} 
+                  onSave={onSaveSingleLineup}/>
               </div>
             )}
           </div>
@@ -162,6 +229,7 @@ const CompareLineupsPage = () => {
                     <th>Pos</th>
                     <th>Name</th>
                     <th>Opponent</th>
+                    <th>FPPG</th>
                     <th>Salary</th>
                   </tr>
                 </thead>
@@ -169,15 +237,18 @@ const CompareLineupsPage = () => {
                   <div className='table-inner'>
                   {draftables.map((player) =>
                     <tr>
-                      <td><CgArrowsExchange className='swap-icon' 
-                        onClick={() => setSwapPlayer({ "player": player["playerSiteId"], "lineup": player["line"]})} /></td>
+                      <td className={`icon-wrapper${swapPlayer && 
+                            swapPlayer["position"].startsWith(player["position"].toLowerCase()) ? ' active': ''}`}>
+                        <CgArrowsExchange className="swap-icon" onClick={() => addPlayerToLineup(player, swapPlayer["lineup"], swapPlayer["position"])} />
+                      </td>
                       <td>{player["position"]}</td>
                       {player["position"] === "DST" ?
                       <td className='player-name'>{player["displayName"]}</td>
                       :
-                      <td className='player-name'>{player["firstName"][0]}. {player["lastName"]}</td>
+                      <td className='player-name' onClick={() => playerWrapper(player)} >{player["firstName"][0]}. {player["lastName"]}</td>
                       }
                       <td className='player-opp'>{player["game"]["awayTeam"] === player["team"] ? "@" : ""}{player["opponent"]} {player["oprk"] ? `(${player["oprk"]})` : ""}</td>
+                      <td>{player["fppg"]}</td>
                       <td>${player["salary"]}</td>
                     </tr>
                   )}
