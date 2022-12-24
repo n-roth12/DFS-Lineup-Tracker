@@ -8,6 +8,8 @@ import { CgArrowsExchange } from 'react-icons/cg'
 import LineupMini from '../SingleLineupPage/Lineup/LineupMini/LineupMini'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 
+import { postLineupUpdate } from '../../../FetchFunctions'
+
 const CompareLineupsPage = ({ setAlertMessage }) => {
     
   const { draftGroupId } = useParams()
@@ -19,7 +21,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   const [swapPlayer, setSwapPlayer] = useState()
   const [playerDialogContent, setPlayerDialogContent] = useState()
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
-  const [editedLineups, setEditedLineups] = useState([])
+  const [editedLineups, setEditedLineups] = useState(new Set())
 
   useEffect(() => {
     getDraftGroup()
@@ -120,14 +122,16 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
     var lineupsCopy = {...lineups}
     lineupsCopy[lineupId] = data
     setLineups(lineupsCopy)
+    editedLineups.delete(lineupId)
   }
 
   const revertAllLineups = async () => {
     getLineups()
+    setEditedLineups(new Set())
   }
 
   const onSaveSingleLineup = (lineupId) => {
-    console.log(lineupId)
+    editedLineups.delete(lineupId)
   }
 
   const addPlayerToLineup = (player, lineupId, position) => {
@@ -138,10 +142,18 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
 
       setLineups(lineupsCopy)
       setSwapPlayer()
+      editedLineups.add(lineupId)
   }
 
   const deletePlayerFromLineup = (lineupId, position) => {
     addPlayerToLineup(null, lineupId, position)
+  }
+
+  const saveAllLineupsWrapper = () => {
+    Object.values(lineups).map((lineup) => {
+      postLineupUpdate(lineup, draftGroup)
+    })
+    setEditedLineups(new Set())
   }
 
   return (
@@ -183,8 +195,10 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
               <button className='revert-all-btn' onClick={createEmptyLineup}>New Lineup</button>
             </div>
             <div>
-              <button className='save-all-btn'>Save All</button>
-              <button className='revert-all-btn'>Revert All <GrRevert className="icon" color='white'/></button>
+              <button className={`save-all-btn${editedLineups.size > 0 ? " active" : ""}`}
+                onClick={editedLineups.size > 0 ? saveAllLineupsWrapper : null}>Save All</button>
+              <button className={`revert-all-btn${editedLineups.size > 0 ? " active" : ""}`}
+                onClick={editedLineups.size > 0 ? revertAllLineups : null}>Revert All <GrRevert className="icon" color='white'/></button>
             </div>
 
           </div>
@@ -198,7 +212,9 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
                   draftGroup={draftGroup}
                   setAlertMessage={setAlertMessage} 
                   onSave={onSaveSingleLineup}
-                  onDelete={deletePlayerFromLineup} />
+                  onDelete={deletePlayerFromLineup}
+                  onRevert={revertSingleLineup}
+                  isEdited={editedLineups.has(lineup["lineupId"])} />
               </div>
             )}
           </div>
@@ -226,7 +242,8 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
                     <tr>
                       <td className={`icon-wrapper${swapPlayer && 
                           swapPlayer["position"].startsWith(player["position"].toLowerCase()) ? ' active': ''}`}
-                          onClick={() => addPlayerToLineup(player, swapPlayer["lineup"], swapPlayer["position"])}>
+                          onClick={swapPlayer && swapPlayer["position"].startsWith(player["position"].toLowerCase()) ? 
+                            () => addPlayerToLineup(player, swapPlayer["lineup"], swapPlayer["position"]) : null}>
                         <CgArrowsExchange className="swap-icon" />
                       </td>
                       <td>{player["position"]}</td>

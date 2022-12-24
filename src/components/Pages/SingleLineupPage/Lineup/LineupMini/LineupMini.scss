@@ -12,7 +12,6 @@
         flex-direction: column;
         justify-content: space-between;
         height: 60px;
-        // padding: 6px;
         .header-upper {
             display: flex;
             flex-direction: row;
@@ -39,18 +38,39 @@
                 padding-left: 10px;
                 border-radius: 10px 0px 0px 10px;
             }
+            .edit-btn:hover {
+                text-decoration: underline;
+                text-decoration-color: var(--btn-blue);
+            }
             .save-btn {
                 border: None;
-                background-color: var(--green);
+                background-color: var(--grey-2);
                 height: fit-content;
                 padding: 0px 15px 0px 15px;
                 border: 1px solid black;
                 border-radius: 5px;
+                cursor: default;
+            }
+            .save-btn:not(:not(.active)) {
+                background-color: var(--green);
+            }
+            .save-btn:not(:not(.active)):hover {
+                background-color: var(--green-2);
+                cursor: pointer;
             }
             .revert-btn {
                 border: None;
                 background-color: inherit;
+                color: var(--grey-1);
+                cursor: default;
+            }
+            .revert-btn:not(:not(.active)) {
                 color: red;
+            }
+            .revert-btn:not(:not(.active)):hover {
+                cursor: pointer;
+                text-decoration: underline;
+                text-decoration-color: red;
             }
             button {
                 font-size: 10pt;

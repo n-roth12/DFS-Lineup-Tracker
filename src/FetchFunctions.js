@@ -42,6 +42,7 @@ const fetchDraftablesByDraftGroupId = async (draftGroupId) => {
 }
 
 const postLineupUpdate = async (lineup, draftGroup) => {
+    console.log(sessionStorage.dfsTrackerToken)
     const teamSalary = getLineupSalary(lineup["lineup"])
     const res = await fetch(`/lineups/updateLineup`, {
         method: 'POST',
@@ -63,6 +64,7 @@ const postLineupUpdate = async (lineup, draftGroup) => {
         })
     })
     .then(() => {
+        console.log("test")
         if (teamSalary > draftGroup["salaryCap"]) {
             return "Lineup Saved with Warning: Lineup over the salary cap!"
         } else {
@@ -70,6 +72,7 @@ const postLineupUpdate = async (lineup, draftGroup) => {
         }    
     })
     .catch((error) => {
+        console.log("test2")
         return "Error while saving lineup!"
     })
 }

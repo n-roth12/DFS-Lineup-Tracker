@@ -93,18 +93,30 @@
                     margin: 5px;
                 }
                 .save-all-btn {
+                    background-color: var(--grey-2);
+                    cursor: default;
+                }
+                .save-all-btn:not(:not(.active)) {
                     background-color: var(--green);
-
+                }
+                .save-all-btn:not(:not(.active)):hover {
+                    cursor: pointer;
+                    background-color: var(--green-2);
                 }
                 .revert-all-btn {
-                    background-color: var(--btn-blue);
+                    background-color: var(--grey-2);
+                    cursor: default;
+                }
+                .revert-all-btn:not(:not(.active)) {
+                    background-color: red;
                     color: white;
                     .icon {
                         color: white;
                     }
                 }
-                .revert-all-btn:hover {
-                    background-color: var(--btn-blue-2);
+                .revert-all-btn:not(:not(.active)):hover {
+                    cursor: pointer;
+                    background-color: #e00202;
                 }
             }
             h2 {

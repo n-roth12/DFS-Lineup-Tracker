@@ -5,7 +5,9 @@ import { useState, useEffect } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 
-const LineupMini = ({ lineup, onAdd, editingPos, cancelEdit, onOpenDialog, toggleEditingPos, setSwapPlayer, playerDialogWrapper, draftGroup, setAlertMessage, onSave, onDelete }) => {
+import { postLineupUpdate } from '../../../../../FetchFunctions'
+
+const LineupMini = ({ lineup, onAdd, editingPos, cancelEdit, onOpenDialog, toggleEditingPos, setSwapPlayer, playerDialogWrapper, draftGroup, setAlertMessage, onSave, onDelete, onRevert, isEdited }) => {
 
   const [lineupSalary, setLineupSalary] = useState()
   const [teamProjectedPoints, setTeamProjectedPoints] = useState(0)
@@ -67,6 +69,7 @@ const LineupMini = ({ lineup, onAdd, editingPos, cancelEdit, onOpenDialog, toggl
       })
     })
     .then(() => {
+      onSave(lineup["lineupId"])
       if (remainingSalary < 0) {
         setAlertMessage("Lineup Saved with Warning: Lineup over the salary cap!")
       } else {
@@ -75,8 +78,7 @@ const LineupMini = ({ lineup, onAdd, editingPos, cancelEdit, onOpenDialog, toggl
     })
     .catch((error) => {
       setAlertMessage("Error while saving lineup!")
-    })
-    onSave(lineup["lineupId"])
+    })  
   }
 
   const getSalary = () => {
@@ -101,8 +103,8 @@ const LineupMini = ({ lineup, onAdd, editingPos, cancelEdit, onOpenDialog, toggl
                 <p>Proj: {getTeamProjPoints()} Pts</p>
             </div>
             <div className='header-lower'>
-              <button className='revert-btn'>Revert <GrRevert /></button>
-              <button className='save-btn' onClick={saveLineup} >Save</button>
+              <button className={`revert-btn${isEdited ? " active" : ""}`} onClick={isEdited ? () => onRevert(lineup["lineupId"]) : null} >Revert <GrRevert /></button>
+              <button className={`save-btn${isEdited ? " active" : ""}`} onClick={isEdited ? saveLineup : null} >Save</button>
               <button className='edit-btn'>Details <FaAngleRight /></button>
             </div>
         </div>

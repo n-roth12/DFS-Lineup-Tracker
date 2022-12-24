@@ -1,7 +1,7 @@
 
 const getTeamProjPoints = (lineup) => {
     var projectedPoints = 0
-    for (const [k,  lineupSlot] of Object.entries(lineup["lineup"])) {
+    for (const [k,  lineupSlot] of Object.entries(lineup)) {
         if (lineupSlot !== null) {
             projectedPoints += parseFloat(lineupSlot["fppg"])
         }
