@@ -103,6 +103,9 @@
                         color: white;
                     }
                 }
+                .revert-all-btn:hover {
+                    background-color: var(--btn-blue-2);
+                }
             }
             h2 {
                 margin-right: 20px;
@@ -167,6 +170,9 @@
                             height: fit-content;
                             font-size: 15pt;
                         }
+                    }
+                    .icon-wrapper:not(:not(.active)):hover {
+                        background-color: var(--btn-blue-2);
                     }
                 }
             }

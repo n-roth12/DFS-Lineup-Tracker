@@ -10,9 +10,9 @@ const LineupPlayerMini = ({ player, position, beingEdited, onDelete, onAdd, onOp
         <div className={`lineup-player-mini ${beingEdited ? 'selected': ''}`}>
             <p className='position'>{position.toUpperCase()}</p>
             <p className='player-name' onClick={() => playerDialogWrapper(player)}>
-              {player["firstName"]} {player["lastName"]}</p>
+              {player ? player["firstName"] : console.log("test " + player)} {player["lastName"]}</p>
             <p className='salary'>${player["salary"]}</p>
-            <p className='icon-wrapper' onClick={deletePlayer}><FaTimes className='delete-icon icon' /></p>
+            <p className='icon-wrapper' onClick={() => onDelete(position)}><FaTimes className='delete-icon icon' /></p>
             <p className='icon-wrapper' onClick={() => toggleEditingPos(position)} >
               <CgArrowsExchange className='swap-icon icon' /></p>
         </div>

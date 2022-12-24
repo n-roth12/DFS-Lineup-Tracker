@@ -19,7 +19,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   const [swapPlayer, setSwapPlayer] = useState()
   const [playerDialogContent, setPlayerDialogContent] = useState()
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
-  const [editedLineups, setEditedLineups] = useState({})
+  const [editedLineups, setEditedLineups] = useState([])
 
   useEffect(() => {
     getDraftGroup()
@@ -135,27 +135,13 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
       var lineupCopy = lineupsCopy[lineupId]
       lineupCopy["lineup"][position] = player
       lineupsCopy[lineupId] = lineupCopy
+
       setLineups(lineupsCopy)
-      // if (editedLineups && Object.keys(editedLineups).includes(lineupId)) {
-    //   var editedLineupsCopy = { ...editedLineups }
-    //   // var temp = editedLineupsCopy[lineupId]
-    //   // temp["lineup"][position] = player
-    //   editedLineupsCopy[lineupId]["lineup"][position] = player
-    //   // setEditedLineups(editedLineupsCopy)
-    //   // setEditedLineups({ ...editedLineups, lineupId: { ...editedLineups[lineupId], `${position}`: player } })
-    // } else {
-    //   var lineupCopy = JSON.parse(JSON.stringify(lineups[lineupId]))
-    //   lineupCopy["lineup"][position] = player
-    //   var editedLineupsCopy = { ...editedLineups }
-    //   editedLineupsCopy[lineupId] = lineupCopy
-    //   // console.log(lineupsCopy)
-    //   // var temp = lineupsCopy[lineupId]
-    //   // temp["lineup"][position] = player
-    //   // editedLineups[lineupId] = temp
-    //   editedLineupsCopy[lineupId] = lineupCopy
-    //   setEditedLineups(editedLineupsCopy)
-      // setEditedLineups({ ...editedLineups, lineupId: { ...lineups[lineupId], position: player } })
-    
+      setSwapPlayer()
+  }
+
+  const deletePlayerFromLineup = (lineupId, position) => {
+    addPlayerToLineup(null, lineupId, position)
   }
 
   return (
@@ -211,7 +197,8 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
                   playerDialogWrapper={playerWrapper}
                   draftGroup={draftGroup}
                   setAlertMessage={setAlertMessage} 
-                  onSave={onSaveSingleLineup}/>
+                  onSave={onSaveSingleLineup}
+                  onDelete={deletePlayerFromLineup} />
               </div>
             )}
           </div>
@@ -238,8 +225,9 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
                   {draftables.map((player) =>
                     <tr>
                       <td className={`icon-wrapper${swapPlayer && 
-                            swapPlayer["position"].startsWith(player["position"].toLowerCase()) ? ' active': ''}`}>
-                        <CgArrowsExchange className="swap-icon" onClick={() => addPlayerToLineup(player, swapPlayer["lineup"], swapPlayer["position"])} />
+                          swapPlayer["position"].startsWith(player["position"].toLowerCase()) ? ' active': ''}`}
+                          onClick={() => addPlayerToLineup(player, swapPlayer["lineup"], swapPlayer["position"])}>
+                        <CgArrowsExchange className="swap-icon" />
                       </td>
                       <td>{player["position"]}</td>
                       {player["position"] === "DST" ?

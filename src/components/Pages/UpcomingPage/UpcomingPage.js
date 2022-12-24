@@ -54,7 +54,7 @@ const UpcomingPage = ({ week, year }) => {
 			return Date.parse(slate["startTime"].split("T")[0]) > Date.parse(new Date())
 		})
 		setSlates(upcoming)
-		setActiveSlate(data[0])
+		setActiveSlate(upcoming[0])
 	}
 
 	const getDraftables = async () => {
@@ -285,60 +285,6 @@ export default UpcomingPage
 
 
 // DEPRECATED CODE
-
-	// useEffect(() => {
-	// 	const slateMatchingId = slates.find((slate) => {
-	// 		return String(slate["draftGroup"]["draftGroupId"]) === activeSlate
-	// 	})
-	// 	if (slateMatchingId) {
-	// 		setPlayers(slateMatchingId["draftables"])
-	// 	}
-	// }, [activeSlate])
-
-		// const getGames = async () => {
-	// 	const res = await fetch('/upcoming/games', {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'x-access-token': sessionStorage.dfsTrackerToken
-	// 		}
-	// 	})
-	// 	const result = await res.json()
-	// 	var games_data = []
-	// 	result["games"].map((game) => {
-	// 		games_data.push(
-	// 			{
-	// 				"game": `${game["away_team"]}@${game["home_team"]}`,
-	// 				"away": game["away_team"],
-	// 				"home": game["home_team"],
-
-	// 			})
-	// 	})
-	// 	setGames(games_data)
-	// }
-
-	// const getSlates = async () => {
-	// 	const url = "https://www.draftkings.com/lineup/getupcomingcontestinfo"
-	// 	const res = await fetch(`${url}`, {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'origin': "https://www.draftkings.com"
-	// 		}
-	// 	})
-	// 	const contests = await res.json()
-	// 	const nflContests = contests.filter((contest) => {
-	// 		return contest["Sport"] === "NFL"
-	// 	})
-	// 	setContests(nflContests)
-		
-	// }
-
-	// const getUpcomingSlates = async () => {
-	// 	const url = "https://www.draftkings.com/lobby/getcontests?sport=nfl"
-	// 	const res = await fetch(url)
-	// 	const data = res.json()
-	// 	console.log(data["Contests"].length)
-	// }
-
 		// const getFanduelPlayers = async () => {
 
 	// 	const res = await fetch("https://api.fanduel.com/fixture-lists/78816/players?content_sources=NUMBERFIRE,ROTOWIRE,ROTOGRINDERS", {
@@ -369,47 +315,6 @@ export default UpcomingPage
 	// 	})
 	// 	const players = await res.json()
 	// 	console.log(players)
-
-	// }
-
-				{/* {games.length > 0 &&
-				<GamesSlider
-					games={games}
-					selectedWeek={week}
-					selectedYear={year} />
-			} */}
-			{/* {games.length > 0 && 
-				<div className='games-outer' >
-					<h2>Games</h2>
-					<div className="games-inner">
-						{games.map((game) => (
-							<div className="game-block">
-								<span>
-									<span>{game["summary"]} - {game["fullStatus"]["displayClock"]}</span>
-								</span>
-								<span>
-									<span><img src={game["competitors"][0]["logo"]} />{game["competitors"][0]["abbreviation"]} - {game["competitors"][0]["score"]}</span>
-								</span>
-								<span>
-									<span><img src={game["competitors"][1]["logo"]} />{game["competitors"][1]["abbreviation"]} - {game["competitors"][1]["score"]}</span>
-								</span>
-							</div>
-						))}
-					</div>
-				</div>
-			} */}
-			{/* {players['All'] && players['All'].length > 0 &&
-				<PlayersList players={players} />
-			} */}
-			{/* <select value={activeSlate} onChange={(e) => setActiveSlate(e.target.value)}>
-				{slates.length > 0 && slates.map((slate) => (
-					<option 
-						value={slate["draftGroupId"]}
-						key={slate["draftGroupId"]}>
-						{slate["minStartTime"]} ({slate["games"].length} games)
-					</option>
-				))}
-			</select> */}
 
 				// const getScoreboard = async () => {
 	// 	// url for current week scoreboard

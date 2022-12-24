@@ -2,7 +2,7 @@ import React from 'react'
 import './PlayerNew.scss'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 
-function PlayerNew({ player }) {
+const  PlayerNew = ({ player }) => {
  
   const makeOpponentDisplay = (game) => {
     if (game[0].isEmphasized) {

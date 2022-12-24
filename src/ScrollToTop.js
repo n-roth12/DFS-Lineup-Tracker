@@ -16,5 +16,3 @@ const capitalize = (s) => {
 }
 
 export { ScrollToTop, capitalize }
-
-

@@ -61,7 +61,6 @@ class MongoController:
 
     def getDraftablesByDraftGroupId(self, draftGroupId):
         draftables = self.draftables_collection.find_one({"draftGroupId": int(draftGroupId)})
-        print(draftables)
         return draftables
 
     def deleteAllLineups(self):

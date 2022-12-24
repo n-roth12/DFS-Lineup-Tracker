@@ -73,8 +73,6 @@ def upcoming_games(current_user: User):
 @token_required
 def upcoming_players(current_user: User):
 	draft_group_id = request.args.get("draftGroup")
-	print(draft_group_id)
-
 	draftables = mongoController.getDraftablesByDraftGroupId(draft_group_id)
 	
 	return jsonify(draftables["draftables"]), 200

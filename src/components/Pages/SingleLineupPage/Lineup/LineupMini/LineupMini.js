@@ -5,11 +5,15 @@ import { useState, useEffect } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 
-const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, onOpenDialog, toggleEditingPos, setSwapPlayer, playerDialogWrapper, draftGroup, setAlertMessage, onSave }) => {
+const LineupMini = ({ lineup, onAdd, editingPos, cancelEdit, onOpenDialog, toggleEditingPos, setSwapPlayer, playerDialogWrapper, draftGroup, setAlertMessage, onSave, onDelete }) => {
 
   const [lineupSalary, setLineupSalary] = useState()
   const [teamProjectedPoints, setTeamProjectedPoints] = useState(0)
   const [remainingSalary, setRemainingSalary] = useState(0)
+
+  useEffect(() => {
+    getSalary()
+  }, [])
 
   const checkBeingEdited = (pos) => {
     return editingPos && (pos === editingPos["position"]) && (editingPos["lineup"] == lineup["lineupId"])
@@ -21,12 +25,12 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, onOpenDia
 
   const getTeamProjPoints = () => {
     var projectedPoints = 0
-    for (const [k,  lineupSlot] of Object.entries(lineup)) {
+    for (const [k,  lineupSlot] of Object.entries(lineup["lineup"])) {
       if (lineupSlot !== null) {
         projectedPoints += parseFloat(lineupSlot["fppg"])
       }
     }
-    setTeamProjectedPoints(parseFloat(projectedPoints).toFixed(2))
+    return parseFloat(projectedPoints).toFixed(2)
   }
 
   const getRemainingSalary = () => {
@@ -49,7 +53,7 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, onOpenDia
         'x-access-token': sessionStorage.dfsTrackerToken
       },
       body: JSON.stringify({
-        "lineup": lineup,
+        "lineup": lineup["lineup"],
         "draftGroupId": lineup["draftGroupId"],
         "lineupId": lineup["lineupId"],
         "salary": draftGroup["salaryCap"] - remainingSalary,
@@ -75,26 +79,26 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, onOpenDia
     onSave(lineup["lineupId"])
   }
 
-  useEffect(() => {
-    getSalary()
-  }, [])
-
   const getSalary = () => {
     var salary = 0
-    for (const [k,  lineupSlot] of Object.entries(lineup)) {
+    for (const [k,  lineupSlot] of Object.entries(lineup["lineup"])) {
       if (lineupSlot !== null) {
         salary += lineupSlot["salary"]
       }
     }
-    setLineupSalary(salary)
+    return salary
+  }
+
+  const onDeleteWrapper = (pos) => {
+    onDelete(lineup["lineupId"], pos)
   }
 
   return (
     <div className="lineup-mini">
         <div className='lineup-mini-header'>
             <div className='header-upper'>
-                <p>Salary: ${lineup["salary"]}</p>
-                <p>Proj: {lineup["projectedPoints"]} Pts</p>
+                <p>Salary: {getSalary()}</p>
+                <p>Proj: {getTeamProjPoints()} Pts</p>
             </div>
             <div className='header-lower'>
               <button className='revert-btn'>Revert <GrRevert /></button>
@@ -102,186 +106,29 @@ const LineupMini = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, onOpenDia
               <button className='edit-btn'>Details <FaAngleRight /></button>
             </div>
         </div>
-        {lineup["lineup"]["qb"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["qb"]} 
-            position={'qb'} 
-            beingEdited={checkBeingEdited('qb')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'qb'} 
-            position={'qb'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('qb')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["rb1"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["rb1"]} 
-            position={'rb1'} 
-            beingEdited={checkBeingEdited('rb1')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'rb1'} 
-            position={'rb1'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('rb1')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["rb2"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["rb2"]} 
-            position={'rb2'} 
-            beingEdited={checkBeingEdited('rb2')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'rb2'} 
-            position={'rb2'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('rb2')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["wr1"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["wr1"]} 
-            position={'wr1'} 
-            beingEdited={checkBeingEdited('wr1')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'wr1'} 
-            position={'wr1'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('wr1')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["wr2"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["wr2"]} 
-            position={'wr2'} 
-            beingEdited={checkBeingEdited('wr2')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'wr2'} 
-            position={'wr2'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('wr2')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["wr3"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["wr3"]} 
-            position={'wr3'} 
-            beingEdited={checkBeingEdited('wr3')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'wr3'} 
-            position={'wr3'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('wr3')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["te"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["te"]} 
-            position={'te'} 
-            beingEdited={checkBeingEdited('te')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'te'} 
-            position={'te'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('te')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["flex"] !== null ? 
-          <LineupPlayerMini
-            player={lineup["lineup"]["flex"]} 
-            position={'flex'} 
-            beingEdited={checkBeingEdited('flex')} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} /> 
-        : <EmptyPlayerMini
-            key={'flex'} 
-            position={'flex'} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited('flex')} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} />
-        }
-        {lineup["lineup"]["dst"] !== null ?
-          <LineupPlayerMini
-            player={lineup["lineup"]["dst"]}
-            position={'dst'}
-            beingEdited={checkBeingEdited('dst')}
-            onDelete={onDelete}
-            onAdd={onAdd}
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos}
-            playerDialogWrapper={playerDialogWrapper} />
-        : <EmptyPlayerMini
-            key={'dst'}
-            position={'dst'}
-            onAdd={onAdd}
-            beingEdited={checkBeingEdited('dst')}
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPosWrapper}
-            editingPos={editingPos} /> 
-        }
+        {Object.keys(lineup["lineup"]).map((pos) => 
+          lineup["lineup"][pos] !== null ?
+            <LineupPlayerMini
+              player={lineup["lineup"][pos]}
+              position={pos}
+              beingEdited={checkBeingEdited(pos)}
+              onDelete={onDeleteWrapper}
+              onAdd={onAdd}
+              onOpenDialog={onOpenDialog}
+              toggleEditingPos={toggleEditingPosWrapper}
+              editingPos={editingPos}
+              playerDialogWrapper={playerDialogWrapper}
+            />
+          :
+            <EmptyPlayerMini
+              position={pos}
+              onAdd={onAdd}
+              beingEdited={checkBeingEdited(pos)}
+              cancelEdit={cancelEdit}
+              toggleEditingPos={toggleEditingPosWrapper}
+              editingPos={editingPos}              
+            />
+        )}
     </div>     
   )
 }
