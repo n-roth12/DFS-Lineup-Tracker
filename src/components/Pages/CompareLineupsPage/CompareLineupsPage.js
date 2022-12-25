@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom'
 import { capitalize } from '@material-ui/core'
 import { GrRevert } from 'react-icons/gr'
 import { CgArrowsExchange } from 'react-icons/cg'
+import { FaPlus } from 'react-icons/fa'
 
 import LineupMini from '../SingleLineupPage/Lineup/LineupMini/LineupMini'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
-
-import { postLineupUpdate } from '../../../FetchFunctions'
+import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
 
 const CompareLineupsPage = ({ setAlertMessage }) => {
     
@@ -21,7 +21,9 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   const [swapPlayer, setSwapPlayer] = useState()
   const [playerDialogContent, setPlayerDialogContent] = useState()
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
+  const [showDeleteLineupsDialog, setShowDeleteLineupsDialog] = useState(false)
   const [editedLineups, setEditedLineups] = useState(new Set())
+  const [lineupToDelete, setLineupToDelete] = useState([])
 
   useEffect(() => {
     getDraftGroup()
@@ -59,6 +61,21 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
       });
       setLineups(lineupData)
     }
+  }
+
+  const deleteLineup = async () => {
+    const res = await fetch('/lineups/delete', {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify({
+        "lineups": [lineupToDelete["lineupId"]]
+      })
+    })
+    setShowDeleteLineupsDialog(false)
+    getLineups()
+    setAlertMessage("Lineup Deleted")
   }
 
   const getDraftables = async () => {
@@ -99,7 +116,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   }
 
   const createEmptyLineup = () => {
-    return 
+    
   }
 
   const toggleEditingPos = (data) => {
@@ -150,9 +167,9 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   }
 
   const saveAllLineupsWrapper = () => {
-    Object.values(lineups).map((lineup) => {
-      postLineupUpdate(lineup, draftGroup)
-    })
+    // Object.values(lineups).map((lineup) => {
+    //   postLineupUpdate(lineup, draftGroup)
+    // })
     setEditedLineups(new Set())
   }
 
@@ -161,6 +178,10 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
       <PlayerDialog showPlayerDialog={showPlayerDialog} 
         onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
         player={playerDialogContent} />
+      <DeleteLineupsDialog showDeleteLineupsDialog={showDeleteLineupsDialog} 
+				onClose={() => setShowDeleteLineupsDialog(false)} 
+				lineupsToDelete={lineupToDelete} 
+				deleteLineups={deleteLineup} />
       {draftGroup &&
       <div className='header'>
         <div className="header-inner">
@@ -184,7 +205,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
                   <p className='exposure-display' 
                     onClick={() => setIsShowPercentage(!isShowPercentage)}>{isShowPercentage 
                       ? `${player["count"]}/${Object.keys(lineups).length} Lineups` 
-                      : `${((player["count"] / Object.keys(lineups).length) * 100).toFixed(0)}% Lineups`}</p>
+                      : `Exp: ${((player["count"] / Object.keys(lineups).length) * 100).toFixed(0)}%`}</p>
                 </div>
               </div>
             )}
@@ -192,7 +213,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
           <div className='lineups-header'>
             <div className='header-inner'>
               <h2>Lineups ({lineups && Object.keys(lineups).length})</h2>
-              <button className='revert-all-btn' onClick={createEmptyLineup}>New Lineup</button>
+              <button className='new-lineup-btn' onClick={createEmptyLineup}>New Lineup <FaPlus className="icon" /></button>
             </div>
             <div>
               <button className={`save-all-btn${editedLineups.size > 0 ? " active" : ""}`}
@@ -215,6 +236,9 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
                   onDelete={deletePlayerFromLineup}
                   onRevert={revertSingleLineup}
                   isEdited={editedLineups.has(lineup["lineupId"])} />
+                <div className="delete-lineup-btn-wrapper">
+                  <button className="delete-lineup-btn" onClick={() => {setLineupToDelete(lineup); setShowDeleteLineupsDialog(true)}}>Delete</button>
+                </div>
               </div>
             )}
           </div>

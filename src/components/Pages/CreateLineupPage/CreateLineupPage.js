@@ -397,7 +397,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             <div className='lineup-header-info-wrapper'>
               <div className='lineup-header-info'>
                 <p>Remaining Salary <strong>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</strong></p>
-                <p>Rem. Average Salary <strong>{getRemainingSalaryPerPlayer()}</strong></p>
+                <p>Rem. Salary / Player <strong>{getRemainingSalaryPerPlayer()}</strong></p>
               </div>
               <div className='lineup-header-info'>
                 <p><strong>{teamProjectedPoints}</strong> Proj. Points</p>

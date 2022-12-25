@@ -14,7 +14,11 @@ const DeleteLineupsDialog = ({ lineupsToDelete, deleteLineups, onClose, showDele
             <FaTimes className="close-btn" onClick={onClose} />
         </DialogTitle>
         <DialogContent className='content'>
+          {lineupsToDelete.length > 2 ?
             <h2>Are you sure you would like to delete {lineupsToDelete.length} lineups?</h2>
+          :
+            <h2>Are you sure you would like to delete this lineup?</h2>
+          }
         </DialogContent>
         <DialogActions className='actions'>
             <button className='cancel-btn' onClick={onClose}>Cancel</button>

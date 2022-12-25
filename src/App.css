@@ -20,7 +20,7 @@ body {
 
 :root {
   --btn-blue: #0069ed;
-  --btn-blue-2: #0a58ca;
+  --btn-blue-2: rgba(0, 105, 237, 0.8);
   --grey-1: #5d6f7a;
   --grey-2: lightgrey;
   --grey-3: #f2f2f2;
@@ -36,8 +36,9 @@ body {
   --dark-blue: #202033;
   --dark-red: #282119;
   --dark-other: #15233A;
-  --green: rgba(55, 230, 78, 0.8);
-  --green-2: #2fd444;
+  --green: rgba(55, 230, 78, 1);
+  --green-2: rgba(55, 230, 70, 0.7);
+  --red-2: rgba(255, 0, 0, 0.8);
 }
 
 .page {
@@ -177,7 +178,7 @@ a {
   margin-bottom: -7px;
 }
 
-.delete-lineup-btn {
+/* .delete-lineup-btn {
   display: block;
   color: #ffffff;
   background: #f6404f;
@@ -195,7 +196,7 @@ a {
 .delete-lineup-btn:hover {
   background: None;
   color: #f6404f;
-}
+} */
 
 .search-btn {
   display: block;
