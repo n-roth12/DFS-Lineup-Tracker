@@ -6,12 +6,12 @@
 	align-items: center;
 
 	.players-outer {
-		width: 90%;
+		width: 95%;
 		max-width: 1100px;
 		.filters-outer {
 			display: flex;
 			flex-direction: row;
-			
+			margin-bottom: 10px;
 			.pos-filter-wrapper {
 				display: flex;
 				width: 80%;
@@ -25,12 +25,37 @@
 					font-size: 11pt;
 				}
 			}
+			.player-search {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+				height: fit-content;
+				border-radius: 3px;
+				.search-input {
+					font-size: 11pt;
+					padding: 2px 20px 2px 8px;
+					margin: 0;
+					border: 1px solid black;
+					border-radius: 0;
+					outline: none;
+					height: 35px;
+					border-radius: 2px 0px 0px 2px;
+				}
+				.search-btn {
+					font-size: 11pt;
+					border-radius: 2px;
+					padding-left: 15px;
+					padding-right: 15px;
+					margin: 0;
+					border-radius: 0px 2px 2px 0px;
+					height: 35px;
+				}
+			}
 		}
 		.players-outer-header {
 			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: flex-end;
+			flex-direction: column;
 			.btn-wrapper {
 				display: flex;
 				flex-direction: row;
@@ -49,7 +74,7 @@
 					}
 				}
 				.lineup-options-btn:hover {
-					background-color: var(--grey-1);
+					background-color: var(--btn-blue-2);
 				}
 			}
 			h2 {
@@ -119,7 +144,7 @@
 	}
 
 	.slatesWrapper-outer {
-		width: 90%;
+		width: 95%;
 		max-width: 1100px;
 		display: flex;
 		flex-direction: column;
@@ -164,16 +189,14 @@
 		.search-btn {
 			width: fit-content;
 		}
-
 		.slatesWrapper {
 			display: flex;
 			flex-direction: row;
-			margin: 10px 20px 20px 20px;
+			margin: 10px 20px 10px 20px;
 			width: 100%;
 			align-items: left;
 			overflow-x: auto;
 			padding: 6px;
-			
 			.slate {
 				min-width: 180px;
 				height: 100px;

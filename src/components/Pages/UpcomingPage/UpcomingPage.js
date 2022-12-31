@@ -177,11 +177,11 @@ const UpcomingPage = ({ week, year }) => {
 			{activeSlate && Object.keys(activeSlateDraftables).length > 0 && 
 				<div className='players-outer'>
 					<div className='players-outer-header'>
-						<div className='btn-wrapper'>
-							<h2><span>{capitalize(selectedSite)}</span> <span className='slate-title'>{activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
+					<div className='btn-wrapper'>
 							<button className='lineup-options-btn' onClick={() => createLineup(activeSlate)}>Create Lineup <FaPlus className='icon'/></button>
 							<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport className='icon'/></button>
 						</div>
+					<h2><span>{capitalize(selectedSite)}</span> <span className='slate-title'>{activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
 					</div>
 					<div className='filters-outer'>
 						<div className="pos-filter-wrapper">
@@ -213,12 +213,11 @@ const UpcomingPage = ({ week, year }) => {
 							</div>
 						</div>
 						<div className="player-search">
-						<div>
 							<input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
 								onChange={(e) => setPlayerFilter(e.target.value)}></input>
-						</div>
+							<button className="search-btn" type="button"><FaSearch /></button>
+
 					</div>
-					<button className="search-btn" type="button"><FaSearch /></button>
 					</div>
 					<div className='players-inner'>
 						<table className='lineups-table'>

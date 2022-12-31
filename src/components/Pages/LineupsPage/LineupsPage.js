@@ -19,7 +19,6 @@ const LineupsPage = () => {
 	const [selectedLineups, setSelectedLineups] = useState([])
 	const [showDeleteLineupsDialog, setShowDeleteLineupsDialog] = useState(false)
 	const [stateFilter, setStateFilter] = useState("past")
-	const [siteFilter, setSiteFilter] = useState()
 	const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [dialogDraftGroup, setDialogDraftGroup] = useState()
 	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
@@ -131,15 +130,14 @@ const LineupsPage = () => {
 
   return (
   	<div className="lineups-page page">
-		<div className='lineup-wrapper container' >
+		<div className='lineup-wrapper' >
 			<div className='filter-btn-wrapper'>
 				<button onClick={() => setStateFilter("upcoming")} className={`underline-btn${stateFilter === "upcoming" ? " active" : ""}`}>Upcoming</button>
 				<button onClick={() => setStateFilter("live")} className={`underline-btn${stateFilter === "live" ? " active" : ""}`}>Live</button>
 				<button onClick={() => setStateFilter("past")} className={`underline-btn${stateFilter === "past" ? " active" : ""}`}>History</button>
 			</div>
 			<div className='lineup-wrapper-header'>
-				<Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon'/></Link>
-				<button className='lineup-options-btn' onClick={() => setShowImportDialog(true)}>Import <BiImport className='icon'/></button>
+				{stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon'/></Link>}
 				{selectedLineups.length > 0 &&
 					<button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete Lineups ({selectedLineups.length})</button>
 				}
@@ -148,35 +146,41 @@ const LineupsPage = () => {
 		<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={() => setShowCreateLineupDialog(false)} draftGroup={dialogDraftGroup} draftGroupLineups={dialogDraftGroupLineups} />
   		{!loadingLineups && lineups ?
-  		<>
+  			<>
 				<ImportLineupsDialog showImportDialog={showImportDialog} onClose={closeImportDialog} />
 
 				<DeleteLineupsDialog showDeleteLineupsDialog={showDeleteLineupsDialog} 
 					onClose={() => setShowDeleteLineupsDialog(false)} 
 					lineupsToDelete={selectedLineups} 
 					deleteLineups={() => deleteSelectedLineups(selectedLineups)} />
-
-				{ stateFilter === "past" &&
-				<div className="lineups-wrapper container">
-					<LineupsTable
-						selectedLineups={selectedLineups}
-						setSelectedLineups={setSelectedLineups} 
-						lineups={lineups.filter(lineup => {
-							return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
-						})} /> 
-				</div>
+				{stateFilter === "past" &&
+				<>
+					<div className='lineups-title'><h2>Past Lineups</h2></div>
+					<div className="lineups-wrapper container">
+						<LineupsTable
+							selectedLineups={selectedLineups}
+							setSelectedLineups={setSelectedLineups} 
+							lineups={lineups.filter(lineup => {
+								return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
+							})} /> 
+					</div>
+				</>
 				}
 				{stateFilter === "live" &&
+				<>
+					<div className='lineups-title'><h2>Live Lineups</h2></div>
 					<LineupsTable
 						selectedLineups={selectedLineups}
 						setSelectedLineups={setSelectedLineups}
 						lineups={lineups.filter((lineup) => {
 							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
 								&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date())
-						})} />
-
+					})} />
+				</>
 				}
 				{stateFilter === "upcoming" &&
+				<>
+					<div className='lineups-title'><h2>Upcoming Lineups</h2></div>
 					<LineupsTable
 						selectedLineups={selectedLineups}
 						setSelectedLineups={setSelectedLineups}
@@ -184,6 +188,7 @@ const LineupsPage = () => {
 							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
 						})}
 					/>
+				</>
 				}
 		  	</> 
 		: 

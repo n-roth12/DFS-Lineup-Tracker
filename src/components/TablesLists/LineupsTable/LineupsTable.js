@@ -12,6 +12,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
 	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
+  const [siteFilter, setSiteFilter] = useState(new Set())
 
   const nextPage = () => {
     if ((currPage + 1) * 20 >= lineups.length) return
@@ -41,11 +42,45 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
 		setCreateLineupDialogContent({})
 	}
 
+  const changeFilter = (site) => {
+    if (siteFilter.has(site)) {
+      const filterCopy = new Set(siteFilter)
+      filterCopy.delete(site)
+      setSiteFilter(filterCopy)
+    } else {
+      setSiteFilter(new Set(siteFilter.add(site)))
+    }
+    if (siteFilter.size > 2) {
+      setSiteFilter(new Set())
+    }
+  }
+
   return (
     <div className='lineups-table-wrapper'>
       	<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				  onClose={() => setShowCreateLineupDialog(false)} draftGroup={createLineupDialogContent} draftGroupLineups={dialogDraftGroupLineups} />
       <div className='lineups-table-wrapper-inner'>
+        <div className='header'></div>
+      <div className="pos-filter-wrapper">
+        <div>
+          <button 
+            className={`filter-btn${siteFilter.size < 1 ? "-active" : ""}`} 
+            onClick={() => setSiteFilter(new Set())}>All
+          </button>
+          <button 
+            className={`filter-btn${siteFilter.has("draftkings") ? "-active" : ""}`} 
+            onClick={() => changeFilter("draftkings")}>DraftKings
+          </button>
+          <button
+            className={`filter-btn${siteFilter.has("yahoo") ? "-active" : ""}`} 
+            onClick={() => changeFilter("yahoo")}>Yahoo
+          </button>
+          <button 
+            className={`filter-btn${siteFilter.has("fanduel") ? "-active" : ""}`} 
+            onClick={() => changeFilter("fanduel")}>Fanduel
+          </button>
+        </div>
+      </div>
       <span className="page-btn-wrapper">
         <span className="page-label">{1 + (currPage * 20)} - {Math.min((currPage + 1) * 20, lineups.length)} of {lineups.length}</span>
         {currPage > 0 &&
@@ -72,7 +107,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
           </tr>
         </thead>
         <tbody>
-          {lineups.length > 0 && lineups.slice((currPage * 20), 20 + ((currPage) * 20)).map((lineup) => 
+          {lineups.length > 0 && lineups.filter((lineup) => siteFilter.size < 1 || siteFilter.has(lineup["site"])).slice((currPage * 20), 20 + ((currPage) * 20)).map((lineup) => 
             <>
               <tr>
                 <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
@@ -81,7 +116,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                 <td>{capitalize(lineup["site"])}</td>
                 <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</td>
                 <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
-                <td>${lineup["salary"] ? lineup["salary"] : 0}{lineup["salaryCap"] ? `/${lineup["salaryCap"]}` : ""}</td>
+                <td>${lineup["salary"] ? lineup["salary"] : 0}{lineup["salaryCap"] ? ` / ${lineup["salaryCap"]}` : ""}</td>
                 <td>{lineup["projected-points"] ? lineup["projected-points"] : 0} Pts</td>
               </tr>
             </>

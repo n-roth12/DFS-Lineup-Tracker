@@ -4,29 +4,24 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-
 	.header {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: white;
+		background-color: inherit;
 		padding-top: 5px;
-
 		.header-label-wrapper {
 			display: flex;
 			align-items: left;
 			width: 80%;
 			max-width: 1100px;
-
 			.header-label {
 				font-size: 16pt;
 				margin: 0;
 				font-weight: 600;
 			}
-
 		}
-
 		.header-inner {
 			width: 80%;
 			max-width: 1100px;
@@ -36,28 +31,23 @@
 			justify-content: space-between;
 			margin: 10px;
 		}
-
 		.selectors {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			justify-content: center;
-
 			select {
 				margin-right: 10px;
 				padding: 4px 16px 4px 8px;
 				font-size: 11pt;
 			}
-
 			.week-select {
 				width: 120px;
 			}
-
 			.year-select {
 				width: 100px;
 			}
 		}
-
 		.player-search {
 			display: flex;
 			flex-direction: row;
@@ -65,7 +55,6 @@
 			justify-content: center;
 			height: fit-content;
 			border-radius: 3px;
-
 			.search-input {
 				font-size: 11pt;
 				padding: 2px 20px 2px 8px;
@@ -76,7 +65,6 @@
 				height: 35px;
 				border-radius: 2px 0px 0px 2px;
 			}
-
 			.search-btn {
 				font-size: 11pt;
 				border-radius: 2px;
