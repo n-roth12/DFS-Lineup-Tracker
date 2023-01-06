@@ -220,15 +220,22 @@ def get_singe_lineup(current_user: User):
 	return jsonify(json.loads(json_util.dumps(lineup))), 200
 
 
-@lineups_blueprint.route('/generate', methods=['GET'])
+@lineups_blueprint.route('/generate', methods=['POST'])
 @token_required
 def generate_lineup(current_user: User):
-	draftGroupId = request.args.get("draftGroupId")
-	# data = json.loads(request.data)
+	data = json.loads(request.data)
+	draftGroupId = data["draftGroupId"]
 	# existing_lineup = data["lineup"]
+	chosen_flex_positions = data["eligibleFlexPositions"]
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
 
-	eligible_flex_positions = ["WR", "RB", "TE"]
+	eligible_flex_positions = []
+	for flex_position in chosen_flex_positions:
+		if flex_position not in ["RB", "WR", "TE"]:
+			return jsonify({ "Error": "Invalid flex position choice." }), 400
+		eligible_flex_positions.append(flex_position)
+	if len(eligible_flex_positions) < 1:
+		return jsonify({ "Error": "Invalid flex position choice." }), 400
 	flex_position = eligible_flex_positions[random.randint(0, len(eligible_flex_positions) - 1)]
 	
 	lineup_positions = ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]
