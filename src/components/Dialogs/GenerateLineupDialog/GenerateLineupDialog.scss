@@ -1,0 +1,13 @@
+.generate-lineup-dialog {
+    .title {
+        .title-inner {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .close-btn {
+                cursor: pointer;
+                color: red;
+            }
+        }
+    }
+}

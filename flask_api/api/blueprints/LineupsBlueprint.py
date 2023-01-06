@@ -8,7 +8,7 @@ import csv
 from io import StringIO
 import datetime
 from bson import json_util
-
+import random
 
 from ..routes import token_required
 from ..models.user import User
@@ -218,3 +218,117 @@ def get_singe_lineup(current_user: User):
 	lineup = MongoController.getLineupById(lineupId, current_user.public_id)
 
 	return jsonify(json.loads(json_util.dumps(lineup))), 200
+
+
+@lineups_blueprint.route('/generate', methods=['GET'])
+@token_required
+def generate_lineup(current_user: User):
+	draftGroupId = request.args.get("draftGroupId")
+	# data = json.loads(request.data)
+	# existing_lineup = data["lineup"]
+	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
+
+	eligible_flex_positions = ["WR", "RB", "TE"]
+	flex_position = eligible_flex_positions[random.randint(0, len(eligible_flex_positions) - 1)]
+	
+	lineup_positions = ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]
+	weighted_cost_map = {"QB": [], "RB": [], "WR": [], "TE": [], "DST": []}
+
+	for draftable in draftables["draftables"]:
+		fantasy_points_per_game = 0.0 if draftable["fppg"] == "-" else float(draftable["fppg"]) 
+		value = fantasy_points_per_game / int(draftable["salary"])
+		draftable["value"] = value
+		weighted_cost_map[draftable["position"]].append(draftable)
+
+	for position in weighted_cost_map.keys():
+		weighted_cost_map[position].sort(key=lambda player : player["value"], reverse=True)
+
+	best_lineup_proj = 0
+	best_lineup = None
+	best_lineup_salary = 0
+	count = 0
+
+	for i in range(100000):
+		lineup = []
+		lineup_ids = set()
+		salary_sum = 0
+		proj_total = 0
+		for position in lineup_positions:
+			match = False
+			if position == "FLEX":
+				position = flex_position
+
+			for j in range(10):
+				player_index_to_use = random.randint(0, min(15, len(weighted_cost_map[position])))
+				if weighted_cost_map[position][player_index_to_use]["playerSiteId"] not in lineup_ids \
+						and weighted_cost_map[position][player_index_to_use]["status"] not in ["IR", "O"]:
+					salary_sum += weighted_cost_map[position][player_index_to_use]["salary"]
+					proj_total += float(weighted_cost_map[position][player_index_to_use]["fppg"]) if weighted_cost_map[position][player_index_to_use]["fppg"] != "-" else 0
+
+					lineup.append(weighted_cost_map[position][player_index_to_use])
+					lineup_ids.add(weighted_cost_map[position][player_index_to_use]["playerSiteId"])
+					break
+		
+		if len(lineup) == len(lineup_positions) and salary_sum <= 60000:
+			if proj_total > best_lineup_proj:
+				best_lineup_proj = proj_total
+				best_lineup = lineup
+				best_lineup_salary = salary_sum
+				count += 1
+		else:
+			continue
+
+	result = {}
+	converted_lineup_positions = convert_lineup_positions(lineup_positions)
+	for k in range(len(lineup)):
+		result[converted_lineup_positions[k].lower()] = best_lineup[k]
+
+	
+	print(best_lineup_salary)
+	print(best_lineup_proj)
+	print(count)
+	return jsonify({ "lineup": result }), 200 
+
+
+# converts from the format:
+# ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]
+# to =>
+# ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
+# this should be an interview question
+# would be quicker to write and easier to understand with a hash map,
+# but not as efficient
+def convert_lineup_positions(positions_list):
+	result = []
+	if len(positions_list) < 1:
+		return result
+
+	prev = positions_list.pop(0)
+	prev_count = 0
+	for i in range(len(positions_list)):
+		temp = positions_list.pop(0)
+		if temp != prev:
+			result.append(prev + (str(prev_count + 1) if prev_count > 0  else ""))
+			prev_count = 0
+		else:
+			prev_count += 1
+			result.append(prev + str(prev_count))
+		prev = temp
+
+	result.append(prev + (str(prev_count + 1) if prev_count > 0 else ""))
+	
+	return result
+
+# this is the hash map solution I think
+	# counts = {}
+	# for position in positions_list:
+	# 	if position in count.keys():
+	# 		counts[position] += 1
+	# 	else:
+	# 		counts[position] = 1
+	
+	# for key in counts.keys():
+	# 	if counts[position] > 1:
+	#		result.append(position + str(counts - 1))
+	#  	else:
+	# 		result.append(position)	
+

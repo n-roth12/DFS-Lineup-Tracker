@@ -6,6 +6,7 @@ import { GrRevert } from 'react-icons/gr'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
+import GenerateLineupDialog from '../../Dialogs/GenerateLineupDialog/GenerateLineupDialog'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
 import { Roller } from 'react-awesome-spinners'
@@ -27,6 +28,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [lineupPlayerIds, setLineupPlayerIds] = useState(new Set())
   const [playerDialogContent, setPlayerDialogContent] = useState()
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
+  const [showGenerateLineupDialog, setShowGenerateLineupDialog] = useState(false)
   const [teamsFilter, setTeamsFilter] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -356,7 +358,13 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       {loading === false ? <>
       {draftGroup !== null &&
         <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
-				onClose={() => setShowCreateLineupDialog(false)} draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
+				  onClose={() => setShowCreateLineupDialog(false)} 
+          draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
+      }
+      {
+        <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog} 
+          onClose={() => setShowGenerateLineupDialog(false)} 
+          draftGroupId={draftGroupId} />
       }
       <PlayerDialog showPlayerDialog={showPlayerDialog} 
           onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
@@ -367,6 +375,9 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             <div className="header-label">
               <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
               <p className="date">{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}, Starts: {draftGroup["startTime"]}</p>
+            </div>
+            <div>
+              <button onClick={() => setShowGenerateLineupDialog(true)}>Generate</button>
             </div>
           </div>
         }

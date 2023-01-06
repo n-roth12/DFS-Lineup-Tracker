@@ -156,13 +156,6 @@ a {
   overflow: auto;
 }
 
-.player {
-  height: 80px;
-  display: flex;
-  background-color: #ffffff;
-  border: 1px solid #d3d3d3;
-}
-
 .player-body {
    display: flex;
    flex-direction: row;

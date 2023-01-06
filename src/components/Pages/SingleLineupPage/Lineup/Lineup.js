@@ -3,7 +3,6 @@ import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
 import './Lineup.scss'
 import { useState } from 'react'
 
-
 const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos, setPlayerDialogContent }) => {
 
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)

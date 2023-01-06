@@ -32,7 +32,6 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
       }
     })
     const data = await res.json()
-    console.log(data)
     setLineups(data)
     setLineupsLoading(false)
   }
