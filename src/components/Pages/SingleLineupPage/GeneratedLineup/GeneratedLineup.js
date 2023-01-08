@@ -1,11 +1,20 @@
+import './GeneratedLineup.scss'
+import { FaTimes } from 'react-icons/fa'
 
-const GeneratedLineup = ({ lineup }) => {
+const GeneratedLineup = ({ lineup, onDelete }) => {
   return (
     <div className="generated-lineup">
-      {lineup && lineup.length > 0 && lineup.map((player) => 
-        <div className="player">
-          <p>{player["firstName"]} {player["lastName"]}</p>
-        </div>
+      {lineup && lineup.map((player, index) =>
+        player["player"] !== {} ?
+          <div className="player">
+            <p className='position'>{player["position"].toUpperCase()}</p> 
+            <p className='name'>{player["player"]["firstName"]} {player["player"]["lastName"]}</p>
+            <FaTimes className='delete-btn' onClick={() => onDelete(index)} />
+          </div>
+        :
+          <div className='empty-player'>
+            <p>Empty</p>
+          </div>
       )}
     </div>
   )

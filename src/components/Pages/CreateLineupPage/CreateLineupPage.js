@@ -364,7 +364,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       {
         <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog} 
           onClose={() => setShowGenerateLineupDialog(false)} 
-          draftGroupId={draftGroupId} />
+          draftGroupId={draftGroupId}
+          games={draftGroup["games"]} />
       }
       <PlayerDialog showPlayerDialog={showPlayerDialog} 
           onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 

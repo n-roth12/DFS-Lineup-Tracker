@@ -11,9 +11,13 @@
         }
     }
     .content {
-        .flex-position-buttons-wrapper {
-            label {
-                margin-right: 10px;
+        .content-inner {
+            display: flex;
+            flex-direction: row;
+            .flex-position-buttons-wrapper {
+                label {
+                    margin-right: 10px;
+                }
             }
         }
     }

@@ -15,12 +15,12 @@ from ..models.user import User
 from ..models.lineup import Lineup, LineupSchema
 from ..date_services import parseDate
 from ..controllers.MongoController import MongoController
+from ..controllers.LineupOptimizerController import LineupOptimizerController
 
 lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineups')
-
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
-
 MongoController = MongoController()
+LineupOptimizerController = LineupOptimizerController()
 
 # @lineups_blueprint.route('/', defaults={'id': None}, methods=['GET'])
 # @app.route('/lineups/<id>', methods=['GET'])
@@ -230,6 +230,7 @@ def generate_lineup(current_user: User):
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
 
 	eligible_flex_positions = []
+	print(chosen_flex_positions)
 	for flex_position in chosen_flex_positions:
 		if flex_position not in ["RB", "WR", "TE"]:
 			return jsonify({ "Error": "Invalid flex position choice." }), 400
@@ -240,60 +241,12 @@ def generate_lineup(current_user: User):
 	
 	lineup_positions = ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]
 	weighted_cost_map = {"QB": [], "RB": [], "WR": [], "TE": [], "DST": []}
+	existing_lineup = {"QB" : {}, "RB1": {}, "RB2": {}, "WR1": {}, "WR2": {}, "WR3": {}, "TE": {}, "FLEX": {}, "DST": {}}
+	salaryCap = 600000
 
-	for draftable in draftables["draftables"]:
-		fantasy_points_per_game = 0.0 if draftable["fppg"] == "-" else float(draftable["fppg"]) 
-		value = fantasy_points_per_game / int(draftable["salary"])
-		draftable["value"] = value
-		weighted_cost_map[draftable["position"]].append(draftable)
+	result = LineupOptimizerController.generate_lineup(existing_lineup, lineup_positions, eligible_flex_positions, 
+        salaryCap, draftables)
 
-	for position in weighted_cost_map.keys():
-		weighted_cost_map[position].sort(key=lambda player : player["value"], reverse=True)
-
-	best_lineup_proj = 0
-	best_lineup = None
-	best_lineup_salary = 0
-	count = 0
-
-	for i in range(100000):
-		lineup = []
-		lineup_ids = set()
-		salary_sum = 0
-		proj_total = 0
-		for position in lineup_positions:
-			match = False
-			if position == "FLEX":
-				position = flex_position
-
-			for j in range(10):
-				player_index_to_use = random.randint(0, min(15, len(weighted_cost_map[position])))
-				if weighted_cost_map[position][player_index_to_use]["playerSiteId"] not in lineup_ids \
-						and weighted_cost_map[position][player_index_to_use]["status"] not in ["IR", "O"]:
-					salary_sum += weighted_cost_map[position][player_index_to_use]["salary"]
-					proj_total += float(weighted_cost_map[position][player_index_to_use]["fppg"]) if weighted_cost_map[position][player_index_to_use]["fppg"] != "-" else 0
-
-					lineup.append(weighted_cost_map[position][player_index_to_use])
-					lineup_ids.add(weighted_cost_map[position][player_index_to_use]["playerSiteId"])
-					break
-		
-		if len(lineup) == len(lineup_positions) and salary_sum <= 60000:
-			if proj_total > best_lineup_proj:
-				best_lineup_proj = proj_total
-				best_lineup = lineup
-				best_lineup_salary = salary_sum
-				count += 1
-		else:
-			continue
-
-	result = {}
-	converted_lineup_positions = convert_lineup_positions(lineup_positions)
-	for k in range(len(lineup)):
-		result[converted_lineup_positions[k].lower()] = best_lineup[k]
-
-	
-	print(best_lineup_salary)
-	print(best_lineup_proj)
-	print(count)
 	return jsonify({ "lineup": result }), 200 
 
 

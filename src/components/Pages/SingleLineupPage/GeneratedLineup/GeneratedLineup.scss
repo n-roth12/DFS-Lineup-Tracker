@@ -1,5 +1,19 @@
 .generated-lineup {
+    width: 250px;
     .player {
-
+        background-color: white;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        border-bottom: 1px solid var(--grey-2);
+        border-left: 1px solid var(--grey-2);
+        border-right: 1px solid var(--grey-2);
+        height: 35px;
+        .position {
+           width: 50px;
+        }
+        .delete-btn {
+            margin-left: auto;
+        }
     }
 }
