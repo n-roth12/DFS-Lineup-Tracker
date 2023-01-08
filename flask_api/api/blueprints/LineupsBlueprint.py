@@ -230,21 +230,19 @@ def generate_lineup(current_user: User):
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
 
 	eligible_flex_positions = []
-	print(chosen_flex_positions)
 	for flex_position in chosen_flex_positions:
 		if flex_position not in ["RB", "WR", "TE"]:
 			return jsonify({ "Error": "Invalid flex position choice." }), 400
 		eligible_flex_positions.append(flex_position)
 	if len(eligible_flex_positions) < 1:
 		return jsonify({ "Error": "Invalid flex position choice." }), 400
-	flex_position = eligible_flex_positions[random.randint(0, len(eligible_flex_positions) - 1)]
 	
 	lineup_positions = ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]
 	weighted_cost_map = {"QB": [], "RB": [], "WR": [], "TE": [], "DST": []}
 	existing_lineup = {"QB" : {}, "RB1": {}, "RB2": {}, "WR1": {}, "WR2": {}, "WR3": {}, "TE": {}, "FLEX": {}, "DST": {}}
 	salaryCap = 600000
 
-	result = LineupOptimizerController.generate_lineup(existing_lineup, lineup_positions, eligible_flex_positions, 
+	result = LineupOptimizerController.generate_optimized_lineup(existing_lineup, lineup_positions, eligible_flex_positions, 
         salaryCap, draftables)
 
 	return jsonify({ "lineup": result }), 200 

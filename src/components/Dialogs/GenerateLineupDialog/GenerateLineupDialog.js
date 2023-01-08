@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import { FaTimes } from 'react-icons/fa'
-import LineupMini from '../../Pages/SingleLineupPage/GeneratedLineup/GeneratedLineup'
 import './GenerateLineupDialog.scss'
 import GeneratedLineup from '../../Pages/SingleLineupPage/GeneratedLineup/GeneratedLineup'
 
@@ -9,10 +8,18 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
 
   const [generatedLineup, setGeneratedLineup] = useState()
   const [eligibleFlexPositions, setEligibleFlexPositions] = useState(new Set(["RB", "WR", "TE"]))
-  const [gameToStack, setGameToStack] = useState()
+  const [gameToStack, setGameToStack] = useState([])
+  const [countToGameStack, setCountToGameStack] = useState()
   const [teamToStack, setTeamToStack] = useState()
+  const [countToTeamStack, setCountToTeamStack] = useState()
+  const [teams, setTeams] = useState([])
+
+  useEffect(() => {
+    getTeams()
+  }, [])
 
   const generateLineup = async () => {
+    console.log(gameToStack["awayTeam"])
     const res = await fetch(`/lineups/generate`, {
       method: 'POST',
       headers: {
@@ -36,26 +43,61 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
     setEligibleFlexPositions(new Set(eligibleFlexPositions))
   }
 
+  const getTeams = () => {
+    var temp = []
+    games.map((game) => {
+      temp.push(game["awayTeam"])
+      temp.push(game["homeTeam"])
+    })
+    setTeams(temp)
+  }
+
   const deletePlayerFromLineup = (index) => {
     var generatedLineupCopy = [...generatedLineup]
     generatedLineupCopy[index]["player"] = {}
     setGeneratedLineup(generatedLineupCopy)
   }
 
+  const handleGameStack = (e) => {
+    if (e.target.value === "") {
+      setGameToStack([])
+    } else {
+      setGameToStack(e.target.value.split(","))
+    }
+  }
+
+  const handleTeamStack = (e) => {
+    setTeamToStack(e.target.value)
+  }
+
+  const handleGameStackCount = (e) => {
+    setCountToGameStack(e.target.value)
+  }
+
+  const handleTeamStackCount = (e) => {
+    setCountToTeamStack(e.target.value)
+  }
+
   return (
-    <Dialog open={showGenerateLineupDialog} className="generate-lineup-dialog" fullWidth maxWidth="sm" >
+    <Dialog open={showGenerateLineupDialog} className="generate-lineup-dialog" maxWidth="md" >
       <DialogTitle className="title">
           <div className='title-inner'>
-            <p>Optimize Lineup</p> <FaTimes className='close-btn' onClick={onClose}/>
+            <h2>Optimize Lineup</h2> <FaTimes className='close-btn' onClick={onClose}/>
           </div>
       </DialogTitle>
       <DialogContent className='content'>
         <div className='content-inner'>
           <div className='generated-lineup-wrapper'>
+            <h3>Lineup</h3>
+            <div className='generated-lineup-details'>
+              <p>Salary: </p>
+              <p>Proj PTS</p>
+            </div>
             <GeneratedLineup lineup={generatedLineup} onDelete={deletePlayerFromLineup} />
           </div>
           <div className='options-wrapper'>
-            <div className='flex-position-buttons-wrapper'>
+            <h3>Options</h3>
+            <div className='flex-position-buttons-wrapper section'>
               <p>Eligible positions for flex:</p>
               <input type="checkbox" id="RB" name="RB" value="RB"
                 checked={eligibleFlexPositions.has("RB")} onChange={() => toggleCheck("RB")} />
@@ -67,27 +109,44 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
                 checked={eligibleFlexPositions.has("TE")} onChange={() => toggleCheck("TE")} />
               <label for="TE">TE</label>
             </div>
-            <div className='radios'>
+            <div className='radios section'>
               <p>Replace:</p>
               <input type="radio" defaultChecked="true" value="full" name="generate-option" /> Entire Lineup
               <input type="radio" value="empty" name="generate-option" /> Empty Positions
             </div>
-            <div className='game-stacks'>
-              <p>Stack Game:</p>
-              <select name="cars" id="cars">
-                <option value="" defaultValue={true}>None</option>
+            <div className='game-stacks section'>
+              <p>Stack:</p>
+              <label for="game">Game: </label>
+              <select name="game" id="game" value={gameToStack} onChange={handleGameStack}>
+                <option default="true" value="">None</option>
                 {games && games.length > 0 && games.map((game) => 
-                  <option value={game["gameId"]}>{game["awayTeam"]} @ {game["homeTeam"]}</option>
+                  <option value={[game["homeTeam"], game["awayTeam"]]}
+                    onClick={() => setGameToStack(game)}>{game["awayTeam"]} @ {game["homeTeam"]}</option>
                 )}
               </select>
-              <select name="players-to-stack">
+              <label for="players-to-stack">Players: </label>
+              <select name="players-to-stack" value={countToGameStack} onChange={handleGameStackCount}>
                 {generatedLineup && generatedLineup.length > 0 && generatedLineup.map((player, index) =>
-                  <option value={index}>{index + 1}</option>
+                  <option value={index + 1}>{index + 1}</option>
+                )}
+              </select>
+              <label for="team">Team: </label>
+              <select name="team" id="team" onChange={handleTeamStack} value={teamToStack}>
+                <option value="" defaultValue="true" onChange={handleTeamStack}>None</option>
+                {teams && teams.length > 0 && teams.map((team) => 
+                  <option value={team}>{team}</option>
+                )}
+              </select>
+              <label for="players-to-stack">Players: </label>
+              <select name="players-to-stack" value={countToTeamStack} onChange={handleTeamStackCount}>
+                {generatedLineup && generatedLineup.length > 0 && generatedLineup.map((player, index) =>
+                  <option value={index + 1}>{index + 1}</option>
                 )}
               </select>
             </div>
-            <div className='punt-players'>
-              <p>Punt Positions:</p>
+            <div className='punt-players section'>
+              <p>Punt:</p>
+              <label for="punt-players">Punt Position:</label>
               <select name="punt-players">
                 <option value="">None</option>
                 <option value="QB">QB</option>
@@ -98,12 +157,12 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
                 <option value="DST">DST</option>
               </select>
             </div>
+            <button className='generate-btn' onClick={generateLineup}>Generate Lineup</button>
           </div>
         </div>
-        <button className='generate-btn' onClick={generateLineup}>Optimize</button>
       </DialogContent>
       <DialogActions className="dialog-actions">
-        <button className='save-btn'>Apply</button>
+        <button className='apply-btn'>Apply</button>
       </DialogActions>
     </Dialog>
   )

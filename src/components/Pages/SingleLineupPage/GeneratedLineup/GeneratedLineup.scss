@@ -1,5 +1,9 @@
 .generated-lineup {
     width: 250px;
+    margin-top: 0;
+    .player:nth-child(1) {
+        border-top: 1px solid var(--grey-2);
+    }
     .player {
         background-color: white;
         display: flex;
@@ -11,9 +15,24 @@
         height: 35px;
         .position {
            width: 50px;
+           margin-top: auto;
+           margin-bottom: auto;
+           padding-left: 6px;
+           flex: 2;
+        }
+        .name {
+            margin-top: auto;
+            margin-bottom: auto;
+            flex: 6;
         }
         .delete-btn {
             margin-left: auto;
+            margin-right: 6px;
+            cursor: pointer;
+            margin-top: auto;
+            margin-bottom: auto;
+            flex: 1;
+            color: red;
         }
     }
 }
