@@ -296,7 +296,18 @@
 			flex-direction: row;
 			padding: 5px;
 			width: 80%;
-
+			justify-content: space-between;
+			.generate-btn {
+				border: None;
+				color: blue;
+				cursor: pointer;
+				background-color: white;
+				padding: 10px;
+				border-bottom: 2px solid transparent;
+			}
+			.generate-btn:hover {
+				border-bottom: 2px solid blue;
+			}
 			.header-label {
 				display: flex;
 				flex-direction: row;

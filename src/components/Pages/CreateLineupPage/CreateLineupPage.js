@@ -10,6 +10,7 @@ import GenerateLineupDialog from '../../Dialogs/GenerateLineupDialog/GenerateLin
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
 import { Roller } from 'react-awesome-spinners'
+import GeneratedLineup from '../SingleLineupPage/GeneratedLineup/GeneratedLineup'
 
 const CreateLineupPage = ({ setAlertMessage }) => {
 
@@ -353,6 +354,15 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     setShowPlayerDialog(true)
   }
 
+  const applyOptimizedLineup = (generatedLineup) => {
+    var result = {}
+    generatedLineup.map((player) => {
+      result[player["position"]] = Object.keys(player["player"]).length > 0 ? player["player"] : null
+    })
+    setLineup(result)
+    setShowGenerateLineupDialog(false)
+  }
+
   return (
     <div className="createLineupPage page">
       {loading === false ? <>
@@ -365,7 +375,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog} 
           onClose={() => setShowGenerateLineupDialog(false)} 
           draftGroupId={draftGroupId}
-          games={draftGroup["games"]} />
+          games={draftGroup["games"]}
+          onApply={applyOptimizedLineup} />
       }
       <PlayerDialog showPlayerDialog={showPlayerDialog} 
           onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
@@ -377,8 +388,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
               <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
               <p className="date">{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}, Starts: {draftGroup["startTime"]}</p>
             </div>
-            <div>
-              <button onClick={() => setShowGenerateLineupDialog(true)}>Generate</button>
+            <div className='header-label'>
+              <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Generate</button>
             </div>
           </div>
         }

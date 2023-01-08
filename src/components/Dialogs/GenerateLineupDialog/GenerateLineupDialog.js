@@ -4,7 +4,7 @@ import { FaTimes } from 'react-icons/fa'
 import './GenerateLineupDialog.scss'
 import GeneratedLineup from '../../Pages/SingleLineupPage/GeneratedLineup/GeneratedLineup'
 
-const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId, games }) => {
+const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId, games, onApply }) => {
 
   const [generatedLineup, setGeneratedLineup] = useState()
   const [eligibleFlexPositions, setEligibleFlexPositions] = useState(new Set(["RB", "WR", "TE"]))
@@ -19,7 +19,6 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
   }, [])
 
   const generateLineup = async () => {
-    console.log(gameToStack["awayTeam"])
     const res = await fetch(`/lineups/generate`, {
       method: 'POST',
       headers: {
@@ -181,7 +180,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
         </div>
       </DialogContent>
       <DialogActions className="dialog-actions">
-        <button className='apply-btn'>Apply</button>
+        <button className='apply-btn' onClick={() => onApply(generatedLineup)}>Apply</button>
       </DialogActions>
     </Dialog>
   )
