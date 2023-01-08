@@ -9,9 +9,9 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
   const [generatedLineup, setGeneratedLineup] = useState()
   const [eligibleFlexPositions, setEligibleFlexPositions] = useState(new Set(["RB", "WR", "TE"]))
   const [gameToStack, setGameToStack] = useState([])
-  const [countToGameStack, setCountToGameStack] = useState()
+  const [numberToStack, setNumberToStack] = useState()
   const [teamToStack, setTeamToStack] = useState()
-  const [countToTeamStack, setCountToTeamStack] = useState()
+  const [activeStackOption, setActiveStackOption] = useState("team")
   const [teams, setTeams] = useState([])
 
   useEffect(() => {
@@ -27,7 +27,10 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
       },
       body: JSON.stringify({
         "draftGroupId": draftGroupId,
-        "eligibleFlexPositions": Array.from(eligibleFlexPositions)
+        "eligibleFlexPositions": Array.from(eligibleFlexPositions),
+        "gameStack": Array.from(gameToStack),
+        "teamStack": teamToStack,
+        "numberToStack": numberToStack
       })
     })
     const data = await res.json()
@@ -70,12 +73,14 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
     setTeamToStack(e.target.value)
   }
 
-  const handleGameStackCount = (e) => {
-    setCountToGameStack(e.target.value)
+  const handleStackCountChange = (e) => {
+    setNumberToStack(e.target.value)
   }
 
-  const handleTeamStackCount = (e) => {
-    setCountToTeamStack(e.target.value)
+  const stackOptionChange = (e) => {
+    setGameToStack([])
+    setTeamToStack()
+    setActiveStackOption(e.target.value)
   }
 
   return (
@@ -116,33 +121,47 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
             </div>
             <div className='game-stacks section'>
               <p>Stack:</p>
-              <label for="game">Game: </label>
-              <select name="game" id="game" value={gameToStack} onChange={handleGameStack}>
-                <option default="true" value="">None</option>
-                {games && games.length > 0 && games.map((game) => 
-                  <option value={[game["homeTeam"], game["awayTeam"]]}
-                    onClick={() => setGameToStack(game)}>{game["awayTeam"]} @ {game["homeTeam"]}</option>
-                )}
-              </select>
-              <label for="players-to-stack">Players: </label>
-              <select name="players-to-stack" value={countToGameStack} onChange={handleGameStackCount}>
-                {generatedLineup && generatedLineup.length > 0 && generatedLineup.map((player, index) =>
-                  <option value={index + 1}>{index + 1}</option>
-                )}
-              </select>
-              <label for="team">Team: </label>
-              <select name="team" id="team" onChange={handleTeamStack} value={teamToStack}>
-                <option value="" defaultValue="true" onChange={handleTeamStack}>None</option>
-                {teams && teams.length > 0 && teams.map((team) => 
-                  <option value={team}>{team}</option>
-                )}
-              </select>
-              <label for="players-to-stack">Players: </label>
-              <select name="players-to-stack" value={countToTeamStack} onChange={handleTeamStackCount}>
-                {generatedLineup && generatedLineup.length > 0 && generatedLineup.map((player, index) =>
-                  <option value={index + 1}>{index + 1}</option>
-                )}
-              </select>
+              <div>
+                <input type="radio" value="team" checked={activeStackOption === "team"} 
+                  onChange={stackOptionChange} name="stack-option" /> Team
+                <input type="radio" value="game" checked={activeStackOption === "game"} 
+                  onChange={stackOptionChange} name="stack-option" /> Game
+              </div>
+              {activeStackOption === "game" &&
+                <>
+                  <label for="game">Game: </label>
+                  <select name="game" id="game" value={gameToStack} onChange={handleGameStack}>
+                    <option default="true" value="">None</option>
+                    {games && games.length > 0 && games.map((game) => 
+                      <option value={[game["homeTeam"], game["awayTeam"]]}
+                        onClick={() => setGameToStack(game)}>{game["awayTeam"]} @ {game["homeTeam"]}</option>
+                    )}
+                  </select>
+                  <label for="players-to-stack">Players: </label>
+                  <select name="players-to-stack" value={numberToStack} onChange={handleStackCountChange}>
+                    {generatedLineup && generatedLineup.length > 0 && generatedLineup.map((player, index) =>
+                      <option value={index + 1}>{index + 1}</option>
+                    )}
+                  </select>
+                </>
+              }
+              {activeStackOption === "team" &&
+                <>
+                  <label for="team">Team: </label>
+                  <select name="team" id="team" onChange={handleTeamStack} value={teamToStack}>
+                    <option value="" defaultValue="true" onChange={handleTeamStack}>None</option>
+                    {teams && teams.length > 0 && teams.map((team) => 
+                      <option value={team}>{team}</option>
+                    )}
+                  </select>
+                  <label for="players-to-stack">Players: </label>
+                  <select name="players-to-stack" value={numberToStack} onChange={handleStackCountChange}>
+                    {generatedLineup && generatedLineup.length > 0 && generatedLineup.map((player, index) =>
+                      <option value={index + 1}>{index + 1}</option>
+                    )}
+                  </select>
+                </>
+              }
             </div>
             <div className='punt-players section'>
               <p>Punt:</p>

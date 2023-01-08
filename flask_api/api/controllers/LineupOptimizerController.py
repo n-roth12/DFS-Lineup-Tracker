@@ -79,7 +79,7 @@ class LineupOptimizerController:
             lineup_ids.append(player_to_add["playerSiteId"])
         
         if len(lineup) != len(lineup_positions) or salary_sum > 60000:
-            print("error, lineup is either over the salary cap or does not have the right number of players...")
+            # print("error, lineup is either over the salary cap or does not have the right number of players...")
             return None
         
         return lineup
@@ -93,7 +93,7 @@ class LineupOptimizerController:
 
                 return weighted_cost_map[position][player_index_to_use]
 
-        print(f"error, not able to pick player for position in under {str(self.number_of_retries)} tries...")
+        # print(f"error, not able to pick player for position in under {str(self.number_of_retries)} tries...")
         return None
 
 

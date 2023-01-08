@@ -224,9 +224,12 @@ def get_singe_lineup(current_user: User):
 @token_required
 def generate_lineup(current_user: User):
 	data = json.loads(request.data)
-	draftGroupId = data["draftGroupId"]
+	draftGroupId = data.get("draftGroupId")
+	gameStack = data.get("gameStack")
+	teamStack = data.get("teamStack")
+	gameStackPlayerCount = data.get("gameStackPlayerCount")
 	# existing_lineup = data["lineup"]
-	chosen_flex_positions = data["eligibleFlexPositions"]
+	chosen_flex_positions = data.get("eligibleFlexPositions")
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
 
 	eligible_flex_positions = []
@@ -238,7 +241,6 @@ def generate_lineup(current_user: User):
 		return jsonify({ "Error": "Invalid flex position choice." }), 400
 	
 	lineup_positions = ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]
-	weighted_cost_map = {"QB": [], "RB": [], "WR": [], "TE": [], "DST": []}
 	existing_lineup = {"QB" : {}, "RB1": {}, "RB2": {}, "WR1": {}, "WR2": {}, "WR3": {}, "TE": {}, "FLEX": {}, "DST": {}}
 	salaryCap = 600000
 
