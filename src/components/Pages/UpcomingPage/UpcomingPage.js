@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './UpcomingPage.scss'
+import '../../../DefaultTable.scss'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink';
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { Roller } from 'react-awesome-spinners';

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './LineupsPage.scss';
+import '../../../DefaultTable.scss'
 import LineupsTable from '../../TablesLists/LineupsTable/LineupsTable'
 import ImportLineupsDialog from '../../Dialogs/ImportLineupsDialog/ImportLineupsDialog'
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog';

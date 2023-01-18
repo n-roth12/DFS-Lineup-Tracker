@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
-import { FaPlus, FaSearch, FaTimes } from 'react-icons/fa'
+import { FaPlus, FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
@@ -32,6 +32,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [showGenerateLineupDialog, setShowGenerateLineupDialog] = useState(false)
   const [teamsFilter, setTeamsFilter] = useState([])
   const [loading, setLoading] = useState(true)
+  const [playerTableSort, setPlayerTableSort] = useState("salary")
+  const [isPlayerTableSortDesc, setIsPlayerTableSortDesc] = useState(true)
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -391,26 +393,11 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             <div className='header-label'>
               <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
               <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
+              <button className='generate-btn generate-btn-delete'>Delete</button>
             </div>
           </div>
         }
       </div>
-      {draftGroup && draftGroup["games"].length > 1 &&
-        <div className='games-outer'>
-          <div className='games-inner'>
-            <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
-              <p>All</p>
-            </div>
-            {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
-              <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected": ""}`} 
-                onClick={() => toggleGameWrapper(game["awayTeam"], game["homeTeam"])}>
-                <p>{game["awayTeam"]}</p>
-                <p>@{game["homeTeam"]}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      }
       <div className='createLineupPage-inner'>
         <div className='lineup-outer'>
           <div className='title'>
@@ -437,11 +424,29 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             toggleEditingPos={toggleEditingPos}
             setPlayerDialogContent={playerWrapper} />
         </div>
+        
         {draftables.length > 0 ?
           <div className='players-table-wrapper'>
+            <h2>Draftables</h2>
+                  {draftGroup && draftGroup["games"].length > 1 &&
+        <div className='games-outer'>
+          <div className='games-inner'>
+            <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
+              <p>All</p>
+            </div>
+            {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
+              <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected": ""}`} 
+                onClick={() => toggleGameWrapper(game["awayTeam"], game["homeTeam"])}>
+                <p>{game["awayTeam"]}</p>
+                <p>@{game["homeTeam"]}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      }
             <div className='players-table-header'>
               <div className='players-table-header-upper'>
-                <h2>Players</h2>
+                {/* <h2>Players</h2> */}
               </div>
               <div className='players-table-header-lower'>
                 <div className="pos-filter-wrapper">
@@ -486,8 +491,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                 <th></th>
                 <th>Pos</th>
                 <th>Name</th>
-                <th>Salary</th>
-                <th>Opponent</th>
+                <th>Salary <FaArrowUp /></th>
+                <th>Game</th>
                 <th>OPRK</th>
                 <th>FPPG</th>
               </thead>

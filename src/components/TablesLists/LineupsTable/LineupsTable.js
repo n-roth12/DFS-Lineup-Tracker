@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaAngleLeft } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import './LineupsTable.scss'
+import '../../../DefaultTable.scss'
 import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 
