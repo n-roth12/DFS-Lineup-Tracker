@@ -12,6 +12,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
   const [numberToStack, setNumberToStack] = useState()
   const [teamToStack, setTeamToStack] = useState()
   const [activeStackOption, setActiveStackOption] = useState("team")
+  const [replaceEntireLineup, setReplaceEntireLineup] = useState("full")
   const [teams, setTeams] = useState([])
 
   useEffect(() => {
@@ -26,7 +27,9 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
       },
       body: JSON.stringify({
         "draftGroupId": draftGroupId,
+        "existingLineup": generatedLineup,
         "eligibleFlexPositions": Array.from(eligibleFlexPositions),
+        "replaceEntireLineup": replaceEntireLineup,
         "gameStack": Array.from(gameToStack),
         "teamStack": teamToStack,
         "numberToStack": numberToStack
@@ -82,6 +85,10 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
     setActiveStackOption(e.target.value)
   }
 
+  const handleReplaceOptionChange = (e) => {
+    setReplaceEntireLineup(e.target.value)
+  }
+
   return (
     <Dialog open={showGenerateLineupDialog} className="generate-lineup-dialog" maxWidth="md" >
       <DialogTitle className="title">
@@ -115,8 +122,10 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
             </div>
             <div className='radios section'>
               <p>Replace:</p>
-              <input type="radio" defaultChecked="true" value="full" name="generate-option" /> Entire Lineup
-              <input type="radio" value="empty" name="generate-option" /> Empty Positions
+              <input type="radio" checked={replaceEntireLineup === "full"} onChange={handleReplaceOptionChange} 
+                value="full" name="generate-option" /> Entire Lineup
+              <input type="radio" checked={replaceEntireLineup === "empty"} onChange={handleReplaceOptionChange} 
+                value="empty" name="generate-option" /> Empty Positions
             </div>
             <div className='game-stacks section'>
               <p>Stack:</p>

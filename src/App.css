@@ -41,10 +41,6 @@ body {
   --red-2: rgba(255, 0, 0, 0.8);
 }
 
-.page {
-  margin-top: 100px
-}
-
 .page-wrapper {
   display: flex;
   flex-direction: column;

@@ -389,7 +389,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
               <p className="date">{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}, Starts: {draftGroup["startTime"]}</p>
             </div>
             <div className='header-label'>
-              <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Generate</button>
+              <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
+              <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
             </div>
           </div>
         }
@@ -414,7 +415,6 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         <div className='lineup-outer'>
           <div className='title'>
             <h2>Lineup</h2>
-            <button className="view-all-btn" onClick={() => setShowCreateLineupDialog(true)}>View All</button>
           </div>
           <div className='lineup-header'>
             <div className='lineup-header-info-wrapper'>
@@ -436,11 +436,6 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             onOpenDialog={openDialog}
             toggleEditingPos={toggleEditingPos}
             setPlayerDialogContent={playerWrapper} />
-          <div className='lineup-btns'>
-            <button className='revert-btn' onClick={revertLineup}>Revert <GrRevert/></button>
-            <button className='save-btn' onClick={saveLineup}>Save</button>
-            <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
-          </div>
         </div>
         {draftables.length > 0 ?
           <div className='players-table-wrapper'>
@@ -521,6 +516,13 @@ const CreateLineupPage = ({ setAlertMessage }) => {
           </div>
         : <h2>Loading Players...</h2>
         }
+      </div>
+      <div className='fixed-bottom-footer'>
+        <div className='lineup-btns'>
+          <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
+          <button className='revert-btn' onClick={revertLineup}>Revert <GrRevert/></button>
+          <button className='save-btn' onClick={saveLineup}>Save</button>
+        </div>
       </div>
       </>
     :

@@ -11,20 +11,28 @@ class LineupOptimizerController:
         self.number_of_players_to_consider = 15
         self.injured_status_list = ["IR", "O"]
 
+# existing_lineup: [{"player": {...}, "position": "QB", sort_index: 0}, {"player": {...}, "position": RB1, sort_index: 1, {...}]
+# lineup_positions: ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
+# 
 
-    def generate_optimized_lineup(self, existing_lineup: dict, lineup_positions: list, eligible_flex_positions: list, 
+
+    def generate_optimized_lineup(self, existing_lineup: list, lineup_positions: list, eligible_flex_positions: list, 
         remainingSalaryCap: int, draftables: list) -> dict:
 
         flex_position = self.choose_flex_position(eligible_flex_positions)
         weighted_cost_map = self.create_weighted_cost_map(draftables=draftables, lineup_positions=lineup_positions)
+        temp = self.remove_empty_lineup_positions(lineup=existing_lineup)
+        lineup_positions_to_fill = self.get_positions_to_fill(existing_lineup=existing_lineup, lineup_positions=lineup_positions)
+
+        # converted_lineup_positions = self.convert_lineup_positions(lineup_positions)
 
         best_lineup_proj = 0
         best_lineup = None
         count = 0
 
         for i in range(self.number_of_iterations):
-            lineup = self.generate_single_lineup(weighted_cost_map=weighted_cost_map, 
-                    lineup_positions=lineup_positions, flex_position=flex_position)
+            lineup = self.generate_single_lineup(existing_lineup=temp, weighted_cost_map=weighted_cost_map, 
+                    lineup_positions_to_fill=lineup_positions_to_fill, flex_position=flex_position)
 
             if lineup is None:
                 continue
@@ -34,19 +42,18 @@ class LineupOptimizerController:
                 best_lineup_proj = lineup_proj_total
                 best_lineup = lineup
                 count += 1
-
-        result = []
-        converted_lineup_positions = self.convert_lineup_positions(lineup_positions)
-        for k in range(len(best_lineup)):
-            result.append({"position": converted_lineup_positions[k].lower(), "player": best_lineup[k]})
         
-        return self.add_sort_order_to_lineup(result)        
+        return self.add_sort_order_to_lineup(best_lineup)        
 
 
     def get_lineup_projected_points(self, lineup: list) -> float:
         points_sum = 0
         for player in lineup:
-            points_sum += 0.0 if player["fppg"] == "-" else float(player["fppg"]) 
+            if player.get("player"):
+                temp = player.get("player")
+                points_sum += 0.0 if temp.get("fppg") == "-" else float(temp.get("fppg"))
+            else:
+                points_sum += 0.0 if player.get("fppg") == "-" else float(player.get("fppg")) 
 
         return points_sum
 
@@ -58,16 +65,33 @@ class LineupOptimizerController:
         
         return salary_sum
 
+    
+    def get_positions_to_replace(self, lineup: list) -> list:
+        return [position["position"] for position in lineup if len(list(position["player"].keys())) < 1]
 
-    def generate_single_lineup(self, lineup_positions: list, weighted_cost_map: dict, flex_position: list) -> list:
-        lineup = []
-        lineup_ids = []
+    
+    def remove_empty_lineup_positions(self, lineup: list) -> list:
+        result = []
+        for position in lineup:
+            if position.get("player") and len(position.get("player").keys()) > 1:
+                result.append(position)
+        return result
+
+
+    def generate_single_lineup(self, lineup_positions_to_fill: list, weighted_cost_map: dict, flex_position: list, existing_lineup: list) -> list:
+        lineup = [i for i in existing_lineup]
+        lineup_ids = [i.get("player").get("playerSiteId") for i in existing_lineup if i.get("player")]
         salary_sum = 0
         proj_total = 0
-        for position in lineup_positions:
-            if position == self.flex_position_label:
-                position = flex_position
-            player_to_add = self.pick_player_for_position(weighted_cost_map=weighted_cost_map, position=position, lineup_ids=lineup_ids)
+        # print(existing_lineup)
+        # print(len(lineup_positions_to_fill))
+        for position in lineup_positions_to_fill:
+            if self.remove_number_from_string(position) == self.flex_position_label:
+                temp = flex_position
+            else:
+                temp = position
+            player_to_add = self.pick_player_for_position(weighted_cost_map=weighted_cost_map, 
+                position=self.remove_number_from_string(temp), lineup_ids=lineup_ids)
             
             if player_to_add is None:
                 return None
@@ -75,10 +99,12 @@ class LineupOptimizerController:
             salary_sum += player_to_add["salary"]
             proj_total += float(player_to_add["fppg"]) if player_to_add["fppg"] != "-" else 0
 
-            lineup.append(player_to_add)
+            lineup.append({"position": position, "player": player_to_add})
             lineup_ids.append(player_to_add["playerSiteId"])
-        
-        if len(lineup) != len(lineup_positions) or salary_sum > 60000:
+        # print('oo')
+        # print(lineup)
+        # print(len(lineup))
+        if len(lineup) != len(lineup_positions_to_fill) + len(existing_lineup) or salary_sum > 60000:
             # print("error, lineup is either over the salary cap or does not have the right number of players...")
             return None
         
@@ -95,6 +121,34 @@ class LineupOptimizerController:
 
         # print(f"error, not able to pick player for position in under {str(self.number_of_retries)} tries...")
         return None
+        
+    
+    def determine_stack_positions(self, existing_lineup, teams_to_stack, number_of_players_to_stack, lineup_positions):
+        count = 0
+        if len(teams_to_stack) < 1 or number_of_players_to_stack < 1:
+            return []
+
+        for position in existing_lineup:
+            if position["player"] and position["player"]["team"] in teams_to_stack:
+                count += 1
+
+        if count >= number_of_players_to_stack:
+            return []
+
+        
+    def get_positions_to_fill(self, existing_lineup: list, lineup_positions: list) -> list:
+        lineup_positions_copy = [i for i in lineup_positions]
+        print(lineup_positions_copy)
+        for position in existing_lineup:
+            print(position)
+            if position.get("player") and len(position.get("player").keys()) > 1:
+                lineup_positions_copy.remove(position["position"])
+
+        return lineup_positions_copy
+
+    
+    def remove_number_from_string(self, val: str) -> str:
+        return "".join(filter(lambda x: x.isalpha(), val))
 
 
     def create_weighted_cost_map(self, draftables: list, lineup_positions:list) -> dict:
@@ -114,7 +168,7 @@ class LineupOptimizerController:
 
     def positions_list_to_weighted_cost_map(self, positions_list: list) -> dict:
         positions = set(positions_list)
-        return { position: [] for position in positions if position != self.flex_position_label}
+        return { self.remove_number_from_string(position): [] for position in positions if position != self.flex_position_label}
 
 
     def choose_flex_position(self, eligible_flex_positions: list) -> list:
@@ -122,7 +176,7 @@ class LineupOptimizerController:
 
     
     def add_sort_order_to_lineup(self, lineup: dict) -> dict:
-        sorted_positions = ["qb", "rb1", "rb2", "wr1", "wr2", "wr3", "te", "flex", "dst"]
+        sorted_positions = ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
         for player in lineup:
             if player["position"] not in sorted_positions:
                 player["sort_index"] = 100

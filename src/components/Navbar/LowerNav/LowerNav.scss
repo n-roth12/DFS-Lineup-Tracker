@@ -3,6 +3,8 @@
 	width: 100%;
     display: flex;
     justify-content: center;
+    position: sticky;
+    top: 0px;
 
     .lower-nav-inner {
         max-width: 1200px;
@@ -38,3 +40,8 @@
         }
     }
 }
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+  }

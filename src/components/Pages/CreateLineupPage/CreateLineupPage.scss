@@ -4,6 +4,66 @@
 	flex-direction: column;
 	overflow: hidden;
 	margin-bottom: 80px;
+	.fixed-bottom-footer {
+		position: fixed;
+		bottom: 0;
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+		background-color: white;
+		box-shadow: var(--box-shadow-1);
+		// border-top: 1px solid var(--grey-3);
+		.lineup-btns {
+			width: 30%;
+			display: flex;
+			max-width: 400px;
+			flex-direction: row;
+			justify-content: flex-end;
+			margin-right: 30px;
+			button {
+				margin: 8px;
+			}
+			
+			.clear-btn {
+				color: red;
+				border: none;
+				background: none;
+				font-size: 13pt;
+				width: fit-content;
+				float: right;
+				flex: 1;
+				border: 1px solid var(--grey-2);
+				border-radius: 20px;
+			}
+			.clear-btn:hover {
+				background-color: var(--grey-3);
+			}
+			.revert-btn {
+				background-color: var(--grey-3);
+				padding: 6px;
+				flex: 1;
+				color: var(--btn-blue);
+				border: None;
+				background: None;
+				border: 1px solid var(--grey-2);
+				border-radius: 20px;
+			}
+			.revert-btn:hover {
+				background-color: var(--grey-3);
+			}
+			.save-btn {
+				padding: 8px 30px 8px 30px;
+				border-radius: 20px;
+				background-color: #ffdb2b;
+				font-size: 13pt;
+				font-weight: 500;
+				border: 1px solid var(--grey-2);
+			}
+			.save-btn:hover {
+				background-color: #ffcc00;
+			}
+		}
+	}
 	.loading-wrapper {
 		width: 100%;
 		min-height: 50vh;
@@ -99,51 +159,6 @@
 					.lineup-header-info:nth-child(2) {
 						text-align: right;
 					}
-				}
-			}
-
-			.lineup-btns {
-				width: 100%;
-				max-width: 450px;
-				display: flex;
-				flex-direction: row;
-				button {
-					margin: 8px;
-				}
-				
-				.clear-btn {
-					color: red;
-					border: none;
-					background: none;
-					font-size: 13pt;
-					width: fit-content;
-					float: right;
-					flex: 1;
-				}
-				.revert-btn {
-					// border: 1px solid var(--grey-1);
-					// background-color: var(--grey-3);
-					padding: 6px;
-					flex: 1;
-					color: var(--btn-blue);
-					border: None;
-					background: None;
-				}
-				// .revert-btn:hover {
-				// 	background-color: var(--grey-2);
-				// }
-				.save-btn {
-					padding: 6px;
-					border: none;
-					background-color: #ffdb2b;
-					flex: 3;
-					max-width: 400px;
-					font-size: 13pt;
-					font-weight: 500;
-					border: 1px solid var(--grey-2);
-				}
-				.save-btn:hover {
-					background-color: #ffcc00;
 				}
 			}
 		}
