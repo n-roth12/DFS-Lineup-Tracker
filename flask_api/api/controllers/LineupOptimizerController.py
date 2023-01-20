@@ -1,5 +1,4 @@
 import random
-
 class LineupOptimizerController:
 
     def __init__(self) -> None:

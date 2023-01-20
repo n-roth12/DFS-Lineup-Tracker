@@ -386,14 +386,20 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       <div className="header">
         {draftGroup &&
           <div className="header-inner">
-            <div className="header-label">
-              <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
-              <p className="date">{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}, Starts: {draftGroup["startTime"]}</p>
+            <div className='header-upper'>
+              <div className="header-label">
+                <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
+              </div>
+              <div className='header-options'>
+                <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
+                <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
+                <button className='generate-btn generate-btn-delete'>Delete</button>
+              </div>
             </div>
-            <div className='header-label'>
-              <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
-              <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
-              <button className='generate-btn generate-btn-delete'>Delete</button>
+            <div className='header-details'>
+              <p className="date">Slate: <strong>{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}</strong></p>
+              <p>{draftGroup["games"].length} Games</p>
+              <p>Start Time: <strong>{new Date(`${draftGroup["startTime"]}`).toDateString()}</strong></p>
             </div>
           </div>
         }

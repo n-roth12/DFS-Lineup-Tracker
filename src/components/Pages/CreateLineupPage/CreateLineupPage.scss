@@ -21,9 +21,8 @@
 			justify-content: flex-end;
 			display: flex;
 			margin-right: 30px;
-			button {
-				margin: 8px;
-			}
+			padding-top: 10px;
+			padding-bottom: 10px;
 			.clear-btn {
 				color: red;
 				border: none;
@@ -33,7 +32,10 @@
 				float: right;
 				border: 1px solid red;
 				border-radius: 8px;
-				padding: 8px 30px 8px 30px;
+				padding: 4px 20px 4px 20px;
+			}
+			button {
+				margin-left: 15px;
 			}
 			.clear-btn:hover {
 				// background-color: var(--grey-2);
@@ -46,13 +48,13 @@
 				background: None;
 				border: 1px solid var(--btn-blue);
 				border-radius: 8px;
-				padding: 8px 30px 8px 30px;
+				padding: 4px 20px 4px 20px;
 			}
 			.revert-btn:hover {
 				// background-color: var(--grey-2);
 			}
 			.save-btn {
-				padding: 8px 30px 8px 30px;
+				padding: 4px 20px 4px 20px;
 				border-radius: 8px;
 				background-color: #ffdb2b;
 				font-size: 13pt;
@@ -94,7 +96,7 @@
 				p {
 					margin: 0;
 					padding: 0;
-					font-size: 10pt;
+					font-size: 9pt;
 					font-weight: 500;
 				}
 			}
@@ -313,68 +315,68 @@
 	.header {
 		width: 100%;
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		box-shadow: var(--box-shadow-2);
-
 		.header-inner {
 			display: flex;
-			flex-direction: row;
-			padding: 5px;
+			flex-direction: column;
 			width: 80%;
-			justify-content: space-between;
-			.generate-btn {
-				border: None;
-				color: var(--btn-blue);
-				cursor: pointer;
-				background-color: white;
-				padding: 10px;
-				border-bottom: 2px solid transparent;
-				margin-right: 10px;
+			.header-details {
+				display: flex;
+				flex-direction: row;
+				padding: 0px 40px 10px 30px;
+				.date {
+					font-size: 11pt;
+					font-weight: 400;
+				}
+				p {
+					font-size: 11pt;
+					margin: 0px 30px 10px 0px;
+					font-weight: 400;
+				}
+				strong {
+					font-weight: 600;
+				}
 			}
-			.generate-btn-delete {
-				color: red;
+			.header-upper {
+				display: flex;
+				flex-direction: row;
+				padding: 5px;
+				width: 100%;
+				justify-content: space-between;
+				.header-options {
+					justify-content: flex-end;
+					.generate-btn {
+						border: None;
+						color: var(--btn-blue);
+						cursor: pointer;
+						background-color: white;
+						padding: 10px;
+						border-bottom: 2px solid transparent;
+						margin-right: 10px;
+					}
+					.generate-btn-delete {
+						color: red;
+					}
+					.generate-btn:hover {
+						border-bottom: 2px solid var(--btn-blue);
+					}
+					.generate-btn-delete:hover {
+						border-bottom: 2px solid red;
+					}
+				}
 			}
-			.generate-btn:hover {
-				border-bottom: 2px solid var(--btn-blue);
-			}
-			.generate-btn-delete:hover {
-				border-bottom: 2px solid red;
-			}
-			.header-label {
+			.header-label, .header-options {
 				display: flex;
 				flex-direction: row;
 				align-items: center;
 				height: 100%;
-				
 				.site {
 					font-size: 18pt;
 					font-weight: 600;
 					margin: 10px 30px 10px 30px;
-				}
-
-				.date {
-					font-size: 14pt;
-					margin: 10px 30px 10px 0px;
-					font-weight: 400;
-				}
-			}
-			
-			.header-options {
-				display: flex;
-				flex-direction: row;
-				width: 50%;
-
-				button {
-					font-size: 14pt;	
-					background-color: none;
-					background: none;
-					border: none;
-					margin: 15px 15px 0px 15px;
-					padding-bottom: 15px;
-				}
-
-				.active {
-					border-bottom: 3px solid black;
 				}
 			}
 		}
