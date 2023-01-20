@@ -9,3 +9,5 @@ flex_positions_dict = {
         "FLEX" : ["RB", "WR", "TE"]
     }
 }
+
+injured_status_list = ["IR", "O"]

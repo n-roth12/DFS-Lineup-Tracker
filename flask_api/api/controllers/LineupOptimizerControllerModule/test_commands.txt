@@ -1,0 +1,3 @@
+to run test file and show coverage data:
+    pipenv run coverage run -m unittest LineupTests.py LineupOptimizerTests.py
+    coverage report

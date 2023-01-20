@@ -10,10 +10,6 @@ class LineupOptimizerController:
         self.number_of_players_to_consider = 15
         self.injured_status_list = ["IR", "O"]
 
-# existing_lineup: [{"player": {...}, "position": "QB", sort_index: 0}, {"player": {...}, "position": RB1, sort_index: 1, {...}]
-# lineup_positions: ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
-# 
-
 
     def generate_optimized_lineup(self, existing_lineup: list, lineup_positions: list, eligible_flex_positions: list, 
         remainingSalaryCap: int, draftables: list) -> dict:
