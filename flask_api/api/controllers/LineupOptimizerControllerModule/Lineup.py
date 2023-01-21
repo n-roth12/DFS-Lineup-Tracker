@@ -1,20 +1,10 @@
-from LineupSlot import LineupSlot
-from allowed_positions import flex_positions_dict
-
+from ..LineupOptimizerControllerModule import allowed_positions
+# from allowed_positions import flex_positions_dict
 class Lineup:
 
-    def __init__(self, positions: list, players: list, site: str) -> None:
-        if len(players) > len(positions):
-            raise Exception("Cannot construct lineup: More players than lineup positions.")
-
-        self.lineup = {}
+    def __init__(self, lineup: dict,  site: str) -> None:
+        self.lineup = lineup
         self.site = site
-
-        for i in range(len(positions)):
-            if i < len(players) - 1:
-                self.lineup[positions[i]] = players[i]
-            else:
-                self.lineup[positions[i]] = {}
 
     def get_site(self):
         return self.site
@@ -66,7 +56,7 @@ class Lineup:
             self.lineup[lineup_slot] = player
 
     def is_position_eligible_for_slot(self, lineup_slot: str, position: str) -> bool:
-        if lineup_slot in list(flex_positions_dict.get(self.site).keys()):
-            return position in flex_positions_dict.get(self.site).get(lineup_slot)
+        if lineup_slot in list(allowed_positions.flex_positions_dict.get(self.site).keys()):
+            return position in allowed_positions.flex_positions_dict.get(self.site).get(lineup_slot)
         
         return "".join(filter(lambda x: x.isalpha(), lineup_slot)) == position

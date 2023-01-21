@@ -35,10 +35,31 @@ class TestLineupOptimizerMethods(unittest.TestCase):
                 player = optimizer.pick_player_of_position(position)
                 self.assertEqual(position, player.get("position"))
 
-    def test_generate_single_lineup(self):
+    def test_generate_single_lineup_no_empty_positions(self):
         optimizer = self.optimizer_with_empty_lineup()
-        lineup = optimizer.generate_single_lineup()
-        print(lineup.lineup)
+        for i in range(10):
+            lineup = optimizer.generate_single_lineup()
+            self.assertEqual(0, len(lineup.get_empty_slots()))
+
+    def test_exclude_flex_positions(self):
+        for i in range(10):
+            optimizer = self.optimizer_with_empty_lineup().with_flex_constraint(["TE", "RB"])
+            lineup = optimizer.generate_single_lineup()
+            self.assertEqual(lineup.lineup.get("FLEX").get("position"), "WR")
+        for i in range(10):
+            optimizer = self.optimizer_with_empty_lineup().with_flex_constraint(["WR"])
+            lineup = optimizer.generate_single_lineup()
+            self.assertNotEqual(lineup.lineup.get("FLEX").get("position"), "WR")
+
+    def test_replace_only_empty(self):
+        for i in range(10):
+            optimizer = self.optimizer_with_non_empty_lineup().with_replace_only_empty()
+            player1 = optimizer.lineup.lineup.get("WR2")
+            player2 = optimizer.lineup.lineup.get("RB1")
+            lineup = optimizer.generate_single_lineup()
+            self.assertDictEqual(player1, lineup.lineup.get("WR2"))
+            self.assertDictEqual(player2, lineup.lineup.get("RB1"))
+            self.assertEqual(0, len(lineup.get_empty_slots()))
 
     ##### HELPER METHODS ######
     def optimizer_with_empty_lineup(self):
@@ -46,6 +67,14 @@ class TestLineupOptimizerMethods(unittest.TestCase):
         empty_lineup = self.empty_draftkings_lineup()
         return LineupOptimizer(draftables=test_draftables, lineup=empty_lineup, \
             lineup_positions=self.get_all_draftkings_lineup_slots())
+
+    def optimizer_with_non_empty_lineup(self):
+        optimizer = self.optimizer_with_empty_lineup()
+        player1 = optimizer.pick_player_of_position("WR")
+        player2 = optimizer.pick_player_of_position("RB")
+        optimizer.lineup.add_player_at_position(lineup_slot="WR2", player=player1)
+        optimizer.lineup.add_player_at_position(lineup_slot="RB1", player=player2)
+        return optimizer
 
     def empty_draftkings_lineup(self):
         return Lineup(positions=self.get_all_draftkings_lineup_slots(), players=[], site="draftkings")

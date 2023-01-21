@@ -10,4 +10,10 @@ flex_positions_dict = {
     }
 }
 
+lineup_slots = {
+    "draftkings": ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"],
+    "fanduel": ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"],
+    "yahoo": ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
+}
+
 injured_status_list = ["IR", "O"]
