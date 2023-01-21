@@ -270,28 +270,30 @@ def generate_lineup_test():
 	stackTeams = data.get("stackTeams")
 	stackPlayerCount = data.get("gameStackPlayerCount")
 	puntPositions = data.get("puntPositions")
+	site = "draftkings"
 
 	existing_lineup_data = data.get("existingLineup")
 	if existing_lineup_data:
 		existing_lineup = {lineup_slot : existing_lineup_data.get(lineup_slot) if existing_lineup_data.get(lineup_slot) \
-			else {} for lineup_slot in allowed_positions.lineup_slots.get("draftkings")}
+			else {} for lineup_slot in allowed_positions.lineup_slots.get(site)}
 
 	replace_entire_lineup = data.get("replaceEntireLineup")
 	if replace_entire_lineup and replace_entire_lineup == True:
 		replace_entire_lineup = False
-		existing_lineup = {lineup_slot : {} for lineup_slot in allowed_positions.lineup_slots.get("draftkings")}
+		existing_lineup = {lineup_slot : {} for lineup_slot in allowed_positions.lineup_slots.get(site)}
 
 	excluded_flex_positions = data.get("excludedFlexPositions")
 
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId).get("draftables")
-	lineup_slots = allowed_positions.lineup_slots.get("draftkings")
+	lineup_slots = allowed_positions.lineup_slots.get(site)
+	salary_cap = allowed_positions.salary_caps.get(site)
 
-	lineup = Lineup(lineup=existing_lineup, site="draftkings")
-	optimizer = LineupOptimizer(lineup=lineup, draftables=draftables, lineup_positions=lineup_slots, \
+	lineup = Lineup(lineup=existing_lineup, site=site)
+	optimizer = LineupOptimizer(draftables=draftables, lineup_positions=lineup_slots, \
 		stack_number_of_players=stackPlayerCount, stack_teams=stackTeams, punt_positions=puntPositions, \
-		excluded_flex_positions=excluded_flex_positions)
+		excluded_flex_positions=excluded_flex_positions, salary_cap=salary_cap, site=site)
 
-	generated_lineup = optimizer.generate_single_lineup()
+	generated_lineup = optimizer.generate_optimized_lineup(lineup)
 	return jsonify(generated_lineup.lineup), 200
 
 
