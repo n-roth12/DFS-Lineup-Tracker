@@ -6,9 +6,12 @@ import requests
 from ..routes import token_required
 from ..models.user import User
 from ..controllers.RedisController import RedisController
+from ..controllers.MongoController import MongoController
 
 history_blueprint = Blueprint('history_blueprint', __name__, url_prefix='/history')
 RedisController = RedisController()
+MongoController = MongoController()
+
 
 @history_blueprint.route('/search/week', methods=['GET'])
 @token_required
@@ -99,3 +102,15 @@ def research_player(current_user: User):
 	year_data = res.json()
 
 	return jsonify(year_data), 200
+
+@history_blueprint.route('/draftGroups/test', methods=["POST"])
+def test_draftGroups():
+	data = json.loads(request.data)
+	draftGroupId = data.get("draftGroupId")
+	if not draftGroupId:
+		return jsonify({ "Error": "Missing draft group id" }), 400
+
+	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
+	print(draftables)
+
+	return jsonify({ "Message": "Success" }), 200

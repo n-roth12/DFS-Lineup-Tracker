@@ -5,9 +5,10 @@ import './LineupsTable.scss'
 import '../../../DefaultTable.scss'
 import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
+import { FaPlus } from 'react-icons/fa'
 
 
-const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups }) => {
+const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter }) => {
 
   const [currPage, setCurrPage] = useState(0)
   const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
@@ -61,27 +62,34 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
       	<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				  onClose={() => setShowCreateLineupDialog(false)} draftGroup={createLineupDialogContent} draftGroupLineups={dialogDraftGroupLineups} />
       <div className='lineups-table-wrapper-inner'>
-        <div className='header'></div>
-      <div className="pos-filter-wrapper">
-        <div>
-          <button 
-            className={`filter-btn${siteFilter.size < 1 ? "-active" : ""}`} 
-            onClick={() => setSiteFilter(new Set())}>All
-          </button>
-          <button 
-            className={`filter-btn${siteFilter.has("draftkings") ? "-active" : ""}`} 
-            onClick={() => changeFilter("draftkings")}>DraftKings
-          </button>
-          <button
-            className={`filter-btn${siteFilter.has("yahoo") ? "-active" : ""}`} 
-            onClick={() => changeFilter("yahoo")}>Yahoo
-          </button>
-          <button 
-            className={`filter-btn${siteFilter.has("fanduel") ? "-active" : ""}`} 
-            onClick={() => changeFilter("fanduel")}>Fanduel
-          </button>
+        <div className='table-header-wrapper'>
+          <div className="pos-filter-wrapper">
+            <div>
+              <button 
+                className={`filter-btn${siteFilter.size < 1 ? "-active" : ""}`} 
+                onClick={() => setSiteFilter(new Set())}>All
+              </button>
+              <button 
+                className={`filter-btn${siteFilter.has("draftkings") ? "-active" : ""}`} 
+                onClick={() => changeFilter("draftkings")}>DraftKings
+              </button>
+              <button
+                className={`filter-btn${siteFilter.has("yahoo") ? "-active" : ""}`} 
+                onClick={() => changeFilter("yahoo")}>Yahoo
+              </button>
+              <button 
+                className={`filter-btn${siteFilter.has("fanduel") ? "-active" : ""}`} 
+                onClick={() => changeFilter("fanduel")}>Fanduel
+              </button>
+            </div>
+          </div>
+          <div className='lineup-wrapper-header'>
+            {stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon'/></Link>}
+            {/* {selectedLineups.length > 0 &&
+              <button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete Lineups ({selectedLineups.length})</button>
+            } */}
+          </div>
         </div>
-      </div>
       <span className="page-btn-wrapper">
         <span className="page-label">{1 + (currPage * 20)} - {Math.min((currPage + 1) * 20, lineups.length)} of {lineups.length}</span>
         {currPage > 0 &&

@@ -137,12 +137,6 @@ const LineupsPage = () => {
 				<button onClick={() => setStateFilter("live")} className={`underline-btn${stateFilter === "live" ? " active" : ""}`}>Live</button>
 				<button onClick={() => setStateFilter("past")} className={`underline-btn${stateFilter === "past" ? " active" : ""}`}>History</button>
 			</div>
-			<div className='lineup-wrapper-header'>
-				{stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon'/></Link>}
-				{selectedLineups.length > 0 &&
-					<button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete Lineups ({selectedLineups.length})</button>
-				}
-			</div>
 		</div>
 		<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={() => setShowCreateLineupDialog(false)} draftGroup={dialogDraftGroup} draftGroupLineups={dialogDraftGroupLineups} />
@@ -161,6 +155,7 @@ const LineupsPage = () => {
 						<LineupsTable
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups} 
+							stateFilter={stateFilter}
 							lineups={lineups.filter(lineup => {
 								return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
 							})} /> 
@@ -173,6 +168,7 @@ const LineupsPage = () => {
 					<LineupsTable
 						selectedLineups={selectedLineups}
 						setSelectedLineups={setSelectedLineups}
+						stateFilter={stateFilter}
 						lineups={lineups.filter((lineup) => {
 							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
 								&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date())
@@ -185,6 +181,7 @@ const LineupsPage = () => {
 					<LineupsTable
 						selectedLineups={selectedLineups}
 						setSelectedLineups={setSelectedLineups}
+						stateFilter={stateFilter}
 						lineups={lineups.filter((lineup) => {
 							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
 						})}

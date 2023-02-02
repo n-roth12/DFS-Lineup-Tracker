@@ -13,7 +13,7 @@
   display: flex;
 }
 
-.back-btn:hover, {
+.back-btn:hover {
   color: #ffffff;
   border-bottom: 3px solid #ffffff;
 }

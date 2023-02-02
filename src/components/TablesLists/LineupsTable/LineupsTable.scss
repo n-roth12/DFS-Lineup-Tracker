@@ -8,12 +8,46 @@
 	.lineups-table-wrapper-inner {
 		width: 100%;
 		max-width: 1100px;
-		.pos-filter-wrapper {
-			margin-top: 10px;
-			.filter-btn, .filter-btn-active {
-				font-size: 11pt;
-				padding: 5px 10px 5px 10px;
+		.table-header-wrapper {
+			display: flex;
+			justify-content: space-between;
+			.lineup-wrapper-header {
+				width: 50%;
+				display: flex;
+				justify-content: right;
+				align-items: center;
+				.lineup-options-btn {
+					text-decoration: None;
+					background-color: var(--btn-blue);
+					color: white;
+					border: 1px solid var(--grey-1);
+					padding: 7px 13px 7px 15px;
+					border-radius: 20px;
+					transition: all 0.2s;
+					.icon {
+						height: 10px;
+					}
+				}
+				.lineup-options-btn:hover {
+					background-color: var(--btn-blue-2);
+				}
+				.lineup-delete-btn {
+					background-color: red;
+					text-decoration: None;
+					color: white;
+					border: 1px solid var(--grey-1);
+					margin: 6px;
+					padding: 8px;
+					border-radius: 10px;
+				}
+			}
+			.pos-filter-wrapper {
+				margin-top: 10px;
+				.filter-btn, .filter-btn-active {
+					font-size: 11pt;
+					padding: 5px 10px 5px 10px;
 
+				}
 			}
 		}
 		table {

@@ -21,24 +21,24 @@
 	.lineup-wrapper {
 		margin-top: 20px;
 		width: 100%;
-		max-width: 1100px;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
+		border-bottom: 2px solid var(--grey-4);
 		.filter-btn-wrapper {
-			width: 50%;
+			width: 100%;
 			justify-content: left;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
+			max-width: 1100px;
 			.underline-btn {
 				border: None;
 				background: none;
 				font-weight: 600;
 				font-size: 14pt;
 				color: black;
-				margin: 5px;
 				padding: 5px 15px 5px 15px;
 				border-bottom: 3px solid transparent;
 				transition: all 0.2s;
@@ -48,37 +48,6 @@
 			}
 			.active {
 				border-bottom: 3px solid var(--dark-blue);
-			}
-		}
-		.lineup-wrapper-header {
-			width: 50%;
-			display: flex;
-			justify-content: right;
-			align-items: center;
-			.lineup-options-btn {
-				text-decoration: None;
-				background-color: var(--btn-blue);
-				color: white;
-				border: 1px solid var(--grey-1);
-				margin: 6px;
-				padding: 7px 13px 7px 15px;
-				border-radius: 20px;
-				transition: all 0.3s;
-				.icon {
-					height: 10px;
-				}
-			}
-			.lineup-options-btn:hover {
-				background-color: var(--btn-blue-2);
-			}
-			.lineup-delete-btn {
-				background-color: red;
-				text-decoration: None;
-				color: white;
-				border: 1px solid var(--grey-1);
-				margin: 6px;
-				padding: 8px;
-				border-radius: 10px;
 			}
 		}
 	}
@@ -236,12 +205,6 @@
 
 .toggle-lineupform-btn:hover {
   color: #d3d3d3;
-}
-
-.lineup-wrapper {
-	max-width: 1100px;
-	display: flex;
-	flex-direction: column;
 }
 
 h3 {

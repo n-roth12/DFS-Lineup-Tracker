@@ -409,18 +409,6 @@ const CreateLineupPage = ({ setAlertMessage }) => {
           <div className='title'>
             <h2>Lineup</h2>
           </div>
-          <div className='lineup-header'>
-            <div className='lineup-header-info-wrapper'>
-              <div className='lineup-header-info'>
-                <p>Remaining Salary <strong>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</strong></p>
-                <p>Rem. Salary / Player <strong>{getRemainingSalaryPerPlayer()}</strong></p>
-              </div>
-              <div className='lineup-header-info'>
-                <p><strong>{teamProjectedPoints}</strong> Proj. Points</p>
-                <p><strong>90%</strong> Proj. Own Sum</p>
-              </div>
-            </div>
-          </div>
           <Lineup lineup={lineup} 
             onDelete={deleteFromLineup} 
             onAdd={editLineup}
@@ -529,6 +517,24 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         }
       </div>
       <div className='fixed-bottom-footer'>
+      <div className='header-details'>
+              <div className='info-block'>
+                <p>Remaining Salary</p>
+                <p><strong>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</strong></p>
+              </div>
+              <div className='info-block'>
+                <p>Rem. Salary / Player </p>
+                <p><strong>{getRemainingSalaryPerPlayer()}</strong></p>
+              </div>
+              <div className='info-block'>
+                <p>Proj. Points</p>
+                <p><strong>{teamProjectedPoints}</strong></p>
+              </div>
+              <div className='info-block'>
+                <p>Proj. Own Sum</p>
+                <p><strong>90%</strong></p>
+              </div>
+            </div>
         <div className='lineup-btns'>
           <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
           <button className='revert-btn' onClick={revertLineup}>Revert <GrRevert/></button>
