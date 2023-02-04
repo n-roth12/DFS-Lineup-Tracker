@@ -40,6 +40,7 @@ def login_user():
 	if attempted_user:
 		if bcrypt.check_password_hash(attempted_user["password_hash"], data["password"]):
 			token = jwt.encode({ 'public_id': attempted_user["public_id"] }, app.config['SECRET_KEY'], algorithm='HS256')
+			print(token)
 			return jsonify({ 'token': token })
 	else:
 		return jsonify({ 'Error': 'Unable to login.' }), 403
