@@ -27,6 +27,10 @@ class MongoController:
         user = self.users_collection.find_one({"username": username})
         return user
 
+    def getUserByPublicId(self, publicId):
+        user = self.users_collection.find_one({"public_id": publicId})
+        return user
+
     def createUser(self, data):
         self.users_collection.insert_one(data)
 

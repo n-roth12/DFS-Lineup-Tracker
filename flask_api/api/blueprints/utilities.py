@@ -4,6 +4,9 @@ import jwt
 
 from api import app, db
 from models.user import User
+from ..controllers.MongoController import MongoController
+
+mongoController = MongoController()
 
 def token_required(f):
 	"""
@@ -19,7 +22,7 @@ def token_required(f):
 			return jsonify({ 'Error': 'Token is missing.' }), 401
 		try:
 			data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
-			current_user = db.session.query(User).filter(User.public_id == data['public_id']).first()
+			current_user = mongoController.getUserByPublicId(data["public_id"])
 		except:
 			print('token invalid')
 			return jsonify({ 'Error': 'Token is invalid.' }), 401
