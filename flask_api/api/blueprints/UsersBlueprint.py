@@ -38,15 +38,6 @@ def login_user():
 	attempted_user = mongoController.getUserByUsername(data["username"])
 	return jsonify({ "user": attempted_user["username"] }), 200
 
-	# if attempted_user:
-	# 	if bcrypt.check_password_hash(attempted_user["password_hash"], data["password"]):
-	# 		token = jwt.encode({ 'public_id': attempted_user["public_id"] }, app.config['SECRET_KEY'], algorithm='HS256')
-	# 		print(token)
-	# 		return jsonify({ 'token': token })
-	# else:
-	# 	return jsonify({ 'Error': 'Unable to login.' }), 403
-
-
 @users_blueprint.route('/lineups', methods=['GET'])
 @token_required
 def get_user_lineups(current_user: User):
