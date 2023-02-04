@@ -2,7 +2,7 @@
   "name": "reactproject",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:5000",
+  "proxy": "http://ec2-54-183-154-236.us-west-1.compute.amazonaws.com",
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@reduxjs/toolkit": "^1.9.2",
@@ -32,7 +32,9 @@
     "start-backend": "npm run start-redis-server & npm run start-flask-api",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev-deploy": "aws s3 sync build/ s3://website-dfs-tracker",
+    "dev": "npm run build && npm run dev-deploy"
   },
   "eslintConfig": {
     "extends": [

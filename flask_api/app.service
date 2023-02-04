@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance for a dfs tracker flask api
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/DFS-Lineup-Tracker/flask_api
+ExecStart=/home/ubuntu/DFS-Lineup-Tracker/flask_api/venv/bin/gunicorn -b localhost:8000 app:app
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
+
+

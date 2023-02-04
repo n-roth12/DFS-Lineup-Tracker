@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import certifi
 from bson import json_util
 import datetime
+import json
 
 from api import app
 
@@ -15,10 +16,19 @@ class MongoController:
         self.projections_collection = self.db2["projections"]
         self.draftgroups_collection = self.db["draftGroups"]
         self.draftables_collection = self.db["draftables"]
+        self.db3 = self.client["Users"]
+        self.users_collection = self.db3["users"]
 
     def getLineupById(self, lineupId, userPublicId):
         lineup = self.lineups_collection.find_one({"lineupId": lineupId, "userPublicId": userPublicId})
         return lineup
+
+    def getUserByUsername(self, username):
+        user = self.users_collection.find_one({"username": username})
+        return user
+
+    def createUser(self, data):
+        self.users_collection.insert_one(data)
 
     def createLineup(self, data):	
         self.lineups_collection.insert_one(data)
