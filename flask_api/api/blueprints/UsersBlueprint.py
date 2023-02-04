@@ -1,12 +1,11 @@
 from flask import Blueprint, jsonify, request
-from api import db, app, bcrypt
+from api import app, bcrypt
 import json
 import jwt
 import uuid
 from bson import json_util
 
 from ..models.user import User
-from ..models.lineup import Lineup
 from ..routes import token_required
 from ..controllers.MongoController import MongoController
 
@@ -16,10 +15,8 @@ mongoController = MongoController()
 @users_blueprint.route('/register', methods=['POST'])
 def register_user():
 	data = json.loads(request.data)
-	print(data)
 
 	user = mongoController.getUserByUsername(data["username"])
-	print(user)
 	if user:
 		return jsonify({ 'Error': 'Username is already in use.' }), 409
 
@@ -37,10 +34,8 @@ def register_user():
 @users_blueprint.route('/login', methods=['POST'])
 def login_user():
 	data = json.loads(request.data)
-	print(data)
 
 	attempted_user = mongoController.getUserByUsername(data["username"])
-	print(attempted_user)
 
 	if attempted_user:
 		if bcrypt.check_password_hash(attempted_user["password_hash"], data["password"]):
