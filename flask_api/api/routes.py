@@ -69,37 +69,6 @@ def get_players():
 
 	return jsonify({ 'players': players }), 200
 
-
-@app.route('/players/<id>', methods=['DELETE'])
-def delete_player(id: int):
-	player = db.session.query(Player).filter(Player.id == id).first()
-	if not player:
-		return jsonify({ 'Error': 'No player found with specified id.' })
-	
-	db.session.delete(player)
-	db.session.commit()
-
-	return jsonify({ 'Message': 'Player successfully deleted!' })
-
-
-@app.route('/players/<id>', methods=['PUT'])
-def edit_player(id: int):
-	player = db.session.query(Player).filter(Player.id == id).first()
-	if not player:
-		return jsonify({ 'Error': 'No player with specified id.' })
-	
-	data = request.get_json()
-	if data["name"]:
-		player.name = data["name"]
-	if data["position"]:
-		player.position = data["position"]
-	if data["team"]:
-		player.team = data["team"]
-	db.session.commit()
-
-	return jsonify({ 'Message': 'Player information successfully updated!' })
-
-
 @app.route('/pos_points', methods=['POST'])
 @token_required
 def temp(current_user: User):
@@ -147,30 +116,6 @@ def get_lineup_data(lineup_id: int):
 	result = json.loads(lineup_data_from_cache)
 
 	return jsonify({ 'lineup_data': result }), 200
-
-# @app.route('/fetchDraftkingsData', methods=['POST'])
-# def get_data():
-# 	db = client['test_db']
-# 	collection = db['test_collection']
-
-# 	# mydict = { "name": "John", "position": "Justin Jefferson", "team": "Vikings" }
-# 	# x = collection.insert_one(mydict)
-# 	# print(x.inserted_id)
-
-# 	# mylist = [
-# 	# 	{ 
-# 	# 		"_id": 1, "name": "Dalvin Cook", "position": "RB", "team": "Vikings",
-# 	# 		"name": "Deebo Samuel", "position": "WR", "team": "49ers"
-# 	# 	}
-# 	# ]
-
-# 	# x = collection.insert_many(mylist)
-# 	# print(x.inserted_ids)
-
-# 	for x in collection.find():
-# 		print(x)
-
-# 	return 'test', 200
 
 
 @app.route('/nfl/teams', methods=['GET'])
