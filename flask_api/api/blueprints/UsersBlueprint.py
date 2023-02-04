@@ -36,7 +36,7 @@ def login_user():
 	data = json.loads(request.data)
 
 	attempted_user = mongoController.getUserByUsername(data["username"])
-	print("test++ ", attempted_user)
+	return jsonify({ "user": attempted_user["username"] }), 200
 
 	if attempted_user:
 		if bcrypt.check_password_hash(attempted_user["password_hash"], data["password"]):
