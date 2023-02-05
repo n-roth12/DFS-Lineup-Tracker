@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import './LoginPage.scss'
 import UpperNav from '../../Navbar/UpperNav/UpperNav'
+import LowerNav from '../../Navbar/LowerNav/LowerNav'
 
 const LoginPage = ({ setToken, setUserId }) => {
 
@@ -43,6 +44,7 @@ const LoginPage = ({ setToken, setUserId }) => {
 	return (
 		<>
 		<UpperNav />
+		<LowerNav />
 		<div className="login-page">
 			<div className="login-form-wrapper">
 				<h1>Login</h1>

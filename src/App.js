@@ -11,12 +11,13 @@ import ResearchPage from './components/Pages/ResearchPage/ResearchPage'
 import CreateLineupPage from './components/Pages/CreateLineupPage/CreateLineupPage'
 import PlayerPage from './components/Pages/PlayerPage/PlayerPage'
 import CompareLineupsPage from './components/Pages/CompareLineupsPage/CompareLineupsPage';
+import ProfilePage from './components/Pages/ProfilePage/ProfilePage';
+import FeedbackPage from './components/Pages/FeedbackPage/FeedbackPage';
 import Navbar from './components/Navbar/Navbar'
 import Footer from './components/Footer/Footer'
 import './App.css';
 import { FaAngleLeft } from 'react-icons/fa'
 import {ScrollToTop} from './ScrollToTop';
-
 function App() {
   
   const [alertMessage, setAlertMessage] = useState()
@@ -103,16 +104,14 @@ function App() {
 
             <Route path="upcoming" element={
               <>
-                {sessionStorage.dfsTrackerToken ?
+                <ScrollToTop />
+                sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
                       <UpcomingPage week={18} year={2021} />
                     </div>
                   </div>
-                : 
-                  <LoginPage setToken={setToken} />
-                }
               </>
             } />
 
@@ -164,16 +163,12 @@ function App() {
             <Route path="history" element={
               <>
                 <ScrollToTop/>
-                {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
                       <HistoryPage />
                     </div>
                   </div>
-                : 
-                  <LoginPage setToken={setToken} />
-                }
               </>
             } />
 
@@ -190,6 +185,30 @@ function App() {
                 : 
                   <LoginPage setToken={setToken} />
                 }
+              </>
+            } />
+
+            <Route path="feedback" element={
+              <>
+                <ScrollToTop />
+                <div className='page-wrapper'>
+                  <Navbar />
+                  <div className='page-wrapper-inner'>
+                    <FeedbackPage />
+                  </div>
+                </div>
+              </>
+            } />
+
+            <Route path="profile" element={
+              <>
+                <ScrollToTop />
+                <div className='page-wrapper'>
+                  <Navbar />
+                  <div className='page-wrapper-inner'>
+                    <ProfilePage />
+                  </div>
+                </div>
               </>
             } />
 

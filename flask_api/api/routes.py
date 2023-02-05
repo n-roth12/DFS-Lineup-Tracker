@@ -10,6 +10,7 @@ from sqlalchemy import func
 from pymongo import MongoClient
 import certifi
 from bson import json_util
+from .blueprints.utilities import token_required
 from .date_services import getCurrentWeek
 from .controllers.DraftKingsController import DraftKingsController
 from .controllers.RedisController import RedisController
@@ -23,35 +24,6 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0)
 RedisController = RedisController()
 MongoController = MongoController()
 YahooController = YahooController()
-
-# dynamodb = boto3.resource('dynamodb',
-#                           aws_access_key_id="anything",
-#                           aws_secret_access_key="anything",
-#                           region_name="us-west-2",
-#                           endpoint_url="http://localhost:8000")
-
-
-def token_required(f):
-	"""
-		Decorator for handling required json web tokens.
-	"""
-	@wraps(f)
-	def decorated(*args, **kwargs):
-		token = None
-		if 'x-access-token' in request.headers:
-			token = request.headers['x-access-token'].replace('"', '')
-		if not token:
-			print('no token')
-			return jsonify({ 'Error': 'Token is missing.' }), 401
-		try:
-			data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
-			current_user = MongoController.getUserByPublicId(data["public_id"])
-		except:
-			print('token invalid')
-			return jsonify({ 'Error': 'Token is invalid.' }), 401
-		return f(current_user, *args, **kwargs)
-	return decorated
-
 
 @app.route('/test', methods=['GET'])
 def get_test():

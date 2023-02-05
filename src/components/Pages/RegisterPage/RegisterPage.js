@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './RegisterPage.scss'
 import UpperNav from '../../Navbar/UpperNav/UpperNav'
+import LowerNav from '../../Navbar/LowerNav/LowerNav'
 
 const LandingPage = ({ setToken }) => {
 
@@ -43,6 +44,7 @@ const LandingPage = ({ setToken }) => {
 	return (
 		<>
 		<UpperNav />
+		<LowerNav />
 		<div className="register-page">
 			<div className="register-form-wrapper">
 				<h1>Register</h1>

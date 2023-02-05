@@ -20,13 +20,14 @@ def register_user():
 	if user:
 		return jsonify({ 'Error': 'Username is already in use.' }), 409
 
-	user_to_create = User(public_id=str(uuid.uuid4()), username=data['username'], password=data['password'])
+	public_id = str(uuid.uuid4())
+	password_hash = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
 	mongoController.createUser({
-		"public_id": user_to_create.public_id,
-		"username": user_to_create.username,
-		"password_hash": user_to_create.password_hash
+		"public_id": public_id,
+		"username": data["username"],
+		"password_hash": password_hash
 	})
-	token = jwt.encode({ 'public_id': user_to_create.public_id }, app.config['SECRET_KEY'], algorithm='HS256')
+	token = jwt.encode({ 'public_id': public_id }, app.config['SECRET_KEY'], algorithm='HS256')
 
 	return jsonify({ 'token': token }), 200
 
@@ -36,20 +37,34 @@ def login_user():
 	data = json.loads(request.data)
 
 	attempted_user = mongoController.getUserByUsername(data["username"])
-	return jsonify({ "user": attempted_user["username"] }), 200
+	if attempted_user:
+		if bcrypt.check_password_hash(attempted_user["password_hash"], data["password"]):
+			print(attempted_user["username"])
+			token = jwt.encode({ 'public_id': attempted_user["public_id"] }, app.config['SECRET_KEY'], algorithm='HS256')
+			return jsonify({ "token": token }), 200
+
+		return jsonify({"Error": "Incorrect password"}), 403
+
+	return jsonify({"Error": "User not found"}), 404
 
 @users_blueprint.route('/lineups', methods=['GET'])
 @token_required
-def get_user_lineups(current_user: User):
-	lineups = mongoController.get_user_lineups(current_user.public_id)
+def get_user_lineups(current_user):
+	lineups = mongoController.get_user_lineups(current_user["public_id"])
 
 	return jsonify(json.loads(json_util.dumps(lineups))), 200
 
 
 @users_blueprint.route('/lineups/draftGroup', methods=['GET'])
 @token_required
-def get_draftgroup_lineups(current_user: User):
+def get_draftgroup_lineups(current_user):
 	draftGroupId = request.args.get("draftGroup")
-	lineups = mongoController.getUserLineupsByDraftGroup(draftGroupId, current_user.public_id)
+	lineups = mongoController.getUserLineupsByDraftGroup(draftGroupId, current_user["public_id"])
 
 	return jsonify(json.loads(json_util.dumps(lineups))), 200
+
+@users_blueprint.route('/feedback', methods=["POST"])
+def submit_feedback():
+	data = json.loads(request.data)
+
+	return jsonify({ "feedback": data["feedback"] }), 200

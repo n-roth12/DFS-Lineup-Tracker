@@ -2,8 +2,6 @@
     display: flex;
     justify-content: center;
     background-color: var(--cool-grey-8);
-
-
     .upper-nav-inner {
         display: flex;
         flex-direction: row;
@@ -22,6 +20,9 @@
             font-size: 16pt;
         }
 
+    }
+    .profile-btns {
+        display: flex;
     }
     .logout-btn {
         cursor: pointer;

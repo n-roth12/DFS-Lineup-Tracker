@@ -47,9 +47,9 @@ LineupOptimizerController = LineupOptimizerController()
 
 @lineups_blueprint.route('/updateLineup', methods=['POST'])
 @token_required
-def create_lineup_new(current_user: User):
+def create_lineup_new(current_user):
 	data = json.loads(request.data)
-	data["userPublicId"] = current_user.public_id
+	data["userPublicId"] = current_user["public_id"]
 	data["lastUpdate"] = datetime.datetime.now()
 	
 	MongoController.updateLineup(data)
@@ -59,9 +59,9 @@ def create_lineup_new(current_user: User):
 
 @lineups_blueprint.route('/createEmptyLineup', methods=['POST'])
 @token_required
-def create_emptpy_lineup(current_user: User):
+def create_emptpy_lineup(current_user):
 	data = json.loads(request.data)
-	data["userPublicId"] = current_user.public_id
+	data["userPublicId"] = current_user["public_id"]
 	data["lineupId"] = str(uuid.uuid4()).replace("-", "").replace("%7D", "")
 	data["lastUpdate"] = datetime.datetime.now()
 	data["draftGroupId"] = str(data["draftGroupId"])
@@ -84,9 +84,9 @@ def create_emptpy_lineup(current_user: User):
 
 @lineups_blueprint.route('/delete', methods=['POST'])
 @token_required
-def delete_lineups(current_user: User):
+def delete_lineups(current_user):
 	lineup_ids = json.loads(request.data)["lineups"]
-	MongoController.batchDeleteLineups(current_user.public_id, lineup_ids)
+	MongoController.batchDeleteLineups(current_user["public_id"], lineup_ids)
 
 	return jsonify(lineup_ids), 200
 
@@ -136,7 +136,7 @@ def delete_lineups(current_user: User):
 
 @lineups_blueprint.route('/export', methods=['POST'])
 @token_required
-def export_lineups(current_user: User):
+def export_lineups(current_user):
 	data = json.loads(request.data)
 	
 	file = StringIO()
@@ -163,16 +163,16 @@ def export_lineups(current_user: User):
 
 @lineups_blueprint.route('/lineup', methods=['GET'])
 @token_required
-def get_singe_lineup(current_user: User):
+def get_singe_lineup(current_user):
 	lineupId = request.args.get("lineupId")
-	lineup = MongoController.getLineupById(lineupId, current_user.public_id)
+	lineup = MongoController.getLineupById(lineupId, current_user["public_id"])
 
 	return jsonify(json.loads(json_util.dumps(lineup))), 200
 
 
 @lineups_blueprint.route('/generate', methods=['POST'])
 @token_required
-def generate_lineup(current_user: User):
+def generate_lineup(current_user):
 	data = json.loads(request.data)
 	draftGroupId = data.get("draftGroupId")
 	gameStack = data.get("gameStack")
