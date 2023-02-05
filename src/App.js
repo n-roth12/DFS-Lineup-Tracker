@@ -105,13 +105,16 @@ function App() {
             <Route path="upcoming" element={
               <>
                 <ScrollToTop />
-                sessionStorage.dfsTrackerToken ?
+                {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar />
                     <div className="page-wrapper-inner"> 
                       <UpcomingPage week={18} year={2021} />
                     </div>
                   </div>
+                :
+                  <LoginPage setToken={setToken} />
+                }
               </>
             } />
 

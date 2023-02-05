@@ -2,13 +2,15 @@
     display: flex;
     justify-content: center;
     background-color: var(--cool-grey-8);
+    min-height: 50px;
+
     .upper-nav-inner {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        max-width: 1200px;;
+        max-width: 1200px;
 
         h1, h2 {
             margin-left: 20px;
@@ -18,19 +20,35 @@
 
         h1 {
             font-size: 16pt;
+            margin-top: auto;
+            margin-bottom: auto;
         }
-
     }
+
     .profile-btns {
         display: flex;
+        align-items: center;
     }
-    .logout-btn {
+    
+    .basic-menu {
+        width: 200px;
+        z-index: 110;
+        position: relative !important;
+    }
+
+    .user-icon-wrapper {
+        color: white;
+        border: 2px solid white;
+        border-radius: 50%;
+        padding: 6px;
         cursor: pointer;
-        font-size: 12pt;
-        margin: 0;
-        padding: 0;
+        display: flex;
     }
-    .logout-btn:hover {
-        color: var(--grey-2);
+
+    .logout-btn {
+        font-size: 12pt;
+        margin-top: auto;
+        margin-bottom: auto;
+        cursor: pointer;
     }
 }

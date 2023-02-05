@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, request, send_file, Response
-from api import app, db
 import json
 import uuid
 import redis
@@ -10,9 +9,7 @@ import datetime
 from bson import json_util
 import random
 
-from ..routes import token_required
-from ..models.user import User
-from ..models.lineup import Lineup, LineupSchema
+from .utilities import token_required
 from ..date_services import parseDate
 from ..controllers.MongoController import MongoController
 from ..controllers.LineupOptimizerController import LineupOptimizerController
@@ -24,25 +21,6 @@ lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineup
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 MongoController = MongoController()
 LineupOptimizerController = LineupOptimizerController()
-
-# @lineups_blueprint.route('/', defaults={'id': None}, methods=['GET'])
-# @app.route('/lineups/<id>', methods=['GET'])
-# @token_required
-# def get_lineup(current_user: User, id: int):
-# 	if not id:
-# 		lineups = db.session.query(Lineup).all()
-# 		if not len(lineups):
-# 			return jsonify({ 'Error': 'No lineups in database!' })
-
-# 		schema = LineupSchema(many=True)
-# 		return jsonify({ 'lineups': schema.dump(lineups) })
-
-# 	lineup = db.session.query(Lineup).filter(Lineup.id == id).first()
-# 	if not lineup:
-# 		return jsonify({ 'Error': 'No lineup with specified id.' })
-
-# 	l = LineupSchema().dump(lineup)
-# 	return jsonify(LineupSchema().dump(lineup))
 
 
 @lineups_blueprint.route('/updateLineup', methods=['POST'])

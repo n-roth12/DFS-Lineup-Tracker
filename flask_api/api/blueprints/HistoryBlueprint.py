@@ -3,8 +3,7 @@ from api import app
 import json
 import requests
 
-from ..routes import token_required
-from ..models.user import User
+from .utilities import token_required
 from ..controllers.RedisController import RedisController
 from ..controllers.MongoController import MongoController
 
@@ -14,8 +13,7 @@ MongoController = MongoController()
 
 
 @history_blueprint.route('/search/week', methods=['GET'])
-@token_required
-def research_search(current_user: User):
+def research_search():
 	year = request.args.get('year')
 	week = request.args.get('week')
 
@@ -44,8 +42,7 @@ def research_search(current_user: User):
 
 
 @history_blueprint.route('/search/year', methods=['GET'])
-@token_required
-def research_year(current_user: User):
+def research_year():
 	year = request.args.get('year')
 	if not year:
 		return jsonify({ 'Error': 'Year not specified.' }), 400
@@ -59,8 +56,7 @@ def research_year(current_user: User):
 
 
 @history_blueprint.route('/search/top_searches', methods=['GET'])
-@token_required
-def top_searches(current_user: User):
+def top_searches():
 	players = ['Jonathan Taylor', 
 		'Justin Jefferson', 
 		'Joe Mixon',
@@ -69,8 +65,7 @@ def top_searches(current_user: User):
 
 
 @history_blueprint.route('/player', methods=['GET'])
-@token_required
-def research_player(current_user: User):
+def research_player():
 	name = request.args.get('name')
 	year = request.args.get('year')
 	if not year:

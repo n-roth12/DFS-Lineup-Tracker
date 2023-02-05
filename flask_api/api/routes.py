@@ -1,11 +1,10 @@
-from api import app, db
+from api import app
 from flask import request, jsonify
 import json
 import requests
 import redis
 import jwt
 from functools import wraps
-from api.models.user import User
 from sqlalchemy import func
 from pymongo import MongoClient
 import certifi
@@ -43,7 +42,7 @@ def get_players():
 
 @app.route('/pos_points', methods=['POST'])
 @token_required
-def temp(current_user: User):
+def temp(current_user):
 	data = json.loads(request.data)
 	result = {'QB': 0, 'RB': 0, 'WR': 0, 'TE': 0, 'DST': 0}
 	for key, item in data.items():
@@ -57,7 +56,7 @@ def temp(current_user: User):
 
 @app.route('/teaminfo', methods=['GET'])
 @token_required
-def team_info(current_user: User):
+def team_info(current_user):
 	year = request.args.get('year')
 	week = request.args.get('week')
 	if not year or not week:
@@ -92,7 +91,7 @@ def get_lineup_data(lineup_id: int):
 
 @app.route('/nfl/teams', methods=['GET'])
 @token_required
-def nfl_teams(current_user: User):
+def nfl_teams(current_user):
 	teams_from_cache = redis_client.get('nfl_teams')
 	if teams_from_cache is None:
 		teams = requests.get(f'{app.config["FFB_API_URL"]}/api/nfl/teams').json()

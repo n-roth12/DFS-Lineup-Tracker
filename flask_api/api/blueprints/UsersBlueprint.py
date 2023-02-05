@@ -5,8 +5,7 @@ import jwt
 import uuid
 from bson import json_util
 
-from ..models.user import User
-from ..routes import token_required
+from .utilities import token_required
 from ..controllers.MongoController import MongoController
 
 users_blueprint = Blueprint('users_blueprint', __name__, url_prefix='/users')

@@ -7,8 +7,7 @@ from bson import json_util
 import redis
 import requests
 
-from ..routes import token_required
-from ..models.user import User
+from .utilities import token_required
 from ..ownership_service import OwnershipService
 from ..controllers.MongoController import MongoController
 from ..controllers.RedisController import RedisController
@@ -27,7 +26,7 @@ yahooController = YahooController()
 
 @upcoming_blueprint.route('/slates_new', methods=["GET"])
 @token_required
-def upcoming_slates(current_user: User):
+def upcoming_slates(current_user):
 	draft_groups = redisController.get_draft_groups()
 	if not draft_groups:
 		print("cache hit")
@@ -40,7 +39,7 @@ def upcoming_slates(current_user: User):
 
 @upcoming_blueprint.route('/draftGroup', methods=["GET"])
 @token_required
-def upcoming_draftGroups(current_user: User):
+def upcoming_draftGroups(current_user):
 	draftGroupId = request.args.get("draftGroup")
 	client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
 	db = client["DFSDatabase"]
@@ -52,7 +51,7 @@ def upcoming_draftGroups(current_user: User):
 
 @upcoming_blueprint.route('/games', methods=['GET'])
 @token_required
-def upcoming_games(current_user: User):
+def upcoming_games(current_user):
 	
 	key = f'games_week_year'
 	games_from_cache = redis_client.get(key)
@@ -71,7 +70,7 @@ def upcoming_games(current_user: User):
 
 @upcoming_blueprint.route('/players', methods=['GET'])
 @token_required
-def upcoming_players(current_user: User):
+def upcoming_players(current_user):
 	draft_group_id = request.args.get("draftGroup")
 	draftables = mongoController.getDraftablesByDraftGroupId(draft_group_id)
 	
@@ -80,7 +79,7 @@ def upcoming_players(current_user: User):
 
 @upcoming_blueprint.route('/ownership', methods=["GET"])
 @token_required
-def upcoming_projections(current_user: User):
+def upcoming_projections(current_user):
 	projections = ownershipService.getOwnershipProjections()
 
 	return jsonify(projections), 200
@@ -88,7 +87,7 @@ def upcoming_projections(current_user: User):
 
 @upcoming_blueprint.route('/slates', methods=['GET'])
 @token_required
-def get_slates(current_user: User):
+def get_slates(current_user):
 
 	key = f'current_slates'
 	slates_from_cache = redis_client.get(key)
@@ -111,7 +110,7 @@ def get_slates(current_user: User):
 
 @upcoming_blueprint.route('/draftables', methods=['GET'])
 @token_required
-def get_draftables(current_user: User):
+def get_draftables(current_user):
 	draftGroupId = request.args.get("draftGroupId")
 	if not draftGroupId:
 		return jsonify({ "Message": "error" }), 400
