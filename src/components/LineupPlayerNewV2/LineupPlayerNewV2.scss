@@ -1,15 +1,17 @@
 .lineupPlayerNewV2 {
 
     background-color: white;
-    border: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
+    border-left: 1px solid #d3d3d3;
+    border-right: 1px solid #d3d3d3;
     display: flex;
     flex-direction: row;
-    max-width: 450px;
+    width: 450px;
     height: 90px;
 
     .playerImage {
         align-self: center;
-        width: 45px;
+        width: 55px;
         display: flex;
         flex-direction: column;
         margin-right: 15px;
@@ -53,12 +55,12 @@
 
         .add-icon {
             color: var(--btn-blue);
-            font-size: 27pt;
+            font-size: 24pt;
             user-select: None;
         }
         .delete-icon {
             color: red;
-            font-size: 20pt;
+            font-size: 15pt;
             user-select: None;
         }
     }
@@ -90,7 +92,7 @@
     
                     .value {
                         font-size: 11pt;
-                        font-weight: 600;
+                        font-weight: 500;
                     }
     
                     .label {
@@ -105,7 +107,6 @@
             display: flex;
             height: 40%;
             cursor: pointer;
-            font-weight: 700;
     
             p {
                 height: 100%;

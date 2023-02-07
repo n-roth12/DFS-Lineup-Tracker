@@ -393,6 +393,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
               <div className='header-options'>
                 <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
                 <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
+                <button className='generate-btn'>Export</button>
                 <button className='generate-btn generate-btn-delete'>Delete</button>
               </div>
             </div>
@@ -503,7 +504,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
                       <td>{player.position}</td>
-                      <td className='name-col'><strong className='player-name' onClick={() => playerWrapper(player)}>{player.displayName}</strong> {player.status !== "" && `(${player.status})`}</td>
+                      <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
                       <td>{player["game"] ? player["opponent"]: ''}</td>
                       <td>{player["oprk"]}</td>

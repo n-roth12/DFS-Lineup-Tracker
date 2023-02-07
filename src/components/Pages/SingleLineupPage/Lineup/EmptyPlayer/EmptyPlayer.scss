@@ -8,7 +8,9 @@
     flex-direction: column;
     background-color: #ffffff;
     padding: 4px;
-    border: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
+    border-left: 1px solid #d3d3d3;
+    border-right: 1px solid #d3d3d3;
     flex-direction: row;
 
     .pos-label {
@@ -18,8 +20,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
-        h3 {}
     }
 
     .add-player-btn, .cancel-add-btn {
