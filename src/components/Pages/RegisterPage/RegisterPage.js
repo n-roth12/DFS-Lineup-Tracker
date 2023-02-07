@@ -4,6 +4,7 @@ import axios from 'axios'
 import './RegisterPage.scss'
 import UpperNav from '../../Navbar/UpperNav/UpperNav'
 import LowerNav from '../../Navbar/LowerNav/LowerNav'
+import { api_url } from '../../../Constants'
 
 const LandingPage = ({ setToken }) => {
 
@@ -16,7 +17,7 @@ const LandingPage = ({ setToken }) => {
 	const onSubmit = async () => {
 		if (password === passwordCheck) {
 			const params = {'username': username, 'password': password}
-			await axios.post('/users/register', params)
+			await axios.post(`${api_url}/users/register`, params)
 			.then((res) => {
 				setToken(res.data.token)
 	    		window.location.href = "/lineups";

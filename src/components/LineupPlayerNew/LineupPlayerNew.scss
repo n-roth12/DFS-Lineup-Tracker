@@ -97,10 +97,12 @@
             .add-icon {
                 color: var(--btn-blue);
                 font-size: 27pt;
+                user-select: None;
             }
             .delete-icon {
                 color: red;
-                font-size: 20pt
+                font-size: 20pt;
+                user-select: None;
             }
         }
 

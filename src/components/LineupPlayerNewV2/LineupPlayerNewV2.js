@@ -9,7 +9,6 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
     <div>
       <div className={`player lineupPlayerNewV2 ${beingEdited ? 'selected': ''}`}>
         <div className='playerImage'>
-            <img src={player["playerImageLarge"]} />
             <p>{position.toUpperCase()}</p>
         </div>
         <div className='name-and-info'>

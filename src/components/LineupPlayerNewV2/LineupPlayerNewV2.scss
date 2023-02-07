@@ -5,29 +5,22 @@
     display: flex;
     flex-direction: row;
     max-width: 450px;
+    height: 90px;
 
     .playerImage {
         align-self: center;
-        // height: 100%;
-        height: 69px;
+        width: 45px;
         display: flex;
         flex-direction: column;
         margin-right: 15px;
         padding-top: 5px;
 
         p {
-            padding: 0;
-            margin: 0;
-            height: 35px;
+            margin-left: 10px;
+            margin-top: auto;
+            margin-bottom: auto;
             text-align: center;
-            font-weight: 500;
-            background-color: var(--grey-2);
-        }
-
-        img {
-            // max-height: 100%;
-            // height: 80%;
-            height: 57px;
+            font-weight: 600;
         }
     }
 
@@ -56,14 +49,17 @@
         cursor: pointer;
         margin: 0;
         width: 60px;
+        user-select: None;
 
         .add-icon {
             color: var(--btn-blue);
             font-size: 27pt;
+            user-select: None;
         }
         .delete-icon {
             color: red;
-            font-size: 20pt
+            font-size: 20pt;
+            user-select: None;
         }
     }
 
@@ -78,7 +74,7 @@
             flex-direction: row;
             justify-content: space-around;
             width: 100%;
-            height: 50%;
+            height: 60%;
     
             .infoBlock {
                 flex: 1;
@@ -107,7 +103,7 @@
 
         .playerName {
             display: flex;
-            height: 50%;
+            height: 40%;
             cursor: pointer;
             font-weight: 700;
     
@@ -115,7 +111,7 @@
                 height: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                justify-content: flex-end;
                 font-size: 12pt;
                 color: blue;
                 font-weight: 500;

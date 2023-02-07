@@ -7,18 +7,19 @@ import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { FaPlus } from 'react-icons/fa'
 
-
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter }) => {
 
+  const [lineupsPerPage, setLineupsPerPage] = useState(50)
   const [currPage, setCurrPage] = useState(0)
+  const [numPages, setNumPages] = useState(Math.ceil(lineups.length / lineupsPerPage))
   const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
 	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
   const [siteFilter, setSiteFilter] = useState(new Set())
 
   const nextPage = () => {
-    if ((currPage + 1) * 20 >= lineups.length) return
-    setCurrPage(currPage + 1)
+    if ((currPage + 1) * lineupsPerPage >= lineups.length) return
+      setCurrPage(currPage + 1)
   }
 
   const prevPage = () => {
@@ -59,8 +60,8 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
 
   return (
     <div className='lineups-table-wrapper'>
-      	<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
-				  onClose={() => setShowCreateLineupDialog(false)} draftGroup={createLineupDialogContent} draftGroupLineups={dialogDraftGroupLineups} />
+      <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
+        onClose={() => setShowCreateLineupDialog(false)} draftGroup={createLineupDialogContent} draftGroupLineups={dialogDraftGroupLineups} />
       <div className='lineups-table-wrapper-inner'>
         <div className='table-header-wrapper'>
           <div className="pos-filter-wrapper">
@@ -90,19 +91,13 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             } */}
           </div>
         </div>
-      <span className="page-btn-wrapper">
-        <span className="page-label">{1 + (currPage * 20)} - {Math.min((currPage + 1) * 20, lineups.length)} of {lineups.length}</span>
-        {currPage > 0 &&
-          <>
-            <span className="view-lineup-btn" onClick={prevPage}> <FaAngleLeft /> Prev </span>
-          </>
-        }
-        {(currPage + 1) * 20 < lineups.length &&
-          <>
-            <span className="view-lineup-btn" onClick={nextPage}> Next <FaAngleRight /></span>
-          </>
-        }
-      </span>
+        <span className='page-btn-wrapper'>
+          <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>
+          {[...Array(numPages)].map((x, i) => 
+            <span className={currPage === i ? 'page-btn-active' : 'page-btn'} onClick={() => setCurrPage(i)}>{i + 1}</span>
+          )}
+          <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
+        </span>
       <table className="lineups-table">
         <thead>
           <tr>
@@ -115,35 +110,32 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             <th>Proj. Pts</th>
           </tr>
         </thead>
-        <tbody>
-          {lineups.length > 0 && lineups.filter((lineup) => siteFilter.size < 1 || siteFilter.has(lineup["site"])).slice((currPage * 20), 20 + ((currPage) * 20)).map((lineup) => 
-            <>
-              <tr>
-                <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
-                <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`}
-                  className="view-lineup-btn">Edit<FaAngleRight/></Link></td>
-                <td>{capitalize(lineup["site"])}</td>
-                <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</td>
-                <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
-                <td>${lineup["salary"] ? lineup["salary"] : 0}{lineup["salaryCap"] ? ` / ${lineup["salaryCap"]}` : ""}</td>
-                <td>{lineup["projected-points"] ? lineup["projected-points"] : 0} Pts</td>
-              </tr>
-            </>
-          )}
-        </tbody>
+        {lineups.length > 0 &&
+          <tbody>
+            {lineups.filter((lineup) => siteFilter.size < 1 || siteFilter.has(lineup["site"])).slice((currPage * lineupsPerPage), lineupsPerPage + ((currPage) * lineupsPerPage)).map((lineup) => 
+              <>
+                <tr>
+                  <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
+                  <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`}
+                    className="view-lineup-btn">Edit</Link></td>
+                  <td>{capitalize(lineup["site"])}</td>
+                  <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</td>
+                  <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
+                  <td>${lineup["salary"] ? lineup["salary"] : 0}{lineup["salaryCap"] ? ` / ${lineup["salaryCap"]}` : ""}</td>
+                  <td>{lineup["projectedPoints"] ? lineup["projectedPoints"] : 0}</td>
+                </tr>
+              </>
+            )
+          }
+          </tbody>
+        }
       </table>
-      <span className="page-btn-wrapper">
-        <span className="page-label">{1 + (currPage * 20)} - {Math.min((currPage + 1) * 20, lineups.length)} of {lineups.length}</span>
-        {currPage > 0 &&
-          <>
-            <span className="view-lineup-btn" onClick={prevPage}> <FaAngleLeft /> Prev </span>
-          </>
-        }
-        {(currPage + 1) * 20 < lineups.length &&
-          <>
-            <span className="view-lineup-btn" onClick={nextPage}> Next <FaAngleRight /></span>
-          </>
-        }
+      <span className='page-btn-wrapper'>
+        <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>
+        {[...Array(numPages)].map((x, i) => 
+          <span className={currPage === i ? 'page-btn-active' : 'page-btn'} onClick={() => setCurrPage(i)}>{i + 1}</span>
+        )}
+        <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
       </span>
       </div>
     </div>

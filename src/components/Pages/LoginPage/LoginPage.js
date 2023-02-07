@@ -5,6 +5,7 @@ import axios from 'axios'
 import './LoginPage.scss'
 import UpperNav from '../../Navbar/UpperNav/UpperNav'
 import LowerNav from '../../Navbar/LowerNav/LowerNav'
+import { api_url } from '../../../Constants'
 
 const LoginPage = ({ setToken, setUserId }) => {
 
@@ -13,8 +14,12 @@ const LoginPage = ({ setToken, setUserId }) => {
 	const [alert, setAlert] = useState('')
 	const [showPassword, setShowPassword] = useState(false)
 
+	useEffect(() => {
+		console.log(api_url)
+	}, [])
+
 	const loginUser = async (credentials) => {
-		await axios.post('/users/login', credentials)
+		await axios.post(`${api_url}/users/login`, credentials)
 		.then((res) => {
 			if (res.status === 200) {
 				setToken(res.data.token)

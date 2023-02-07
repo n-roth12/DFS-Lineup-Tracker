@@ -9,6 +9,7 @@ import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDia
 import { Roller } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus, FaUpload, FaFileImport } from 'react-icons/fa'
 import { BiImport } from 'react-icons/bi'
+import { api_url } from '../../../Constants';
 
 const LineupsPage = () => {
 
@@ -34,7 +35,7 @@ const LineupsPage = () => {
   }
 
   const getUserLineups = async () => {
-	const res = await fetch(`/users/lineups`, {
+	const res = await fetch(`${api_url}/users/lineups`, {
 		method: 'GET',
 		headers: {
 		  'x-access-token': sessionStorage.dfsTrackerToken
@@ -62,7 +63,7 @@ const LineupsPage = () => {
     const onFileUpload = async () => {
         var data = new FormData()
         data.append("myFile", selectedFile, selectedFile.name)
-        const res = await fetch('/lineups/upload', {
+        const res = await fetch(`${api_url}/lineups/upload`, {
             method: 'POST',
             headers: {
                 'x-access-token': sessionStorage.dfsTrackerToken
@@ -84,7 +85,7 @@ const LineupsPage = () => {
 
 	const deleteSelectedLineups = async (lineupsToDelete) => {
 		console.log(lineupsToDelete)
-		const res = await fetch('/lineups/delete', {
+		const res = await fetch(`${api_url}/lineups/delete`, {
 			method: 'POST',
 			headers: {
 				'x-access-token': sessionStorage.dfsTrackerToken
@@ -109,7 +110,7 @@ const LineupsPage = () => {
 			alert("New lineup year, week, bet, and winnings must be numbers!")
 		}
 		else {
-	  	const res = await fetch(`/lineups`, {
+	  	const res = await fetch(`${api_url}/lineups`, {
 	  		method: 'POST',
 	  		headers: {
 	  			'x-access-token': sessionStorage.dfsTrackerToken
@@ -141,7 +142,7 @@ const LineupsPage = () => {
 		<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={() => setShowCreateLineupDialog(false)} draftGroup={dialogDraftGroup} draftGroupLineups={dialogDraftGroupLineups} />
   		{!loadingLineups && lineups ?
-  			<>
+  			<div className='container'>
 				<ImportLineupsDialog showImportDialog={showImportDialog} onClose={closeImportDialog} />
 
 				<DeleteLineupsDialog showDeleteLineupsDialog={showDeleteLineupsDialog} 
@@ -151,7 +152,6 @@ const LineupsPage = () => {
 				{stateFilter === "past" &&
 				<>
 					<div className='lineups-title'><h2>Past Lineups</h2></div>
-					<div className="lineups-wrapper container">
 						<LineupsTable
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups} 
@@ -159,7 +159,6 @@ const LineupsPage = () => {
 							lineups={lineups.filter(lineup => {
 								return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
 							})} /> 
-					</div>
 				</>
 				}
 				{stateFilter === "live" &&
@@ -188,7 +187,7 @@ const LineupsPage = () => {
 					/>
 				</>
 				}
-		  	</> 
+		  	</div> 
 		: 
 		 	<div className="loading-screen">
 		 		<h3><Roller />Loading lineups</h3>

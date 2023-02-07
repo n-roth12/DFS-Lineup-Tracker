@@ -124,7 +124,10 @@ a {
 }
 
 .filter-btn-active {
-  border: 1px solid #0069ed;
+  border-left: 1px solid #0069ed;
+  border-top: 1px solid #0069ed;
+  border-bottom: 1px solid #0069ed;
+  border-right: None;
   background-color: #0069ed;
   color: #ffffff;
   padding: 5px;
@@ -132,11 +135,21 @@ a {
 }
 
 .filter-btn {
-  border: 1px solid #0069ed;
+  border-left: 1px solid var(--blue-grey-5);
+  border-top: 1px solid var(--blue-grey-5);
+  border-bottom: 1px solid var(--blue-grey-5);
+  border-right: None;
   color: #0069ed;
   background-color: #ffffff;
   padding: 5px;
   font-size: 13pt;
+}
+.pos-filter-wrapper div :first-child {
+  border-radius: 5px 0px 0px 5px;
+}
+.pos-filter-wrapper div :last-child {
+  border-right: 1px solid var(--blue-grey-5);
+  border-radius: 0px 5px 5px 0px;
 }
 
 .delete-lineup-link {

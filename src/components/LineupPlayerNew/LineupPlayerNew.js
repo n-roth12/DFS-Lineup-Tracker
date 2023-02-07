@@ -19,9 +19,6 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
   return (
     <div>
       <div className={`lineupPlayerNew player ${beingEdited ? 'selected': ''}`}>
-        <div className='playerImage'>
-          <img src={player["playerImage160"]} />
-        </div>
         <div className='positionAndNumber'>
           <div className='playerPosition'>{player["position"]}</div>
           <div className='playerNumber'>{player["teamAbbreviation"]}</div>

@@ -52,6 +52,14 @@
 		}
 		table {
 			margin-top: 0px;
+			thead th {
+				font-size: 10pt;
+				text-align: left;
+			}
+			tbody td {
+				text-align: left;
+				font-size: 9pt;
+			}
 		}
 	}
 
@@ -61,12 +69,57 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-end;
+		margin-bottom: 5px;
+		margin-top: 5px;
+
+		.page-btn {
+			color: var(--btn-blue);
+			border: 1px solid var(--blue-grey-4);
+			margin-right: 5px;
+			padding: 0px 7px 0px 7px;
+			border-radius: 3px;
+			cursor: pointer;
+			user-select: None;
+		}
+
+		.page-btn-active {
+			background-color: var(--btn-blue);
+			color: white;
+			margin-right: 5px;
+			padding: 0px 7px 0px 7px;
+			border-radius: 3px;
+			border: 1px solid var(--btn-blue);
+			user-select: None;
+		}
+
+		.page-arrow {
+			color: var(--blue-grey-4);
+			border: 1px solid var(--blue-grey-4);
+			margin-right: 5px;
+			padding: 0px 4px 0px 4px;
+			border-radius: 3px;
+			user-select: None;
+		}
+
+		.page-arrow-active {
+			color: var(--btn-blue);
+			border: 1px solid var(--blue-grey-4);
+			margin-right: 5px;
+			padding: 0px 4px 0px 4px;
+			border-radius: 3px;
+			user-select: None;
+			cursor: pointer;
+
+		}
 
 		.page-label {
 			margin-right: 20px;
 		}
 	}
 	input {
-		margin: 0;
+		height: 100%;
+		width: 100%;
+		margin: auto;
+		
 	}
 }

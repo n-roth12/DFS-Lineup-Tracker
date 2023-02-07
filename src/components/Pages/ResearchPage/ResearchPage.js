@@ -1,5 +1,6 @@
 import './ResearchPage.scss'
 import { useState, useEffect } from 'react'
+import { api_url } from '../../../Constants'
 
 const ResearchPage = () => {
 	const [lineupsCount, setLineupsCount] = useState()
@@ -10,9 +11,8 @@ const ResearchPage = () => {
 		getStats()
 	}, [])
 
-
   const getStats = async () => {
-  	const res1 = await fetch(`/research/lineups/count`, {
+  	const res1 = await fetch(`${api_url}/research/lineups/count`, {
   		method: "GET",
   		headers: {
   			"x-access-token": sessionStorage.dfsTrackerToken
@@ -24,7 +24,7 @@ const ResearchPage = () => {
   			"x-access-token": sessionStorage.dfsTrackerToken
   		}
   	})
-  	const res3 = await fetch(`/research/lineups/highest`, {
+  	const res3 = await fetch(`${api_url}/research/lineups/highest`, {
   		method: "GET",
   		headers: {
   			"x-access-token": sessionStorage.dfsTrackerToken
