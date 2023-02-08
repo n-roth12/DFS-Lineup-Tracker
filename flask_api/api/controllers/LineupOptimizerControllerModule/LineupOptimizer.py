@@ -1,7 +1,11 @@
-from ..LineupOptimizerControllerModule import allowed_positions
-from ..LineupOptimizerControllerModule.Lineup import Lineup
-# from allowed_positions import flex_positions_dict, injured_status_list
-# from Lineup import Lineup
+# imports for use with api
+# from ..LineupOptimizerControllerModule import allowed_positions
+# from ..LineupOptimizerControllerModule.Lineup import Lineup
+
+# imports for use with unit tests
+import allowed_positions
+from Lineup import Lineup
+
 from random import randint
 from copy import deepcopy
 

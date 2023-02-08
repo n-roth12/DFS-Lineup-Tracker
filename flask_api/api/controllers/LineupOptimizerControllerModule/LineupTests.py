@@ -63,14 +63,19 @@ class TestLineupMethods(unittest.TestCase):
         empty_draftkings_lineup = self.empty_draftkings_lineup()
         self.assertFalse(empty_draftkings_lineup.is_position_eligible_for_slot(position="WR", lineup_slot="RB"))
 
+    def test_create_lineup_from_positions(self):
+        lineup = self.empty_draftkings_lineup()
+        self.assertDictEqual(lineup.lineup, {"QB": {}, "RB1": {}, "RB2": {}, "WR1": {}, "WR2": {}, "WR3": {}, "TE": {}, "FLEX": {}, "DST": {}})
+
 
     ##### HELPER METHODS ######
 
     def empty_draftkings_lineup(self):
-        return Lineup(positions=self.get_all_draftkings_lineup_slots(), players=[], site="draftkings")
+        return Lineup.create_lineup_with_positions(self.get_all_draftkings_lineup_slots(), "draftkings")
 
     def get_all_draftkings_lineup_slots(self):
         return ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
+
 
 if __name__ == "__main__":
     unittest.main()

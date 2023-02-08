@@ -1,5 +1,9 @@
-from ..LineupOptimizerControllerModule import allowed_positions
-# from allowed_positions import flex_positions_dict
+# for use with api
+# from ..LineupOptimizerControllerModule import allowed_positions
+
+# for use with unit tests
+import  allowed_positions
+
 class Lineup:
 
     def __init__(self, lineup: dict,  site: str) -> None:
@@ -7,6 +11,10 @@ class Lineup:
         self.player_ids = self.get_player_ids()
         self.site = site
         self.allows_duplicates = False
+
+    def create_lineup_with_positions(positions: list, site: str) -> None:
+        lineup = {position : {} for position in positions}
+        return Lineup(lineup=lineup, site=site)
 
     def get_site(self):
         return self.site
