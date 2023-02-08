@@ -66,9 +66,10 @@ class Lineup:
             return False
         if self.is_position_eligible_for_slot(lineup_slot=lineup_slot, position=player.get("position")):
             self.lineup[lineup_slot] = player
-        self.player_ids.append(player.get("playerSiteId"))
-        return True
-
+            self.player_ids.append(player.get("playerSiteId"))
+            return True
+        return False
+        
     def is_position_eligible_for_slot(self, lineup_slot: str, position: str) -> bool:
         if lineup_slot in list(allowed_positions.flex_positions_dict.get(self.site).keys()):
             return position in allowed_positions.flex_positions_dict.get(self.site).get(lineup_slot)

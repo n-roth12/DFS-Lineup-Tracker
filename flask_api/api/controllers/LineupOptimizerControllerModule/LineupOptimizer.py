@@ -64,6 +64,7 @@ class LineupOptimizer:
     
     def generate_single_lineup(self, lineup: Lineup) -> Lineup:
         lineup_copy = deepcopy(lineup)
+        # lineup_copy = Lineup()
         empty_slots = lineup_copy.get_empty_slots()
         if len(empty_slots) < 1:
             return lineup_copy
@@ -76,9 +77,13 @@ class LineupOptimizer:
             else:
                 position = "".join(filter(lambda x: x.isalpha(), lineup_slot))
 
-            for i in range(self.number_of_retries):
+            count = 0
+            player_found = False
+            while player_found == False and count < self.number_of_retries:
                 player_to_add = self.pick_player_of_position(position)
                 success = lineup_copy.add_player_at_position(player=player_to_add, lineup_slot=lineup_slot)
+                if success:
+                    player_found = True
 
         return lineup_copy
 

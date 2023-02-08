@@ -47,6 +47,10 @@ class TestLineupMethods(unittest.TestCase):
         empty_draftkings_lineup = self.empty_draftkings_lineup()
         self.assertTrue(empty_draftkings_lineup.is_position_eligible_for_slot(position="TE", lineup_slot="FLEX"))
 
+    def test_position_eligible_for_slot_returns_true(self):
+        empty_draftkings_lineup = self.empty_draftkings_lineup()
+        self.assertTrue(empty_draftkings_lineup.is_position_eligible_for_slot(position="WR", lineup_slot="FLEX"))
+
     def test_position_eligible_for_slot_returns_false(self):
         empty_draftkings_lineup = self.empty_draftkings_lineup()
         self.assertFalse(empty_draftkings_lineup.is_position_eligible_for_slot(position="QB", lineup_slot="FLEX"))

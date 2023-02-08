@@ -4,6 +4,8 @@ from LineupOptimizer import LineupOptimizer
 from test_draftables import test_draftables
 
 class TestLineupOptimizerMethods(unittest.TestCase):
+
+    DRAFTKINGS_LINEUP_SLOTS = ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
     
     ###### UNIT TESTS ######
         
@@ -29,17 +31,17 @@ class TestLineupOptimizerMethods(unittest.TestCase):
             lineup = optimizer.generate_single_lineup(lineup=self.empty_draftkings_lineup())
             self.assertEqual(0, len(lineup.get_empty_slots()))
 
-    def test_exclude_flex_positions(self):
-        optimizer = LineupOptimizer(draftables=test_draftables, lineup_positions=self.get_all_draftkings_lineup_slots, \
-            salary_cap=50000, excluded_flex_positions=["TE", "RB"])        
+    def test_exclude_flex_positions(self):   
         for i in range(10):
+            optimizer = LineupOptimizer(draftables=test_draftables, lineup_positions=self.get_all_draftkings_lineup_slots(), \
+                salary_cap=50000, excluded_flex_positions=["TE", "RB"], site="draftkings")
             lineup = optimizer.generate_single_lineup(self.empty_draftkings_lineup())
             self.assertEqual(lineup.lineup.get("FLEX").get("position"), "WR")
         
-        optimizer = LineupOptimizer(draftables=test_draftables, lineup_positions=self.get_all_draftkings_lineup_slots, \
-            salary_cap=50000, excluded_flex_positions=["WR"])
         for i in range(10):
-            lineup = optimizer.generate_single_lineup()
+            optimizer = LineupOptimizer(draftables=test_draftables, lineup_positions=self.get_all_draftkings_lineup_slots(), \
+                salary_cap=50000, excluded_flex_positions=["WR"], site="draftkings")
+            lineup = optimizer.generate_single_lineup(self.empty_draftkings_lineup())
             self.assertNotEqual(lineup.lineup.get("FLEX").get("position"), "WR")
 
     def test_replace_only_empty(self):
@@ -64,13 +66,15 @@ class TestLineupOptimizerMethods(unittest.TestCase):
         player1 = optimizer.pick_player_of_position("WR")
         player2 = optimizer.pick_player_of_position("RB")
         lineup = self.empty_draftkings_lineup()
-        lineup.add_player_at_position(lineup_slot="WR1", player=player1)
+        lineup.add_player_at_position(lineup_slot="WR2", player=player1)
         lineup.add_player_at_position(lineup_slot="RB1", player=player2)
 
         return lineup
 
     def empty_draftkings_lineup(self):
-        return Lineup.create_lineup_with_positions(positions=self.get_all_draftkings_lineup_slots(), site="draftkings")
+        lineup = Lineup.create_lineup_with_positions(positions=self.get_all_draftkings_lineup_slots(), site="draftkings")
+        self.assertEqual(0, len(lineup.player_ids))
+        return lineup
 
     def get_all_draftkings_lineup_slots(self):
         return ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
