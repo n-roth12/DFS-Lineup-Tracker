@@ -85,3 +85,6 @@ class MongoController:
 
     def deleteAllDraftables(self):
         self.draftables_collection.delete_many({})
+
+    def get_draft_groups_by_time_range(self, start_time, end_time):
+        return 

@@ -373,7 +373,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
 				  onClose={() => setShowCreateLineupDialog(false)} 
           draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
       }
-      {
+      {draftGroup !== null &&
         <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog} 
           onClose={() => setShowGenerateLineupDialog(false)} 
           draftGroupId={draftGroupId}
