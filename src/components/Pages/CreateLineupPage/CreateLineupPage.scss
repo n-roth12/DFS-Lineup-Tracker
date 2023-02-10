@@ -69,9 +69,6 @@
 				border-radius: 8px;
 				padding: 4px 20px 4px 20px;
 			}
-			.revert-btn:hover {
-				// background-color: var(--grey-2);
-			}
 			.save-btn {
 				padding: 4px 20px 4px 20px;
 				border-radius: 8px;
@@ -81,8 +78,17 @@
 				border: None;
 				// border: 1px solid var(--grey-4);
 			}
+			.inactive {
+				background-color: var(--grey-4);
+				color: black;
+				border-color: black;
+				cursor: default;
+			}
 			.save-btn:hover {
 				background-color: #ffcc00;
+			}
+			.inactive:hover {
+				background-color: var(--grey-4);
 			}
 		}
 	}

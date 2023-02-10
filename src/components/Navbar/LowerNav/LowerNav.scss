@@ -1,19 +1,24 @@
 .lower-nav {
 	// background-color: var(--grey-1);
-    background-color: var(--blue-grey-10);
+    // background-color: var(--blue-grey-10);
 
 	width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     position: sticky;
     top: 0px;
 
     .lower-nav-inner {
-        max-width: 1200px;
         width: 100%;
         height: fit-content;
+        display: flex;
+        justify-content: center;
+        background-color: var(--blue-grey-10);
 
         .lower-nav-links {
+            max-width: 1200px;
+            width: 100%;
             display: flex;
             flex-direction: row;
             list-style-type: none;

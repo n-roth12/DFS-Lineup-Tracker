@@ -1,8 +1,9 @@
 import './LowerNav.scss'
 import { Link } from 'react-router-dom'
 import { FaChartBar, FaBook, FaCalendarAlt, FaListAlt } from 'react-icons/fa'
+import AlertSection from '../AlertSection/AlertSection'
 
-const LowerNav = () => {
+const LowerNav = ({ alertMessage, closeAlertMessage }) => {
   return (
     <div className='lower-nav'>
       <div className='lower-nav-inner'>
@@ -24,6 +25,9 @@ const LowerNav = () => {
           </li>
         </ul>
       </div>
+      {alertMessage &&
+        <AlertSection alertMessage={alertMessage} onClose={closeAlertMessage} />
+      }
     </div>
   )
 }

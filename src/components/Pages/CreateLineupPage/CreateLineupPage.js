@@ -34,6 +34,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [loading, setLoading] = useState(true)
   const [playerTableSort, setPlayerTableSort] = useState("salary")
   const [isPlayerTableSortDesc, setIsPlayerTableSortDesc] = useState(true)
+  const [hasChanges, setHasChanges] = useState(false)
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -224,6 +225,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     lineupCopy[`${position}`] = null
     setLineup(lineupCopy)
     setEditingPos(null)
+    setHasChanges(true)
   }
 
   const editLineup = (pos) => {
@@ -245,6 +247,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       lineupCopy[lineupSlot] = null
     })
     setLineup(lineupCopy)
+    setHasChanges(true)
   }
 
   const saveLineup = async () => {
@@ -274,7 +277,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         setAlertMessage("Lineup Saved with Warning: Lineup over the salary cap!")
       } else {
         setAlertMessage("Lineup Saved")
-      }    
+      }
+      setHasChanges(false)
     })
     .catch((error) => {
       setAlertMessage("Error while saving lineup!")
@@ -287,12 +291,14 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       lineupCopy[pos] = player
       setLineup(lineupCopy)
       setEditingPos(null)
+      setHasChanges(true)
     } else {
       for (const [k, v] of Object.entries(lineup)) {
         if (v === null && lineupSlots[k]["allowedPositions"].includes(player["position"].toLowerCase())) {
           var lineupCopy = { ...lineup }
           lineupCopy[`${k}`] = player
           setLineup(lineupCopy)
+          setHasChanges(true)
           return
         } 
       }
@@ -349,6 +355,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const revertLineup = () => {
     setLineup(prevLineup)
     setLineupPlayerIds(new Set())
+    setHasChanges(false)
   }
 
   const playerWrapper = (player) => {
@@ -538,8 +545,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             </div>
         <div className='lineup-btns'>
           <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
-          <button className='revert-btn' onClick={revertLineup}>Revert <GrRevert/></button>
-          <button className='save-btn' onClick={saveLineup}>Save</button>
+          <button className={`revert-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && revertLineup}>Revert <GrRevert/></button>
+          <button className={`save-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && saveLineup}>Save</button>
         </div>
       </div>
       </>
