@@ -132,6 +132,7 @@
 				outline: None;			}
 			.all {
 				align-items: center;
+				margin-left: 0;
 			}
 			:hover {
 				background-color: var(--grey-2);
@@ -211,7 +212,7 @@
 							border-radius: 0;
 							outline: none;
 							height: 35px;
-							border-radius: 2px 0px 0px 2px;
+							border-radius: 6px 0px 0px 6px;
 						}
 			
 						.search-btn {
@@ -220,7 +221,7 @@
 							padding-left: 15px;
 							padding-right: 15px;
 							margin: 0;
-							border-radius: 0px 2px 2px 0px;
+							border-radius: 0px 6px 6px 0px;
 							height: 35px;
 						}
 					}
@@ -251,6 +252,8 @@
 			table {
 				width: 100%;
 				border-spacing: 0;
+				border-collapse: separate;
+				border-radius: 6px 6px 6px 6px;
 				
 				.row {
 					display: flex;
@@ -262,7 +265,8 @@
 			}
 			thead {
 				display: block;
-				height: 30px;
+				height: 30px;				
+				border-radius: 6px 6px 0px 0px;
 			}
 			thead th {
 				font-weight: 600;
@@ -280,6 +284,8 @@
 				max-height: 70vh;
 				overflow-y: auto;
 				display: block;
+				border-radius: 0px 0px 6px 6px;
+				border-collapse: separate;
 
 				.name-col {
 					text-align: left;
@@ -288,6 +294,7 @@
 				}
 				.add-icon-outer {
 					background-color: var(--btn-blue);
+					border-bottom: 1px solid var(--grey-5);
 				}
 				.add-icon-outer, .no-add-icon-outer {
 					height: 40px;
@@ -297,7 +304,7 @@
 					align-items: center;
 				}
 				.no-add-icon-outer {
-					background-color: var(--grey-4);
+					background-color: var(--grey-5);
 				}
 				.add-icon, .no-add-icon {
 					color: white;
