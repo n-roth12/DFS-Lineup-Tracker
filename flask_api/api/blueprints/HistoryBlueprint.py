@@ -109,3 +109,22 @@ def test_draftGroups():
 	print(draftables)
 
 	return jsonify({ "Message": "Success" }), 200
+
+@history_blueprint.route('/draftGroupsByWeek', methods=["GET"])
+def get_draftGroups_by_week():
+	year = request.args.get("year")
+	week = request.args.get("week")
+
+	if not year or not week:
+		return jsonify({ "Error": "Missing year or week" }), 400
+
+@history_blueprint.route('/draftGroupsByDateRange', methods=["GET"])
+def get_draftGroups_by_date_range():
+	startTime = request.args.get("startTime")
+	endTime = request.args.get("endTime")
+
+	if not startTime or not endTime:
+		return jsonify({ "Error": "Missing startTime or endTime" }), 400
+
+		
+	

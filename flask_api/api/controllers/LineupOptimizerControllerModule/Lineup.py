@@ -1,8 +1,8 @@
 # for use with api
-# from ..LineupOptimizerControllerModule import allowed_positions
+from ..LineupOptimizerControllerModule import allowed_positions
 
 # for use with unit tests
-import  allowed_positions
+# import  allowed_positions
 
 class Lineup:
 
@@ -15,9 +15,6 @@ class Lineup:
     def create_lineup_with_positions(positions: list, site: str) -> None:
         lineup = {position : {} for position in positions}
         return Lineup(lineup=lineup, site=site)
-
-    def get_site(self):
-        return self.site
         
     def get_lineup_as_list(self) -> list:
         return [player for player in self.lineup.values()]

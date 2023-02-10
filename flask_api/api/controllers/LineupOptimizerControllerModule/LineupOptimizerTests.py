@@ -55,6 +55,12 @@ class TestLineupOptimizerMethods(unittest.TestCase):
             self.assertDictEqual(player2, lineup.lineup.get("RB1"))
             self.assertEqual(0, len(lineup.get_empty_slots()))
 
+    def test_generate_optimized_lineup(self):
+        optimizer = LineupOptimizer(draftables=test_draftables, lineup_positions=self.get_all_draftkings_lineup_slots(), \
+                salary_cap=50000, excluded_flex_positions=["TE", "RB"], site="draftkings")
+        optimized_lineup = optimizer.generate_optimized_lineup(self.empty_draftkings_lineup())
+        self.assertEqual(0, len(optimized_lineup.get_empty_slots()))
+
     ##### HELPER METHODS ######
     def optimizer_draftkings(self):
         test_draftables = self.draftables()

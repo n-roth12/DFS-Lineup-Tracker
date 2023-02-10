@@ -1,10 +1,10 @@
 # imports for use with api
-# from ..LineupOptimizerControllerModule import allowed_positions
-# from ..LineupOptimizerControllerModule.Lineup import Lineup
+from ..LineupOptimizerControllerModule import allowed_positions
+from ..LineupOptimizerControllerModule.Lineup import Lineup
 
 # imports for use with unit tests
-import allowed_positions
-from Lineup import Lineup
+# import allowed_positions
+# from Lineup import Lineup
 
 from random import randint
 from copy import deepcopy
@@ -22,6 +22,7 @@ class LineupOptimizer:
         self.number_of_retries = 10
         self.number_of_players_to_consider = 15
         self.salary_cap = salary_cap
+        self.number_of_lineups_to_consider = 100
 
     def create_weighted_cost_map(self, draftables: list, lineup_positions:list) -> dict:
         positions_set = set(lineup_positions)
@@ -42,36 +43,27 @@ class LineupOptimizer:
     def generate_optimized_lineup(self, lineup: Lineup) -> Lineup:
         best_lineup_projection = 0.0
         best_lineup = None
-        count1 = 0
-        count2 = 0
 
-        for i in range(100):
+        for i in range(self.number_of_lineups_to_consider):
             generated_lineup = self.generate_single_lineup(lineup)
 
             lineup_proj_total = generated_lineup.get_lineup_projected_points()
             lineup_salary = generated_lineup.get_lineup_salary()
-            if lineup_proj_total > best_lineup_projection:
+            if lineup_proj_total > best_lineup_projection and lineup_salary <= self.salary_cap:
                 best_lineup_projection = lineup_proj_total
                 best_lineup = generated_lineup
-                count1 += 1
-            if lineup_salary > self.salary_cap or len(generated_lineup.get_empty_slots()) != 0:
-                count2 += 1
     
-        print(count1)
-        print(count2)
-        print(best_lineup_projection)
         return best_lineup
     
     def generate_single_lineup(self, lineup: Lineup) -> Lineup:
         lineup_copy = deepcopy(lineup)
-        # lineup_copy = Lineup()
         empty_slots = lineup_copy.get_empty_slots()
         if len(empty_slots) < 1:
             return lineup_copy
 
         for lineup_slot in empty_slots:
-            if lineup_slot in list(allowed_positions.flex_positions_dict.get(lineup_copy.get_site()).keys()):
-                eligible_flex_positions = [position for position in allowed_positions.flex_positions_dict.get(lineup_copy.get_site()).get(lineup_slot) \
+            if lineup_slot in list(allowed_positions.flex_positions_dict.get(lineup_copy.site).keys()):
+                eligible_flex_positions = [position for position in allowed_positions.flex_positions_dict.get(lineup_copy.site).get(lineup_slot) \
                     if self.flex_positions_to_exclude is None or (position not in self.flex_positions_to_exclude)]
                 position = eligible_flex_positions[randint(0, len(eligible_flex_positions) - 1)]
             else:
@@ -99,6 +91,7 @@ class LineupOptimizer:
             first_team_number_of_players = stack_number_of_players // 2
             second_team_number_of_players = stack_number_of_players - first_team_number_of_players
             return { stack_teams[0]: first_team_number_of_players, stack_teams[1]: second_team_number_of_players }
+
         elif stack_teams and len(stack_teams) == 1:
             return {stack_teams[0]: stack_number_of_players}
         
