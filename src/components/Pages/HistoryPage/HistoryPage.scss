@@ -1,6 +1,5 @@
 .history-page {
 	width: 100%;
-	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -75,5 +74,11 @@
 				height: 35px;
 			}
 		}
+	}
+	.loading-screen {
+		height: 50vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 }

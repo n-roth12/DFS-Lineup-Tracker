@@ -31,20 +31,20 @@ function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpe
                 <div className='infoBlock'>
                     <p>
                     <span className='value'>
-                        {player['oprk']}
+                        {player["game"]["awayTeam"]} @ {player["game"]["homeTeam"]}
                     </span>
                     <span className='label'>
-                        OPRK
+                        GAME
                     </span>
                     </p>
                 </div>
                 <div className='infoBlock'>
                     <p>
                     <span className='value'>
-                        {player["opponent"]}
+                        {player['oprk']}
                     </span>
                     <span className='label'>
-                        OPP
+                        OPRK
                     </span>
                     </p>
                 </div>

@@ -170,7 +170,9 @@ const UpcomingPage = ({ week, year }) => {
 					</div>
 				</>
 				:
-					<h3><Roller />Loading Slates</h3>
+					<div className='loading-screen'>
+						<h3><Roller /></h3>
+					</div>
 				}
 			</div>
 

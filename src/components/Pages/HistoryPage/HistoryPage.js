@@ -2,6 +2,7 @@ import './HistoryPage.scss'
 import { useState, useEffect, useRef } from 'react'
 import PlayersTable from '../../TablesLists/PlayersTable/PlayersTable'
 import { FaSearch } from 'react-icons/fa'
+import { Roller } from 'react-awesome-spinners'
 const ResearchPage = () => {
 
   const years = [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021]
@@ -147,7 +148,9 @@ const ResearchPage = () => {
       </div>
 
       {loading ? 
-        <h1>Loading...</h1>
+        <div className='loading-screen'>
+          <h3><Roller /></h3>
+        </div>
       :
       <>
         {playerData["All"] &&

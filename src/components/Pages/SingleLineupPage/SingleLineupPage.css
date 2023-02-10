@@ -4,10 +4,6 @@
   flex-direction: column;
 }
 
-.loading-screen {
-  min-height: 100%;
-}
-
 .back-btn-wrapper {
   background: #2d78fa;
   display: flex;

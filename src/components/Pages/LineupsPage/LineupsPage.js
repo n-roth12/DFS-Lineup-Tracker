@@ -190,7 +190,7 @@ const LineupsPage = () => {
 		  	</div> 
 		: 
 		 	<div className="loading-screen">
-		 		<h3><Roller />Loading lineups</h3>
+		 		<h3><Roller /></h3>
 		  	</div>
 		}
 	</div>
