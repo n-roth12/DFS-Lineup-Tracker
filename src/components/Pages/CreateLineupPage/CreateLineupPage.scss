@@ -4,6 +4,7 @@
 	flex-direction: column;
 	overflow: hidden;
 	margin-bottom: 80px;
+
 	.fixed-bottom-footer {
 		position: fixed;
 		bottom: 0;
@@ -12,9 +13,10 @@
 		width: 100%;
 		background-color: white;
 		box-shadow: var(--box-shadow-1);
+
 		.fixed-bottom-footer-inner {
 			max-width: 1200px;
-			width: 100%;
+			width: 95%;
 			display: flex;
 			justify-content: space-between;
 			flex-wrap: wrap;
@@ -23,11 +25,13 @@
 			display: flex;
 			flex-direction: row;
 			align-self: center;
+
 			strong {
 				font-weight: 600;
 			}
 			.info-block {
 				margin-right: 40px;
+
 				strong {
 					font-size: 12pt;
 					font-weight: 500;
@@ -45,8 +49,9 @@
 			display: flex;
 			flex-direction: row;
 			display: flex;
-			padding-top: 10px;
-			padding-bottom: 10px;
+			padding-top: 13px;
+			padding-bottom: 13px;
+
 			.clear-btn {
 				color: red;
 				border: none;
@@ -111,9 +116,11 @@
 		margin-bottom: 5px;
 		overflow-x: auto;
 		max-width: 900px;
+
 		.games-inner {
 			display: flex;
 			flex-direction: row;
+
 			.game {
 				background-color: white;
 				border: 1px solid var(--grey-4);
@@ -126,6 +133,7 @@
 				flex-direction: column;
 				justify-content: center;
 				align-items: center;
+
 				p {
 					margin: 0;
 					padding: 0;
@@ -184,18 +192,16 @@
 			margin-right: 20px;
 			margin-top: 10px;
 			max-width: 900px;
+
 			h2 {
 				font-size: 18pt;
 				margin-left: 10px;
 			}
-
 			.players-table-header {
 				width: 100%;
 				flex-direction: column;
 				align-items: center;
 				padding-top: 5px;
-				// background-color: white;
-				// box-shadow: var(--box-shadow-1);
 
 				.players-table-header-lower {
 					display: flex;
@@ -221,7 +227,6 @@
 							height: 35px;
 							border-radius: 6px 0px 0px 6px;
 						}
-			
 						.search-btn {
 							font-size: 11pt;
 							border-radius: 2px;
@@ -233,21 +238,10 @@
 						}
 					}
 				}
-
 				.filter-btn, .filter-btn-active {
 					width: 50px;
 					padding: 3px 8px 3px 8px;
 					font-size: 11pt;
-
-					// .pos-filter-wrapper {
-					// 	display: flex;
-					// 	width: 80%;
-					// 	max-width: 1100px;
-					// 	justify-content: left;
-					// 	align-items: left;
-					// 	margin-top: 10px;
-				
-					// }
 				}
 				h2 {
 					text-align: left;
@@ -255,7 +249,6 @@
 					margin-left: 10px;
 				}
 			}
-
 			table {
 				width: 100%;
 				border-spacing: 0;
@@ -284,9 +277,6 @@
 				min-width: 50px;
 				max-width: 50px;
 			}
-			// thead th:nth-child(2), tbody td:nth-child(2) {
-			// 	width: 30px;
-			// }
 			tbody {
 				max-height: 70vh;
 				overflow-y: auto;
@@ -333,7 +323,6 @@
 			}
 		}
 	}
-
 	.header {
 		width: 100%;
 		display: flex;
@@ -341,13 +330,16 @@
 		justify-content: center;
 		align-items: center;
 		box-shadow: var(--box-shadow-2);
+
 		.header-inner {
 			display: flex;
 			flex-direction: column;
 			width: 95%;
 			max-width: 1200px;
+
 			.header-options {
 				justify-content: flex-end;
+
 				.generate-btn {
 					border: None;
 					color: var(--btn-blue);
@@ -379,6 +371,7 @@
 			flex-direction: row;
 			padding-top: 5px;
 			padding-bottom: 10px;
+
 			.date {
 				font-size: 11pt;
 				font-weight: 400;
@@ -393,7 +386,8 @@
 				font-weight: 600;
 			}
 			.info-block {
-				margin-right: 30px;
+				margin-right: 50px;
+
 				strong {
 					font-size: 12pt;
 					font-weight: 500;
@@ -412,18 +406,20 @@
 			flex-direction: row;
 			width: 100%;
 			justify-content: space-between;
+
 			.header-label, .header-options {
 				display: flex;
 				flex-direction: row;
 				align-items: center;
 				height: 100%;
+
 				.site {
-					font-size: 22pt;
+					font-size: 20pt;
 					font-weight: 500;
 					margin-top: auto;
 					margin-bottom: auto;
 					padding-top: 10px;
-					padding-bottom: 10px;
+					padding-bottom: 6px;
 				}
 			}
 		}

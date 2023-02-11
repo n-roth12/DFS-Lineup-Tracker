@@ -9,12 +9,10 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        width: 100%;
+        width: 95%;
         max-width: 1200px;
 
         h1, h2 {
-            margin-left: 20px;
-            margin-right: 20px;
             color: white;
         }
 
@@ -50,5 +48,6 @@
         margin-top: auto;
         margin-bottom: auto;
         cursor: pointer;
+        margin-left: 20px;
     }
 }

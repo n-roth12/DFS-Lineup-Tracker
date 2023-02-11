@@ -3,6 +3,7 @@ import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
 import { FaPlus, FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
+import { BiDownload } from 'react-icons/bi'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
@@ -11,6 +12,8 @@ import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
 import { Roller } from 'react-awesome-spinners'
 import GeneratedLineup from '../SingleLineupPage/GeneratedLineup/GeneratedLineup'
+import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
+import { useNavigate } from 'react-router-dom'
 
 const CreateLineupPage = ({ setAlertMessage }) => {
 
@@ -35,6 +38,9 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [playerTableSort, setPlayerTableSort] = useState("salary")
   const [isPlayerTableSortDesc, setIsPlayerTableSortDesc] = useState(true)
   const [hasChanges, setHasChanges] = useState(false)
+  const [file, setFile] = useState(null)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
     "qb": null,
@@ -328,8 +334,22 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     return false
   }
 
-  const exportLineup = () => {
-    console.log(lineup)
+
+  const exportLineup = async () => {
+    const res = await fetch(`/lineups/export`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify(lineup)
+    })
+    const data = await res.blob()
+    downloadFile(data)
+  }
+
+  const downloadFile = (blob) => {
+    const url = window.URL.createObjectURL(blob)
+    setFile(url)
   }
 
   const getRemainingSalary = () => {
@@ -372,6 +392,21 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     setShowGenerateLineupDialog(false)
   }
 
+  const deleteLineup = async () => {
+    const res = await fetch('/lineups/delete', {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify({
+        "lineups": [lineup["lineupId"]]
+      })
+    })
+    setShowDeleteDialog(false)
+		navigate(`/lineups`)
+    setAlertMessage("Lineup Deleted")
+  }
+
   return (
     <div className="createLineupPage page">
       {loading === false ? <>
@@ -390,6 +425,12 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       <PlayerDialog showPlayerDialog={showPlayerDialog} 
           onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
           player={playerDialogContent} />
+
+      <DeleteLineupsDialog showDeleteLineupsDialog={showDeleteDialog}
+        onClose={() => setShowCreateLineupDialog(false)}
+        deleteLineups={deleteLineup}
+        lineupsToDelete={[lineup]}
+      />
       <div className="header">
         {draftGroup &&
           <div className="header-inner">
@@ -416,8 +457,12 @@ const CreateLineupPage = ({ setAlertMessage }) => {
               <div className='header-options'>
                 <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
                 <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
-                <button className='generate-btn'>Export</button>
-                <button className='generate-btn generate-btn-delete'>Delete</button>
+                {file === null ?
+                  <button className='generate-btn' onClick={exportLineup}>Export</button>
+                :
+                  <a className='generate-btn' href={file} download={`lineups_${draftGroup["draftGroupId"]}.csv`}>Download<BiDownload className='download-icon'/></a>
+                }
+                <button className='generate-btn generate-btn-delete' onClick={() => setShowDeleteDialog(true)}>Delete</button>
               </div>
             </div>
           </div>
