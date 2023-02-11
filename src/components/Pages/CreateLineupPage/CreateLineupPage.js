@@ -397,17 +397,28 @@ const CreateLineupPage = ({ setAlertMessage }) => {
               <div className="header-label">
                 <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
               </div>
+            </div>
+            <div className='header-lower'>
+              <div className='header-details'>
+                <div className='info-block'>
+                  <p className="date">Slate</p>
+                  <p><strong>{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}</strong></p>
+                </div>
+                <div className='info-block'>
+                  <p>Games</p>
+                  <p><strong>{draftGroup["games"].length}</strong></p>
+                </div>
+                <div className='info-block'>
+                  <p>Start Time:</p>
+                  <p><strong>{new Date(`${draftGroup["startTime"]}`).toDateString()}</strong></p>
+                </div>
+              </div>
               <div className='header-options'>
                 <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
                 <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
                 <button className='generate-btn'>Export</button>
                 <button className='generate-btn generate-btn-delete'>Delete</button>
               </div>
-            </div>
-            <div className='header-details'>
-              <p className="date">Slate: <strong>{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}</strong></p>
-              <p>{draftGroup["games"].length} Games</p>
-              <p>Start Time: <strong>{new Date(`${draftGroup["startTime"]}`).toDateString()}</strong></p>
             </div>
           </div>
         }
@@ -525,31 +536,33 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         }
       </div>
       <div className='fixed-bottom-footer'>
-      <div className='header-details'>
-              <div className='info-block'>
-                <p>Remaining Salary</p>
-                <p><strong>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</strong></p>
-              </div>
-              <div className='info-block'>
-                <p>Rem. Salary / Player </p>
-                <p><strong>{getRemainingSalaryPerPlayer()}</strong></p>
-              </div>
-              <div className='info-block'>
-                <p>Proj. Points</p>
-                <p><strong>{teamProjectedPoints}</strong></p>
-              </div>
-              <div className='info-block'>
-                <p>Proj. Own Sum</p>
-                <p><strong>90%</strong></p>
-              </div>
+        <div className='fixed-bottom-footer-inner'>
+          <div className='header-details'>
+            <div className='info-block'>
+              <p>Remaining Salary</p>
+              <p><strong>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</strong></p>
             </div>
-        <div className='lineup-btns'>
-          <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
-          <button className={`revert-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && revertLineup}>Revert <GrRevert/></button>
-          <button className={`save-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && saveLineup}>Save</button>
+            <div className='info-block'>
+              <p>Rem. Salary / Player </p>
+              <p><strong>{getRemainingSalaryPerPlayer()}</strong></p>
+            </div>
+            <div className='info-block'>
+              <p>Proj. Points</p>
+              <p><strong>{teamProjectedPoints}</strong></p>
+            </div>
+            <div className='info-block'>
+              <p>Proj. Own Sum</p>
+              <p><strong>90%</strong></p>
+            </div>
+          </div>
+          <div className='lineup-btns'>
+            <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
+            <button className={`revert-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && revertLineup}>Revert <GrRevert/></button>
+            <button className={`save-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && saveLineup}>Save</button>
+          </div>
         </div>
       </div>
-      </>
+    </>
     :
     <div className='loading-wrapper'>
       <Roller />

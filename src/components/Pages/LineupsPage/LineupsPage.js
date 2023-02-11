@@ -25,7 +25,6 @@ const LineupsPage = () => {
 	const [dialogDraftGroup, setDialogDraftGroup] = useState()
 	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
 
-  
   useEffect(() => {
   	loadPage()
   }, [])

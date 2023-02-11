@@ -142,8 +142,8 @@ const UpcomingPage = ({ week, year }) => {
 		<div className="upcoming-page page">
 			<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				onClose={closeDialogWrapper} draftGroup={createLineupDialogContent} />
-			<div className='slatesWrapper-outer'>
-				<div className='site-filter-wrapper'>
+			<div className='site-filter-wrapper'>
+				<div className='site-filter-wrapper-inner'>
 					<button className={`underline-btn${selectedSite === "draftkings" ? " active": ""}`}
 						onClick={() => setSelectedSite("draftkings")}>DraftKings</button>
 					<button className={`underline-btn${selectedSite === "yahoo" ? " active" : ""}`}
@@ -151,6 +151,8 @@ const UpcomingPage = ({ week, year }) => {
 					<button className={`underline-btn${selectedSite === "fanduel" ? " active" : ""}`}
 						onClick={() => setSelectedSite("fanduel")}>Fanduel</button>
 				</div>
+			</div>
+			<div className='slatesWrapper-outer'>
 				{slates.length && activeSlate ?
 					<>
 					<div className="slatesWrapper">

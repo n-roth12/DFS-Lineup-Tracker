@@ -1,4 +1,3 @@
-
 .lineup {
     box-shadow: var(--box-shadow-1);
     max-width: 450px;
@@ -13,5 +12,9 @@
     }
     :last-child {
         border: None;
+    }
+    .selected {
+        outline: 2px solid var(--grey-5);
+        border-bottom: 1px solid transparent;
     }
 }

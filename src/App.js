@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LineupsPage from './components/Pages/LineupsPage/LineupsPage'
-import SingleLineupPage from './components/Pages/SingleLineupPage/SingleLineupPage'
 import LoginPage from './components/Pages/LoginPage/LoginPage'
 import RegisterPage from './components/Pages/RegisterPage/RegisterPage'
 import UpcomingPage from './components/Pages/UpcomingPage/UpcomingPage'
@@ -78,21 +77,6 @@ function App() {
                       <Navbar />
                       <div className="page-wrapper-inner"> 
                         <LineupsPage />
-                      </div>
-                    </div>
-                  : 
-                    <LoginPage setToken={setToken} />
-                  }
-                </>
-              } />
-
-            <Route path=":lineupId/:lineupWeek/:lineupYear" element={
-                <>
-                  {sessionStorage.dfsTrackerToken ?
-                    <div className="page-wrapper">
-                      <Navbar />
-                      <div className="page-wrapper-inner"> 
-                        <SingleLineupPage  />
                       </div>
                     </div>
                   : 
