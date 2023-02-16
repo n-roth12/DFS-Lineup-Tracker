@@ -88,3 +88,15 @@ class MongoController:
 
     def get_draft_groups_by_time_range(self, start_time, end_time):
         return 
+
+    def get_draft_groups_by_year_and_week(self, year: int, week: int) -> list:
+        cursor = self.draftgroups_collection.find({ "week": week, "year": year })
+        draft_groups = sorted([group for group in cursor], key=lambda x: len(x["games"]), reverse=True)
+        
+        for draft_group in draft_groups:
+            del(draft_group["_id"])
+        return draft_groups
+
+    def add_week_and_year_to_draftGroup_and_draftables(self, draftGroupId, week, year):
+        self.draftables_collection.update_one({ "draftGroupId": draftGroupId }, {"$set": {"week": week, "year": year}})
+        self.draftgroups_collection.update_one({ "draftGroupId": draftGroupId }, {"$set": {"week": week, "year": year}})

@@ -51,11 +51,9 @@ const UpcomingPage = ({ week, year }) => {
 			}
 		})
 		const data = await res.json()
-		const upcoming = data.filter((slate) => {
-			return Date.parse(slate["startTime"].split("T")[0]) > Date.parse(new Date())
-		})
-		setSlates(upcoming)
-		setActiveSlate(upcoming[0])
+
+		setSlates(data)
+		setActiveSlate(data.find((slate) => slate["site"] === selectedSite))
 	}
 
 	const getDraftables = async () => {

@@ -10,7 +10,7 @@ from pymongo import MongoClient
 import certifi
 from bson import json_util
 from .blueprints.utilities import token_required
-from .date_services import getCurrentWeek
+from .date_services import getCurrentWeek, getWeek, parseDate, parseDraftGroupDateString
 from .controllers.DraftKingsController import DraftKingsController
 from .controllers.RedisController import RedisController
 from .controllers.MongoController import MongoController
@@ -108,6 +108,27 @@ def nfl_teams(current_user):
 def get_current_week():
 	result = getCurrentWeek()
 	return jsonify(result), 200
+
+@app.route('/getWeekByDate', methods=['GET'])
+def get_week_by_date():
+	date = request.args.get("date")
+	if not date:
+		return jsonify({ "Error": "Missing or incorrect date format" }), 400
+
+	result = parseDraftGroupDateString(date)
+
+	return jsonify({"date": result}), 200
+
+@app.route("/temp/addDate", methods=["POST"])
+def temp_add_date():
+	draftGroups = MongoController.getDraftGroupsAll()
+
+	for draftGroup in draftGroups:
+		week_info = parseDraftGroupDateString(draftGroup["startTime"])
+		MongoController.add_week_and_year_to_draftGroup_and_draftables(draftGroupId=draftGroup["draftGroupId"], \
+			week=week_info["week"], year=week_info["year"])
+
+	return "success", 200
 
 @app.route('/draftkings_slates', methods=['GET'])
 def get_slates():

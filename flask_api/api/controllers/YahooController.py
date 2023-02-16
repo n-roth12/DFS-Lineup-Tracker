@@ -1,5 +1,6 @@
 import requests
 import datetime
+from ..date_services import parseDraftGroupDateString
 
 class YahooController:
 
@@ -102,6 +103,9 @@ class YahooController:
         data["endTime"] = datetime.datetime.utcfromtimestamp(draftGroup["series"]["endTime"] / 1000.0).strftime("%Y-%m-%dT%H:%M:%S")
         data["startTimeSuffix"] = "Main" if draftGroup["series"]["mainSeries"] == True else draftGroup["series"]["seriesType"]
         data["salaryCap"] = draftGroup["series"]["salaryCapOverride"] if draftGroup["series"]["salaryCapOverride"] != None else 200
+        week_info = parseDraftGroupDateString(data["startTime"])
+        data["week"] = week_info["week"]
+        data["year"] = week_info["year"]
 
         games = []
         for game_code in draftGroup["gameCodeList"]:

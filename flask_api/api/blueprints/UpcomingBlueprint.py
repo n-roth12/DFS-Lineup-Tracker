@@ -27,6 +27,18 @@ yahooController = YahooController()
 @upcoming_blueprint.route('/slates_new', methods=["GET"])
 @token_required
 def upcoming_slates(current_user):
+
+	year = request.args.get("year")
+	week = request.args.get("week")
+	
+	# temporarily overriding week and year so that we can show something in beta
+	year = 2022
+	week = 18
+
+	if year and week:
+		draft_groups = mongoController.get_draft_groups_by_year_and_week(year=int(year), week=int(week))
+		return jsonify(draft_groups), 200
+
 	draft_groups = redisController.get_draft_groups()
 	if not draft_groups:
 		print("cache hit")

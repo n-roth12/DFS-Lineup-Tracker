@@ -2,6 +2,7 @@ import requests
 import datetime
 import time
 from calendar import timegm
+from ..date_services import parseDraftGroupDateString
 
 class DraftKingsController:
 
@@ -75,6 +76,9 @@ class DraftKingsController:
         data["endTime"] = ""
         data["startTimeSuffix"] = draftGroup.get("startTimeSuffix") if draftGroup.get("startTimeSuffix") else "Main"
         data["salaryCap"] = 60000
+        week_info = parseDraftGroupDateString(data["startTime"])
+        data["week"] = week_info["week"]
+        data["year"] = week_info["year"]
 
         games = []
         for game in draftGroup["games"]:

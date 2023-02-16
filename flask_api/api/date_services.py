@@ -134,6 +134,18 @@ def parseDate(date: str):
 	return getWeek(year, month, day)
 
 
+def parseDraftGroupDateString(date_string: str):
+	split_date = date_string.split("T")
+	temp = datetime.datetime.strptime(split_date[0], "%Y-%m-%d")
+	year = temp.year
+	month = temp.month
+	day = temp.day
+
+	season_year = getYear(year=year, month=month, day=day)
+	season_week = getWeek(year=year, month=month, day=day)
+
+	return {"year": season_year, "week": season_week}
+
 # TODO make this able to handle preseason and offseason
 def getWeek(year, month, day):
 	lineup_date = datetime.date(year, month, day)
