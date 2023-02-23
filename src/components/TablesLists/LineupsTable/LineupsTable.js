@@ -9,6 +9,9 @@ import { FaPlus } from 'react-icons/fa'
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter }) => {
 
+	const weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+
+  const [years, setYears] = useState([2021, 2022, 2023])
   const [lineupsPerPage, setLineupsPerPage] = useState(50)
   const [currPage, setCurrPage] = useState(0)
   const [numPages, setNumPages] = useState(Math.ceil(lineups.length / lineupsPerPage))
@@ -16,6 +19,12 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
 	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
   const [siteFilter, setSiteFilter] = useState(new Set())
+  const [yearFilter, setYearFilter] = useState()
+  const [weekFilter, setWeekFilter] = useState()
+
+  useEffect(() => {
+    getYears()
+  }, [lineups])
 
   const nextPage = () => {
     if ((currPage + 1) * lineupsPerPage >= lineups.length) return
@@ -25,6 +34,21 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const prevPage = () => {
     if (currPage <= 0) return
     setCurrPage(currPage - 1)
+  }
+
+  const getYears = () => {
+    var temp = [...years]
+    lineups && lineups.length > 0 && lineups.map((lineup) => {
+      if (!(temp.includes(lineup.year))) {
+        temp.push(lineup.year)
+      }
+    })
+    setYears(temp.sort().reverse())
+  }
+
+  const changeYear = (year) => {
+    setWeekFilter("All")
+    setYearFilter(year)
   }
 
   const toggleSelectedLineup = (lineupId) => {
@@ -84,6 +108,28 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               </button>
             </div>
           </div>
+          <div>
+          <div className="selectors">
+            <select 
+              className="year-select" 
+              value={yearFilter} 
+              onChange={(e) => changeYear(e.target.value) }>
+              {years.map((year) => 
+                <option value={year} key={year}>{year}</option>
+              )}
+            </select>
+            <select 
+              className="week-select" 
+              value={weekFilter}
+              onChange={(e) => setWeekFilter(e.target.value)}>
+              {weeks.map((week) =>
+                !(week > 17 && yearFilter < 2021) &&
+                  <option value={week} key={week}>Week {week}</option>
+              )}
+              <option value={"All"} key={"All"}>All</option>
+            </select>
+          </div>
+          </div>
           <div className='lineup-wrapper-header'>
             {stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon'/></Link>}
             {/* {selectedLineups.length > 0 &&
@@ -110,7 +156,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             <th>Proj. Pts</th>
           </tr>
         </thead>
-        {lineups.length > 0 &&
+        {lineups.length > 0 ?
           <tbody>
             {lineups.filter((lineup) => siteFilter.size < 1 || siteFilter.has(lineup["site"])).slice((currPage * lineupsPerPage), lineupsPerPage + ((currPage) * lineupsPerPage)).map((lineup) => 
               <>
@@ -128,6 +174,12 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             )
           }
           </tbody>
+        :
+        <tbody>
+          <tr>
+            <td>You must login to save and view past lineups.</td>
+          </tr>
+        </tbody>
         }
       </table>
       <span className='page-btn-wrapper'>

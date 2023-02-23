@@ -71,8 +71,9 @@ const LandingPage = ({ setToken }) => {
 		    </form>
 		    <button className="form-submit-btn form-control" onClick={() => onSubmit()}>Register</button>
 		    <div className="login-page-link-wrapper">
-		    	<h4>Have an account?      
-		    	<Link to='/login' className="login-page-link">Login</Link></h4>
+		    	<h4>Have an account?
+		    		<Link to='/login' className="login-page-link">Login</Link>
+				</h4>
 		    </div>
 		  </div>
 		</div>

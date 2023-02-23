@@ -155,35 +155,35 @@ const LineupsPage = () => {
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups} 
 							stateFilter={stateFilter}
-							lineups={lineups.filter(lineup => {
+							lineups={lineups.length > 0 ? lineups.filter(lineup => {
 								return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
-							})} /> 
+							}) : []} /> 
 				</>
 				}
 				{stateFilter === "live" &&
 				<>
 					<div className='lineups-title'><h2>Live Lineups</h2></div>
-					<LineupsTable
-						selectedLineups={selectedLineups}
-						setSelectedLineups={setSelectedLineups}
-						stateFilter={stateFilter}
-						lineups={lineups.filter((lineup) => {
-							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
-								&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date())
-					})} />
+						<LineupsTable
+							selectedLineups={selectedLineups}
+							setSelectedLineups={setSelectedLineups}
+							stateFilter={stateFilter}
+							lineups={lineups.length > 0 ? lineups.filter((lineup) => {
+								return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
+									&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date())
+						}) : []} />
 				</>
 				}
 				{stateFilter === "upcoming" &&
 				<>
 					<div className='lineups-title'><h2>Upcoming Lineups</h2></div>
-					<LineupsTable
-						selectedLineups={selectedLineups}
-						setSelectedLineups={setSelectedLineups}
-						stateFilter={stateFilter}
-						lineups={lineups.filter((lineup) => {
-							return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
-						})}
-					/>
+						<LineupsTable
+							selectedLineups={selectedLineups}
+							setSelectedLineups={setSelectedLineups}
+							stateFilter={stateFilter}
+							lineups={lineups.length > 0 ? lineups.filter((lineup) => {
+								return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
+							}) : []}
+						/>
 				</>
 				}
 		  	</div> 

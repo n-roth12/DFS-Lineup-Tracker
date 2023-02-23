@@ -49,6 +49,27 @@
 
 				}
 			}
+			.selectors {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+				select {
+					margin-right: 10px;
+					padding: 4px 16px 4px 8px;
+					font-size: 11pt;
+				}
+				.week-select {
+					width: 120px;
+					border-radius: 6px;
+					border: 1px solid var(--blue-grey-5);
+				}
+				.year-select {
+					width: 100px;
+					border-radius: 6px;
+					border: 1px solid var(--blue-grey-5);
+				}
+			}
 		}
 		table {
 			margin-top: 0px;

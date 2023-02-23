@@ -72,16 +72,13 @@ function App() {
             <Route path="lineups">
               <Route index element={
                 <>
-                  {sessionStorage.dfsTrackerToken ?
-                    <div className="page-wrapper">
-                      <Navbar />
-                      <div className="page-wrapper-inner"> 
-                        <LineupsPage />
-                      </div>
+                <ScrollToTop />
+                  <div className="page-wrapper">
+                    <Navbar />
+                    <div className="page-wrapper-inner"> 
+                      <LineupsPage />
                     </div>
-                  : 
-                    <LoginPage setToken={setToken} />
-                  }
+                  </div>
                 </>
               } />
             </Route>
@@ -89,16 +86,12 @@ function App() {
             <Route path="upcoming" element={
               <>
                 <ScrollToTop />
-                {sessionStorage.dfsTrackerToken ?
-                  <div className="page-wrapper">
-                    <Navbar />
-                    <div className="page-wrapper-inner"> 
-                      <UpcomingPage week={18} year={2021} />
-                    </div>
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <UpcomingPage week={18} year={2021} />
                   </div>
-                :
-                  <LoginPage setToken={setToken} />
-                }
+                </div>
               </>
             } />
 
@@ -150,12 +143,12 @@ function App() {
             <Route path="history" element={
               <>
                 <ScrollToTop/>
-                  <div className="page-wrapper">
-                    <Navbar />
-                    <div className="page-wrapper-inner"> 
-                      <HistoryPage />
-                    </div>
+                <div className="page-wrapper">
+                  <Navbar />
+                  <div className="page-wrapper-inner"> 
+                    <HistoryPage />
                   </div>
+                </div>
               </>
             } />
 

@@ -34,13 +34,15 @@ const UpperNav = () => {
         </div>
         <div className='profile-btns'>
         <div>
-          {window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" && 
+          {sessionStorage.dfsTrackerToken && window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" && 
             <div className='user-icon-wrapper'><FaUserAlt className='user-icon' onClick={profile}/></div>
           }
           </div>
           <div>
-            {window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" && 
-              <h2 className="logout-btn" onClick={logout}>Logout</h2>}
+            {!sessionStorage.dfsTrackerToken ?
+              <h2 className='logout-btn' onClick={() => navigate("/login")}>Login</h2>
+              : <h2 className="logout-btn" onClick={logout}>Logout</h2>
+            }
           </div>
         </div>
       </div>
