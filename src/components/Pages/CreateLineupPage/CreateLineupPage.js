@@ -42,8 +42,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [file, setFile] = useState(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [stateFilter, setStateFilter] = useState("all")
-  const [favorites, setFavorites] = useState([])
-  const [hidden, setHidden] = useState([])
+  const [favoritesIds, setFavoritesIds] = useState([])
+  const [hiddenIds, setHiddenIds] = useState([])
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -132,14 +132,6 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     getLineupPlayerIds()
   }, [lineup, draftGroup])
 
-  const canAddToFavorites = (player) => {
-    return true
-  }
-
-  const canAddToUndraftables = (player) => {
-    return true
-  }
-
   const togglePosFilter = (position) => {
     if (posFilter.has(position)) {
       const filterCopy = new Set(posFilter)
@@ -191,8 +183,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
       const data = await res.json()
       setLineup(data["lineup"])
       setPrevLineup(data["lineup"])
-      setFavorites(data["favorites"])
-      setHidden(data["hidden"])
+      data["favorites"] && setFavoritesIds(data["favorites"].map((player) => player["playerSiteId"]))
+      data["hidden"] && setHiddenIds(data["hidden"].map((player) => player["playerSiteId"]))
     } else {
       setPrevLineup(lineup)
     } 
@@ -607,6 +599,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
               </thead>
               <tbody>
                 {stateFilter === "all" && draftables.map((player, index) => 
+                  (!hiddenIds.includes(player["playerSiteId"])) &&
                   (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
@@ -617,12 +610,12 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                       :
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
-                      {canAddToFavorites(player) ?
+                      {!favoritesIds.includes(player["playerSiteId"]) ?
                         <td className='favorite-icon-outer' onClick={() => addPlayerToFavorites(player)}><AiOutlineStar className='favorite-icon'/></td>  
                       :
                         <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
                       }
-                      {canAddToUndraftables(player) ?
+                      {!hiddenIds.includes(player["playerSiteId"]) ?
                         <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><BiBlock className='undraftables-icon'/></td>
                       :
                         <td className='no-undraftables-icon-outer'><AiOutlineMinusCircle className='no-undraftables-icon'/></td>
@@ -635,7 +628,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                       <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
                     </tr>
                 )}
-                {stateFilter === "favorites" && favorites && favorites.map((player, index) => 
+                {stateFilter === "favorites" && draftables.map((player, index) => 
+                  (favoritesIds.includes(player["playerSiteId"])) &&
                   (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
@@ -647,11 +641,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
                       <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
-                      {canAddToUndraftables ?
-                        <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
-                      :
-                        <td className='no-undraftables-icon-outer'><AiOutlineMinusCircle className='no-undraftables-icon'/></td>
-                      }
+                      <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
                       <td>{player.position}</td>
                       <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
@@ -660,7 +650,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                       <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
                     </tr>
                 )}
-                {stateFilter === "hidden" && hidden && hidden.map((player, index) => 
+                {stateFilter === "hidden" && draftables.map((player, index) => 
+                  (hiddenIds.includes(player["playerSiteId"])) && 
                   (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
@@ -671,16 +662,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                       :
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
-                      {canAddToFavorites ?
-                        <td className='favorite-icon-outer' onClick={() => addPlayerToFavorites(player)}><AiOutlineStar className='favorite-icon'/></td>  
-                      :
-                        <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
-                      }
-                      {canAddToUndraftables ?
-                        <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
-                      :
-                        <td className='no-undraftables-icon-outer'><AiOutlineMinusCircle className='no-undraftables-icon'/></td>
-                      }
+                      <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
+                      <td className='undraftables-icon-outer'><AiOutlineMinusCircle className='undraftables-icon'/></td>
                       <td>{player.position}</td>
                       <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
