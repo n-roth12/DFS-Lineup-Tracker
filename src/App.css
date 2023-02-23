@@ -38,9 +38,10 @@ body {
   --dark-blue-2: #3d3d54;
   --dark-red: #282119;
   --dark-other: #15233A;
-  --green: rgba(55, 230, 78, 1);
-  --green-2: rgba(55, 230, 70, 0.7);
-  --red-2: rgba(255, 0, 0, 0.8);
+  --green: #00992e;
+  --green-2: #41a35e;
+  --red: #fa2525;
+  --red-2: #ff4a4a;
 
   --black: #000000;
   --dark-grey: #121212;

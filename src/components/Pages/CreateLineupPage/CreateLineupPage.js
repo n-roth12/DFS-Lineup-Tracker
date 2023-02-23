@@ -3,7 +3,8 @@ import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
 import { FaPlus, FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
-import { BiDownload } from 'react-icons/bi'
+import { BiDownload, BiBlock } from 'react-icons/bi'
+import { AiOutlineStar, AiOutlineMinusCircle } from 'react-icons/ai'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
@@ -40,6 +41,9 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   const [hasChanges, setHasChanges] = useState(false)
   const [file, setFile] = useState(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [stateFilter, setStateFilter] = useState("all")
+  const [favorites, setFavorites] = useState([])
+  const [hidden, setHidden] = useState([])
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -128,6 +132,14 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     getLineupPlayerIds()
   }, [lineup, draftGroup])
 
+  const canAddToFavorites = (player) => {
+    return true
+  }
+
+  const canAddToUndraftables = (player) => {
+    return true
+  }
+
   const togglePosFilter = (position) => {
     if (posFilter.has(position)) {
       const filterCopy = new Set(posFilter)
@@ -169,15 +181,21 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   }
 
   const getLineup = async () => {
-    const res = await fetch(`/lineups/lineup?lineupId=${lineupId}`, {
-      method: 'GET',
-      headers: {
-        'x-access-token': sessionStorage.dfsTrackerToken
-      }
-    })
-    const data = await res.json()
-    setLineup(data["lineup"])
-    setPrevLineup(data["lineup"])
+    if (lineupId) {
+      const res = await fetch(`/lineups/lineup?lineupId=${lineupId}`, {
+        method: 'GET',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        }
+      })
+      const data = await res.json()
+      setLineup(data["lineup"])
+      setPrevLineup(data["lineup"])
+      setFavorites(data["favorites"])
+      setHidden(data["hidden"])
+    } else {
+      setPrevLineup(lineup)
+    } 
   }
 
   const toggleGameWrapper = (team1, team2) => {
@@ -334,6 +352,33 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     return false
   }
 
+  const addPlayerToFavorites = async (player) => {
+    const res = await fetch(`/lineups/favorite`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify({
+        "lineupId": lineupId,
+        "player": player
+      })
+    })
+    const data = await res.json()
+  }
+
+  const addPlayerToHidden = async (player) => {
+    const res = await fetch(`/lineups/hidden`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify({
+        "lineupId": lineupId,
+        "player": player
+      })
+    })
+    const data = await res.json()
+  }
 
   const exportLineup = async () => {
     const res = await fetch(`/lineups/export`, {
@@ -485,23 +530,27 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         
         {draftables.length > 0 ?
           <div className='players-table-wrapper'>
-            <h2>Draftables</h2>
-                  {draftGroup && draftGroup["games"].length > 1 &&
-        <div className='games-outer'>
-          <div className='games-inner'>
-            <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
-              <p>All</p>
+            <div className='filter-btn-wrapper'>
+              <button onClick={() => setStateFilter("all")} className={`underline-btn${stateFilter === "all" ? " active" : ""}`}>All Players</button>
+              <button onClick={() => setStateFilter("favorites")} className={`underline-btn${stateFilter === "favorites" ? " active" : ""}`}>Favorites</button>
+              <button onClick={() => setStateFilter("hidden")} className={`underline-btn${stateFilter === "hidden" ? " active" : ""}`}>Hidden</button>
             </div>
-            {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
-              <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected": ""}`} 
-                onClick={() => toggleGameWrapper(game["awayTeam"], game["homeTeam"])}>
-                <p>{game["awayTeam"]}</p>
-                <p>@{game["homeTeam"]}</p>
+            {draftGroup && draftGroup["games"].length > 1 &&
+            <div className='games-outer'>
+              <div className='games-inner'>
+                <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
+                  <p>All</p>
+                </div>
+                {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) => 
+                  <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected": ""}`} 
+                    onClick={() => toggleGameWrapper(game["awayTeam"], game["homeTeam"])}>
+                    <p>{game["awayTeam"]}</p>
+                    <p>@{game["homeTeam"]}</p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-      }
+            </div>
+          }
             <div className='players-table-header'>
               <div className='players-table-header-upper'>
                 {/* <h2>Players</h2> */}
@@ -547,6 +596,8 @@ const CreateLineupPage = ({ setAlertMessage }) => {
             <table className='lineups-table'>
               <thead>
                 <th></th>
+                <th></th>
+                <th></th>
                 <th>Pos</th>
                 <th>Name</th>
                 <th>Salary <FaArrowUp /></th>
@@ -555,7 +606,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                 <th>FPPG</th>
               </thead>
               <tbody>
-                {draftables.map((player, index) => 
+                {stateFilter === "all" && draftables.map((player, index) => 
                   (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
                   (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
@@ -565,6 +616,70 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                         <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
                       :
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
+                      }
+                      {canAddToFavorites(player) ?
+                        <td className='favorite-icon-outer' onClick={() => addPlayerToFavorites(player)}><AiOutlineStar className='favorite-icon'/></td>  
+                      :
+                        <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
+                      }
+                      {canAddToUndraftables(player) ?
+                        <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><BiBlock className='undraftables-icon'/></td>
+                      :
+                        <td className='no-undraftables-icon-outer'><AiOutlineMinusCircle className='no-undraftables-icon'/></td>
+                      }
+                      <td>{player.position}</td>
+                      <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
+                      <td>${player.salary}</td>
+                      <td>{player["game"] ? player["opponent"]: ''}</td>
+                      <td>{player["oprk"]}</td>
+                      <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
+                    </tr>
+                )}
+                {stateFilter === "favorites" && favorites && favorites.map((player, index) => 
+                  (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
+                  (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
+                  (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
+                  (teamsFilter.length < 1 || teamsFilter.includes(player["team"])) &&
+                    <tr>
+                      {canQuickAdd(player) || editingPos === player.position ?
+                        <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
+                      :
+                        <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
+                      }
+                      <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
+                      {canAddToUndraftables ?
+                        <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
+                      :
+                        <td className='no-undraftables-icon-outer'><AiOutlineMinusCircle className='no-undraftables-icon'/></td>
+                      }
+                      <td>{player.position}</td>
+                      <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
+                      <td>${player.salary}</td>
+                      <td>{player["game"] ? player["opponent"]: ''}</td>
+                      <td>{player["oprk"]}</td>
+                      <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
+                    </tr>
+                )}
+                {stateFilter === "hidden" && hidden && hidden.map((player, index) => 
+                  (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
+                  (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
+                  (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
+                  (teamsFilter.length < 1 || teamsFilter.includes(player["team"])) &&
+                    <tr>
+                      {canQuickAdd(player) || editingPos === player.position ?
+                        <td className='add-icon-outer' onClick={() => addToLineup(editingPos, player)}><FaPlus className='add-icon'/></td>
+                      :
+                        <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
+                      }
+                      {canAddToFavorites ?
+                        <td className='favorite-icon-outer' onClick={() => addPlayerToFavorites(player)}><AiOutlineStar className='favorite-icon'/></td>  
+                      :
+                        <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
+                      }
+                      {canAddToUndraftables ?
+                        <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
+                      :
+                        <td className='no-undraftables-icon-outer'><AiOutlineMinusCircle className='no-undraftables-icon'/></td>
                       }
                       <td>{player.position}</td>
                       <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>

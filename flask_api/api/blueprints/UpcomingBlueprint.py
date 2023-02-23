@@ -25,8 +25,7 @@ ownershipService = OwnershipService()
 yahooController = YahooController()
 
 @upcoming_blueprint.route('/slates_new', methods=["GET"])
-@token_required
-def upcoming_slates(current_user):
+def upcoming_slates():
 
 	year = request.args.get("year")
 	week = request.args.get("week")
@@ -121,8 +120,7 @@ def get_slates(current_user):
 
 
 @upcoming_blueprint.route('/draftables', methods=['GET'])
-@token_required
-def get_draftables(current_user):
+def get_draftables():
 	draftGroupId = request.args.get("draftGroupId")
 	if not draftGroupId:
 		return jsonify({ "Message": "error" }), 400

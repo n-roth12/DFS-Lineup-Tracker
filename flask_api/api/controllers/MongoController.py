@@ -100,3 +100,11 @@ class MongoController:
     def add_week_and_year_to_draftGroup_and_draftables(self, draftGroupId, week, year):
         self.draftables_collection.update_one({ "draftGroupId": draftGroupId }, {"$set": {"week": week, "year": year}})
         self.draftgroups_collection.update_one({ "draftGroupId": draftGroupId }, {"$set": {"week": week, "year": year}})
+
+    def add_player_to_lineup_favorites(self, lineupId, player, userId):
+        self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$push": {"favorites": player}})
+
+    def add_player_to_lineup_hidden(self, lineupId, player, userId):
+        self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$push": {"hidden": player}})
+
+

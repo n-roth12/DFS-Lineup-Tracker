@@ -16,9 +16,10 @@ def token_required(f):
 		token = None
 		if 'x-access-token' in request.headers:
 			token = request.headers['x-access-token'].replace('"', '')
-		if not token:
+			print(token)
+		if not token or token == "undefined":
 			print('no token')
-			return jsonify({ 'Error': 'Token is missing.' }), 401
+			return f(None, *args, **kwargs)
 		try:
 			data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
 			current_user = mongoController.getUserByPublicId(data["public_id"])

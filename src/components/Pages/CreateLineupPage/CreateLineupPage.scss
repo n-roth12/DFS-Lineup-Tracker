@@ -192,6 +192,31 @@
 			margin-right: 20px;
 			margin-top: 10px;
 			max-width: 900px;
+			.filter-btn-wrapper {
+				width: 100%;
+				justify-content: left;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				max-width: 1100px;
+				margin-bottom: 10px;
+				.underline-btn {
+					border: None;
+					background: none;
+					font-weight: 600;
+					font-size: 14pt;
+					color: black;
+					padding: 5px 15px 5px 15px;
+					border-bottom: 3px solid transparent;
+					transition: all 0.2s;
+				}
+				.underline-btn:hover:not(.active) {
+					border-bottom: 3px solid var(--grey-5);
+				}
+				.active {
+					border-bottom: 3px solid var(--dark-blue);
+				}
+			}
 
 			h2 {
 				font-size: 18pt;
@@ -272,7 +297,12 @@
 				font-weight: 600;
 				font-size: 10pt;
 			}
-			thead th:nth-child(1), thead th:nth-child(2), tbody td:nth-child(2) {
+			thead th:nth-child(1), thead th:nth-child(2), thead th:nth-child(3) {
+				width: 40px;
+				min-width: 40px;
+				max-width: 40px;
+			}
+			thead th:nth-child(4), tbody td:nth-child(4) {
 				width: 50px;
 				min-width: 50px;
 				max-width: 50px;
@@ -295,17 +325,47 @@
 					background-color: var(--btn-blue);
 					border-bottom: 1px solid var(--grey-5);
 				}
+				.favorite-icon-outer {
+					background-color: var(--green);
+					border-bottom: 1px solid var(--grey-5);
+				}
+				.favorite-icon-outer:hover {
+					cursor: pointer;
+					background-color: var(--green-2);
+				}
+				.undraftables-icon-outer {
+					background-color: var(--red);
+					border-bottom: 1px solid var(--grey-5);
+				}
+				.undraftables-icon-outer:hover {
+					cursor: pointer;
+					background-color: var(--red-2);
+				}
+				.favorite-icon-outer, .no-favorite-icon-outer {
+					height: 40px;
+					width: 50px;
+					border-right: 1px solid white;
+					justify-content: center;
+					align-items: center;
+				}
+				.undraftables-icon-outer, .no-undraftables-icon-outer {
+					height: 40px;
+					width: 50px;
+					border-right: 1px solid white;
+					justify-content: center;
+					align-items: center;
+				}
 				.add-icon-outer, .no-add-icon-outer {
 					height: 40px;
 					width: 50px;
-					display: flex;
+					border-right: 1px solid white;
 					justify-content: center;
 					align-items: center;
 				}
 				.no-add-icon-outer {
 					background-color: var(--grey-5);
 				}
-				.add-icon, .no-add-icon {
+				.add-icon, .no-add-icon, .favorite-icon, .no-favorite-icon, .undraftables-icon, .no-undraftables-icon {
 					color: white;
 					width: 15px;
 					height: 15px;

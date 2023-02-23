@@ -22,6 +22,21 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0)
 MongoController = MongoController()
 LineupOptimizerController = LineupOptimizerController()
 
+@lineups_blueprint.route('/favorite', methods=['POST'])
+@token_required
+def add_to_favorites(current_user):
+	data = json.loads(request.data)
+	MongoController.add_player_to_lineup_favorites(lineupId=data["lineupId"], player=data["player"], userId=current_user["public_id"])
+
+	return jsonify({ "Message": "Success" }), 200
+
+@lineups_blueprint.route('/hidden', methods=['POST'])
+@token_required
+def add_to_hidden(current_user):
+	data = json.loads(request.data)
+	MongoController.add_player_to_lineup_hidden(lineupId=data["lineupId"], player=data["player"], userId=current_user["public_id"])
+
+	return jsonify({ "Message": "Success" }), 200
 
 @lineups_blueprint.route('/updateLineup', methods=['POST'])
 @token_required
@@ -39,6 +54,11 @@ def create_lineup_new(current_user):
 @token_required
 def create_emptpy_lineup(current_user):
 	data = json.loads(request.data)
+
+	# user is not logged in, so we will not save their lineup to the database
+	if not current_user:
+		return jsonify({ "lineupId": None }), 200
+	
 	data["userPublicId"] = current_user["public_id"]
 	data["lineupId"] = str(uuid.uuid4()).replace("-", "").replace("%7D", "")
 	data["lastUpdate"] = datetime.datetime.now()

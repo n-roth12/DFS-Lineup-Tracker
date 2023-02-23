@@ -97,16 +97,12 @@ function App() {
 
             <Route path="createLineup/:draftGroupId/:lineupId" element={
               <>
-                {sessionStorage.dfsTrackerToken ?
-                  <div className="page-wrapper">
-                    <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} />
-                    <div className="page-wrapper-inner"> 
-                      <CreateLineupPage setAlertMessage={setAlertMessage}/>
-                    </div>
+                <div className="page-wrapper">
+                  <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} />
+                  <div className="page-wrapper-inner"> 
+                    <CreateLineupPage setAlertMessage={setAlertMessage}/>
                   </div>
-                : 
-                  <LoginPage setToken={setToken} />
-                }
+                </div>
               </>
             } />
 
