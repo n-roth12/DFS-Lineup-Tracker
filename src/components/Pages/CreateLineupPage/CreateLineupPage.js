@@ -267,6 +267,10 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   }
 
   const saveLineup = async () => {
+    if (lineupId === "null") {
+      setAlertMessage("Must be logged in to save a lineup!")
+      return
+    }
     const projectedPoints = getTeamProjPoints()
     const res = await fetch(`/lineups/updateLineup`, {
       method: 'POST',
@@ -345,31 +349,45 @@ const CreateLineupPage = ({ setAlertMessage }) => {
   }
 
   const addPlayerToFavorites = async (player) => {
-    const res = await fetch(`/lineups/favorite`, {
-      method: 'POST',
-      headers: {
-        'x-access-token': sessionStorage.dfsTrackerToken
-      },
-      body: JSON.stringify({
-        "lineupId": lineupId,
-        "player": player
+    setFavoritesIds([...favoritesIds, player["playerSiteId"]])
+    if (lineupId !== "null") {
+      const res = await fetch(`/lineups/favorite`, {
+        method: 'POST',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        },
+        body: JSON.stringify({
+          "lineupId": lineupId,
+          "player": player
+        })
       })
-    })
-    const data = await res.json()
+      const data = await res.json()
+    }
   }
 
   const addPlayerToHidden = async (player) => {
-    const res = await fetch(`/lineups/hidden`, {
-      method: 'POST',
-      headers: {
-        'x-access-token': sessionStorage.dfsTrackerToken
-      },
-      body: JSON.stringify({
-        "lineupId": lineupId,
-        "player": player
+    setHiddenIds([...hiddenIds, player["playerSiteId"]])
+    if (lineupId !== "null") {
+      const res = await fetch(`/lineups/hidden`, {
+        method: 'POST',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        },
+        body: JSON.stringify({
+          "lineupId": lineupId,
+          "player": player
+        })
       })
-    })
-    const data = await res.json()
+      const data = await res.json()
+    }
+  }
+
+  const removePlayerFromFavorites = (player) => {
+    setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
+  }
+
+  const removePlayerFromHidden = (player) => {
+    setHiddenIds(hiddenIds.filter((playerId) => playerId !== player["playerSiteId"]))
   }
 
   const exportLineup = async () => {
@@ -413,6 +431,14 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     setLineup(prevLineup)
     setLineupPlayerIds(new Set())
     setHasChanges(false)
+  }
+
+  const changeStateFilter = (state) => {
+    setStateFilter(state)
+    setPosFilter(new Set())
+    setTeamsFilter([])
+    setPlayerFilter("")
+    setEditingPos()
   }
 
   const playerWrapper = (player) => {
@@ -523,9 +549,13 @@ const CreateLineupPage = ({ setAlertMessage }) => {
         {draftables.length > 0 ?
           <div className='players-table-wrapper'>
             <div className='filter-btn-wrapper'>
-              <button onClick={() => setStateFilter("all")} className={`underline-btn${stateFilter === "all" ? " active" : ""}`}>All Players</button>
-              <button onClick={() => setStateFilter("favorites")} className={`underline-btn${stateFilter === "favorites" ? " active" : ""}`}>Favorites</button>
-              <button onClick={() => setStateFilter("hidden")} className={`underline-btn${stateFilter === "hidden" ? " active" : ""}`}>Hidden</button>
+              <button onClick={() => changeStateFilter("all")} className={`underline-btn${stateFilter === "all" ? " active" : ""}`}>Players</button>
+              <button onClick={() => changeStateFilter("favorites")} className={`underline-btn${stateFilter === "favorites" ? " active" : ""}`}>Favorites
+                <span className='length-indicator'>{favoritesIds.length}</span>
+              </button>
+              <button onClick={() => changeStateFilter("hidden")} className={`underline-btn${stateFilter === "hidden" ? " active" : ""}`}>Hidden
+                <span className='length-indicator'>{hiddenIds.length}</span>
+              </button>
             </div>
             {draftGroup && draftGroup["games"].length > 1 &&
             <div className='games-outer'>
@@ -641,7 +671,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
                       <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
-                      <td className='undraftables-icon-outer' onClick={() => addPlayerToHidden(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
+                      <td className='undraftables-icon-outer' onClick={() => removePlayerFromFavorites(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
                       <td>{player.position}</td>
                       <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
                       <td>${player.salary}</td>
@@ -663,7 +693,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
                         <td className='no-add-icon-outer'><FaPlus className='no-add-icon'/></td>
                       }
                       <td className='no-add-icon-outer'><AiOutlineStar className='no-favorite-icon'/></td>
-                      <td className='undraftables-icon-outer'><AiOutlineMinusCircle className='undraftables-icon'/></td>
+                      <td className='undraftables-icon-outer' onClick={() => removePlayerFromHidden(player)}><AiOutlineMinusCircle className='undraftables-icon'/></td>
                       <td>{player.position}</td>
                       <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
                       <td>${player.salary}</td>

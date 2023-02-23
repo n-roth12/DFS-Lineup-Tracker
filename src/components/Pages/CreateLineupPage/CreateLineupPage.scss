@@ -200,6 +200,14 @@
 				align-items: center;
 				max-width: 1100px;
 				margin-bottom: 10px;
+				.length-indicator {
+					font-size: 8pt;
+					border: 1px solid var(--blue-grey-8);
+					color: var(--blue-grey-9);
+					padding: 2px 6px 2px 6px;
+					border-radius: 100px;
+					margin-left: 5px;
+				}
 				.underline-btn {
 					border: None;
 					background: none;
@@ -209,6 +217,9 @@
 					padding: 5px 15px 5px 15px;
 					border-bottom: 3px solid transparent;
 					transition: all 0.2s;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
 				}
 				.underline-btn:hover:not(.active) {
 					border-bottom: 3px solid var(--grey-5);
