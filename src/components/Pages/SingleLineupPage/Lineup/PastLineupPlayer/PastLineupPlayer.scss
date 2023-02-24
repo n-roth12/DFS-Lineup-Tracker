@@ -1,0 +1,128 @@
+.pastLineupPlayer {
+
+    background-color: white;
+    border-bottom: 1px solid #d3d3d3;
+    display: flex;
+    flex-direction: row;
+    height: 80px;
+
+    .playerImage {
+        align-self: center;
+        width: 50px;
+        display: flex;
+        flex-direction: column;
+        margin-right: 15px;
+        padding-top: 5px;
+
+        p {
+            margin-left: 10px;
+            margin-top: auto;
+            margin-bottom: auto;
+            text-align: center;
+            font-weight: 600;
+            font-size: 10pt;
+        }
+    }
+
+    .positionAndNumber {
+        width: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+
+        .playerPosition {
+            font-size: 12pt;
+            font-weight: 600;
+        }
+
+        .playerNumber {
+            font-size: 9pt;
+        }
+    }
+
+    .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        margin: 0px 0px 0px 15px;
+        width: 60px;
+        user-select: None;
+
+        .add-icon {
+            color: var(--btn-blue);
+            font-size: 20pt;
+            user-select: None;
+        }
+        .delete-icon {
+            color: red;
+            font-size: 15pt;
+            user-select: None;
+        }
+    }
+
+    .name-and-info {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        flex: 1;
+
+        .playerInfo {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            height: 60%;
+    
+            .infoBlock {
+                display: flex;
+                justify-content: center;
+    
+                p {
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    justify-content: center;
+                    align-items: center;
+    
+                    .value {
+                        font-size: 10pt;
+                        font-weight: 500;
+                    }
+    
+                    .label {
+                        font-size: 8pt;
+                        color: gray;
+                    }
+                }
+            }
+            .points-block {
+                display: flex;
+                justify-content: center;
+                margin-right: 10px;
+                p {
+                    font-size: 13pt;
+                }
+            }
+        }
+
+        .playerName {
+            display: flex;
+            height: 40%;
+            cursor: pointer;
+    
+            p {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                font-size: 11pt;
+                color: blue;
+                font-weight: 600;
+                font-family: var(--nunito);
+            }
+        }
+    }
+}

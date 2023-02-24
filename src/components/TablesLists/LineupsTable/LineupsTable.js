@@ -189,8 +189,9 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               <>
                 <tr>
                   <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
-                  <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`}
-                    className="view-lineup-btn">Edit</Link></td>
+                  <td>
+                    {stateFilter === "past" ? <Link to={`/lineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`} className="view-lineup-btn">View</Link> 
+                    : <Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`} className="view-lineup-btn">Edit</Link>}</td>
                   <td>{capitalize(lineup["site"])}</td>
                   <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</td>
                   <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
