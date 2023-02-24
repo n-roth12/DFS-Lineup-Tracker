@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import './LineupsPage.scss';
+import './LineupsPage.scss'
 import '../../../DefaultTable.scss'
 import LineupsTable from '../../TablesLists/LineupsTable/LineupsTable'
 import ImportLineupsDialog from '../../Dialogs/ImportLineupsDialog/ImportLineupsDialog'
-import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog';
-import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
+import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
+import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
+import PointsGraph from '../LineupsPage/PointsGraph/PointsGraph'
 import { Roller } from 'react-awesome-spinners'
 import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaPlus, FaUpload, FaFileImport } from 'react-icons/fa'
 import { BiImport } from 'react-icons/bi'
-import { api_url } from '../../../Constants';
+import { api_url } from '../../../Constants'
 
 const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
@@ -153,7 +154,6 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 					deleteLineups={() => deleteSelectedLineups(selectedLineups)} />
 				{stateFilter === "past" &&
 				<>
-					<div className='lineups-title'><h2>Past Lineups</h2></div>
 						<LineupsTable
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups} 
@@ -165,7 +165,6 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 				}
 				{stateFilter === "live" &&
 				<>
-					<div className='lineups-title'><h2>Live Lineups</h2></div>
 						<LineupsTable
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups}
@@ -178,7 +177,6 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 				}
 				{stateFilter === "upcoming" &&
 				<>
-					<div className='lineups-title'><h2>Upcoming Lineups</h2></div>
 						<LineupsTable
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups}

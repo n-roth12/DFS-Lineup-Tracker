@@ -289,6 +289,13 @@
 			justify-content: space-between;
 			flex-wrap: wrap;
 		}
+		.edit-wrapper {
+			.edit-link {
+				color: blue;
+				text-decoration: None;
+				margin-left: 10px;
+			}
+		}
 		.header-details {
 			display: flex;
 			flex-direction: row;

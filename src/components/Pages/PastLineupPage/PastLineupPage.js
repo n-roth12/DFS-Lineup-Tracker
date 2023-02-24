@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './PastLineupPage.scss'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { FaPlus, FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 import { BiDownload, BiBlock } from 'react-icons/bi'
@@ -43,6 +43,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [stateFilter, setStateFilter] = useState("all")
   const [favoritesIds, setFavoritesIds] = useState([])
   const [hiddenIds, setHiddenIds] = useState([])
+  const [showEditLineup, setShowEditLineup] = useState(false)
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -296,11 +297,14 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       if (remainingSalary < 0) {
         setAlertColor("green")
         setAlertMessage("Lineup Saved with Warning: Lineup over the salary cap!")
+        setAlertTime(4000)
       } else {
         setAlertColor("green")
         setAlertMessage("Lineup Saved")
+        setAlertTime(4000)
       }
       setHasChanges(false)
+      setShowEditLineup(false)
     })
     .catch((error) => {
       setAlertColor("red")
@@ -522,6 +526,11 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                 </div>
               </div>
               <div className='header-options'>
+                {showEditLineup ?
+                  <button onClick={saveLineup}>Save</button>
+                :
+                  <button className='generate-btn' onClick={() => setShowEditLineup(true)}>Edit</button>
+                }
                 <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
                 {file === null ?
                   <button className='generate-btn' onClick={exportLineup}>Export</button>
