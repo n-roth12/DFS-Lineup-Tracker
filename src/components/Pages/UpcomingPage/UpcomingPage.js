@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { capitalize } from '@material-ui/core';
 import { FaSearch } from 'react-icons/fa';
 
-const UpcomingPage = ({ week, year }) => {
+const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor }) => {
 
 	const [slates, setSlates] = useState([])
 	const [players, setPlayers] = useState([])
@@ -29,6 +29,9 @@ const UpcomingPage = ({ week, year }) => {
 	const navigate = useNavigate()
  
 	useEffect(() => {
+		setAlertMessage("Notice: For testing purposes, the site is functioning as though it is still Week 18, 2021, due to the NFL being in offseason.")
+		setAlertColor("blue")
+		setAlertTime(400000)
 		getPlayers()
 		getUpcomingSlates()
 	}, [])

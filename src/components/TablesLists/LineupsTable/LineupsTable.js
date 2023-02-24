@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaAngleLeft } from 'react-icons/fa'
+import { FaAngleRight, FaAngleDown, FaAngleUp, FaAngleLeft } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import './LineupsTable.scss'
 import '../../../DefaultTable.scss'
@@ -18,9 +18,12 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
 	const [createLineupDialogContent, setCreateLineupDialogContent] = useState({})
 	const [dialogDraftGroupLineups, setDialogDraftGroupLineups] = useState([])
-  const [siteFilter, setSiteFilter] = useState(new Set())
-  const [yearFilter, setYearFilter] = useState()
-  const [weekFilter, setWeekFilter] = useState()
+  const [siteFilter, setSiteFilter] = useState()
+  const [showDeleteLineupsDialog, setShowDeleteLineupsDialog] = useState(false)
+  const [yearFilter, setYearFilter] = useState("all")
+  const [weekFilter, setWeekFilter] = useState("all")
+  const [sortColumn, setSortColumn] = useState("startTime")
+  const [reverseSort, setReverseSort] = useState(false)
 
   useEffect(() => {
     getYears()
@@ -39,7 +42,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const getYears = () => {
     var temp = [...years]
     lineups && lineups.length > 0 && lineups.map((lineup) => {
-      if (!(temp.includes(lineup.year))) {
+      if (!(temp.includes(lineup.year)) && lineup.year) {
         temp.push(lineup.year)
       }
     })
@@ -47,8 +50,17 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   }
 
   const changeYear = (year) => {
-    setWeekFilter("All")
+    setWeekFilter("all")
     setYearFilter(year)
+  }
+
+  const changeSortColumn = (column) => {
+    if (sortColumn === column) {
+      setReverseSort(!reverseSort)
+    } else {
+      setReverseSort(false)
+    }
+    setSortColumn(column)
   }
 
   const toggleSelectedLineup = (lineupId) => {
@@ -70,15 +82,18 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
 	}
 
   const changeFilter = (site) => {
-    if (siteFilter.has(site)) {
-      const filterCopy = new Set(siteFilter)
-      filterCopy.delete(site)
-      setSiteFilter(filterCopy)
-    } else {
-      setSiteFilter(new Set(siteFilter.add(site)))
-    }
-    if (siteFilter.size > 2) {
-      setSiteFilter(new Set())
+    setSelectedLineups([])
+    setSiteFilter(site)
+  }
+
+  const sortCompare = (a, b) => {
+    if (sortColumn === "salary") {
+      return reverseSort === true ? parseInt(b["salary"]) - parseInt(a["salary"]) : parseInt(a["salary"]) - parseInt(b["salary"])
+    } else if (sortColumn === "startTime") {
+      return (reverseSort === true ? a["startTime"].localeCompare(b["startTime"]) : b["startTime"].localeCompare(a["startTime"]))
+    } else if (sortColumn === "projectedPoints") {
+      return reverseSort === true ? parseInt(b["projectedPoints"]) - parseInt(a["projectedPoints"]) 
+        : parseInt(a["projectedPoints"]) - parseInt(b["projectedPoints"])
     }
   }
 
@@ -89,31 +104,12 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
       <div className='lineups-table-wrapper-inner'>
         <div className='table-header-wrapper'>
           <div className="pos-filter-wrapper">
-            <div>
-              <button 
-                className={`filter-btn${siteFilter.size < 1 ? "-active" : ""}`} 
-                onClick={() => setSiteFilter(new Set())}>All
-              </button>
-              <button 
-                className={`filter-btn${siteFilter.has("draftkings") ? "-active" : ""}`} 
-                onClick={() => changeFilter("draftkings")}>DraftKings
-              </button>
-              <button
-                className={`filter-btn${siteFilter.has("yahoo") ? "-active" : ""}`} 
-                onClick={() => changeFilter("yahoo")}>Yahoo
-              </button>
-              <button 
-                className={`filter-btn${siteFilter.has("fanduel") ? "-active" : ""}`} 
-                onClick={() => changeFilter("fanduel")}>Fanduel
-              </button>
-            </div>
-          </div>
-          <div>
           <div className="selectors">
             <select 
               className="year-select" 
-              value={yearFilter} 
+              value={yearFilter}
               onChange={(e) => changeYear(e.target.value) }>
+              <option value="all" key="All">All Years</option>
               {years.map((year) => 
                 <option value={year} key={year}>{year}</option>
               )}
@@ -122,19 +118,40 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               className="week-select" 
               value={weekFilter}
               onChange={(e) => setWeekFilter(e.target.value)}>
+              <option value="all" key="All">All Weeks</option>
               {weeks.map((week) =>
                 !(week > 17 && yearFilter < 2021) &&
                   <option value={week} key={week}>Week {week}</option>
               )}
-              <option value={"All"} key={"All"}>All</option>
             </select>
           </div>
+            <div>
+              <button 
+                className={`filter-btn${!siteFilter ? "-active" : ""}`} 
+                onClick={() => setSiteFilter()}>All
+              </button>
+              <button 
+                className={`filter-btn${siteFilter === "draftkings" ? "-active" : ""}`} 
+                onClick={() => changeFilter("draftkings")}>DraftKings
+              </button>
+              <button
+                className={`filter-btn${siteFilter === "yahoo" ? "-active" : ""}`} 
+                onClick={() => changeFilter("yahoo")}>Yahoo
+              </button>
+              <button 
+                className={`filter-btn${siteFilter === "fanduel" ? "-active" : ""}`} 
+                onClick={() => changeFilter("fanduel")}>Fanduel
+              </button>
+            </div>
           </div>
           <div className='lineup-wrapper-header'>
+            {selectedLineups.length > 0 &&
+              <button className='lineup-export-btn'>Export ({selectedLineups.length})</button>
+            }
+            {selectedLineups.length > 0 &&
+              <button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete ({selectedLineups.length})</button>
+            }
             {stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon'/></Link>}
-            {/* {selectedLineups.length > 0 &&
-              <button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete Lineups ({selectedLineups.length})</button>
-            } */}
           </div>
         </div>
         <span className='page-btn-wrapper'>
@@ -151,14 +168,24 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             <th></th>
             <th>Site</th>
             <th>Slate</th>
-            <th>Date</th>
-            <th>Salary</th>
-            <th>Proj. Pts</th>
+            <th className='sortable-col' onClick={() => changeSortColumn("startTime")}>
+              Date {sortColumn === "startTime" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
+            <th className='sortable-col' onClick={() => changeSortColumn("salary")}>
+              Salary {sortColumn === "salary" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
+            <th className='sortable-col' onClick={() => changeSortColumn("projectedPoints")}>
+              Proj. Pts {sortColumn === "projectedPoints" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
           </tr>
         </thead>
         {lineups.length > 0 ?
           <tbody>
-            {lineups.filter((lineup) => siteFilter.size < 1 || siteFilter.has(lineup["site"])).slice((currPage * lineupsPerPage), lineupsPerPage + ((currPage) * lineupsPerPage)).map((lineup) => 
+            {lineups.filter((lineup) => 
+              (!siteFilter || siteFilter === lineup["site"])
+              && (yearFilter === "all" || lineup["year"] === parseInt(yearFilter))
+              && (weekFilter === "all" || lineup["week"] === parseInt(weekFilter))
+              )
+              .slice((currPage * lineupsPerPage), lineupsPerPage + ((currPage) * lineupsPerPage))
+              .sort((a, b) => sortCompare(a, b))
+              .map((lineup) => 
               <>
                 <tr>
                   <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>

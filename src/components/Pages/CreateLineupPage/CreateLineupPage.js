@@ -16,7 +16,7 @@ import GeneratedLineup from '../SingleLineupPage/GeneratedLineup/GeneratedLineup
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
 import { useNavigate } from 'react-router-dom'
 
-const CreateLineupPage = ({ setAlertMessage }) => {
+const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   const { draftGroupId, lineupId } = useParams()
   const [draftables, setDraftables] = useState([])
@@ -268,6 +268,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
 
   const saveLineup = async () => {
     if (lineupId === "null") {
+      setAlertColor("red")
       setAlertMessage("Must be logged in to save a lineup!")
       return
     }
@@ -294,13 +295,16 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     .then(() => {
       setPrevLineup(lineup)
       if (remainingSalary < 0) {
+        setAlertColor("green")
         setAlertMessage("Lineup Saved with Warning: Lineup over the salary cap!")
       } else {
+        setAlertColor("green")
         setAlertMessage("Lineup Saved")
       }
       setHasChanges(false)
     })
     .catch((error) => {
+      setAlertColor("red")
       setAlertMessage("Error while saving lineup!")
     })
   }
@@ -367,6 +371,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
 
   const addPlayerToHidden = async (player) => {
     setHiddenIds([...hiddenIds, player["playerSiteId"]])
+    setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
     if (lineupId !== "null") {
       const res = await fetch(`/lineups/hidden`, {
         method: 'POST',
@@ -467,7 +472,7 @@ const CreateLineupPage = ({ setAlertMessage }) => {
     })
     setShowDeleteDialog(false)
 		navigate(`/lineups`)
-    setAlertMessage("Lineup Deleted")
+    setAlertMessage("Lineup Deleted", "green")
   }
 
   return (

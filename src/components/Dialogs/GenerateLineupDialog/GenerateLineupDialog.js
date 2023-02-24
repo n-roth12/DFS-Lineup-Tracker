@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import { FaTimes } from 'react-icons/fa'
+import { Roller } from 'react-awesome-spinners'
 import './GenerateLineupDialog.scss'
 import GeneratedLineup from '../../Pages/SingleLineupPage/GeneratedLineup/GeneratedLineup'
 
@@ -13,6 +14,8 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
   const [teamToStack, setTeamToStack] = useState()
   const [activeStackOption, setActiveStackOption] = useState("team")
   const [replaceEntireLineup, setReplaceEntireLineup] = useState("full")
+  const [includeHiddenPlayers, setIncludeHiddenPlayers] = useState(false)
+  const [loadingLineup, setLoadingLineup] = useState(false)
   const [teams, setTeams] = useState([])
 
   useEffect(() => {
@@ -20,6 +23,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
   }, [])
 
   const generateLineup = async () => {
+    setLoadingLineup(true)
     const res = await fetch(`/lineups/generate`, {
       method: 'POST',
       headers: {
@@ -37,6 +41,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
     })
     const data = await res.json()
     setGeneratedLineup(data["lineup"])
+    setLoadingLineup(false)
   }
 
   const toggleCheck = (position) => {
@@ -98,14 +103,6 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
       </DialogTitle>
       <DialogContent className='content'>
         <div className='content-inner'>
-          <div className='generated-lineup-wrapper'>
-            <h3>Lineup</h3>
-            <div className='generated-lineup-details'>
-              <p>Salary: </p>
-              <p>Proj PTS</p>
-            </div>
-            <GeneratedLineup lineup={generatedLineup} onDelete={deletePlayerFromLineup} />
-          </div>
           <div className='options-wrapper'>
             <h3>Options</h3>
             <div className='flex-position-buttons-wrapper section'>
@@ -119,6 +116,11 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
               <input type="checkbox" id="TE" name="TE" value="TE" 
                 checked={eligibleFlexPositions.has("TE")} onChange={() => toggleCheck("TE")} />
               <label for="TE">TE</label>
+            </div>
+            <div className='section'>
+              <label for="hidden-option">Include hidden players: </label>
+              <input type="checkbox" checked={includeHiddenPlayers} onChange={() => setIncludeHiddenPlayers(!includeHiddenPlayers)} 
+                value="full" name="hidden-option" />
             </div>
             <div className='radios section'>
               <p>Replace:</p>
@@ -185,6 +187,20 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
               </select>
             </div>
             <button className='generate-btn' onClick={generateLineup}>Generate Lineup</button>
+          </div>
+          <div className='generated-lineup-wrapper'>
+            <h3>Lineup</h3>
+            <div className='generated-lineup-details'>
+              <p>Salary: </p>
+              <p>Proj PTS</p>
+            </div>
+            {!loadingLineup ?
+              <GeneratedLineup lineup={generatedLineup} onDelete={deletePlayerFromLineup} />
+            :
+              <div className='roller-wrapper'>
+                <Roller className="roller"/>
+              </div>
+            }
           </div>
         </div>
       </DialogContent>

@@ -69,6 +69,13 @@ class MongoController:
             del(draftGroup["_id"])
         return draftgroups
 
+    def getLineupsAll(self):
+        cursor = self.lineups_collection.find({})
+        lineups = [x for x in cursor]
+        for lineup in lineups:
+            del(lineup["_id"])
+        return lineups
+
     def addDraftables(self, data):
         for draftables in data:
             self.draftables_collection.replace_one({ "draftGroupId": draftables["draftGroupId"] }, draftables, upsert=True)        
@@ -100,6 +107,9 @@ class MongoController:
     def add_week_and_year_to_draftGroup_and_draftables(self, draftGroupId, week, year):
         self.draftables_collection.update_one({ "draftGroupId": draftGroupId }, {"$set": {"week": week, "year": year}})
         self.draftgroups_collection.update_one({ "draftGroupId": draftGroupId }, {"$set": {"week": week, "year": year}})
+
+    def add_week_and_year_to_lineup(self, lineupId, week, year):
+        self.lineups_collection.update_one({ "lineupId": lineupId }, {"$set": {"week": week, "year": year}})
 
     def add_player_to_lineup_favorites(self, lineupId, player, userId):
         self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$push": {"favorites": player}})

@@ -130,6 +130,17 @@ def temp_add_date():
 
 	return "success", 200
 
+@app.route("/temp/addDateLineup", methods=["POST"])
+def temp_add_date_2():
+	lineups = MongoController.getLineupsAll()
+
+	for lineup in lineups:
+		week_info = parseDraftGroupDateString(lineup["startTime"])
+		MongoController.add_week_and_year_to_lineup(lineupId=lineup["lineupId"], \
+			week=week_info["week"], year=week_info["year"])
+
+	return "success", 200
+
 @app.route('/draftkings_slates', methods=['GET'])
 def get_slates():
 	result = DraftKingsController.getDraftKingsSlates()

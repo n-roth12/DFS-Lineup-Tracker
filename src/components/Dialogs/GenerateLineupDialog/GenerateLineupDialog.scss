@@ -17,6 +17,7 @@
         }
     }
     .content {
+        background-color: var(--grey-2);
         .content-inner {
             display: flex;
             flex-direction: row;
@@ -26,8 +27,15 @@
             .generated-lineup-wrapper {
                 display: flex;
                 flex-direction: column;
+                .roller-wrapper {
+                    display: flex;
+                    height: 100%;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                }
                 .generated-lineup-details {
-                    background-color: var(--grey-3);
+                    background-color: var(--grey-4);
                     margin-bottom: 0;
                     display: flex;
                     justify-content: space-between;
@@ -46,9 +54,11 @@
                 align-items: center;
                 .section {
                     width: 100%;
-                    padding: 8px;
+                    padding: 8px 15px 8px 15px;
                     margin-bottom: 10px;
-                    background-color: var(--grey-3);
+                    border-radius: 6px;
+                    box-shadow: var(--box-shadow-1);
+                    background-color: white;
                     select {
                         margin-right: 10px;
                     }
@@ -70,12 +80,13 @@
                     }
                 }
                 .generate-btn {
+                    font-size: 11pt;
                     width: fit-content;
                     border: none;
                     background-color: var(--btn-blue);
                     color: white;
                     padding: 5px 10px 5px 10px;
-                    border-radius: 5px;
+                    border-radius: 6px;
                     box-shadow: var(--box-shadow-1);
                 }
 
@@ -83,12 +94,13 @@
         }
     }
     .dialog-actions {
+        background-color: var(--grey-2);
         .apply-btn {
             border: none;
             background-color: var(--btn-blue);
             color: white;
             padding: 10px 20px 10px 20px;
-            border-radius: 5px;
+            border-radius: 6px;
             box-shadow: var(--box-shadow-1);
         }
     }

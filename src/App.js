@@ -20,13 +20,15 @@ import {ScrollToTop} from './ScrollToTop';
 function App() {
   
   const [alertMessage, setAlertMessage] = useState()
+  const [alertColor, setAlertColor] = useState()
+  const [alertTime, setAlertTime] = useState(4000)
 
-  useEffect(() =>{
+  useEffect(() => {
     document.title = "Mainslater"
   })
 
   useEffect(() => {
-      setTimeout(() => { if (alertMessage) { setAlertMessage() }} , 4000)
+      setTimeout(() => { if (alertMessage) { setAlertMessage() && setAlertTime(4000) }} , alertTime)
   }, [alertMessage])
 
   const setToken = (userToken) => {
@@ -74,9 +76,9 @@ function App() {
                 <>
                 <ScrollToTop />
                   <div className="page-wrapper">
-                    <Navbar />
+                    <Navbar alertMessage={alertMessage} alertColor={alertColor} closeAlertMessage={closeAlertMessage} />
                     <div className="page-wrapper-inner"> 
-                      <LineupsPage />
+                      <LineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} setAlertTime={setAlertTime} />
                     </div>
                   </div>
                 </>
@@ -87,9 +89,10 @@ function App() {
               <>
                 <ScrollToTop />
                 <div className="page-wrapper">
-                  <Navbar />
+                  <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
                   <div className="page-wrapper-inner"> 
-                    <UpcomingPage week={18} year={2021} />
+                    <UpcomingPage week={18} year={2021} setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
+                      setAlertTime={setAlertTime}/>
                   </div>
                 </div>
               </>
@@ -98,9 +101,10 @@ function App() {
             <Route path="createLineup/:draftGroupId/:lineupId" element={
               <>
                 <div className="page-wrapper">
-                  <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} />
+                  <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
                   <div className="page-wrapper-inner"> 
-                    <CreateLineupPage setAlertMessage={setAlertMessage}/>
+                    <CreateLineupPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
+                      setAlertTime={setAlertTime} />
                   </div>
                 </div>
               </>
@@ -110,9 +114,10 @@ function App() {
               <>
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
-                    <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} />
+                    <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
                     <div className="page-wrapper-inner"> 
-                      <CompareLineupsPage setAlertMessage={setAlertMessage}/>
+                      <CompareLineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
+                        setAlertTime={setAlertTime} />
                     </div>
                   </div>
                 : 

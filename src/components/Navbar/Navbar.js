@@ -3,12 +3,12 @@ import './Navbar.scss'
 import UpperNav from './UpperNav/UpperNav'
 import LowerNav from './LowerNav/LowerNav'
 
-const Navbar = ({ alertMessage, closeAlertMessage}) => {
+const Navbar = ({ alertMessage, closeAlertMessage, alertColor }) => {
 
   return (
     <>
       <UpperNav />
-      <LowerNav alertMessage={alertMessage} onClose={closeAlertMessage}/>
+      <LowerNav alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
       </>
   )
 }

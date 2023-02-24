@@ -1,6 +1,16 @@
+.green {
+    background-color: var(--green-6);
+    border: 2px solid var(--green-5);
+}
+.red {
+    background-color: var(--red-4);
+    border: 1px solid var(--red-2);
+}
+.blue {
+    background-color: var(--btn-blue-3);
+    border: 1px solid var(--btn-blue-2);
+}
 .alert-section {
-    background-color: var(--green-2);
-    border: 2px solid var(--green);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -9,9 +19,9 @@
     width: 100%;
     p {
         display: flex;
-        font-size: 14pt;
+        font-size: 12pt;
         margin: 0;
-        padding: 5px;
+        padding: 10px;
         font-weight: 400;
     }
     .close-btn {

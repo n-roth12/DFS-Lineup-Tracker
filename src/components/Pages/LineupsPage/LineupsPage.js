@@ -11,7 +11,7 @@ import { FaAngleRight, FaAngleDown, FaAngleUp, FaTimes, FaFire, FaSnowflake, FaP
 import { BiImport } from 'react-icons/bi'
 import { api_url } from '../../../Constants';
 
-const LineupsPage = () => {
+const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
 	const [lineups, setLineups] = useState([])
 	const [loadingLineups, setLoadingLineups] = useState(true)
@@ -30,6 +30,9 @@ const LineupsPage = () => {
   }, [])
 
   const loadPage = async () => {
+	setAlertMessage("Notice: For testing purposes, the site is functioning as though it is still Week 18, 2021, due to the NFL being in offseason.")
+	setAlertColor("blue")
+	setAlertTime(400000)
   	await getUserLineups()
   }
 
@@ -156,7 +159,7 @@ const LineupsPage = () => {
 							setSelectedLineups={setSelectedLineups} 
 							stateFilter={stateFilter}
 							lineups={lineups.length > 0 ? lineups.filter(lineup => {
-								return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date())
+								return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date("2022-12-30T06:00:00"))
 							}) : []} /> 
 				</>
 				}
@@ -169,7 +172,7 @@ const LineupsPage = () => {
 							stateFilter={stateFilter}
 							lineups={lineups.length > 0 ? lineups.filter((lineup) => {
 								return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
-									&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date())
+									&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date("2022-12-30T06:00:00"))
 						}) : []} />
 				</>
 				}
@@ -181,7 +184,7 @@ const LineupsPage = () => {
 							setSelectedLineups={setSelectedLineups}
 							stateFilter={stateFilter}
 							lineups={lineups.length > 0 ? lineups.filter((lineup) => {
-								return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
+								return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date("2022-12-30T06:00:00"))
 							}) : []}
 						/>
 				</>
@@ -197,67 +200,3 @@ const LineupsPage = () => {
 }
 
 export default LineupsPage
-
-
-// DEPRECATED CODE
- 	// const loadGraphData = () => {
- 	// 	setLoadingPointsGraph(true)
- 	// 	setLoadingBankrollGraph(true)
- 	// 	var data = []
- 	// 	var bankRollSum = 0
- 	// 	var lineups_copy = [...lineups]
- 	// 	var max_percentile = 0
- 	// 	var max_points = 0
- 	// 	var max_win = 0
- 	// 	lineups_copy.reverse()
-
- 	// 	lineups_copy.length > 0 && lineups_copy.map((lineup) => {
- 	// 		if (filteredYears == null || filteredYears == lineup.year) {
-	//  			bankRollSum += (lineup.winnings - lineup.bet)
-	//  			var week_string = `${lineup.year}/${lineup.week}`
-	//  			var sameWeeks =  data.filter(week => week.week === week_string)
-	//  			max_points = Math.max(max_points, lineup.points)
-	//  			max_win = Math.max(max_win, lineup.winnings - lineup.bet)
-	//  			max_percentile = Math.max(max_percentile, lineup.percentile)
-	//  			if (sameWeeks.length > 0) {
-	//  				sameWeeks[0]["bankroll"] = bankRollSum
-	//  				sameWeeks[0]["points"] = (sameWeeks[0]["points"] * sameWeeks[0]["lineup_count"] + lineup.points) / (sameWeeks[0]["lineup_count"] + 1)
-	//  				sameWeeks[0]["lineup_count"] += 1
-	//  				if (data.length > 1) {
-	//  					sameWeeks[0]["points_change"] = sameWeeks[0]["points"] - data[data.length - 2]["points"]
-	//  					sameWeeks[0]["bankroll_change"] = bankRollSum - data[data.length - 2]["bankroll"]
-	//  				}
-	//  			} else {
-	// 	 			var lineup_data = {}
-	// 	 			lineup_data["points"] = lineup.points
-	// 	 			lineup_data["lineup_count"] = 1
-	// 	 			lineup_data["bankroll"] = bankRollSum
-	// 	 			lineup_data["week"] = week_string
-	// 	 			if (data.length > 0) {
-	// 	 				lineup_data["points_change"] = (lineup.points - data[data.length - 1]["points"])
-	// 	 				lineup_data["bankroll_change"] = (bankRollSum - data[data.length - 1]["bankroll"])
-	// 	 			}
-	// 	 			data.push(lineup_data)
-	// 	 		}
-	// 	 	}
-	// 	 	setLineupCount(data.length)
-	// 	 	setHighestWin(max_win)
-	// 	 	setMaxScore(max_points)
-	// 	 	setHighestPercentile(max_percentile)
-	//  	})	
-
-	// 	setPointsGraphData(data)
-	// 	setBankrollGraphData(data)
-	// 	setLoadingPointsGraph(false)
-	// 	setLoadingBankrollGraph(false)
- 	// }
-
-	//  const getExtras = () => {
-	// 	setLineupCount(lineups.length)
-	// 	const a = Math.max(...lineups.map(lineup => (lineup.winnings - lineup.bet)))
-	// 	setHighestWin(a)
-	// 	const b = Math.max(...lineups.map(lineup => (lineup.percentile)))
-	// 	setHighestPercentile(b)
-	// 	const c = Math.max(...lineups.map(lineup => (lineup.points)))
-	// 	setMaxScore(c)
-	// }
