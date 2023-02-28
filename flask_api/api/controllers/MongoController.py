@@ -69,6 +69,13 @@ class MongoController:
             del(draftGroup["_id"])
         return draftgroups
 
+    def getDraftablesAll(self):
+        cursor = self.draftables_collection.find({})
+        draftables = [group for group in cursor]
+        for draftable in draftables:
+            del(draftable["_id"])
+        return draftables
+
     def getLineupsAll(self):
         cursor = self.lineups_collection.find({})
         lineups = [x for x in cursor]
@@ -78,7 +85,13 @@ class MongoController:
 
     def addDraftables(self, data):
         for draftables in data:
-            self.draftables_collection.replace_one({ "draftGroupId": draftables["draftGroupId"] }, draftables, upsert=True)        
+            self.draftables_collection.replace_one({ "draftGroupId": draftables["draftGroupId"] }, draftables, upsert=True)
+
+    def deleteDraftableByDraftGroupId(self, draftGroupId):
+        self.draftables_collection.delete_one({ "draftGroupId": draftGroupId })
+
+    def updateDraftablesStatusByDraftGroupId(self, draftGroupId, status):
+        self.draftables_collection.update_one({ "draftGroupId": int(draftGroupId)}, {"$set": {"status": status }})
 
     def getDraftablesByDraftGroupId(self, draftGroupId):
         draftables = self.draftables_collection.find_one({"draftGroupId": int(draftGroupId)})
@@ -116,5 +129,3 @@ class MongoController:
 
     def add_player_to_lineup_hidden(self, lineupId, player, userId):
         self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$push": {"hidden": player}})
-
-

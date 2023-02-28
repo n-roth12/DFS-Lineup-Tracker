@@ -6,11 +6,12 @@ import requests
 from .utilities import token_required
 from ..controllers.RedisController import RedisController
 from ..controllers.MongoController import MongoController
+from ..controllers.FFBApiController import FFBApiController
 
 history_blueprint = Blueprint('history_blueprint', __name__, url_prefix='/history')
 RedisController = RedisController()
 MongoController = MongoController()
-
+FFBApiController = FFBApiController()
 
 @history_blueprint.route('/search/week', methods=['GET'])
 def research_search():
@@ -127,5 +128,59 @@ def get_draftGroups_by_date_range():
 	if not startTime or not endTime:
 		return jsonify({ "Error": "Missing startTime or endTime" }), 400
 
-	
-	
+
+@history_blueprint.route('/playergamestats', methods=["GET"])
+def get_draftGroup_playergamestats():
+	draft_group_id = request.args.get("draftGroup")
+
+	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId=int(draft_group_id))
+
+	result = FFBApiController.get_draftables_playergamestats(draftables=draftables["draftables"], 
+		week=draftables["week"], year=draftables["year"])
+
+	return jsonify(result), 200
+
+
+@history_blueprint.route('/updateDraftgroups', methods=['POST'])
+def update_draftgroups():
+	draft_groups = MongoController.getDraftGroupsAll()
+
+	count = 0
+	for draft_group in draft_groups:
+		if draft_group.get("year") and draft_group.get("week"):
+			if draft_group["year"] <= 2022 and draft_group["week"] < 18:
+				draft_group["state"] = "complete"
+			count += 1
+
+	return jsonify({ "Count": count }), 200
+
+
+@history_blueprint.route('/updateDraftables', methods=['POST'])
+def update_draftables():
+	draftables = MongoController.getDraftablesAll()
+
+	count1 = 0
+	count2 = 0
+	for draftable in draftables:
+		if draftable.get("year") and draftable.get("week"):
+			if draftable["year"] <= 2022 and draftable["week"] < 18:
+				MongoController.updateDraftablesStatusByDraftGroupId(draftGroupId=draftable["draftGroupId"], status="complete")
+				count1 += 1
+			else:
+				MongoController.updateDraftablesStatusByDraftGroupId(draftGroupId=draftable["draftGroupId"], status="upcoming")
+				count2 += 1
+
+	return jsonify({ "complete": count1, "upcoming": count2 }), 200
+
+
+@history_blueprint.route('deleteEmptyDraftables', methods=['POST'])
+def remove_empty_draftables():
+	draftables = MongoController.getDraftablesAll()
+
+	count = 0
+	for draftable in draftables:
+		if len(draftable["draftables"]) < 1:
+			MongoController.deleteDraftableByDraftGroupId(draftable["draftGroupId"])
+			count += 1
+
+	return jsonify({ "Count": count }), 200

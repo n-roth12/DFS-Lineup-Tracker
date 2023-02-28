@@ -68,42 +68,6 @@ def team_info(current_user):
 
 	return jsonify(teams_info), 200
 
-
-@app.route('/lineup_data/<lineup_id>', methods=['GET'])
-def get_lineup_data(lineup_id: int):
-	key = f'lineup_data_{lineup_id}'
-	lineup_data_from_cache = redis_client.get(key)
-	if lineup_data_from_cache is None:
-
-		body_data = requests.get(f'{app.config["BASE_URL"]}/lineups/{lineup_id}').json()
-		res = requests.post(f'{app.config["FFB_API_URL"]}api/playergamestats', 
-							json=body_data)
-		lineup_data_from_api = res.json()
-
-
-		redis_client.set(key, json.dumps(lineup_data_from_api))
-		lineup_data_from_cache = redis_client.get(key)
-
-	result = json.loads(lineup_data_from_cache)
-
-	return jsonify({ 'lineup_data': result }), 200
-
-
-@app.route('/nfl/teams', methods=['GET'])
-@token_required
-def nfl_teams(current_user):
-	teams_from_cache = redis_client.get('nfl_teams')
-	if teams_from_cache is None:
-		teams = requests.get(f'{app.config["FFB_API_URL"]}/api/nfl/teams').json()
-		sorted_teams = sorted(teams['teams'])
-		redis_client.set('nfl_teams', json.dumps(sorted_teams))
-		teams_from_cache = sorted_teams
-	else:
-		teams_from_cache = json.loads(teams_from_cache)
-
-	return jsonify(teams_from_cache), 200
-
-
 @app.route('/current/week', methods=['GET'])
 def get_current_week():
 	result = getCurrentWeek()

@@ -62,11 +62,12 @@ const PointsGraph = ({ graphData }) => {
             {/* <CartesianGrid strokeDasharray="3 3" stroke="#ccc" vertical={false} /> */}
             <XAxis width={"150%"} dataKey="date" tickLine={false} tick={{ fill: "#000000", fontSize: 11 }} minTickGap={30} />
             <YAxis tick={{ fill: "#000000", fontSize: 11 }} orientation={"right"}/>
+            <div><p>hello</p></div>
             <Line
               dataKey="proj"
               stroke="#202033"
-              strokeWidth="2"
-              dot={{ fill: "#202033", stroke: "#202033", r: 2 }}
+              strokeWidth="1.5"
+              dot={{ fill: "#ffffff", stroke: "#202033", r: 1 }}
               activeDot={{ fill: "#202033", stroke: "#202033", r: 4 }}
             />
             {/* <Tooltip content={<CustomToolTip />} /> */}

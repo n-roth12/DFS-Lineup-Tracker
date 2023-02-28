@@ -123,7 +123,8 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     getLineup()
     getDraftGroup()
     getDraftGroupLineups()
-    setTimeout(() => setLoading(false), 1000)
+    getPastDraftablesData()
+    setTimeout(() => setLoading(false), 1500)
   }, [draftGroupId, lineupId])
 
   useEffect(() => {
@@ -207,6 +208,17 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     })
     const data = await res.json()
     setDraftGroup(data)
+  }
+
+  const getPastDraftablesData = async () => {
+    const res = await fetch(`/history/playergamestats?draftGroup=${draftGroupId}`, {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
+    })
+    const data = await res.json()
+    console.log(data)
   }
 
   const getDraftGroupLineups = async () => {
