@@ -44,6 +44,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [favoritesIds, setFavoritesIds] = useState([])
   const [hiddenIds, setHiddenIds] = useState([])
   const [showEditLineup, setShowEditLineup] = useState(false)
+  const [pastDraftablesData, setPastDraftablesData] = useState([])
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -119,7 +120,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   useEffect(() => {
     setShowCreateLineupDialog(false)
-    getDraftables()
     getLineup()
     getDraftGroup()
     getDraftGroupLineups()
@@ -152,25 +152,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       }
     }
     setLineupPlayerIds(temp)
-  }
-
-  const getDraftables = async () => {
-    const res = await fetch(`/upcoming/players?draftGroup=${draftGroupId}`, {
-      method: 'GET',
-      headers: {
-        'x-access-token': sessionStorage.dfsTrackerToken
-      }
-    })
-    const data = await res.json()
-    var mySet = new Set()
-    var draftables = []
-    data.forEach((player) => {
-      if (!mySet.has(player["playeSiteId"])) {
-        draftables.push(player)
-        mySet.add(player["playerSiteId"])
-      }
-    })
-    setDraftables(draftables)
   }
 
   const getLineup = async () => {
@@ -218,7 +199,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       }
     })
     const data = await res.json()
-    console.log(data)
+    setPastDraftablesData(data)
   }
 
   const getDraftGroupLineups = async () => {
@@ -490,6 +471,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setAlertMessage("Lineup Deleted", "green")
   }
 
+
   return (
     <div className="pastLineupPage page">
       {loading === false ? <>
@@ -571,7 +553,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
             setPlayerDialogContent={playerWrapper} />
         </div>
         
-        {draftables.length > 0 ?
+        {pastDraftablesData.length > 0 ?
           <div className='players-table-wrapper'>
             <div className='filter-btn-wrapper'>
               <h2>Players</h2>
@@ -635,15 +617,17 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
             </div>
             <table className='lineups-table'>
               <thead>
+                <tr>
                   <th>Pos</th>
                   <th>Name</th>
                   <th>Points</th>
                   <th>Salary</th>
                   <th>Game</th>
                   <th>Stats</th>
+                </tr>
               </thead>
               <tbody>
-                {stateFilter === "all" && draftables.map((player, index) => 
+                {stateFilter === "all" && pastDraftablesData.map((player, index) => 
                   (!hiddenIds.includes(player["playerSiteId"])) &&
                   (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
                   (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
@@ -652,10 +636,15 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                     <tr>
                       <td>{player.position}</td>
                       <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
-                      <td>{parseFloat(player["fppg"]).toFixed(2)} PTS</td>
+                      <td>{player["stats"]["stats"] ? parseFloat(player["stats"]["stats"]["fantasy_points"]).toFixed(2) : ""} PTS</td>
                       <td>${player.salary}</td>
                       <td>{player["game"] ? `${player["game"]["awayTeam"]} 17 @ ${player["game"]["homeTeam"]} 24` : ''}</td>
-                      <td><span>25/34, 123 Pass YDS, 2 Pass TD, 28 Rush YDS, 1 INT</span></td>
+                      <td className='statsDisplay-wrapper'>{player["statsDisplay"] && player["statsDisplay"].map((stat) => 
+                        <span className='statsDisplay'>
+                          <span className='value'>{stat["value"]}</span>
+                          <span className='key'>{stat["key"]}</span>
+                        </span>
+                      )}</td>
                     </tr>
                 )}
               </tbody>

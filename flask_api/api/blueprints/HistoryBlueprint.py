@@ -3,7 +3,7 @@ from api import app
 import json
 import requests
 
-from .utilities import token_required
+from .utilities import token_required, generate_stats_display
 from ..controllers.RedisController import RedisController
 from ..controllers.MongoController import MongoController
 from ..controllers.FFBApiController import FFBApiController
@@ -107,7 +107,6 @@ def test_draftGroups():
 		return jsonify({ "Error": "Missing draft group id" }), 400
 
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
-	print(draftables)
 
 	return jsonify({ "Message": "Success" }), 200
 
@@ -137,6 +136,12 @@ def get_draftGroup_playergamestats():
 
 	result = FFBApiController.get_draftables_playergamestats(draftables=draftables["draftables"], 
 		week=draftables["week"], year=draftables["year"])
+
+	for player in result:
+		try: 
+			player["statsDisplay"] = generate_stats_display(player["stats"]["stats"])
+		except KeyError:
+			pass
 
 	return jsonify(result), 200
 
