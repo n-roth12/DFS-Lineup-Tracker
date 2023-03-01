@@ -18,22 +18,16 @@ function PastLineupPlayer({ player, position, beingEdited, onDelete, onAdd, onOp
         </div>
         <div className='playerInfo'>
           <div className='infoBlock'>
-            <p>
-              <span className='value'>123 YDS, 2TDs</span>
-            </p>
-          </div>
-          <div className='infoBlock'>
-            <p>
-              <span className='value'>{player["game"]["awayTeam"]} 17 @ {player["game"]["homeTeam"]} 24</span>
-            </p>
-          </div>
-          <div className='infoBlock'>
-            <p>
-              <span className='value'>${player["salary"]}</span>
-            </p>
+            {player["statsDisplay"] && player["statsDisplay"].map((stat) =>
+              stat["key"] !== "PTS" &&
+              <span className='statsDisplay'>
+                <span className='value'>{stat["value"]}</span>
+                <span className='key'>{stat["key"]}</span>
+              </span>
+            )}
           </div>
           <div className='points-block'>
-            <p>18.3</p>
+            <p>{parseFloat(player["PTS"]).toFixed(2)}</p>
         </div>
         </div>
       </div>

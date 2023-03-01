@@ -41,10 +41,10 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [file, setFile] = useState(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [stateFilter, setStateFilter] = useState("all")
-  const [favoritesIds, setFavoritesIds] = useState([])
   const [hiddenIds, setHiddenIds] = useState([])
   const [showEditLineup, setShowEditLineup] = useState(false)
   const [pastDraftablesData, setPastDraftablesData] = useState([])
+  const [loadingDraftables, setLoadingDraftables] = useState(true)
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -133,6 +133,12 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     getLineupPlayerIds()
   }, [lineup, draftGroup])
 
+  useEffect(() => {
+    if (pastDraftablesData.length > 0) {
+      getLineupPlayerData()
+    }
+  }, [loadingDraftables])
+
   const togglePosFilter = (position) => {
     if (posFilter.has(position)) {
       const filterCopy = new Set(posFilter)
@@ -154,6 +160,19 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setLineupPlayerIds(temp)
   }
 
+  const getLineupPlayerData = () => {
+    var lineupCopy = {...lineup}
+    for (const [pos, player] of Object.entries(lineup)) {
+      if (player !== null) {
+        const temp = pastDraftablesData.find(
+          x => x["playerSiteId"] === player["playerSiteId"])
+        lineupCopy[pos]["statsDisplay"] = temp["statsDisplay"]
+        lineupCopy[pos]["PTS"] = temp["stats"] && temp["stats"]["stats"] && temp["stats"]["stats"]["fantasy_points"]
+      }
+    }
+    setLineup(lineupCopy)
+  }
+
   const getLineup = async () => {
     if (lineupId) {
       const res = await fetch(`/lineups/lineup?lineupId=${lineupId}`, {
@@ -165,8 +184,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       const data = await res.json()
       setLineup(data["lineup"])
       setPrevLineup(data["lineup"])
-      data["favorites"] && setFavoritesIds(data["favorites"].map((player) => player["playerSiteId"]))
-      data["hidden"] && setHiddenIds(data["hidden"].map((player) => player["playerSiteId"]))
     } else {
       setPrevLineup(lineup)
     } 
@@ -200,6 +217,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     })
     const data = await res.json()
     setPastDraftablesData(data)
+    setLoadingDraftables(false)
   }
 
   const getDraftGroupLineups = async () => {
@@ -348,49 +366,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     return false
   }
 
-  const addPlayerToFavorites = async (player) => {
-    setFavoritesIds([...favoritesIds, player["playerSiteId"]])
-    if (lineupId !== "null") {
-      const res = await fetch(`/lineups/favorite`, {
-        method: 'POST',
-        headers: {
-          'x-access-token': sessionStorage.dfsTrackerToken
-        },
-        body: JSON.stringify({
-          "lineupId": lineupId,
-          "player": player
-        })
-      })
-      const data = await res.json()
-    }
-  }
-
-  const addPlayerToHidden = async (player) => {
-    setHiddenIds([...hiddenIds, player["playerSiteId"]])
-    setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
-    if (lineupId !== "null") {
-      const res = await fetch(`/lineups/hidden`, {
-        method: 'POST',
-        headers: {
-          'x-access-token': sessionStorage.dfsTrackerToken
-        },
-        body: JSON.stringify({
-          "lineupId": lineupId,
-          "player": player
-        })
-      })
-      const data = await res.json()
-    }
-  }
-
-  const removePlayerFromFavorites = (player) => {
-    setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
-  }
-
-  const removePlayerFromHidden = (player) => {
-    setHiddenIds(hiddenIds.filter((playerId) => playerId !== player["playerSiteId"]))
-  }
-
   const exportLineup = async () => {
     const res = await fetch(`/lineups/export`, {
       method: 'POST',
@@ -471,7 +446,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setAlertMessage("Lineup Deleted", "green")
   }
 
-
   return (
     <div className="pastLineupPage page">
       {loading === false ? <>
@@ -479,13 +453,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
         <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				  onClose={() => setShowCreateLineupDialog(false)} 
           draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
-      }
-      {draftGroup !== null &&
-        <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog} 
-          onClose={() => setShowGenerateLineupDialog(false)} 
-          draftGroupId={draftGroupId}
-          games={draftGroup["games"]}
-          onApply={applyOptimizedLineup} />
       }
       <PlayerDialog showPlayerDialog={showPlayerDialog} 
           onClose={() => {setPlayerDialogContent({}); setShowPlayerDialog(false)}} 
@@ -553,7 +520,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
             setPlayerDialogContent={playerWrapper} />
         </div>
         
-        {pastDraftablesData.length > 0 ?
+        {!loadingDraftables && pastDraftablesData.length > 0 ?
           <div className='players-table-wrapper'>
             <div className='filter-btn-wrapper'>
               <h2>Players</h2>
@@ -640,6 +607,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                       <td>${player.salary}</td>
                       <td>{player["game"] ? `${player["game"]["awayTeam"]} 17 @ ${player["game"]["homeTeam"]} 24` : ''}</td>
                       <td className='statsDisplay-wrapper'>{player["statsDisplay"] && player["statsDisplay"].map((stat) => 
+                        stat["key"] !== "PTS" &&
                         <span className='statsDisplay'>
                           <span className='value'>{stat["value"]}</span>
                           <span className='key'>{stat["key"]}</span>

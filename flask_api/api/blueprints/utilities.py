@@ -44,6 +44,7 @@ stat_col_conversions = {
 	"RUSH 2PT": "rushing_2point_conversions",
 	"FUM": "fumbles_lost",
 	"INT": "passing_interceptions", 
+	"PTS": "fantasy_points"
 }
 
 def generate_stats_display(stats):
