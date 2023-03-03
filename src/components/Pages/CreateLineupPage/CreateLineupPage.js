@@ -9,6 +9,7 @@ import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
 import GenerateLineupDialog from '../../Dialogs/GenerateLineupDialog/GenerateLineupDialog'
+import RecommendedTagsDialog from '../../Dialogs/RecommendedTagsDialog/RecommendedTagsDialog'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
 import { Roller } from 'react-awesome-spinners'
@@ -44,6 +45,8 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [stateFilter, setStateFilter] = useState("all")
   const [favoritesIds, setFavoritesIds] = useState([])
   const [hiddenIds, setHiddenIds] = useState([])
+  const [recommendedTags, setRecommendedTags] = useState([])
+  const [showRecommendedTagsDialog, setShowRecommendedTagsDialog] = useState(false)
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -123,6 +126,8 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     getLineup()
     getDraftGroup()
     getDraftGroupLineups()
+    getRecommendedTags()
+    
     setTimeout(() => setLoading(false), 1000)
   }, [draftGroupId, lineupId])
 
@@ -196,6 +201,17 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     } else {
       setTeamsFilter([...teamsFilter, team1, team2])
     }
+  }
+
+  const getRecommendedTags = async () => {
+    const res = await fetch(`/lineups/recommendedTags`, {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      }
+    })
+    const data = await res.json()
+    setRecommendedTags(data)
   }
 
   const getDraftGroup = async () => {
@@ -499,6 +515,9 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
         deleteLineups={deleteLineup}
         lineupsToDelete={[lineup]}
       />
+      <RecommendedTagsDialog showRecommendedTagsDialog={showRecommendedTagsDialog}
+        onClose={() => setShowRecommendedTagsDialog(false)}
+        tags={recommendedTags} />
       <div className="header">
         {draftGroup &&
           <div className="header-inner">
@@ -520,6 +539,10 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                 <div className='info-block'>
                   <p>Start Time:</p>
                   <p><strong>{new Date(`${draftGroup["startTime"]}`).toDateString()}</strong></p>
+                </div>
+                <div className='info-block'>
+                  <button onClick={() => setShowRecommendedTagsDialog(true)} className='link'>Tags:</button>
+                  <div className='tag-wrapper'><p className='tag'>Stack</p><p className='tag'>GPP</p><p className='tag'>TE Punt</p></div>
                 </div>
               </div>
               <div className='header-options'>

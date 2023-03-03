@@ -31,7 +31,7 @@
 			}
 			.info-block {
 				margin-right: 40px;
-
+				
 				strong {
 					font-size: 12pt;
 					font-weight: 500;
@@ -123,7 +123,7 @@
 
 			.game {
 				background-color: white;
-				border: 1px solid var(--grey-4);
+				border: 1px solid var(--grey-5);
 				border-radius: 5px;
 				margin: 3px;
 				cursor: pointer;
@@ -142,7 +142,7 @@
 				}
 			}
 			.selected {
-				border: 1.5px solid var(--blue-grey-6);
+				border: 1.5px solid var(--btn-blue);
 				outline: None;			
 			}
 			.all {
@@ -461,17 +461,37 @@
 			}
 			.info-block {
 				margin-right: 50px;
+				p, .link {
+					margin-top: 0;
+					margin-bottom: 0;
+					font-size: 9pt;
+					color: var(--grey-9);
+					background: None;
+					border: None;
+				}
+
+				.link {
+					color: blue;
+					font-weight: 600;
+				}
+
+				.tag-wrapper {
+					display: flex;
+					flex-direction: row;
+
+					.tag {
+						width: fit-content;
+						border: 1px solid var(--grey-3);
+						padding: 0px 5px 0px 5px;
+						margin: 1px;
+						border-radius: 2px;
+					}
+				}
 
 				strong {
 					font-size: 12pt;
 					font-weight: 500;
 					margin: 0;
-				}
-				p {
-					margin-top: 0;
-					margin-bottom: 0;
-					font-size: 9pt;
-					color: var(--grey-9);
 				}
 			}
 		}

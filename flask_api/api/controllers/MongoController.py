@@ -109,6 +109,10 @@ class MongoController:
     def get_draft_groups_by_time_range(self, start_time, end_time):
         return 
 
+    def add_tag_to_lineup(self, user_id, lineup_id, tag):
+        lineup = self.lineups_collection.updateOne({"lineupId": int(lineup_id), "userPublicId": user_id}, {"$push": {"tags": tag}})
+        
+
     def get_draft_groups_by_year_and_week(self, year: int, week: int) -> list:
         cursor = self.draftgroups_collection.find({ "week": week, "year": year })
         draft_groups = sorted([group for group in cursor], key=lambda x: len(x["games"]), reverse=True)

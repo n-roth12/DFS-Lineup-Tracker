@@ -88,6 +88,94 @@ def delete_lineups(current_user):
 
 	return jsonify(lineup_ids), 200
 
+@lineups_blueprint.route('/addTag', methods=["POST"])
+@token_required
+def add_tag_to_lineup(current_user):
+	body = json.loads(request.data)
+	lineup_id = body["lineupId"]
+	tag = body["tag"]
+
+	MongoController.add_tag_to_lineup(user_id=current_user.public_id, lineup_id=lineup_id, tag=tag)
+
+	return jsonify({ "Message": "Succes" }), 200
+
+@lineups_blueprint.route('/recommendedTags', methods=["GET"])
+@token_required
+def get_recommended_tags(current_user):
+
+	temp = [
+		{
+			"category": "Punt",
+			"value": "TE"
+		},
+		{
+			"category": "Punt",
+			"value": "DEF"
+		},
+		{
+			"category": "Punt",
+			"value": None
+		},
+		{
+			"category": "Contest",
+			"value": "GPP"
+		},
+		{
+			"category": "Contest",
+			"value": "H2H"
+		},
+		{
+			"category": "Contest",
+			"value": "Cash"
+		},
+		{
+			"category": "Entries",
+			"value": 150
+		},
+		{
+			"category": "Max Entries",
+			"value": 1
+		},
+		{
+			"category": "Stack",
+			"value": None
+		},
+		{
+			"category": "Stack",
+			"value": "Skinny Stack"
+		},
+		{
+			"category": "Stack",
+			"value": "3x1"
+		},
+		{
+			"category": "Stack",
+			"value": "3x2"
+		},
+		{
+			"category": "Stack",
+			"value": "4x1"
+		},
+		{
+			"category": "Stack",
+			"value": "4x2"
+		},
+		{
+			"category": "Stack",
+			"value": "2x2"
+		},
+		{
+			"category": "Stack",
+			"value": "Onslaught"
+		},
+		{
+			"category": "Build",
+			"value": "Balanced"
+		}
+	]
+
+	return jsonify(temp), 200
+
 
 # # TODO check if it is a bestball lineup, maybe allow filtering or dont show it
 # @lineups_blueprint.route('/upload', methods=['POST'])
@@ -269,3 +357,5 @@ def convert_lineup_positions(positions_list):
 	result.append(prev + (str(prev_count + 1) if prev_count > 0 else ""))
 	
 	return result
+
+
