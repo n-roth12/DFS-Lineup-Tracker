@@ -187,7 +187,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               <PointsGraph graphData={lineups} />
             </div>
           }
-          {/* <div className='lineup-wrapper-header'>
+          <div className='lineup-wrapper-header'>
             {selectedLineups.length > 0 &&
               <button className='lineup-export-btn'>Export ({selectedLineups.length})</button>
             }
@@ -195,7 +195,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               <button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete ({selectedLineups.length})</button>
             }
             {stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon' /></Link>}
-          </div> */}
+          </div>
         </div>
         <span className='page-btn-wrapper'>
           <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>

@@ -86,6 +86,11 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 		setShowImportDialog(false)
 	}
 
+	const changeStateFilter = (state) => {
+		setSelectedLineups([])
+		setStateFilter(state)
+	}
+
 	const deleteSelectedLineups = async (lineupsToDelete) => {
 		console.log(lineupsToDelete)
 		const res = await fetch(`${api_url}/lineups/delete`, {
@@ -137,9 +142,9 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   	<div className="lineups-page page">
 		<div className='lineup-wrapper' >
 			<div className='filter-btn-wrapper'>
-				<button onClick={() => setStateFilter("upcoming")} className={`underline-btn${stateFilter === "upcoming" ? " active" : ""}`}>Upcoming</button>
-				<button onClick={() => setStateFilter("live")} className={`underline-btn${stateFilter === "live" ? " active" : ""}`}>Live</button>
-				<button onClick={() => setStateFilter("past")} className={`underline-btn${stateFilter === "past" ? " active" : ""}`}>History</button>
+				<button onClick={() => changeStateFilter("upcoming")} className={`underline-btn${stateFilter === "upcoming" ? " active" : ""}`}>Upcoming</button>
+				<button onClick={() => changeStateFilter("live")} className={`underline-btn${stateFilter === "live" ? " active" : ""}`}>Live</button>
+				<button onClick={() => changeStateFilter("past")} className={`underline-btn${stateFilter === "past" ? " active" : ""}`}>History</button>
 			</div>
 		</div>
 		<CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 

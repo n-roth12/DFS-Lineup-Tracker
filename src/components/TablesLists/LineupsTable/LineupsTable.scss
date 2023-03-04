@@ -174,12 +174,13 @@
 						width: 300px;
 
 						.tag {
-							border: 1px solid black;
+							border: 1px solid var(--btn-blue);
 							border-radius: 6px;
 							padding: 0px 3px 0px 3px;
 							margin-right: 2px;
 							margin-bottom: 0;
 							white-space: nowrap;
+							color: var(--btn-blue);
 						}
 
 						.tag:hover {
