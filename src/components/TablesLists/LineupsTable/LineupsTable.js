@@ -57,7 +57,9 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   }
 
   const addToTagFilter = (tag) => {
-    setTagFilter([...tagFilter, tag])
+    if (!tagFilter.find((t) => t["category"] === tag["category"] && t["value"] === tag["value"])) {
+      setTagFilter([...tagFilter, tag])
+    }
   }
 
   const changeSortColumn = (column) => {
@@ -90,6 +92,26 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const changeFilter = (site) => {
     setSelectedLineups([])
     setSiteFilter(site)
+  }
+
+  const containsTagFilter = (lineup) => {
+    var failure = true
+    if (!tagFilter || tagFilter.length < 1) {
+      return true
+    }
+    if (!lineup["tags"]) {
+      return false
+    }
+    tagFilter.map((tag) => {
+      if (!lineup["tags"].find((t) => t["category"] === tag["category"] && t["value"] === tag["value"])) {
+        failure = false
+      }
+    })
+    return failure
+  }
+
+  const removeTagFilter = (tag) => {
+    setTagFilter([...tagFilter.filter((t) => t["category"] !== tag["category"] || t["value"] !== tag["value"])])
   }
 
   const sortCompare = (a, b) => {
@@ -134,7 +156,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                 )}
               </select>
             </div>
-            <div>
+            <div className='pos-filter-wrapper-inner'>
               <button
                 className={`filter-btn${!siteFilter ? "-active" : ""}`}
                 onClick={() => setSiteFilter()}>All
@@ -154,8 +176,8 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             </div>
             <div className='tag-filter-wrapper'>
               {tagFilter && tagFilter.map((tag) => 
-              <button className='tag-filter'>
-                {`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}
+              <button className='tag-filter' onClick={() => removeTagFilter(tag)}>
+                <FaTimes className='delete-icon' />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}
               </button>
               )}
             </div>
@@ -202,6 +224,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             <tbody>
               {lineups.filter((lineup) =>
                 (!siteFilter || siteFilter === lineup["site"])
+                && (containsTagFilter(lineup))
                 && (yearFilter === "all" || lineup["year"] === parseInt(yearFilter))
                 && (weekFilter === "all" || lineup["week"] === parseInt(weekFilter))
               )
@@ -222,7 +245,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                       <td className='tag-col'>
                         <div className='tags-wrapper'>
                           {lineup["tags"] && lineup["tags"].map((tag) => 
-                            <span onClick={() => addToTagFilter(tag)} className='tag'>{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}</span>
+                            <span onClick={() => addToTagFilter(tag)} className='tag'>{`${tag["category"]}${tag["value"] ? `: ${tag["value"]}` : "" }`}</span>
                           )}                        
                         </div>
                       </td>

@@ -89,6 +89,7 @@
 				display: flex;
 				flex-direction: row;
 				margin-top: 10px;
+
 				.tag-filter {
 					border-radius: 6px;
 					padding: 4px 8px 4px 8px;
@@ -102,9 +103,16 @@
 						margin-bottom: 0;
 					}
 					.delete-icon {
+						display: None;
+						color: white;
 						margin-top: auto;
 						margin-bottom: auto;
 						margin-right: 5px;
+					}
+				}
+				.tag-filter:hover {
+					.delete-icon {
+						display: inline-block;
 					}
 				}
 			}
@@ -151,12 +159,20 @@
 
 				.tag-col {
 					width: 300px;
+					-ms-overflow-style: none;
+					scrollbar-width: none;
+
+					::-webkit-scrollbar {
+						display: none;
+					}
+
 					.tags-wrapper {
 						display: flex;
 						flex-direction: row;
 						margin-bottom: 0;
 						overflow-x: auto;
 						width: 300px;
+
 						.tag {
 							border: 1px solid black;
 							border-radius: 6px;
@@ -164,6 +180,13 @@
 							margin-right: 2px;
 							margin-bottom: 0;
 							white-space: nowrap;
+						}
+
+						.tag:hover {
+							border: 1px solid transparent;
+							background-color: var(--btn-blue);
+							color: white;
+							cursor: pointer;
 						}
 					}
 				}

@@ -635,7 +635,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
               </div>
               <div className='players-table-header-lower'>
                 <div className="pos-filter-wrapper">
-                  <div>
+                  <div className='pos-filter-wrapper-inner'>
                     <button 
                       className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`} 
                       onClick={() => setPosFilter(new Set())}>All
