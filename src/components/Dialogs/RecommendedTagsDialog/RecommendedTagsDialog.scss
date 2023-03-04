@@ -1,0 +1,61 @@
+.recommended-tags-dialog {
+    .content {
+        .recommended-tags-wrapper, .active-tags-wrapper {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .tag {
+            display: inline-flex;
+            flex-direction: row;
+            padding : 5px 5px 5px 5px;
+            margin: 2px;
+            border-radius: 6px;
+            cursor: pointer;
+
+            .tag-value {
+                margin-bottom: 0;
+            }
+            .icon {
+                font-size: 8pt;
+                margin-top: auto;
+                margin-bottom: auto;
+                margin-right: 3px;
+            }
+        }
+        .active-tag {
+            border: 1px solid var(--green);
+
+            .tag-value {
+                color: var(--green);
+            }
+            .delete-icon {
+                color: var(--green);
+            }
+        }
+        .active-tag:hover {
+            background-color: var(--red);
+        }
+        .tag:hover {
+            .tag-value {
+                color: white;
+            }
+            .add-icon, .delete-icon {
+                color: white;
+            }
+        }
+        .recommended-tag {
+            border: 1px solid var(--btn-blue);
+
+            .tag-value {
+                color: var(--btn-blue);
+            }
+            .add-icon {
+                color: var(--btn-blue);
+            }
+        }
+        .recommended-tag:hover {
+            background-color: var(--btn-blue);
+
+        }
+    }
+}
