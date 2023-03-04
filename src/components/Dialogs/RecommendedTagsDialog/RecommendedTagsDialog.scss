@@ -1,8 +1,39 @@
 .recommended-tags-dialog {
+    .title {
+        background-color: var(--dark-blue);
+        .title-inner {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        h1 {
+            font-size: 16pt;
+            text-align: left;
+            font-weight: 500;
+            color: white;
+        }
+
+        .close-btn {
+            color: white;
+            float: right;
+            font-size: 18pt;
+        }
+        .close-btn:hover {
+            cursor: pointer;
+        }
+        p {
+            color: white;
+        }
+    }
     .content {
+        h2 {
+            font-size: 14pt;
+        }
         .recommended-tags-wrapper, .active-tags-wrapper {
             max-height: 300px;
             overflow-y: auto;
+            margin-bottom: 20px;
         }
         .tag {
             display: inline-flex;
@@ -56,6 +87,33 @@
         .recommended-tag:hover {
             background-color: var(--btn-blue);
 
+        }
+    }
+    .actions {
+        .save-btn {
+            border: none;
+            background-color: var(--btn-blue);
+            color: white;
+            padding: 5px 15px 5px 15px;
+            border-radius: 6px;
+            box-shadow: var(--box-shadow-1);
+        }
+        .save-btn:hover {
+            background-color: var(--btn-blue-2);
+        }
+        .cancel-btn {
+            border: None;
+            background: None;
+            color: red;
+            display: flex;
+            height: 100%;
+            align-items: center;
+            margin-right: 15px;
+            margin-bottom: 0;
+
+            .trash-icon {
+                margin-left: 5px;
+            }
         }
     }
 }

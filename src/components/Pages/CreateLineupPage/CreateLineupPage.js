@@ -46,6 +46,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [favoritesIds, setFavoritesIds] = useState([])
   const [hiddenIds, setHiddenIds] = useState([])
   const [recommendedTags, setRecommendedTags] = useState([])
+  const [activeTags, setActiveTags] = useState([])
   const [showRecommendedTagsDialog, setShowRecommendedTagsDialog] = useState(false)
   const navigate = useNavigate()
 
@@ -190,6 +191,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       setPrevLineup(data["lineup"])
       data["favorites"] && setFavoritesIds(data["favorites"].map((player) => player["playerSiteId"]))
       data["hidden"] && setHiddenIds(data["hidden"].map((player) => player["playerSiteId"]))
+      data["tags"] && setActiveTags(data["tags"])
     } else {
       setPrevLineup(lineup)
     } 
@@ -491,6 +493,22 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setAlertMessage("Lineup Deleted", "green")
   }
 
+  const saveActiveTags = async (activeTags) => {
+    if (lineupId !== "null") {
+      const res = await fetch(`/lineups/setTags`, {
+        method: 'POST',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        },
+        body: JSON.stringify({
+          "lineupId": lineupId,
+          "tags": activeTags
+        })
+      })
+      const data = await res.json()
+    }
+  }
+
   return (
     <div className="createLineupPage page">
       {loading === false ? <>
@@ -499,7 +517,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 				  onClose={() => setShowCreateLineupDialog(false)} 
           draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
       }
-      {draftGroup !== null &&
+      {draftGroup !== {} &&
         <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog} 
           onClose={() => setShowGenerateLineupDialog(false)} 
           draftGroupId={draftGroupId}
@@ -517,7 +535,9 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       />
       <RecommendedTagsDialog showRecommendedTagsDialog={showRecommendedTagsDialog}
         onClose={() => setShowRecommendedTagsDialog(false)}
-        tags={recommendedTags} />
+        tags={recommendedTags}
+        onSave={saveActiveTags}
+        lineupTags={activeTags} />
       <div className="header">
         {draftGroup &&
           <div className="header-inner">
@@ -542,7 +562,15 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                 </div>
                 <div className='info-block'>
                   <button onClick={() => setShowRecommendedTagsDialog(true)} className='link'>Tags:</button>
-                  <div className='tag-wrapper'><p className='tag'>Stack</p><p className='tag'>GPP</p><p className='tag'>TE Punt</p></div>
+                  {activeTags && activeTags.length > 0 ?
+                  <div className='tag-wrapper'>
+                    {activeTags.map((tag) => 
+                      <p className='tag'>{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}</p>
+                    )}
+                  </div> 
+                  :
+                    <p>None</p>
+                  }
                 </div>
               </div>
               <div className='header-options'>

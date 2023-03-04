@@ -95,9 +95,21 @@ def add_tag_to_lineup(current_user):
 	lineup_id = body["lineupId"]
 	tag = body["tag"]
 
-	MongoController.add_tag_to_lineup(user_id=current_user.public_id, lineup_id=lineup_id, tag=tag)
+	MongoController.add_tag_to_lineup(user_id=current_user["public_id"], lineup_id=lineup_id, tag=tag)
 
 	return jsonify({ "Message": "Succes" }), 200
+
+@lineups_blueprint.route('/setTags', methods=["POST"])
+@token_required
+def set_lineup_tags(current_user):
+	body = json.loads(request.data)
+	lineup_id = body.get("lineupId")
+	tags = body.get("tags")
+	print(tags)
+
+	MongoController.set_lineup_tags(user_id=current_user["public_id"], lineup_id=lineup_id, tags=tags)
+
+	return jsonify({ "Message": "Success" }), 200
 
 @lineups_blueprint.route('/recommendedTags', methods=["GET"])
 @token_required

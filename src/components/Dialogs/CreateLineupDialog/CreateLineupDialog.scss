@@ -80,11 +80,13 @@
     }
     .title {
         background-color: var(--dark-blue);
+        
         .title-inner {
             width: 100%;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+
             .close-btn {
                 color: white;
                 float: right;

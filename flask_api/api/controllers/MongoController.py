@@ -110,8 +110,10 @@ class MongoController:
         return 
 
     def add_tag_to_lineup(self, user_id, lineup_id, tag):
-        lineup = self.lineups_collection.updateOne({"lineupId": int(lineup_id), "userPublicId": user_id}, {"$push": {"tags": tag}})
+        self.lineups_collection.update_one({"lineupId": lineup_id, "userPublicId": user_id}, {"$push": {"tags": tag} })
         
+    def set_lineup_tags(self, user_id, lineup_id, tags):
+        self.lineups_collection.update_one({ "lineupId": lineup_id, "userPublicId": user_id}, {"$set": {"tags": tags} })
 
     def get_draft_groups_by_year_and_week(self, year: int, week: int) -> list:
         cursor = self.draftgroups_collection.find({ "week": week, "year": year })
