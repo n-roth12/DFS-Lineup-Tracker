@@ -9,11 +9,13 @@
 	.lineups-table-wrapper-inner {
 		width: 100%;
 		max-width: 1100px;
+
 		.lineups-title {
 			max-width: 1100px;
 			display: flex;
 			margin-left: auto;
 			margin-right: auto;
+
 			h2 {
 				margin: 20px 20px 10px 5px;
 				font-weight: 600;
@@ -26,10 +28,12 @@
 			flex-direction: row;
 			justify-content: space-between;
 			flex-wrap: wrap;
+
 			.lineup-wrapper-header {
 				display: flex;
 				justify-content: right;
 				align-items: center;
+
 				.lineup-options-btn {
 					text-decoration: None;
 					background-color: var(--btn-blue);
@@ -39,6 +43,7 @@
 					border-radius: 20px;
 					transition: all 0.2s;
 					font-size: 11pt;
+
 					.icon {
 						height: 10px;
 					}
@@ -80,10 +85,35 @@
 					padding: 5px 10px 5px 10px;
 				}
 			}
+			.tag-filter-wrapper {
+				display: flex;
+				flex-direction: row;
+				margin-top: 10px;
+				.tag-filter {
+					border-radius: 6px;
+					padding: 4px 8px 4px 8px;
+					margin-right: 4px;
+					background-color: var(--btn-blue);
+					display: flex;
+					flex-direction: row;
+					border: None;
+					color: white;
+					p {
+						margin-bottom: 0;
+					}
+					.delete-icon {
+						margin-top: auto;
+						margin-bottom: auto;
+						margin-right: 5px;
+					}
+				}
+			}
+
 			.selectors {
 				display: flex;
 				flex-direction: row;
 				margin-bottom: 10px;
+
 				select {
 					margin-right: 10px;
 					padding: 4px 16px 4px 8px;
@@ -104,6 +134,7 @@
 		}
 		table {
 			margin-top: 0px;
+
 			thead th {
 				font-size: 10pt;
 				text-align: left;
@@ -112,9 +143,30 @@
 				cursor: pointer;
 				user-select: None;
 			}
-			tbody td {
-				text-align: left;
-				font-size: 9pt;
+			tbody {
+				td {
+					text-align: left;
+					font-size: 9pt;
+				}
+
+				.tag-col {
+					width: 300px;
+					.tags-wrapper {
+						display: flex;
+						flex-direction: row;
+						margin-bottom: 0;
+						overflow-x: auto;
+						width: 300px;
+						.tag {
+							border: 1px solid black;
+							border-radius: 6px;
+							padding: 0px 3px 0px 3px;
+							margin-right: 2px;
+							margin-bottom: 0;
+							white-space: nowrap;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -165,7 +217,6 @@
 			border-radius: 3px;
 			user-select: None;
 			cursor: pointer;
-
 		}
 
 		.page-label {
@@ -176,6 +227,5 @@
 		height: 100%;
 		width: 100%;
 		margin: auto;
-		
 	}
 }

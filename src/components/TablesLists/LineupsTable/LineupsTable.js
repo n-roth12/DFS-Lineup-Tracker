@@ -6,7 +6,7 @@ import '../../../DefaultTable.scss'
 import PointsGraph from '../../Pages/LineupsPage/PointsGraph/PointsGraph'
 import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaTimes } from 'react-icons/fa'
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter }) => {
 
@@ -25,6 +25,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const [weekFilter, setWeekFilter] = useState("all")
   const [sortColumn, setSortColumn] = useState("startTime")
   const [reverseSort, setReverseSort] = useState(false)
+  const [tagFilter, setTagFilter] = useState([])
 
   useEffect(() => {
     getYears()
@@ -53,6 +54,10 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const changeYear = (year) => {
     setWeekFilter("all")
     setYearFilter(year)
+  }
+
+  const addToTagFilter = (tag) => {
+    setTagFilter([...tagFilter, tag])
   }
 
   const changeSortColumn = (column) => {
@@ -147,6 +152,13 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                 onClick={() => changeFilter("fanduel")}>Fanduel
               </button>
             </div>
+            <div className='tag-filter-wrapper'>
+              {tagFilter && tagFilter.map((tag) => 
+              <button className='tag-filter'>
+                {`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}
+              </button>
+              )}
+            </div>
           </div>
           {stateFilter === "past" &&
             <div className='points-graph-wrapper'>
@@ -179,10 +191,11 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               <th>Slate</th>
               <th className='sortable-col' onClick={() => changeSortColumn("startTime")}>
                 Date {sortColumn === "startTime" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
-              <th className='sortable-col' onClick={() => changeSortColumn("salary")}>
+              <th>Tags</th>
+              {/* <th className='sortable-col' onClick={() => changeSortColumn("salary")}>
                 Salary {sortColumn === "salary" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
               <th className='sortable-col' onClick={() => changeSortColumn("projectedPoints")}>
-                Proj. Pts {sortColumn === "projectedPoints" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
+                Proj. Pts {sortColumn === "projectedPoints" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th> */}
             </tr>
           </thead>
           {lineups.length > 0 ?
@@ -204,8 +217,15 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                       <td>{capitalize(lineup["site"])}</td>
                       <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</td>
                       <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
-                      <td>${lineup["salary"] ? lineup["salary"] : 0}{lineup["salaryCap"] ? ` / ${lineup["salaryCap"]}` : ""}</td>
-                      <td>{lineup["projectedPoints"] ? lineup["projectedPoints"] : 0}</td>
+                      {/* <td>${lineup["salary"] ? lineup["salary"] : 0}{lineup["salaryCap"] ? ` / ${lineup["salaryCap"]}` : ""}</td>
+                      <td>{lineup["projectedPoints"] ? lineup["projectedPoints"] : 0}</td> */}
+                      <td className='tag-col'>
+                        <div className='tags-wrapper'>
+                          {lineup["tags"] && lineup["tags"].map((tag) => 
+                            <span onClick={() => addToTagFilter(tag)} className='tag'>{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}</span>
+                          )}                        
+                        </div>
+                      </td>
                     </tr>
                   </>
                 )
