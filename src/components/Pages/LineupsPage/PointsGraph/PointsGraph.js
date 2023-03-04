@@ -48,7 +48,7 @@ const PointsGraph = ({ graphData }) => {
   return (
     <div className="graph-wrapper">
       <div className="points-graph">
-        <ResponsiveContainer width={700} aspect={3}>
+        <ResponsiveContainer width={1100} aspect={3}>
           <LineChart
             width={400}
             height={500}

@@ -5,6 +5,7 @@
 	overflow: hidden;
 	align-items: center;
 	margin-bottom: 70px;
+
 	.lineup-wrapper {
 		margin-top: 20px;
 		width: 100%;
@@ -13,6 +14,7 @@
 		justify-content: center;
 		align-items: center;
 		border-bottom: 2px solid var(--blue-grey-2);
+
 		.filter-btn-wrapper {
 			width: 100%;
 			justify-content: left;
@@ -20,6 +22,7 @@
 			flex-direction: row;
 			align-items: center;
 			max-width: 1100px;
+
 			.underline-btn {
 				border: None;
 				background: none;
@@ -41,28 +44,7 @@
 	.close-btn {
 		color: red;
 	}
-
-	.cards-wrapper {
-		display: flex;
-
-		.card {
-			flex: 1;
-			margin: 10px;
-			padding: 10px;
-			// box-shadow: 0px 0px 1px 0.25px lightgrey;
-
-			p {
-				margin: auto;
-			}
-			.number {
-				font-size: 14pt;
-				font-weight: 600;
-			}
-			.desc {
-				color: #656565;
-			}
-		}
-	}
+	
 	.loading-screen {
 		height: 50vh;
 		display: flex;

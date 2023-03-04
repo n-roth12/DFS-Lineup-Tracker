@@ -181,13 +181,8 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               </button>
               )}
             </div>
-          </div>
-          {stateFilter === "past" &&
-            <div className='points-graph-wrapper'>
-              <PointsGraph graphData={lineups} />
             </div>
-          }
-          <div className='lineup-wrapper-header'>
+            <div className='lineup-wrapper-header'>
             {selectedLineups.length > 0 &&
               <button className='lineup-export-btn'>Export ({selectedLineups.length})</button>
             }
@@ -196,14 +191,12 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             }
             {stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon' /></Link>}
           </div>
+          {stateFilter === "past" &&
+            <div className='points-graph-wrapper'>
+              <PointsGraph graphData={lineups} />
+            </div>
+          }
         </div>
-        <span className='page-btn-wrapper'>
-          <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>
-          {[...Array(numPages)].map((x, i) =>
-            <span className={currPage === i ? 'page-btn-active' : 'page-btn'} onClick={() => setCurrPage(i)}>{i + 1}</span>
-          )}
-          <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
-        </span>
         <table className="lineups-table">
           <thead>
             <tr>
