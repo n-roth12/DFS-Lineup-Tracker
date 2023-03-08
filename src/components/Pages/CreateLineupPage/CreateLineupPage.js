@@ -15,6 +15,7 @@ import { capitalize } from '@material-ui/core'
 import { Roller } from 'react-awesome-spinners'
 import GeneratedLineup from '../SingleLineupPage/GeneratedLineup/GeneratedLineup'
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
+import PlayersTableWrapper from '../../TablesLists/PlayersTableWrapper/PlayersTableWrapper'
 import { useNavigate } from 'react-router-dom'
 
 const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
@@ -478,6 +479,10 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setShowGenerateLineupDialog(false)
   }
 
+  const canAddPos = (player) => {
+    return true
+   }
+
   const deleteLineup = async () => {
     const res = await fetch('/lineups/delete', {
       method: 'POST',
@@ -592,14 +597,16 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
           <div className='title'>
             <h2>Lineup</h2>
           </div>
-          <Lineup lineup={lineup} 
+          <Lineup 
+            lineup={lineup} 
             onDelete={deleteFromLineup} 
             onAdd={editLineup}
             editingPos={editingPos}
             cancelEdit={cancelEdit} 
             onOpenDialog={openDialog}
             toggleEditingPos={toggleEditingPos}
-            setPlayerDialogContent={playerWrapper} />
+            setPlayerDialogContent={playerWrapper} 
+          />
         </div>
         
         {draftables.length > 0 ?
@@ -671,7 +678,21 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                 </div>
               </div>
             </div>
-            <table className='lineups-table'>
+            <PlayersTableWrapper 
+              state="upcoming"
+              players={draftables}
+              hiddenIds={hiddenIds}
+              favoritesIds={favoritesIds}
+              playerFilter={playerFilter}
+              teamsFilter={teamsFilter}
+              posFilter={posFilter}
+              removePlayerFromFavorites={removePlayerFromFavorites}
+              addPlayerToFavorites={addPlayerToFavorites}
+              removePlayerFromHidden={removePlayerFromHidden}
+              addPlayerToHidden={addPlayerToHidden}
+              canAddPos={canAddPos}
+            />
+            {/* <table className='lineups-table'>
               <thead>
                 <th></th>
                 <th></th>
@@ -759,7 +780,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                     </tr>
                 )}
               </tbody>
-            </table>
+            </table> */}
           </div>
         : <h2>Loading Players...</h2>
         }

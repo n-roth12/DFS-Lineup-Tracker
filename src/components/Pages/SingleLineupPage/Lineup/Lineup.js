@@ -1,4 +1,4 @@
-import LineupPlayerNew from '../../../LineupPlayerNewV2/LineupPlayerNewV2'
+import LineupPlayerNew from './LineupPlayerNewV2/LineupPlayerNewV2'
 import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
 import './Lineup.scss'
 import { useState, useEffect } from 'react'
@@ -14,9 +14,7 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
         lineupOrder.indexOf(a.toUpperCase()) - lineupOrder.indexOf(b.toUpperCase())  
       )])
     }
-    console.log(orderedPositions)
   }, [])
-
 
   const checkBeingEdited = (pos) => {
     return pos === editingPos
@@ -27,24 +25,25 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
       {lineup && Object.keys(lineup).length > 0 && orderedPositions.length > 0 &&
         orderedPositions.map(position => 
           lineup[position] !== null ? 
-          <LineupPlayerNew 
-            player={lineup[position]} 
-            position={position} 
-            beingEdited={checkBeingEdited(position)} 
-            onDelete={onDelete} 
-            onAdd={onAdd} 
-            onOpenDialog={onOpenDialog}
-            toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos}
-            setPlayerDialogContent={setPlayerDialogContent} /> 
-        : <EmptyPlayer 
-            key={position} 
-            position={position} 
-            onAdd={onAdd} 
-            beingEdited={checkBeingEdited(position)} 
-            cancelEdit={cancelEdit}
-            toggleEditingPos={toggleEditingPos}
-            editingPos={editingPos} />
+            <LineupPlayerNew 
+              player={lineup[position]} 
+              position={position} 
+              beingEdited={checkBeingEdited(position)} 
+              onDelete={onDelete} 
+              onAdd={onAdd} 
+              onOpenDialog={onOpenDialog}
+              toggleEditingPos={toggleEditingPos}
+              editingPos={editingPos}
+              setPlayerDialogContent={setPlayerDialogContent} /> 
+          : 
+            <EmptyPlayer 
+              key={position} 
+              position={position} 
+              onAdd={onAdd} 
+              beingEdited={checkBeingEdited(position)} 
+              cancelEdit={cancelEdit}
+              toggleEditingPos={toggleEditingPos}
+              editingPos={editingPos} />
         )
       }
     </div>

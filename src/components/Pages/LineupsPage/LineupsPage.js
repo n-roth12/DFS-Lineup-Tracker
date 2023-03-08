@@ -163,6 +163,7 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups} 
 							stateFilter={stateFilter}
+							setShowImportLineupDialog={setShowImportDialog}
 							lineups={lineups.length > 0 ? lineups.filter(lineup => {
 								return Date.parse(lineup["startTime"].split("T")[0]) <= Date.parse(new Date("2022-12-30T06:00:00"))
 							}) : []} /> 
@@ -174,6 +175,7 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups}
 							stateFilter={stateFilter}
+							setShowImportLineupDialog={setShowImportDialog}
 							lineups={lineups.length > 0 ? lineups.filter((lineup) => {
 								return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date())
 									&& lineup["endTime"] && Date.parse(lineup["endTime"].split("T")[0]) < Date.parse(new Date("2022-12-30T06:00:00"))
@@ -186,6 +188,7 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 							selectedLineups={selectedLineups}
 							setSelectedLineups={setSelectedLineups}
 							stateFilter={stateFilter}
+							setShowImportLineupDialog={setShowImportDialog}
 							lineups={lineups.length > 0 ? lineups.filter((lineup) => {
 								return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date("2022-12-30T06:00:00"))
 							}) : []}

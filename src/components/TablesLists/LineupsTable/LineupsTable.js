@@ -8,7 +8,7 @@ import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { FaPlus, FaTimes } from 'react-icons/fa'
 
-const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter }) => {
+const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter, setShowImportLineupDialog }) => {
 
   const weeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 
@@ -176,9 +176,9 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             </div>
             <div className='tag-filter-wrapper'>
               {tagFilter && tagFilter.map((tag) => 
-              <button className='tag-filter' onClick={() => removeTagFilter(tag)}>
-                <FaTimes className='delete-icon' />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}
-              </button>
+                <div className='tag-filter'>
+                  <FaTimes className='delete-icon' onClick={() => removeTagFilter(tag)} />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}
+                </div>
               )}
             </div>
             </div>
@@ -190,6 +190,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               <button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete ({selectedLineups.length})</button>
             }
             {stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon' /></Link>}
+            {stateFilter === "past" && <button className='lineup-options-btn' onClick={() => setShowImportLineupDialog(true)}>Import Lineups</button>}
           </div>
           {stateFilter === "past" &&
             <div className='points-graph-wrapper'>

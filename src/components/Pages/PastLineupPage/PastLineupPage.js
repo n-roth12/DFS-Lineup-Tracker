@@ -9,11 +9,13 @@ import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import PastLineup from '../SingleLineupPage/Lineup/PastLineup/PastLineup'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
 import GenerateLineupDialog from '../../Dialogs/GenerateLineupDialog/GenerateLineupDialog'
+import PastPlayersTable from '../../TablesLists/PastPlayersTable/PastPlayersTable'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
 import { Roller } from 'react-awesome-spinners'
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
 import { useNavigate } from 'react-router-dom'
+import PlayersTableWrapper from '../../TablesLists/PlayersTableWrapper/PlayersTableWrapper'
 
 const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
@@ -32,7 +34,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [lineupPlayerIds, setLineupPlayerIds] = useState(new Set())
   const [playerDialogContent, setPlayerDialogContent] = useState()
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
-  const [showGenerateLineupDialog, setShowGenerateLineupDialog] = useState(false)
   const [teamsFilter, setTeamsFilter] = useState([])
   const [loading, setLoading] = useState(true)
   const [playerTableSort, setPlayerTableSort] = useState("salary")
@@ -40,11 +41,10 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [hasChanges, setHasChanges] = useState(false)
   const [file, setFile] = useState(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [stateFilter, setStateFilter] = useState("all")
-  const [hiddenIds, setHiddenIds] = useState([])
   const [showEditLineup, setShowEditLineup] = useState(false)
   const [pastDraftablesData, setPastDraftablesData] = useState([])
   const [loadingDraftables, setLoadingDraftables] = useState(true)
+  const [showEditing, setShowEditing] = useState(false)
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -260,7 +260,9 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const cancelEdit = () => {
+    setShowEditLineup(false)
     setEditingPos(null)
+    setLineup(prevLineup)
     setPosFilter(new Set())
   }
 
@@ -330,16 +332,6 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       setLineup(lineupCopy)
       setEditingPos(null)
       setHasChanges(true)
-    } else {
-      for (const [k, v] of Object.entries(lineup)) {
-        if (v === null && lineupSlots[k]["allowedPositions"].includes(player["position"].toLowerCase())) {
-          var lineupCopy = { ...lineup }
-          lineupCopy[`${k}`] = player
-          setLineup(lineupCopy)
-          setHasChanges(true)
-          return
-        } 
-      }
     }
   }
 
@@ -357,13 +349,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     if (lineupPlayerIds.has(player["playerSiteId"])) {
       return false
     }
-    for (const [k, v] of Object.entries(lineup)) {
-      if ((v === null && lineupSlots[k]["allowedPositions"].includes(player["position"].toLowerCase() ))
-        || (editingPos && lineupSlots[editingPos]["allowedPositions"].includes(player["position"].toLowerCase()))) {
-        return true
-      }
-    }
-    return false
+    return true
   }
 
   const exportLineup = async () => {
@@ -395,6 +381,10 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     }
   }
 
+  const canAddPos = (player) => {
+    return editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())
+  }
+
   const getRemainingSalaryPerPlayer = () => {
     const emptySlotsCount = Object.values(lineup).filter((lineupSlot) => lineupSlot == null).length
     if (emptySlotsCount < 1) {
@@ -409,26 +399,9 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setHasChanges(false)
   }
 
-  const changeStateFilter = (state) => {
-    setStateFilter(state)
-    setPosFilter(new Set())
-    setTeamsFilter([])
-    setPlayerFilter("")
-    setEditingPos()
-  }
-
   const playerWrapper = (player) => {
     setPlayerDialogContent(player)
     setShowPlayerDialog(true)
-  }
-
-  const applyOptimizedLineup = (generatedLineup) => {
-    var result = {}
-    generatedLineup.map((player) => {
-      result[player["position"]] = Object.keys(player["player"]).length > 0 ? player["player"] : null
-    })
-    setLineup(result)
-    setShowGenerateLineupDialog(false)
   }
 
   const deleteLineup = async () => {
@@ -488,7 +461,7 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
               </div>
               <div className='header-options'>
                 {showEditLineup ?
-                  <button onClick={saveLineup}>Save</button>
+                  <button className='generate-btn generate-btn-delete' onClick={cancelEdit}>Cancel</button>
                 :
                   <button className='generate-btn' onClick={() => setShowEditLineup(true)}>Edit</button>
                 }
@@ -517,7 +490,8 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
             cancelEdit={cancelEdit} 
             onOpenDialog={openDialog}
             toggleEditingPos={toggleEditingPos}
-            setPlayerDialogContent={playerWrapper} />
+            setPlayerDialogContent={playerWrapper}
+            showEditing={showEditLineup} />
         </div>
         
         {!loadingDraftables && pastDraftablesData.length > 0 ?
@@ -582,50 +556,38 @@ const PastLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                 </div>
               </div>
             </div>
-            <table className='lineups-table'>
-              <thead>
-                <tr>
-                  <th>Pos</th>
-                  <th>Name</th>
-                  <th>Points</th>
-                  <th>Salary</th>
-                  <th>Game</th>
-                  <th>Stats</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stateFilter === "all" && pastDraftablesData.map((player, index) => 
-                  (!hiddenIds.includes(player["playerSiteId"])) &&
-                  (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
-                  (editingPos == null || lineupSlots[editingPos]["allowedPositions"].includes(player.position.toLowerCase())) &&
-                  (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
-                  (teamsFilter.length < 1 || teamsFilter.includes(player["team"])) &&
-                    <tr>
-                      <td>{player.position}</td>
-                      <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
-                      <td>{player["stats"]["stats"] ? parseFloat(player["stats"]["stats"]["fantasy_points"]).toFixed(2) : ""} PTS</td>
-                      <td>${player.salary}</td>
-                      <td>{player["game"] ? `${player["game"]["awayTeam"]} 17 @ ${player["game"]["homeTeam"]} 24` : ''}</td>
-                      <td className='statsDisplay-wrapper'>{player["statsDisplay"] && player["statsDisplay"].map((stat) => 
-                        stat["key"] !== "PTS" &&
-                        <span className='statsDisplay'>
-                          <span className='value'>{stat["value"]}</span>
-                          <span className='key'>{stat["key"]}</span>
-                        </span>
-                      )}</td>
-                    </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+
+            <PlayersTableWrapper 
+              state={"past"} 
+              players={pastDraftablesData}
+              playerFilter={playerFilter}
+              teamsFilter={teamsFilter}
+              posFilter={posFilter}
+              canAddPos={canAddPos}
+              editingPos={editingPos}
+              playerWrapper={playerWrapper}
+              addToLineup={addToLineup} />
+
+            </div>
         : <h2>Loading Players...</h2>
         }
       </div>
+      {showEditLineup &&
+        <div className='fixed-bottom-footer'>
+          <div className='fixed-bottom-footer-inner'>
+            <div className='lineup-btns'>
+              <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
+              <button className={`revert-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && revertLineup}>Revert <GrRevert/></button>
+              <button className={`save-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && saveLineup}>Save</button>
+            </div>
+          </div>
+        </div>
+      }
     </>
     :
-    <div className='loading-wrapper'>
-      <Roller />
-    </div>
+      <div className='loading-wrapper'>
+        <Roller />
+      </div>
     }
     </div>
   )

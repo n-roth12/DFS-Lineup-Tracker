@@ -4,6 +4,104 @@
 	flex-direction: column;
 	overflow: hidden;
 	margin-bottom: 80px;
+	.fixed-bottom-footer {
+		position: fixed;
+		bottom: 0;
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		background-color: white;
+		box-shadow: var(--box-shadow-1);
+
+		.fixed-bottom-footer-inner {
+			max-width: 1200px;
+			width: 95%;
+			display: flex;
+			justify-content: space-between;
+			flex-wrap: wrap;
+		}
+		.header-details {
+			display: flex;
+			flex-direction: row;
+			align-self: center;
+
+			strong {
+				font-weight: 600;
+			}
+			.info-block {
+				margin-right: 40px;
+				
+				strong {
+					font-size: 12pt;
+					font-weight: 500;
+					margin: 0;
+				}
+				p {
+					margin-top: 0;
+					margin-bottom: 0;
+					font-size: 9pt;
+					color: var(--grey-9);
+				}
+			}
+		}
+		.lineup-btns {
+			display: flex;
+			flex-direction: row;
+			display: flex;
+			padding-top: 13px;
+			padding-bottom: 13px;
+
+			.clear-btn {
+				color: red;
+				border: none;
+				background: none;
+				width: fit-content;
+				float: right;
+				border: 1px solid red;
+				border-radius: 8px;
+				padding: 4px 20px 4px 20px;
+				font-size: 12pt;
+				font-weight: 500;
+			}
+			button {
+				margin-left: 15px;
+			}
+			.revert-btn {
+				background-color: var(--grey-3);
+				// padding: 4px 6px 4px 6px;
+				color: var(--btn-blue);
+				border: None;
+				background: None;
+				border: 1px solid var(--btn-blue);
+				border-radius: 8px;
+				padding: 4px 20px 4px 20px;
+				font-size: 12pt;
+				font-weight: 500;
+			}
+			.save-btn {
+				padding: 4px 20px 4px 20px;
+				border-radius: 8px;
+				background-color: #ffdb2b;
+				font-weight: 500;
+				border: None;
+				// border: 1px solid var(--grey-4);
+				font-size: 12pt;
+				font-weight: 500;
+			}
+			.inactive {
+				background-color: var(--grey-4);
+				color: black;
+				border-color: black;
+				cursor: default;
+			}
+			.save-btn:hover {
+				background-color: #ffcc00;
+			}
+			.inactive:hover {
+				background-color: var(--grey-4);
+			}
+		}
+	}
 
 	.loading-wrapper {
 		width: 100%;

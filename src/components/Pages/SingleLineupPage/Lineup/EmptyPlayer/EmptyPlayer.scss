@@ -1,4 +1,4 @@
-.past-empty-player {
+.empty-player {
     height: 80px;
     display: flex;
     flex-direction: column;
@@ -6,6 +6,7 @@
     padding: 4px;
     border-bottom: 1px solid #d3d3d3;
     flex-direction: row;
+
     .playerImage {
         p {
             margin-left: 10px;

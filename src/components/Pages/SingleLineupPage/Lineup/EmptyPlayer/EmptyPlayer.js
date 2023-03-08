@@ -1,8 +1,7 @@
 import { FaPlus } from 'react-icons/fa'
-import { FaTimes } from 'react-icons/fa'
 import './EmptyPlayer.scss'
 
-const EmptyPlayer = ({ position, showAddPlayer, onAdd, cancelEdit, beingEdited, toggleEditingPos, editingPos }) => {
+const EmptyPlayer = ({ position, beingEdited, toggleEditingPos }) => {
   return (
     <div className={`empty-player player ${beingEdited ? 'selected': ''}`} onClick={() => {toggleEditingPos(position)}}>
       <div className='playerImage'>

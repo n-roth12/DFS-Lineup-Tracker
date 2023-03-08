@@ -3,7 +3,7 @@ import PastEmptyPlayer from '../PastEmptyPlayer/PastEmptyPlayer'
 import './PastLineup.scss'
 import { useState, useEffect } from 'react'
 
-const PastLineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos, setPlayerDialogContent }) => {
+const PastLineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos, setPlayerDialogContent, showEditing }) => {
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
   const [lineupOrder, setLineupOrder] = useState(["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"])
   const [orderedPositions, setOrderedPositions] = useState([])
@@ -35,7 +35,8 @@ const PastLineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
               onOpenDialog={onOpenDialog}
               toggleEditingPos={toggleEditingPos}
               editingPos={editingPos}
-              setPlayerDialogContent={setPlayerDialogContent} />
+              setPlayerDialogContent={setPlayerDialogContent} 
+              showEditing={showEditing}/>
             : <PastEmptyPlayer
               key={position}
               position={position}
@@ -43,7 +44,8 @@ const PastLineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYea
               beingEdited={checkBeingEdited(position)}
               cancelEdit={cancelEdit}
               toggleEditingPos={toggleEditingPos}
-              editingPos={editingPos} />
+              editingPos={editingPos}
+              showEditing={showEditing} />
         )
       }
     </div>

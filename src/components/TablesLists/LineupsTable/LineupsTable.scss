@@ -80,6 +80,7 @@
 			}
 			.pos-filter-wrapper {
 				margin-top: 10px;
+
 				.filter-btn, .filter-btn-active {
 					font-size: 11pt;
 					padding: 5px 10px 5px 10px;
@@ -99,22 +100,25 @@
 					flex-direction: row;
 					border: None;
 					color: white;
+					font-size: 11pt;
+
 					p {
 						margin-bottom: 0;
 					}
 					.delete-icon {
-						display: None;
+						// display: None;
 						color: white;
 						margin-top: auto;
 						margin-bottom: auto;
 						margin-right: 5px;
+						cursor: pointer;
 					}
 				}
-				.tag-filter:hover {
-					.delete-icon {
-						display: inline-block;
-					}
-				}
+				// .tag-filter:hover {
+				// 	.delete-icon {
+				// 		display: inline-block;
+				// 	}
+				// }
 			}
 
 			.selectors {

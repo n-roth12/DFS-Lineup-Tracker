@@ -1,5 +1,4 @@
 .pastLineupPlayer {
-
     background-color: white;
     border-bottom: 1px solid #d3d3d3;
     display: flex;
@@ -61,6 +60,10 @@
             font-size: 15pt;
             user-select: None;
         }
+        p {
+            margin-bottom: 0;
+            font-size: 13pt;
+        }
     }
 
     .name-and-info {
@@ -80,6 +83,7 @@
                 .statsDisplay {
                     font-size: 8pt;
                     display: inline-block;
+
                     .key {
                         margin-right: 4px;
                     }
@@ -93,9 +97,6 @@
                 display: flex;
                 justify-content: center;
                 margin-right: 10px;
-                p {
-                    font-size: 13pt;
-                }
             }
         }
 
