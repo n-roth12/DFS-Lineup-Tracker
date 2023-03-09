@@ -498,7 +498,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setAlertMessage("Lineup Deleted", "green")
   }
 
-  const saveActiveTags = async (activeTags) => {
+  const saveActiveTags = async (tags) => {
     if (lineupId !== "null") {
       const res = await fetch(`/lineups/setTags`, {
         method: 'POST',
@@ -507,11 +507,13 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
         },
         body: JSON.stringify({
           "lineupId": lineupId,
-          "tags": activeTags
+          "tags": tags
         })
       })
       const data = await res.json()
     }
+    setActiveTags(tags)
+    setShowRecommendedTagsDialog(false)
   }
 
   return (
