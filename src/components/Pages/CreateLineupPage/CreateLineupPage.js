@@ -680,6 +680,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
             </div>
             <PlayersTableWrapper 
               state="upcoming"
+              stateFilter={stateFilter}
               players={draftables}
               hiddenIds={hiddenIds}
               favoritesIds={favoritesIds}
@@ -691,6 +692,8 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
               removePlayerFromHidden={removePlayerFromHidden}
               addPlayerToHidden={addPlayerToHidden}
               canAddPos={canAddPos}
+              canQuickAdd={canQuickAdd}
+              changeStateFilter={changeStateFilter}
             />
             {/* <table className='lineups-table'>
               <thead>

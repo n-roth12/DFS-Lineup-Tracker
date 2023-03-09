@@ -2,9 +2,12 @@ import './UpcomingPlayersTable.scss'
 import { FaPlus, FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
 import { AiOutlineStar, AiOutlineMinusCircle } from 'react-icons/ai'
 import { BiBlock } from 'react-icons/bi'
+import { useEffect } from 'react'
+import { capitalize } from '@material-ui/core'
 
-const UpcomingPlayersTable = ({ draftables, canQuickAdd, addPlayerToFavorites, addPlayerToHidden, playerWrapper, 
-    hiddenIds, removePlayerFromFavorites, removePlayerFromHidden, stateFilter, editingPos, addToLineup, favoritesIds }) => {
+const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addPlayerToHidden, playerWrapper, 
+    hiddenIds, removePlayerFromFavorites, removePlayerFromHidden, stateFilter, editingPos, addToLineup, favoritesIds,
+    changeStateFilter }) => {
 
   return (
     <table className='upcoming-players-table lineups-table'>
@@ -20,7 +23,7 @@ const UpcomingPlayersTable = ({ draftables, canQuickAdd, addPlayerToFavorites, a
         <th>FPPG</th>
       </thead>
       <tbody>
-        {stateFilter === "all" && draftables.map((player, index) =>
+        {players.length > 0 ? players.map((player, index) =>
           <tr>
             {stateFilter === "all" &&
               <>
@@ -71,7 +74,12 @@ const UpcomingPlayersTable = ({ draftables, canQuickAdd, addPlayerToFavorites, a
             <td>{player["oprk"]}</td>
             <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
           </tr>
-        )}
+        )
+      :
+        <tr className='empty-players-row'>
+          <td><button className='add-players-btn' onClick={() => changeStateFilter("all")}>Add Players to {capitalize(stateFilter)}</button></td>
+        </tr>
+      }
       </tbody>
     </table >
   )

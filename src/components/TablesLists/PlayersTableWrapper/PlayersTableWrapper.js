@@ -3,7 +3,8 @@ import PastPlayersTable from '../PastPlayersTable/PastPlayersTable'
 import UpcomingPlayersTable from '../UpcomingPlayersTable/UpcomingPlayersTable'
 
 const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFilter, posFilter, canAddPos, 
-    canQuickAdd, editingPos, playerWrapper, addToLineup, stateFilter, favoritesIds }) => {
+    canQuickAdd, editingPos, playerWrapper, addToLineup, stateFilter, favoritesIds, addPlayerToFavorites, 
+    addPlayerToHidden, removePlayerFromFavorites, removePlayerFromHidden, changeStateFilter }) => {
 
   const applyFilters = (playersList) => {
     return playersList.filter((player) => 
@@ -46,7 +47,13 @@ const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFil
           hiddenIds={hiddenIds}
           favoritesIds={favoritesIds} 
           playerWrapper={playerWrapper}
-          
+          stateFilter={stateFilter}
+          canQuickAdd={canQuickAdd}
+          addPlayerToFavorites={addPlayerToFavorites}
+          addPlayerToHidden={addPlayerToHidden}
+          removePlayerFromFavorites={removePlayerFromFavorites}
+          removePlayerFromHidden={removePlayerFromHidden}
+          changeStateFilter={changeStateFilter}
         />
       }
     </div>
