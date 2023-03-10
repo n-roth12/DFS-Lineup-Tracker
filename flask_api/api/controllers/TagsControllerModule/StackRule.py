@@ -23,7 +23,7 @@ class StackRule:
 
 # maybe store game map like this:
 # stack_map = { 
-#   174834: { "TEN": [], "SF": [{player1}, {player2}] }
-#   899028: { "MIA": [{player1}], "BUF": [{player1}, {player2}, {player3}] }
+#   174834: { "homeTeam": { "team": "TEN", "players": [] }, "awayTeam": { "team": "SF", players: [{player1}] }
+#   899028: { "homeTeam": { "team": "MIA": "players": [{player1}], "awayTeam" :{ "team": "BUF", "players": [{player1}, {player2}, {player3}] }
 # }
 

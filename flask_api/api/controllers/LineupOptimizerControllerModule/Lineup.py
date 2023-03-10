@@ -12,6 +12,9 @@ class Lineup:
         self.site = site
         self.allows_duplicates = False
 
+    def get(self, lineup_slot: str):
+        return self.lineup.get(lineup_slot)
+
     def create_lineup_with_positions(positions: list, site: str) -> None:
         lineup = {position : {} for position in positions}
         return Lineup(lineup=lineup, site=site)
@@ -71,7 +74,6 @@ class Lineup:
         eligible_positions = [x for x in self.lineup.keys()]
         for player in players:
             eligible_positions.remove(self.add_player(player=player, eligible_positions=eligible_positions))
-            print(eligible_positions)
 
     def add_player(self, player: dict, eligible_positions: list = None) -> str:
         if not eligible_positions:
@@ -79,6 +81,7 @@ class Lineup:
 
         for lineup_slot in eligible_positions:
             if self.is_position_eligible_for_slot(lineup_slot=lineup_slot, position=player.get("position")):
+                self.add_player_at_position(lineup_slot=lineup_slot, player=player)
                 return lineup_slot
 
         return None
