@@ -1,8 +1,8 @@
 # for use with api
-from ..LineupOptimizerControllerModule import allowed_positions
+# from ..LineupOptimizerControllerModule import allowed_positions
 
 # for use with unit tests
-# import  allowed_positions
+from LineupOptimizerControllerModule import allowed_positions
 
 class Lineup:
 
@@ -66,7 +66,23 @@ class Lineup:
             self.player_ids.append(player.get("playerSiteId"))
             return True
         return False
-        
+
+    def add_players(self, players: list) -> bool:
+        eligible_positions = [x for x in self.lineup.keys()]
+        for player in players:
+            eligible_positions.remove(self.add_player(player=player, eligible_positions=eligible_positions))
+            print(eligible_positions)
+
+    def add_player(self, player: dict, eligible_positions: list = None) -> str:
+        if not eligible_positions:
+            eligible_positions = self.lineup.keys()
+
+        for lineup_slot in eligible_positions:
+            if self.is_position_eligible_for_slot(lineup_slot=lineup_slot, position=player.get("position")):
+                return lineup_slot
+
+        return None
+
     def is_position_eligible_for_slot(self, lineup_slot: str, position: str) -> bool:
         if lineup_slot in list(allowed_positions.flex_positions_dict.get(self.site).keys()):
             return position in allowed_positions.flex_positions_dict.get(self.site).get(lineup_slot)

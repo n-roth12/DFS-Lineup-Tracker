@@ -1,4 +1,4 @@
-from ..LineupOptimizerControllerModule.Lineup import Lineup
+from LineupOptimizerControllerModule.Lineup import Lineup
 
 DRAFT_KINGS_PUNT_PRICE = 4000
 

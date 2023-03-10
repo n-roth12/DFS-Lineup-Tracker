@@ -1,3 +1,7 @@
 to run test file and show coverage data:
     pipenv run coverage run -m unittest LineupTests.py LineupOptimizerTests.py
     pipenv run coverage report
+
+run tests from "/Users/nolanroth/Desktop/Projects/DFS-Lineup-Tracker/flask_api/api/controllers"
+    because relative imports aren't working when I want to import across modules for the tests
+    example: "python -m unittest TagsControllerModule/TagsControllerTests.py"
