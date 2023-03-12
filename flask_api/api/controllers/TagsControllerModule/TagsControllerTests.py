@@ -5,6 +5,8 @@ from TagsControllerModule.TagsController import TagsController
 from TagsControllerModule.PuntPositionRule import PuntPositionRule
 from LineupOptimizerControllerModule.test_draftables import test_draftables
 from TagsControllerModule.StackRule import StackRule
+from TagsControllerModule.PuntPositionRule import PuntPositionRule
+from TagsControllerModule.CompositionRule import CompositionRule
 
 class TestTagsControllerMethods(unittest.TestCase):
     
@@ -19,6 +21,11 @@ class TestTagsControllerMethods(unittest.TestCase):
         empty_lineup = self.empty_draftkings_lineup()
         lineup = self.add_stack_to_lineup(team_abbr="KC", num_players=3, lineup=empty_lineup, eligible_positions=["WR", "WR", "QB"])
         self.assertEqual([(3, 0)], StackRule.check_rule(lineup))
+        self.assertNotEqual([(3, 1)], StackRule.check_rule(lineup))
+        self.assertTrue(CompositionRule.check_rule(composition={"QB": 1, "WR": 2}, lineup=lineup))
+        self.assertFalse(CompositionRule.check_rule(composition={"QB": 1, "WR": 3}, lineup=lineup))
+
+    
 
 ###### HELPER METHODS ######
 

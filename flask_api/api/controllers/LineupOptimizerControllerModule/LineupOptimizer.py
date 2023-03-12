@@ -24,7 +24,7 @@ class LineupOptimizer:
         self.salary_cap = salary_cap
         self.number_of_lineups_to_consider = 100
 
-    def create_weighted_cost_map(self, draftables: list, lineup_positions:list) -> dict:
+    def create_weighted_cost_map(self, draftables: list, lineup_positions: list) -> dict:
         positions_set = set(lineup_positions)
         weighted_cost_map = { "".join(filter(lambda x: x.isalpha(), position)): [] for position in positions_set \
             if position not in list(allowed_positions.flex_positions_dict.get(self.site).keys()) }
