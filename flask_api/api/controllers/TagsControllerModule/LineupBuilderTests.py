@@ -36,3 +36,68 @@ class LineupBuilderTests(unittest.TestCase):
             site="draftkings").with_composition_rule(position="TE", num_players=3))
         self.assertIsNone(LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
             site="draftkings").with_composition_rule(position="QB", num_players=2))
+
+    def test_with_valid_stack_rule_3_1(self):
+        lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+            site="draftkings").with_stack_rule("KC", 3, "JAX", 1)
+
+        self.assertTrue(lineup_builder.get("QB").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR1").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR2").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("WR3").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("FLEX").eligible_team == None)
+
+    def test_with_valid_stack_rule_1_3(self):
+        lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+            site="draftkings").with_stack_rule("KC", 1, "JAX", 3)
+
+        self.assertTrue(lineup_builder.get("QB").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR1").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("WR2").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("WR3").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("FLEX").eligible_team == None)
+
+    def test_with_valid_stack_rule_2_2(self):
+        lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+            site="draftkings").with_stack_rule("KC", 2, "JAX", 2)
+
+        self.assertTrue(lineup_builder.get("QB").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR1").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR2").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("WR3").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("FLEX").eligible_team == None)
+
+    def test_with_valid_stack_rule_3_0(self):
+        lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+            site="draftkings").with_stack_rule("KC", 3, "JAX", 0)
+
+        self.assertTrue(lineup_builder.get("QB").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR1").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR2").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR3").eligible_team == None)
+
+    def test_with_valid_stack_rule_4_3(self):
+        lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+            site="draftkings").with_stack_rule("KC", 4, "JAX", 3)
+
+        self.assertTrue(lineup_builder.get("QB").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR1").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("WR2").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("WR3").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("FLEX").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("TE").eligible_team == "KC")
+        self.assertTrue(lineup_builder.get("RB1").eligible_team == "JAX")
+        self.assertTrue(lineup_builder.get("RB2").eligible_team == None)
+
+    def test_with_valid_stack_rule_0_0(self):
+        lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+            site="draftkings").with_stack_rule("KC", 0, "JAX", 0)
+
+        self.assertTrue(lineup_builder.get("QB").eligible_team == None)
+
+    def test_with_invalid_stack_rule_5_5(self):
+        lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+            site="draftkings").with_stack_rule("KC", 5, "JAX", 5)
+
+        self.assertIsNone(lineup_builder)
+    
