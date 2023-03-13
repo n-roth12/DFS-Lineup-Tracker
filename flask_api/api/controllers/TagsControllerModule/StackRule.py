@@ -8,8 +8,8 @@ class StackRule:
         stack_map = StackRule.get_team_positional_map(lineup=lineup)
         return StackRule.get_stacks(stack_map)
 
-    def implement_rule(lineup: Lineup):
-        return 
+    def implement_rule(team_abbr: str, num_players: int, lineup: Lineup, draftables: list, eligible_positions: list = None):
+        return StackRule.add_stack_to_lineup(team_abbr=team_abbr, num_players=num_players, lineup=lineup, draftables=draftables, eligible_positions=eligible_positions)
 
     # def contains_stack(self, stack_map: dict, num_players1: int, num_players2: int):
     #     result = []
@@ -50,3 +50,22 @@ class StackRule:
                     stack_map[player.get("game").get("gameId")]["awayTeam"]["players"].append(player)
 
         return stack_map
+
+
+    def add_stack_to_lineup(team_abbr: str, num_players: int, lineup: Lineup, draftables: list, eligible_positions: list = None):
+        if num_players < 1:
+            return
+        
+        if len(eligible_positions) > 0 and num_players != len(eligible_positions):
+            return
+
+        stack_players = []
+        for player in draftables:
+            if player.get("team") == team_abbr and player.get("position") in eligible_positions:
+                stack_players.append(player)
+                eligible_positions.remove(player.get("position"))
+                if len(stack_players) >= num_players:
+                    break
+
+        lineup.add_players(stack_players)
+        return lineup

@@ -13,10 +13,6 @@ class TestTagsControllerMethods(unittest.TestCase):
     def test_returns_true(self):
         self.assertTrue(True)
 
-    def test_stack_check_rule_returns_true(self):
-        # self.get_lineup_with_stack()
-        self.assertTrue(True)
-
     def test_get_team_stack(self):
         empty_lineup = self.empty_draftkings_lineup()
         lineup = self.add_stack_to_lineup(team_abbr="KC", num_players=3, lineup=empty_lineup, eligible_positions=["WR", "WR", "QB"])
@@ -25,8 +21,11 @@ class TestTagsControllerMethods(unittest.TestCase):
         self.assertTrue(CompositionRule.check_rule(composition={"QB": 1, "WR": 2}, lineup=lineup))
         self.assertFalse(CompositionRule.check_rule(composition={"QB": 1, "WR": 3}, lineup=lineup))
 
+    def test_implement_stack(self):
+        empty_lineup = self.empty_draftkings_lineup()
+        lineup = StackRule.implement_rule(team_abbr="KC", num_players=3, lineup=empty_lineup, draftables=test_draftables, eligible_positions=["WR", "WR", "QB"])
+        self.assertTrue(CompositionRule.check_rule(composition={"QB": 1, "WR": 2}, lineup=lineup))
     
-
 ###### HELPER METHODS ######
 
     # Adds a stack to an existing lineup
@@ -52,28 +51,6 @@ class TestTagsControllerMethods(unittest.TestCase):
     def add_players_to_lineup(self, players: list, lineup: Lineup) -> Lineup:
         for player in players:
             lineup.add_player(player)
-
-
-    def get_lineup_with_stack(self):
-        lineup = self.optimizer_draftkings().generate_optimized_lineup(self.empty_draftkings_lineup())
-        return lineup
-
-    def get_team_stack(self, team_name: str, num_players: int, positions: list = []) -> list:
-        if num_players < 1:
-            return []
-        
-        if len(positions) > 0 and num_players != len(positions):
-            return None
-
-        result = []
-        for player in test_draftables:
-            if player.get("team") == team_name and player.get("position") in positions:
-                result.append(player)
-                positions.remove(player.get("position"))
-                if len(result) >= num_players:
-                    return result
-        
-        return result
 
     def empty_draftkings_lineup(self):
         lineup = Lineup.create_lineup_with_positions(positions=self.get_all_draftkings_lineup_slots(), site="draftkings")
