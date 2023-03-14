@@ -3,7 +3,7 @@ from LineupOptimizerControllerModule.allowed_positions import flex_positions_dic
 class LineupBuilderSlot:
 
     # you would pass title="QB" or title="WR2" and it is optional to pass eligible_positions
-    def __init__(self, title: str, site: str, eligible_positions = None, eligible_team_abbr = None, max_salary = None):
+    def __init__(self, title: str, site: str, eligible_positions: list = None, eligible_team_abbr: str = None, max_salary: int = None):
         self.title = title
         self.site = site
         if not eligible_positions or not len(eligible_positions):

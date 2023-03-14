@@ -29,6 +29,20 @@ class LineupBuilder:
             lineup[lineup_slot.title] = player
         return Lineup(lineup=lineup, site=self.site)
 
+    def fill(self, lineup: Lineup) -> Lineup:
+        new_lineup = {}
+        lineup_ids = lineup.get_player_ids()
+        for lineup_slot in self.lineup_slots:
+            if lineup.is_slot_empty(lineup_slot.title):
+                player = self.pick_player(position=lineup_slot.eligible_positions[0],
+                    taken_ids=lineup_ids)
+                new_lineup[lineup_slot.title] = player
+                lineup_ids.append(player.get("playerSiteId"))
+            else:
+                new_lineup[lineup_slot.title] = lineup.get(lineup_slot.title)
+
+        return Lineup(lineup=new_lineup, site=self.site)
+
     def with_composition_rule(self, position: str, num_players: int):
         count = 0
         for slot in self.lineup_slots:
@@ -40,7 +54,7 @@ class LineupBuilder:
                     return self
         return None
 
-    def with_punt_rule(self, position_title: str, max_salary = None):
+    def with_punt_rule(self, position_title: str, max_salary: int = None):
         lineup_slot = self.get(position_title)
         if not lineup_slot:
             return None
@@ -67,10 +81,15 @@ class LineupBuilder:
                 else:
                     lineup_slot.set_eligible_team(team_abbr1)
                     count1 += 1
+        if count1 == num_players1 and count2 == num_players2:
+            return self
         return None
 
     def stack_order_helper(self, eligible_positions: list) -> int:
         return min([STACK_ORDER.index(pos) for pos in eligible_positions])
+
+    def pick_position_of_eligible_positions(self, eligible_positions: list) -> str:
+        return
 
     def create_weighted_cost_map(self, draftables: list) -> dict:
         weighted_cost_map = {}
@@ -86,11 +105,15 @@ class LineupBuilder:
             weighted_cost_map[position].sort(key=lambda player : player["value"], reverse=True)
         return weighted_cost_map
 
-    # picks the top players that matches the filters, None if no player matches filter
-    def pick_player(self, position: str, taken_ids = [], team_abbr = None, max_salary = None) -> dict:
-        return next((player for player in self.weighted_cost_map[position] if (
+    def pick_player(self, position: str, taken_ids: list = [], team_abbr: str = None, max_salary: int = None) -> dict:
+        eligible_players = [player for player in self.weighted_cost_map[position] if (
             (team_abbr == None or player["team"] == team_abbr) 
             and (max_salary == None or player["salary"] <=  max_salary) 
             and (player["status"] not in injured_status_list)
             and (player["playerSiteId"] not in taken_ids)
-            )), None)
+        )]
+        if not len(eligible_players):
+            return None
+        index_to_pick = randint(0, min(NUM_PLAYERS_TO_CONSIDER - 1, len(eligible_players) - 1))
+        return eligible_players[index_to_pick]
+

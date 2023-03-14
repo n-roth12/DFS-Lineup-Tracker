@@ -2,11 +2,9 @@ import unittest
 from LineupOptimizerControllerModule.LineupBuilder import LineupBuilder
 from LineupOptimizerControllerModule.LineupBuilderSlot import LineupBuilderSlot
 from LineupOptimizerControllerModule.test_draftables import test_draftables
+from LineupOptimizerControllerModule.Lineup import Lineup
 
 class LineupBuilderTests(unittest.TestCase):
-
-    def test_true(self):
-        return self.assertTrue(True)
 
     def test_lineup_builder_get(self):
         lineup_builder = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
@@ -107,13 +105,65 @@ class LineupBuilderTests(unittest.TestCase):
 
     def test_build(self):
         lineup = self.default_draftkings_builder().build()
-        self.assertIsNotNone(lineup)
-        for slot in lineup.lineup.keys():
-            print(slot, lineup.get(slot))
+        self.assertEqual(0, len(lineup.get_empty_slots()))
 
+    def test_build_1(self):
+        lineup = self.default_draftkings_builder() \
+            .with_stack_rule("KC", 5, "JAX", 4) \
+            .with_composition_rule("RB", 3) \
+            .with_punt_rule("TE", 3700) \
+            .build()
+        self.assertEqual("KC", lineup.get("QB")["team"])
+        self.assertEqual("KC", lineup.get("WR1")["team"])
+        self.assertEqual("JAX", lineup.get("WR2")["team"])
+        self.assertEqual("KC", lineup.get("WR3")["team"])
+        self.assertEqual("JAX", lineup.get("FLEX")["team"])
+        self.assertEqual("KC", lineup.get("TE")["team"])
+        self.assertEqual("JAX", lineup.get("RB1")["team"])
+        self.assertEqual("KC", lineup.get("RB2")["team"])
+        self.assertEqual("JAX", lineup.get("DST")["team"])
+        self.assertEqual("RB", lineup.get("FLEX")["position"])
+        self.assertGreaterEqual(3700, lineup.get("TE")["salary"])
+
+    def test_fill_empty_lineup_with_positions(self):
+        empty_lineup = self.empty_lineup()
+        lineup = self.default_draftkings_builder().fill(empty_lineup)
+        self.assertEqual(0, len(lineup.get_empty_slots()))
+
+    def test_fill_empty_lineup_without_positions(self):
+        lineup = self.default_draftkings_builder().fill(Lineup(lineup={}, site="draftkings"))
+        self.assertEqual(0, len(lineup.get_empty_slots()))
+
+    def test_fill_non_empty_lineup_1(self):
+        empty_lineup = self.empty_lineup()
+        builder = self.default_draftkings_builder()
+        player1 = builder.pick_player(position="WR")
+        empty_lineup.add_player_at_position(lineup_slot="WR2", player=player1)
+        lineup = builder.fill(empty_lineup)
+        self.assertEqual(player1, lineup.get("WR2"))
+
+    def test_fill_non_empty_lineup_2(self):
+        builder = self.default_draftkings_builder()
+        player1 = builder.pick_player(position="QB")
+        player2 = builder.pick_player(position="RB")
+        player3 = builder.pick_player(position="WR")
+        player4 = builder.pick_player(position="TE")
+        player5 = builder.pick_player(position="DST")
+        lineup = Lineup(lineup={"QB": player1, "RB1": player2, "WR1": player3, "TE": player4, "DST": player5}, site="draftkings")
+        result = builder.fill(lineup=lineup)
+        self.assertEqual(player1, result.get("QB"))
+        self.assertEqual(player2, result.get("RB1"))
+        self.assertEqual(player3, result.get("WR1"))
+        self.assertEqual(player4, result.get("TE"))
+        self.assertEqual(player5, result.get("DST"))
+        self.assertEqual(0, len(result.get_empty_slots()))
+        self.assertEqual(["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], list(result.lineup.keys()))
         
 ### HELPER METHODS ###
 
     def default_draftkings_builder(self):
         return LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
             site="draftkings", draftables=test_draftables)
+
+    def empty_lineup(self):
+        return Lineup({"QB": {}, "RB1": {}, "RB2": {}, "WR1": {}, "WR2": {}, "WR3": {}, "TE": {}, "FLEX": {}, "DST": {}}, site="draftkings")
