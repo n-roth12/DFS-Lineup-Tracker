@@ -6,6 +6,8 @@ from random import randint
 
 STACK_ORDER = ["QB", "WR", "TE", "RB", "DST"]
 NUM_PLAYERS_TO_CONSIDER = 10
+NUM_OF_LINEUPS_TO_CONSIDER = 10
+SALARY_CAP = 50000
 
 class LineupBuilder:
 
@@ -40,8 +42,22 @@ class LineupBuilder:
                 lineup_ids.append(player.get("playerSiteId"))
             else:
                 new_lineup[lineup_slot.title] = lineup.get(lineup_slot.title)
-
         return Lineup(lineup=new_lineup, site=self.site)
+
+    # for tested lineups, about a third of all generated lineups are over the salary cap
+    # strictness should be an integer between 1 and 10
+    def optimize(self, lineup: Lineup = {}, strictness: int = 5) -> Lineup:
+        best_lineup_projection = 0.0
+        best_lineup = None
+        count = 0
+        for i in range(NUM_OF_LINEUPS_TO_CONSIDER * (10 * strictness)):
+            generated_lineup = self.fill(lineup=lineup)
+            lineup_salary = generated_lineup.get_lineup_salary()
+            lineup_projection = generated_lineup.get_lineup_projected_points()
+            if lineup_projection > best_lineup_projection and lineup_salary <= SALARY_CAP:
+                best_lineup = generated_lineup
+                best_lineup_projection = lineup_projection
+        return best_lineup
 
     def with_composition_rule(self, position: str, num_players: int):
         count = 0

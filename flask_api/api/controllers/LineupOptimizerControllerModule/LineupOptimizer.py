@@ -5,6 +5,7 @@
 # imports for use with unit tests
 from LineupOptimizerControllerModule import allowed_positions
 from LineupOptimizerControllerModule.Lineup import Lineup
+from LineupOptimizerControllerModule.LineupBuilder import LineupBuilder
 
 from random import randint
 from copy import deepcopy

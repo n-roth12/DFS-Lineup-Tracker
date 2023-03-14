@@ -158,6 +158,11 @@ class LineupBuilderTests(unittest.TestCase):
         self.assertEqual(player5, result.get("DST"))
         self.assertEqual(0, len(result.get_empty_slots()))
         self.assertEqual(["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], list(result.lineup.keys()))
+
+    def test_optimizer(self):
+        empty_lineup = self.empty_lineup()
+        lineup = self.default_draftkings_builder().optimize(empty_lineup, strictness=1)
+        self.assertEqual(["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], list(lineup.lineup.keys()))
         
 ### HELPER METHODS ###
 
