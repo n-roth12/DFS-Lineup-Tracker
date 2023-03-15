@@ -1,7 +1,7 @@
 import unittest
 from LineupOptimizerControllerModule.LineupBuilder import LineupBuilder
 from LineupOptimizerControllerModule.LineupBuilderSlot import LineupBuilderSlot
-from LineupOptimizerControllerModule.test_draftables import test_draftables
+from tests.test_draftables import test_draftables
 from LineupOptimizerControllerModule.Lineup import Lineup
 
 class LineupBuilderTests(unittest.TestCase):
@@ -159,8 +159,8 @@ class LineupBuilderTests(unittest.TestCase):
         self.assertEqual(0, len(result.get_empty_slots()))
         self.assertEqual(["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], list(result.lineup.keys()))
 
-    # this will fail about 2% of the time because optimize() is not deterministic, it is not gauranteed that a lineup
-    # under the salary cap will be found within 10 tries
+    # this will fail a rare number of times of the time because optimize() is not deterministic, 
+    # it is not gauranteed that a lineup under the salary cap will be found within 100 tries
     def test_optimizer(self):
         empty_lineup = self.empty_lineup()
         lineup = self.default_draftkings_builder().optimize(empty_lineup, strictness=1)

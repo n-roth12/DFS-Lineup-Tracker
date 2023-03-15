@@ -1,5 +1,4 @@
 from LineupOptimizerControllerModule.LineupBuilderSlot import LineupBuilderSlot
-from LineupOptimizerControllerModule.PlayerPicker import PlayerPicker
 from LineupOptimizerControllerModule.allowed_positions import injured_status_list
 from LineupOptimizerControllerModule.Lineup import Lineup
 from random import randint
@@ -25,7 +24,7 @@ class LineupBuilder:
         lineup = {}
         lineup_ids = []
         for lineup_slot in self.lineup_slots:
-            player = self.pick_player(lineup_slot.eligible_positions[0], 
+            player = self.pick_player(position=self.pick_eligible_position(lineup_slot.eligible_positions), 
                 team_abbr=lineup_slot.eligible_team, max_salary=lineup_slot.max_salary, taken_ids=lineup_ids)
             lineup_ids.append(player["playerSiteId"])
             lineup[lineup_slot.title] = player
@@ -36,7 +35,7 @@ class LineupBuilder:
         lineup_ids = lineup.get_player_ids()
         for lineup_slot in self.lineup_slots:
             if lineup.is_slot_empty(lineup_slot.title):
-                player = self.pick_player(position=lineup_slot.eligible_positions[0],
+                player = self.pick_player(position=self.pick_eligible_position(lineup_slot.eligible_positions),
                     taken_ids=lineup_ids)
                 new_lineup[lineup_slot.title] = player
                 lineup_ids.append(player.get("playerSiteId"))
@@ -104,8 +103,8 @@ class LineupBuilder:
     def stack_order_helper(self, eligible_positions: list) -> int:
         return min([STACK_ORDER.index(pos) for pos in eligible_positions])
 
-    def pick_position_of_eligible_positions(self, eligible_positions: list) -> str:
-        return
+    def pick_eligible_position(self, eligible_positions: list) -> str:
+        return eligible_positions[randint(0, len(eligible_positions) - 1)]
 
     def create_weighted_cost_map(self, draftables: list) -> dict:
         weighted_cost_map = {}
