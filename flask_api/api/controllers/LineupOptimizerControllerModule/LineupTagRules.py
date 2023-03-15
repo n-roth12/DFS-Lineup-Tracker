@@ -3,7 +3,7 @@ from LineupOptimizerControllerModule.Lineup import Lineup
 DRAFTKINGS_PUNT_PRICE = 4000
 STACK_TYPES = [(3, 1), (3, 2), (4, 1), (4, 2), (4, 3), (5, 1), (3, 0), (4, 0), (2, 1), (5, 0)]
 
-class LineupRules:
+class LineupTagRules:
 
     def check_punt_rule(lineup: Lineup) -> tuple[bool, dict]:
         for player in lineup.lineup.values():
