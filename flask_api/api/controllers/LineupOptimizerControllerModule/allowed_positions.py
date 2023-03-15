@@ -1,4 +1,4 @@
-flex_positions_dict = {
+FLEX_POSITIONS = {
     "draftkings" : {
         "FLEX" : ["RB", "WR", "TE"]
     }, 
@@ -10,16 +10,16 @@ flex_positions_dict = {
     }
 }
 
-lineup_slots = {
+LINEUP_SLOTS = {
     "draftkings": ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"],
     "fanduel": ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"],
     "yahoo": ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
 }
 
-salary_caps = {
-    "draftkings": 60000,
+SALARY_CAPS = {
+    "draftkings": 50000,
     "fanduel": 60000,
     "yahoo": 200
 }
 
-injured_status_list = ["IR", "O"]
+INJURED_STATUSES = ["IR", "O"]

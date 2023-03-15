@@ -7,20 +7,15 @@ import csv
 from io import StringIO
 import datetime
 from bson import json_util
-import random
 
 from .utilities import token_required
-from ..date_services import parseDate
 from ..controllers.MongoController import MongoController
-from ..controllers.LineupOptimizerController import LineupOptimizerController
-from ..controllers.LineupOptimizerControllerModule import allowed_positions
-from ..controllers.LineupOptimizerControllerModule.Lineup import Lineup
-from ..controllers.LineupOptimizerControllerModule.LineupOptimizer import LineupOptimizer
+from ..controllers.LineupOptimizerControllerModule.LineupBuilder import LineupBuilder
+from ..controllers.LineupOptimizerControllerModule.allowed_positions import LINEUP_SLOTS
 
 lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineups')
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 MongoController = MongoController()
-LineupOptimizerController = LineupOptimizerController()
 
 @lineups_blueprint.route('/favorite', methods=['POST'])
 @token_required
@@ -273,74 +268,25 @@ def get_singe_lineup(current_user):
 def generate_lineup(current_user):
 	data = json.loads(request.data)
 	draftGroupId = data.get("draftGroupId")
-	gameStack = data.get("gameStack")
-	teamStack = data.get("teamStack")
-	gameStackPlayerCount = data.get("gameStackPlayerCount")
 	existing_lineup = data.get("existingLineup") if data.get("existingLineup") else []
 	replace_entire_lineup = data.get("replaceEntireLineup")
-	chosen_flex_positions = data.get("eligibleFlexPositions")
 
 	if replace_entire_lineup == "full":
 		existing_lineup = []
 
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
 
-	eligible_flex_positions = []
-	for flex_position in chosen_flex_positions:
-		if flex_position not in ["RB", "WR", "TE"]:
-			return jsonify({ "Error": "Invalid flex position choice." }), 400
-		eligible_flex_positions.append(flex_position)
-	if len(eligible_flex_positions) < 1:
-		return jsonify({ "Error": "Invalid flex position choice." }), 400
+	lineup = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+		site=draftables.get("site"), draftables=draftables.get("draftables")).build()
 
-	lineup_positions = ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
-	salaryCap = 600000
-
-	result = LineupOptimizerController.generate_optimized_lineup(existing_lineup, lineup_positions, eligible_flex_positions, 
-        salaryCap, draftables)
-
+	result = convert_lineup_to_list(lineup=lineup.lineup, site=lineup.site)
 	return jsonify({ "lineup": result }), 200
- 
-@lineups_blueprint.route('/generate_test', methods=["POST"])
-def generate_lineup_test():
-	data = json.loads(request.data)
-	draftGroupId = data.get("draftGroupId")
-	if not draftGroupId:
-		return jsonify({ "Error": "Missing Required Paramerter: DraftGroupId" }), 400
-	try:
-		draftGroupId = int(draftGroupId)
-	except ValueError as e:
-		return jsonify({ "Error": "Invalid Value for DraftGroupId" }), 400
-		
-	stackTeams = data.get("stackTeams")
-	stackPlayerCount = data.get("gameStackPlayerCount")
-	puntPositions = data.get("puntPositions")
-	site = "draftkings"
 
-	existing_lineup_data = data.get("existingLineup")
-	if existing_lineup_data:
-		existing_lineup = {lineup_slot : existing_lineup_data.get(lineup_slot) if existing_lineup_data.get(lineup_slot) \
-			else {} for lineup_slot in allowed_positions.lineup_slots.get(site)}
 
-	replace_entire_lineup = data.get("replaceEntireLineup")
-	if replace_entire_lineup and replace_entire_lineup == True:
-		replace_entire_lineup = False
-		existing_lineup = {lineup_slot : {} for lineup_slot in allowed_positions.lineup_slots.get(site)}
-
-	excluded_flex_positions = data.get("excludedFlexPositions")
-
-	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId).get("draftables")
-	lineup_slots = allowed_positions.lineup_slots.get(site)
-	salary_cap = allowed_positions.salary_caps.get(site)
-
-	lineup = Lineup(lineup=existing_lineup, site=site)
-	optimizer = LineupOptimizer(draftables=draftables, lineup_positions=lineup_slots, \
-		stack_number_of_players=stackPlayerCount, stack_teams=stackTeams, punt_positions=puntPositions, \
-		excluded_flex_positions=excluded_flex_positions, salary_cap=salary_cap, site=site)
-
-	generated_lineup = optimizer.generate_optimized_lineup(lineup)
-	return jsonify(generated_lineup.lineup), 200
-
+def convert_lineup_to_list(lineup: dict, site: str) -> list:
+	slots = LINEUP_SLOTS.get(site)
+	lineup_as_list = [{"pos": slot, "player": lineup.get(slot)} for slot in lineup.keys()]
+	return sorted(lineup_as_list, key=lambda x: slots.index(x["pos"]))
 
 # converts from the format:
 # ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]

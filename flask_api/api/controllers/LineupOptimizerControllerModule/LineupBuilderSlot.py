@@ -1,4 +1,8 @@
-from LineupOptimizerControllerModule.allowed_positions import flex_positions_dict
+# for use with unit testing
+# from LineupOptimizerControllerModule.allowed_positions import FLEX_POSITIONS
+
+# for use with api
+from ..LineupOptimizerControllerModule.allowed_positions import FLEX_POSITIONS
 
 class LineupBuilderSlot:
 
@@ -15,7 +19,7 @@ class LineupBuilderSlot:
         if title != "FLEX":
             self.eligible_positions = ["".join(filter(lambda x: x.isalpha(), title))]
         else:
-            self.eligible_positions = flex_positions_dict[self.site][title]
+            self.eligible_positions = FLEX_POSITIONS[self.site][title]
 
     def set_eligible_team(self, eligible_team_abbr: str):
         self.eligible_team = eligible_team_abbr

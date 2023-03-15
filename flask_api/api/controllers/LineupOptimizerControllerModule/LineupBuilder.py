@@ -1,12 +1,18 @@
-from LineupOptimizerControllerModule.LineupBuilderSlot import LineupBuilderSlot
-from LineupOptimizerControllerModule.allowed_positions import injured_status_list
-from LineupOptimizerControllerModule.Lineup import Lineup
+# for use with unit testing
+# from LineupOptimizerControllerModule.LineupBuilderSlot import LineupBuilderSlot
+# from LineupOptimizerControllerModule.allowed_positions import INJURED_STATUSES
+# from LineupOptimizerControllerModule.Lineup import Lineup
+
+# for use with api
+from ..LineupOptimizerControllerModule.LineupBuilderSlot import LineupBuilderSlot
+from ..LineupOptimizerControllerModule.Lineup import Lineup
+from ..LineupOptimizerControllerModule.allowed_positions import INJURED_STATUSES, SALARY_CAPS
+
 from random import randint
 
 STACK_ORDER = ["QB", "WR", "TE", "RB", "DST"]
 NUM_PLAYERS_TO_CONSIDER = 10
 NUM_OF_LINEUPS_TO_CONSIDER = 10
-SALARY_CAP = 50000
 
 class LineupBuilder:
 
@@ -53,7 +59,7 @@ class LineupBuilder:
             generated_lineup = self.fill(lineup=lineup)
             lineup_salary = generated_lineup.get_lineup_salary()
             lineup_projection = generated_lineup.get_lineup_projected_points()
-            if lineup_projection > best_lineup_projection and lineup_salary <= SALARY_CAP:
+            if lineup_projection > best_lineup_projection and lineup_salary <= SALARY_CAPS.get(self.site):
                 best_lineup = generated_lineup
                 best_lineup_projection = lineup_projection
         return best_lineup
@@ -124,7 +130,7 @@ class LineupBuilder:
         eligible_players = [player for player in self.weighted_cost_map[position] if (
             (team_abbr == None or player["team"] == team_abbr) 
             and (max_salary == None or player["salary"] <=  max_salary) 
-            and (player["status"] not in injured_status_list)
+            and (player["status"] not in INJURED_STATUSES)
             and (player["playerSiteId"] not in taken_ids)
         )]
         if not len(eligible_players):

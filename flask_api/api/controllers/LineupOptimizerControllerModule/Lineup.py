@@ -1,8 +1,8 @@
 # for use with api
-# from ..LineupOptimizerControllerModule import allowed_positions
+from ..LineupOptimizerControllerModule.allowed_positions import FLEX_POSITIONS
 
 # for use with unit tests
-from LineupOptimizerControllerModule import allowed_positions
+# from LineupOptimizerControllerModule import allowed_positions
 
 class Lineup:
 
@@ -87,7 +87,7 @@ class Lineup:
         return None
 
     def is_position_eligible_for_slot(self, lineup_slot: str, position: str) -> bool:
-        if lineup_slot in list(allowed_positions.flex_positions_dict.get(self.site).keys()):
-            return position in allowed_positions.flex_positions_dict.get(self.site).get(lineup_slot)
+        if lineup_slot in list(FLEX_POSITIONS.get(self.site).keys()):
+            return position in FLEX_POSITIONS.get(self.site).get(lineup_slot)
         
         return "".join(filter(lambda x: x.isalpha(), lineup_slot)) == position
