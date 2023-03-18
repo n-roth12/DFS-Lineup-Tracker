@@ -242,21 +242,24 @@ def get_recommended_tags():
 @token_required
 def export_lineups(current_user):
 	data = json.loads(request.data)
-	
+	print(data)
+
 	file = StringIO()
 	writer = csv.writer(file)
 	writer.writerow(["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"])
+	if data is not list:
+		data = [{"lineup": data}]
 	for entry in data:
 		lineup = entry["lineup"]
-		writer.writerow([lineup["qb"]["draftableId"] if lineup.get("qb") else None,
-			lineup["rb1"]["draftableId"] if lineup.get("rb1") else None,
-			lineup["rb2"]["draftableId"] if lineup.get("rb2") else None,
-			lineup["wr1"]["draftableId"] if lineup.get("wr1") else None,
-			lineup["wr2"]["draftableId"] if lineup.get("wr2") else None,
-			lineup["wr3"]["draftableId"] if lineup.get("wr3") else None,
-			lineup["te"]["draftableId"] if lineup.get("te") else None,
-			lineup["flex"]["draftableId"] if lineup.get("flex") else None,
-			lineup["dst"]["draftableId"] if lineup.get("dst") else None,
+		writer.writerow([lineup["qb"]["playerSiteId"] if lineup.get("qb") else None,
+			lineup["rb1"]["playerSiteId"] if lineup.get("rb1") else None,
+			lineup["rb2"]["playerSiteId"] if lineup.get("rb2") else None,
+			lineup["wr1"]["playerSiteId"] if lineup.get("wr1") else None,
+			lineup["wr2"]["playerSiteId"] if lineup.get("wr2") else None,
+			lineup["wr3"]["playerSiteId"] if lineup.get("wr3") else None,
+			lineup["te"]["playerSiteId"] if lineup.get("te") else None,
+			lineup["flex"]["playerSiteId"] if lineup.get("flex") else None,
+			lineup["dst"]["playerSiteId"] if lineup.get("dst") else None,
 		])
 		
 	return Response(
