@@ -13,6 +13,7 @@
 		align-items: left;
 		margin-top: 10px;
 		margin-bottom: 10px;
+
 		.filter-btn, .filter-btn-active {
 			width: 50px;
 			padding: 3px 8px 3px 8px;
@@ -23,8 +24,11 @@
 	.load-more-btn {
 		border: None;
 		background: None;
-		color: blue;
+		color: var(--btn-blue);
 		font-size: 14pt;
+		margin-top: 10px;
+		margin-bottom: 30px;
+		font-weight: 600;
 	}
 
 	.lineups-table {
@@ -32,23 +36,24 @@
 		width: 80%;
 		max-width: 1100px;
 
+		thead {
+			position: sticky;
+			top: 0;
+		}
+
 		.col-labels {
 			border-bottom: None;
-
-			.col-label {
-				border-left: 1px solid gray;
-				border-right: 1px solid gray;
-			}
+			background-color: var(--grey-4);
 		}
 
 		.table-header {
-			background-color: #d3d3d3;
+			background-color: var(--grey-4);
 			border-top: none;
 		}
 
 		tbody {
 			tr:hover {
-				background-color: #d5d8dc;
+				outline: 1px solid var(--grey-6);
 			}
 		}
 	}

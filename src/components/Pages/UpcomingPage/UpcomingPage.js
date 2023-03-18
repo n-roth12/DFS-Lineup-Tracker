@@ -228,11 +228,6 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
 					<div className='players-inner'>
 						<table className='lineups-table'>
 							<thead>
-								{/* <tr className="col-labels">
-									<th colspan="4"></th>
-									<th className="col-label" colspan="2">Fanduel</th>
-									<th className="col-label" colspan="2">Draftkings</th>
-								</tr> */}
 								<tr className='header-labels'>
 									<th className={sortColumn[1] === "name" ? "selected": ""}
 										onClick={() => sortRows("", "name")}>Name</th>

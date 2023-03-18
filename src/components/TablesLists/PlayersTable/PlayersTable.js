@@ -65,7 +65,6 @@ const PlayersTable = ({ players }) => {
               <th>Rank</th>
               <th>Name</th>
               <th>Pos</th>
-              <th>Team</th>
               <th>FAN Pts</th>
               <th>YRDs</th>
               <th>TDs</th>
@@ -85,7 +84,6 @@ const PlayersTable = ({ players }) => {
               <td>{player.rank}</td>
               <td><strong><PlayerLink playerName={player.name} /></strong></td>
               <td>{player.position}</td>
-              <td>{player.stats.team}</td>
               <td className="points-col"><strong>{truncPoints(player)}</strong></td>
               <td>{player.stats.passing_yards}</td>
               <td>{player.stats.passing_touchdowns}</td>
@@ -108,7 +106,6 @@ const PlayersTable = ({ players }) => {
               <th>Rank</th>
               <th>Name</th>
               <th>Pos</th>
-              <th>Team</th>
               <th>FAN Pts</th>
               <th>TDs</th>
               <th>INTs</th>
@@ -125,7 +122,6 @@ const PlayersTable = ({ players }) => {
               <td>{player.rank}</td>
               <td><strong><Link className="player-link" to={`/team/${player.team}`}>{player.city} {player.name}</Link></strong></td>
               <td>{player.position}</td>
-              <td>{player.stats.team}</td>
               <td className="points-col"><strong>{truncPoints(player)}</strong></td>
               <td>{player.stats.touchdowns}</td>
               <td>{player.stats.interceptions}</td>
@@ -142,7 +138,7 @@ const PlayersTable = ({ players }) => {
       </table>
       { players[posFilter].length > (currPage + 1) * 50 &&
         <div>
-          <button className="load-more-btn" onClick={() => setCurrPage(currPage + 1)}>Load More</button>
+          <button className="load-more-btn" onClick={() => setCurrPage(currPage + 1)}>More</button>
         </div>
       }
     </div>

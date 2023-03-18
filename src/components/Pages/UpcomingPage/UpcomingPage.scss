@@ -2,7 +2,7 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	overflow: hidden;
+	// overflow: hidden;
 	align-items: center;
 
 	.players-outer {
@@ -102,6 +102,10 @@
 				font-size: 10pt;
 				width: 100%;
 				max-width: 1100px;
+				thead {
+					position: sticky;
+					top: 0;
+				}
 			
 				.col-labels {
 					border-bottom: None;
