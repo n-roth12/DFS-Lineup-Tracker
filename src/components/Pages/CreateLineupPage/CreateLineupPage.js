@@ -439,7 +439,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       },
-      body: JSON.stringify(lineup)
+      body: JSON.stringify([lineup])
     })
     const data = await res.blob()
     downloadFile(data)

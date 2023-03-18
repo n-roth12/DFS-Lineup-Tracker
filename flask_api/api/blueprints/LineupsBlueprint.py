@@ -242,15 +242,12 @@ def get_recommended_tags():
 @token_required
 def export_lineups(current_user):
 	data = json.loads(request.data)
-	print(data)
 
 	file = StringIO()
 	writer = csv.writer(file)
 	writer.writerow(["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"])
-	if data is not list:
-		data = [{"lineup": data}]
-	for entry in data:
-		lineup = entry["lineup"]
+
+	for lineup in data:
 		writer.writerow([lineup["qb"]["playerSiteId"] if lineup.get("qb") else None,
 			lineup["rb1"]["playerSiteId"] if lineup.get("rb1") else None,
 			lineup["rb2"]["playerSiteId"] if lineup.get("rb2") else None,

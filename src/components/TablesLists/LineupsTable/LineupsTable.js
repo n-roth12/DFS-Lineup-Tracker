@@ -7,6 +7,7 @@ import PointsGraph from '../../Pages/LineupsPage/PointsGraph/PointsGraph'
 import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { FaPlus, FaTimes } from 'react-icons/fa'
+import { BiDownload } from 'react-icons/bi'
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter, setShowImportLineupDialog }) => {
 
@@ -26,6 +27,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   const [sortColumn, setSortColumn] = useState("startTime")
   const [reverseSort, setReverseSort] = useState(false)
   const [tagFilter, setTagFilter] = useState([])
+  const [file, setFile] = useState(null)
 
   useEffect(() => {
     getYears()
@@ -60,6 +62,24 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
     if (!tagFilter.find((t) => t["category"] === tag["category"] && t["value"] === tag["value"])) {
       setTagFilter([...tagFilter, tag])
     }
+  }
+
+  const downloadFile = (blob) => {
+    const url = window.URL.createObjectURL(blob)
+    setFile(url)
+  }
+
+  const exportLineups = async () => {
+    const res = await fetch(`/lineups/export`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: JSON.stringify(lineups.filter((lineup) => 
+        selectedLineups.includes(lineup["lineupId"])).map((lineup) => lineup["lineup"]))
+    })
+    const data = await res.blob()
+    downloadFile(data)
   }
 
   const changeSortColumn = (column) => {
@@ -184,7 +204,11 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             </div>
             <div className='lineup-wrapper-header'>
             {selectedLineups.length > 0 &&
-              <button className='lineup-export-btn'>Export ({selectedLineups.length})</button>
+              (file === null ?
+                <button className='lineup-export-btn' onClick={exportLineups}>Export ({selectedLineups.length})</button>
+              :
+                <a href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon'/></a>
+              )
             }
             {selectedLineups.length > 0 &&
               <button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete ({selectedLineups.length})</button>
