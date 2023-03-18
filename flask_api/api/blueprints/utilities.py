@@ -16,7 +16,6 @@ def token_required(f):
 		token = None
 		if 'x-access-token' in request.headers:
 			token = request.headers['x-access-token'].replace('"', '')
-			print(token)
 		if not token or token == "undefined":
 			print('no token')
 			return f(None, *args, **kwargs)

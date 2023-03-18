@@ -49,6 +49,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [recommendedTags, setRecommendedTags] = useState([])
   const [activeTags, setActiveTags] = useState([])
   const [showRecommendedTagsDialog, setShowRecommendedTagsDialog] = useState(false)
+  const [allTags, setAllTags] = useState([])
   const navigate = useNavigate()
 
   const [lineup, setLineup] = useState({
@@ -128,7 +129,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     getLineup()
     getDraftGroup()
     getDraftGroupLineups()
-    getRecommendedTags()
+    getAllTags()
     
     setTimeout(() => setLoading(false), 1000)
   }, [draftGroupId, lineupId])
@@ -137,6 +138,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     getRemainingSalary()
     getTeamProjPoints()
     getLineupPlayerIds()
+    getRecommendedTags()
   }, [lineup, draftGroup])
 
   const togglePosFilter = (position) => {
@@ -206,15 +208,32 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     }
   }
 
-  const getRecommendedTags = async () => {
-    const res = await fetch(`/lineups/recommendedTags`, {
+  const getAllTags = async () => {
+    const res = await fetch(`/lineups/allTags`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       }
     })
     const data = await res.json()
-    setRecommendedTags(data)
+    setAllTags(data) 
+  }
+
+  const getRecommendedTags = async () => {
+    if (lineup && draftGroup) {
+      const res = await fetch(`/lineups/recommendedTags`, {
+        method: 'POST',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        },
+        body: JSON.stringify({
+          "lineup": lineup,
+          "site": draftGroup["site"]
+        })
+      })
+      const data = await res.json()
+      setRecommendedTags(data)
+    }
   }
 
   const getDraftGroup = async () => {
@@ -519,12 +538,12 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   return (
     <div className="createLineupPage page">
       {loading === false ? <>
-      {draftGroup !== null &&
+      {draftGroup && draftGroup["games"] &&
         <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog} 
 				  onClose={() => setShowCreateLineupDialog(false)} 
           draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
       }
-      {draftGroup !== {} &&
+      {draftGroup && draftGroup["games"] &&
         <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog} 
           onClose={() => setShowGenerateLineupDialog(false)} 
           draftGroupId={draftGroupId}
@@ -536,15 +555,16 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
           player={playerDialogContent} />
 
       <DeleteLineupsDialog showDeleteLineupsDialog={showDeleteDialog}
-        onClose={() => setShowCreateLineupDialog(false)}
+        onClose={() => setShowDeleteDialog(false)}
         deleteLineups={deleteLineup}
         lineupsToDelete={[lineup]}
       />
       <RecommendedTagsDialog showRecommendedTagsDialog={showRecommendedTagsDialog}
         onClose={() => setShowRecommendedTagsDialog(false)}
-        tags={recommendedTags}
+        recommended={recommendedTags}
         onSave={saveActiveTags}
-        lineupTags={activeTags} />
+        active={activeTags}
+        all={allTags} />
       <div className="header">
         {draftGroup &&
           <div className="header-inner">
@@ -568,7 +588,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                   <p><strong>{new Date(`${draftGroup["startTime"]}`).toDateString()}</strong></p>
                 </div>
                 <div className='info-block'>
-                  <button onClick={() => setShowRecommendedTagsDialog(true)} className='link'>Tags:</button>
+                  <p onClick={() => setShowRecommendedTagsDialog(true)} className='link'>Tags:</p>
                   {activeTags && activeTags.length > 0 ?
                   <div className='tag-wrapper'>
                     {activeTags.map((tag) => 

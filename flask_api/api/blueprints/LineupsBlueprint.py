@@ -12,7 +12,8 @@ from .utilities import token_required
 from ..controllers.MongoController import MongoController
 from ..controllers.LineupOptimizerControllerModule.LineupBuilder import LineupBuilder
 from ..controllers.LineupOptimizerControllerModule.allowed_positions import LINEUP_SLOTS
-
+from ..controllers.LineupOptimizerControllerModule.TagsController import TagsController
+from ..controllers.LineupOptimizerControllerModule.Lineup import Lineup
 lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineups')
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 MongoController = MongoController()
@@ -106,9 +107,9 @@ def set_lineup_tags(current_user):
 
 	return jsonify({ "Message": "Success" }), 200
 
-@lineups_blueprint.route('/recommendedTags', methods=["GET"])
+@lineups_blueprint.route('/allTags', methods=["GET"])
 @token_required
-def get_recommended_tags(current_user):
+def get_all_tags(current_user):
 
 	temp = [
 		{
@@ -182,6 +183,16 @@ def get_recommended_tags(current_user):
 	]
 
 	return jsonify(temp), 200
+
+@lineups_blueprint.route("/recommendedTags", methods=["POST"])
+def get_recommended_tags():
+	data = json.loads(request.data)
+	players = data.get("lineup")
+	site = data.get("site")
+	lineup = Lineup(lineup=players, site=site)
+	tags = TagsController.get_recommended_tags(lineup)
+	return jsonify(tags), 200
+
 
 
 # # TODO check if it is a bestball lineup, maybe allow filtering or dont show it

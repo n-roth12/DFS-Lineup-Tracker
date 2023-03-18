@@ -6,24 +6,34 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { FaTimes, FaPlus } from 'react-icons/fa';
 
-const RecommendedTagsDialog = ({ tags, showRecommendedTagsDialog, onClose, lineupTags, onSave }) => {
+const RecommendedTagsDialog = ({ active, showRecommendedTagsDialog, onClose, all, onSave, recommended }) => {
 
   const [activeTags, setActiveTags] = useState([{"category": "Punt", "value": "TE"}])
   const [recommendedTags, setRecommendedTags] = useState([])
+  const [allTags, setAllTags] = useState([])
 
   useEffect(() => {
-    setActiveTags(lineupTags)
-    setRecommendedTags(tags)
+    setActiveTags(active)
+    setRecommendedTags(recommended)
+    setAllTags(all)
   }, [])
+
+  const isInActive = (tag) => {
+    var res = false
+    activeTags.forEach((activeTag) => {
+      if (tag["category"] === activeTag["category"] && tag["value"] === activeTag["value"]) {
+        res = true
+      }
+    })
+    return res
+  }
 
   const addTag = (tag) => {
     setActiveTags([...activeTags, tag])
-    setRecommendedTags([...recommendedTags.filter((t) => t["category"] !== tag["category"] || t["value"] !== tag["value"] )])
   }
 
   const removeTag = (tag) => {
     setActiveTags([...activeTags.filter((t) => t["category"] !== tag["category"] || t["value"] !== tag["value"] )])
-    setRecommendedTags([...recommendedTags, tag])
   }
 
   return (
@@ -46,9 +56,19 @@ const RecommendedTagsDialog = ({ tags, showRecommendedTagsDialog, onClose, lineu
           </div>
         }
         <h2>Recommended Tags:</h2>
-        {tags && tags.length > 0 &&
+        {recommendedTags && recommendedTags.length > 0 &&
           <div className='recommended-tags-wrapper'>
-            {recommendedTags.map((tag) => 
+            {recommendedTags.filter((tag) => !isInActive(tag)).map((tag) => 
+            <div className='tag recommended-tag' onClick={() => addTag(tag)}>
+              <FaPlus className='icon add-icon' /><p className='tag-value'>{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}</p>
+            </div>
+            )}
+          </div>
+        }
+        <h2>All Tags:</h2>
+        {allTags && allTags.length > 0 &&
+          <div className='recommended-tags-wrapper'>
+            {allTags.filter((tag) => !isInActive(tag)).map((tag) => 
             <div className='tag recommended-tag' onClick={() => addTag(tag)}>
               <FaPlus className='icon add-icon' /><p className='tag-value'>{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}</p>
             </div>

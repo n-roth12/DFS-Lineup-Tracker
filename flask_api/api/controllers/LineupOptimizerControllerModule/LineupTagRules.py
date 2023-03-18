@@ -1,7 +1,12 @@
-from LineupOptimizerControllerModule.Lineup import Lineup
+# for use with api
+from ..LineupOptimizerControllerModule.Lineup import Lineup
+
+# for use with tests
+# from LineupOptimizerControllerModule.Lineup import Lineup
 
 DRAFTKINGS_PUNT_PRICE = 4000
 STACK_TYPES = [(3, 1), (3, 2), (4, 1), (4, 2), (4, 3), (5, 1), (3, 0), (4, 0), (2, 1), (5, 0)]
+COMPOSITION_TYPES = [{"RB": 3}, {"WR": 4}, {"TE": 2}]
 
 class LineupTagRules:
 
@@ -9,6 +14,7 @@ class LineupTagRules:
         for player in lineup.lineup.values():
             if player.get("salary") < DRAFTKINGS_PUNT_PRICE:
                 return True, player.get("position")
+        return False, None
 
     def check_composition_rule(composition: dict, lineup: Lineup) -> bool:
         position_count = {}
