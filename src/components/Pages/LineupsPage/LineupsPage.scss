@@ -65,7 +65,7 @@
 	position: sticky;
 }
 
-.lineups-table tr:nth-child(even) {
+.lineups-table tbody tr:nth-child(even) {
 	background-color: var(--grey-2);
 }
 

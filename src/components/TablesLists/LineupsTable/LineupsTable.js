@@ -3,11 +3,13 @@ import { FaAngleRight, FaAngleDown, FaAngleUp, FaAngleLeft } from 'react-icons/f
 import { Link } from 'react-router-dom'
 import './LineupsTable.scss'
 import '../../../DefaultTable.scss'
+import { Tooltip } from '@material-ui/core'
 import PointsGraph from '../../Pages/LineupsPage/PointsGraph/PointsGraph'
 import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { FaPlus, FaTimes } from 'react-icons/fa'
-import { BiDownload } from 'react-icons/bi'
+import { BiDownload, BiTrash, BiExport, BiSquare } from 'react-icons/bi'
+import { FiSquare, FiMinusSquare } from 'react-icons/fi'
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter, setShowImportLineupDialog }) => {
 
@@ -75,7 +77,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
       },
-      body: JSON.stringify(lineups.filter((lineup) => 
+      body: JSON.stringify(lineups.filter((lineup) =>
         selectedLineups.includes(lineup["lineupId"])).map((lineup) => lineup["lineup"]))
     })
     const data = await res.blob()
@@ -91,7 +93,24 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
     setSortColumn(column)
   }
 
+  const selectAllLineups = () => {
+    var result = []
+    lineups.filter((lineup) =>
+      (!siteFilter || siteFilter === lineup["site"])
+      && (containsTagFilter(lineup))
+      && (yearFilter === "all" || lineup["year"] === parseInt(yearFilter))
+      && (weekFilter === "all" || lineup["week"] === parseInt(weekFilter))
+    ).map((lineup) => {
+      result.push(lineup["lineupId"])})
+    setSelectedLineups(result)
+  }
+
+  const deselectAllLineups = () => {
+    setSelectedLineups([])
+  }
+
   const toggleSelectedLineup = (lineupId) => {
+    setFile(null)
     if (!selectedLineups.includes(lineupId)) {
       setSelectedLineups(selectedLineups.concat(lineupId))
     } else {
@@ -195,26 +214,12 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               </button>
             </div>
             <div className='tag-filter-wrapper'>
-              {tagFilter && tagFilter.map((tag) => 
+              {tagFilter && tagFilter.map((tag) =>
                 <div className='tag-filter'>
-                  <FaTimes className='delete-icon' onClick={() => removeTagFilter(tag)} />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : "" }`}
+                  <FaTimes className='delete-icon' onClick={() => removeTagFilter(tag)} />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : ""}`}
                 </div>
               )}
             </div>
-            </div>
-            <div className='lineup-wrapper-header'>
-            {selectedLineups.length > 0 &&
-              (file === null ?
-                <button className='lineup-export-btn' onClick={exportLineups}>Export ({selectedLineups.length})</button>
-              :
-                <a href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon'/></a>
-              )
-            }
-            {selectedLineups.length > 0 &&
-              <button className='lineup-delete-btn' onClick={() => setShowDeleteLineupsDialog(true)}>Delete ({selectedLineups.length})</button>
-            }
-            {stateFilter === "upcoming" && <Link to='/upcoming' className='lineup-options-btn'>Create Lineup <FaPlus className='icon' /></Link>}
-            {stateFilter === "past" && <button className='lineup-options-btn' onClick={() => setShowImportLineupDialog(true)}>Import Lineups</button>}
           </div>
           {stateFilter === "past" &&
             <div className='points-graph-wrapper'>
@@ -224,6 +229,49 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
         </div>
         <table className="lineups-table">
           <thead>
+            <div className='lineup-wrapper-header'>
+              <div className='lineup-options-btns'>
+                {!selectedLineups.length > 0 ?
+                  <Tooltip title="Select">
+                    <button className='lineup-options-btn' onClick={selectAllLineups}><FiSquare className='icon' /></button>
+                  </Tooltip>
+                :
+                  <Tooltip title="De-select">
+                    <button className='lineup-options-btn' onClick={deselectAllLineups} ><FiMinusSquare className='icon' /></button>
+                  </Tooltip>
+                }
+                {selectedLineups.length > 0 &&
+                  (file === null ?
+                    <Tooltip title="Export">
+                      <button className='lineup-options-btn' onClick={exportLineups}><BiExport className='icon' /></button>
+                    </Tooltip>
+                    :
+                    <a className='download-btn' href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon' /></a>
+                  )
+                }
+                {selectedLineups.length > 0 &&
+                  <Tooltip title="Delete">
+                    <button className='lineup-options-btn' onClick={() => setShowDeleteLineupsDialog(true)}><BiTrash className='trash-icon' /></button>
+                  </Tooltip>
+                }
+                {stateFilter === "upcoming" && 
+                  <Tooltip title="Create">
+                    <Link to='/upcoming' className='lineup-options-btn'><FaPlus className='add-icon' /></Link>
+                  </Tooltip>
+                }
+                {selectedLineups.length > 0 &&
+                  <span className="selected-counter">{selectedLineups.length} Selected</span>
+                }
+                {stateFilter === "past" && <button className='lineup-options-btn' onClick={() => setShowImportLineupDialog(true)}>Import Lineups</button>}
+              </div>
+              <div className='page-btn-wrapper'>
+                  <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>
+                  {[...Array(numPages)].map((x, i) =>
+                    <span className={currPage === i ? 'page-btn-active' : 'page-btn'} onClick={() => setCurrPage(i)}>{i + 1}</span>
+                  )}
+                  <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
+              </div>
+            </div>
             <tr>
               <th></th>
               <th></th>
@@ -262,9 +310,9 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                       <td>{lineup["projectedPoints"] ? lineup["projectedPoints"] : 0}</td> */}
                       <td className='tag-col'>
                         <div className='tags-wrapper'>
-                          {lineup["tags"] && lineup["tags"].map((tag) => 
-                            <span onClick={() => addToTagFilter(tag)} className='tag'>{`${tag["category"]}${tag["value"] ? `: ${tag["value"]}` : "" }`}</span>
-                          )}                        
+                          {lineup["tags"] && lineup["tags"].map((tag) =>
+                            <span onClick={() => addToTagFilter(tag)} className='tag'>{`${tag["category"]}${tag["value"] ? `: ${tag["value"]}` : ""}`}</span>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -280,13 +328,6 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
             </tbody>
           }
         </table>
-        <span className='page-btn-wrapper'>
-          <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>
-          {[...Array(numPages)].map((x, i) =>
-            <span className={currPage === i ? 'page-btn-active' : 'page-btn'} onClick={() => setCurrPage(i)}>{i + 1}</span>
-          )}
-          <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
-        </span>
       </div>
     </div>
   )
