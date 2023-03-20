@@ -2,23 +2,24 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	// overflow: hidden;
 	align-items: center;
 
 	.players-outer {
 		width: 95%;
 		max-width: 1100px;
+
 		.filters-outer {
 			display: flex;
 			flex-direction: row;
 			margin-bottom: 10px;
+
 			.pos-filter-wrapper {
 				display: flex;
 				width: 80%;
 				max-width: 1100px;
 				justify-content: left;
-				align-items: left;
-				margin-top: 10px;
+				align-items: center;
+
 				.filter-btn, .filter-btn-active {
 					width: 50px;
 					padding: 3px 8px 3px 8px;
@@ -32,6 +33,7 @@
 				justify-content: center;
 				height: fit-content;
 				border-radius: 3px;
+
 				.search-input {
 					font-size: 11pt;
 					padding: 2px 20px 2px 8px;
@@ -55,22 +57,29 @@
 		}
 		.players-outer-header {
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			padding-top: 10px;
+			padding-bottom: 10px;
+
 			.btn-wrapper {
 				display: flex;
 				flex-direction: row;
+
 				.lineup-options-btn {
 					text-decoration: None;
 					background-color: var(--btn-blue);
+					border: None;
 					color: white;
-					border: 1px solid var(--grey-1);
-					margin: 6px;
-					padding: 4px 13px 4px 15px;
+					padding: 4px 15px 4px 15px;
 					border-radius: 20px;
 					transition: all 0.3s;
 					height: fit-content;
+					font-size: 12pt;
+
 					.icon {
-						height: 10px;
+						height: 15px;
 					}
 				}
 				.lineup-options-btn:hover {
@@ -79,11 +88,12 @@
 			}
 			h2 {
 				text-align: left;
-				margin: 20px 20px 10px 5px;
 				font-weight: 600;
 				font-size: 18pt;
+				margin-top: auto;
+				margin-bottom: auto;
 				.slate-title {
-					font-size: 15pt;
+					font-size: 18pt;
 					font-weight: 500;
 				}
 			}
@@ -91,7 +101,6 @@
 				margin-bottom: 0;
 			}
 		}
-		
 		.players-inner {
 			width: 100%;
 			display: flex;
@@ -102,11 +111,11 @@
 				font-size: 10pt;
 				width: 100%;
 				max-width: 1100px;
+
 				thead {
 					position: sticky;
 					top: 0;
 				}
-			
 				.col-labels {
 					border-bottom: None;
 			
@@ -132,21 +141,26 @@
 					background-color: #d3d3d3;
 					border-top: none;
 				}
-			
 				tbody {
 					tr:hover {
 						background-color: #d5d8dc;
 					}
 					tr {
 						transition: all 0.1s;
-						font-weight: 600;
+						font-weight: 400;
+
+						.player-col {
+							text-align: left;
+						}
+
+						.bold {
+							font-weight: 800;
+						}
 					}
 				}
-			
 			}
 		}
 	}
-
 	.site-filter-wrapper {
 		margin-top: 20px;
 		width: 100%;
@@ -155,6 +169,7 @@
 		flex-direction: row;
 		align-items: center;
 		border-bottom: 2px solid var(--blue-grey-2);
+
 		.site-filter-wrapper-inner {
 			max-width: 1100px;
 			display: flex;
@@ -191,6 +206,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+
 		h3 {
 			display: flex;
 			flex-direction: row;

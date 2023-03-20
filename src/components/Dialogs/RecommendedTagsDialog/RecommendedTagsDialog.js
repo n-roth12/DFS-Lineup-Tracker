@@ -6,16 +6,12 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { FaTimes, FaPlus } from 'react-icons/fa';
 
-const RecommendedTagsDialog = ({ active, showRecommendedTagsDialog, onClose, all, onSave, recommended }) => {
+const RecommendedTagsDialog = ({ active, showRecommendedTagsDialog, onClose, onSave, recommendedTags, allTags}) => {
 
-  const [activeTags, setActiveTags] = useState([{"category": "Punt", "value": "TE"}])
-  const [recommendedTags, setRecommendedTags] = useState([])
-  const [allTags, setAllTags] = useState([])
+  const [activeTags, setActiveTags] = useState([])
 
   useEffect(() => {
     setActiveTags(active)
-    setRecommendedTags(recommended)
-    setAllTags(all)
   }, [])
 
   const isInActive = (tag) => {
@@ -46,7 +42,7 @@ const RecommendedTagsDialog = ({ active, showRecommendedTagsDialog, onClose, all
       </DialogTitle>
       <DialogContent className='content'>
         <h2>Active Tags:</h2>
-        {activeTags && activeTags.length > 0 &&
+        {activeTags && activeTags.length > 0 ?
           <div className='active-tags-wrapper'>
             {activeTags.map((tag) => 
             <div className='tag active-tag' onClick={() => removeTag(tag)}>
@@ -54,6 +50,8 @@ const RecommendedTagsDialog = ({ active, showRecommendedTagsDialog, onClose, all
             </div>
             )}
           </div>
+        :
+          <div className='active-tags-wrapper'><h3>None</h3></div>
         }
         <h2>Recommended Tags:</h2>
         {recommendedTags && recommendedTags.length > 0 &&

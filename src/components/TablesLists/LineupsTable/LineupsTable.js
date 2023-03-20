@@ -8,8 +8,9 @@ import PointsGraph from '../../Pages/LineupsPage/PointsGraph/PointsGraph'
 import { capitalize } from '@material-ui/core'
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { FaPlus, FaTimes } from 'react-icons/fa'
-import { BiDownload, BiTrash, BiExport, BiSquare } from 'react-icons/bi'
+import { BiDownload, BiTrash, BiExport, BiImport } from 'react-icons/bi'
 import { FiSquare, FiMinusSquare } from 'react-icons/fi'
+import { AiOutlineImport, AiOutlineExport } from 'react-icons/ai'
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter, setShowImportLineupDialog }) => {
 
@@ -243,7 +244,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                 {selectedLineups.length > 0 &&
                   (file === null ?
                     <Tooltip title="Export">
-                      <button className='lineup-options-btn' onClick={exportLineups}><BiExport className='icon' /></button>
+                      <button className='lineup-options-btn' onClick={exportLineups}><AiOutlineExport className='icon' /></button>
                     </Tooltip>
                     :
                     <a className='download-btn' href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon' /></a>
@@ -262,7 +263,11 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                 {selectedLineups.length > 0 &&
                   <span className="selected-counter">{selectedLineups.length} Selected</span>
                 }
-                {stateFilter === "past" && <button className='lineup-options-btn' onClick={() => setShowImportLineupDialog(true)}>Import Lineups</button>}
+                {stateFilter === "past" && 
+                  <Tooltip title="Import">
+                    <button className='lineup-options-btn' onClick={() => setShowImportLineupDialog(true)}><AiOutlineImport className='icon' /></button>
+                  </Tooltip>
+                }
               </div>
               <div className='page-btn-wrapper'>
                   <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>

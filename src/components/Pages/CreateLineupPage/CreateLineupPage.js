@@ -561,10 +561,10 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       />
       <RecommendedTagsDialog showRecommendedTagsDialog={showRecommendedTagsDialog}
         onClose={() => setShowRecommendedTagsDialog(false)}
-        recommended={recommendedTags}
+        recommendedTags={recommendedTags}
         onSave={saveActiveTags}
         active={activeTags}
-        all={allTags} />
+        allTags={allTags} />
       <div className="header">
         {draftGroup &&
           <div className="header-inner">
@@ -596,7 +596,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                     )}
                   </div> 
                   :
-                    <p>None</p>
+                    <p><strong>None</strong></p>
                   }
                 </div>
               </div>

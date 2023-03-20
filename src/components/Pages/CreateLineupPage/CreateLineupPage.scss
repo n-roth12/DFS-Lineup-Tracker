@@ -51,7 +51,7 @@
 			display: flex;
 			padding-top: 13px;
 			padding-bottom: 13px;
-
+			
 			.clear-btn {
 				color: red;
 				border: none;
@@ -155,7 +155,6 @@
 			}
 		}
 	}
-
 	.createLineupPage-inner {
 		display: flex;
 		width: 100%;
@@ -472,16 +471,17 @@
 					background: None;
 					border: None;
 				}
-
 				.link {
 					color: blue;
 					font-weight: 600;
 					cursor: pointer;
 				}
-
 				.tag-wrapper {
 					display: flex;
 					flex-direction: row;
+					flex-wrap: wrap;
+					max-width: 400px;
+					height: fit-content;
 
 					.tag {
 						width: fit-content;
@@ -491,7 +491,6 @@
 						border-radius: 2px;
 					}
 				}
-
 				strong {
 					font-size: 12pt;
 					font-weight: 500;
