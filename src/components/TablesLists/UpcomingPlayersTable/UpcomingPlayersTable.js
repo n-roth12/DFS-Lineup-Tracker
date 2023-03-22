@@ -70,7 +70,7 @@ const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addP
             <td>{player.position}</td>
             <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
             <td>${player.salary}</td>
-            <td>{player["game"] ? player["opponent"] : ''}</td>
+            <td><span className={player["team"] === player["game"]["homeTeam"] ? "bold" : ""}>{player["game"]["homeTeam"]}</span> @ <span className={player["team"] === player["game"]["awayTeam"] ? "bold" : ""}>{player["game"]["awayTeam"]}</span></td>
             <td>{player["oprk"]}</td>
             <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
           </tr>

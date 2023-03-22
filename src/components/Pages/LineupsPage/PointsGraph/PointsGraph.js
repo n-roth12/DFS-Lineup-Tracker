@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, ResponsiveContainer, Label } from 'recharts'
 import './PointsGraph.css'
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
 
 const PointsGraph = ({ graphData }) => {
 
@@ -14,12 +13,15 @@ const PointsGraph = ({ graphData }) => {
   const loadData = () => {
     var result = []
     var count = 0
-    graphData.map((lineup) => {
+    console.log(new Date(graphData[0]["startTime"]) - new Date(graphData[10]["startTime"]))
+    graphData.sort((a, b) => new Date(a["startTime"]) - new Date(b["startTime"])).map((lineup) => {
       count += 1
-      result.push({ "date": count, "proj" : parseInt(lineup["projectedPoints"]) })
+      result.push({ "date": new Date(lineup["startTime"]).toLocaleDateString(), "proj" : parseInt(lineup["projectedPoints"]) })
     })
     setData(result)
   }
+
+
 
   // const CustomToolTip = ({ active, payload, label }) => {
   //   if (active && payload && payload.length) {

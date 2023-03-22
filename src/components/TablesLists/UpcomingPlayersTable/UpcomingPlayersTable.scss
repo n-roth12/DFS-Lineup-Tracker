@@ -7,4 +7,14 @@
             font-weight: 600;
         }
     }
+    tbody {
+        font-weight: 400;
+        tr {
+            td {
+                .bold {
+                    font-weight: 800;
+                }
+            }
+        }
+    }
 }

@@ -222,11 +222,6 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               )}
             </div>
           </div>
-          {stateFilter === "past" &&
-            <div className='points-graph-wrapper'>
-              <PointsGraph graphData={lineups} />
-            </div>
-          }
         </div>
         <table className="lineups-table">
           <thead>
@@ -260,13 +255,13 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                     <Link to='/upcoming' className='lineup-options-btn'><FaPlus className='add-icon' /></Link>
                   </Tooltip>
                 }
-                {selectedLineups.length > 0 &&
-                  <span className="selected-counter">{selectedLineups.length} Selected</span>
-                }
                 {stateFilter === "past" && 
                   <Tooltip title="Import">
                     <button className='lineup-options-btn' onClick={() => setShowImportLineupDialog(true)}><AiOutlineImport className='icon' /></button>
                   </Tooltip>
+                }
+                {selectedLineups.length > 0 &&
+                  <span className="selected-counter">{selectedLineups.length} Selected</span>
                 }
               </div>
               <div className='page-btn-wrapper'>

@@ -38,6 +38,7 @@
 				display: flex;
 				flex-direction: row;
 				margin-top: 10px;
+				margin-bottom: 10px;
 
 				.tag-filter {
 					border-radius: 6px;
@@ -88,13 +89,15 @@
 		}
 		.lineups-table {
 			margin-top: 0px;
-			border-radius: 20px 20px 0px 0px;
-			box-shadow: None;
+			// border-radius: 20px 20px 0px 0px;
+			box-shadow: var(--box-shadow-1);
 			border: None;
 
 			thead {
 				display: block;
-				border-radius: 20px 20px 0px 0px;
+				// border-radius: 20px 20px 0px 0px;
+				position: sticky;
+				top: 0;
 
 				.lineup-wrapper-header {
 					display: flex;
@@ -184,8 +187,8 @@
 				width: 5%;
 			}
 			tbody {
-				max-height: 80vh;
-				overflow-y: auto;
+				// max-height: 80vh;
+				// overflow-y: auto;
 				display: block;
 				border: 1px solid var(--grey-4);
 				tr {
@@ -208,7 +211,6 @@
 					.tags-wrapper {
 						display: flex;
 						flex-direction: row;
-						margin-bottom: 0;
 						overflow-x: auto;
 						width: 300px;
 

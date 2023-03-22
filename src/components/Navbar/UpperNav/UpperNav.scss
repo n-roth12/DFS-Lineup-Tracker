@@ -4,6 +4,49 @@
     background-color: var(--cool-grey-8);
     min-height: 50px;
 
+    .dropdown {
+        position: relative;
+        display: inline-block;
+
+        .hidden {
+            display: none;
+        }
+        .dropdown-content {
+            display: block;
+            position: absolute;
+            right: 0;
+            background-color: var(--grey-2);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 6px;
+            :first-child {
+                border-radius: 6px 6px 0px 0px;
+            }
+            :last-child {
+                border-radius: 0px 0px 6px 6px;
+            }
+            a {
+                color: black;
+                padding: 10px 12px;
+                text-decoration: none;
+                display: block;
+                font-size: 11pt;
+            }
+            a:hover {
+                background-color: var(--grey-4);
+            }
+        }
+        .dropbtn {
+            padding: 6px;
+            border: 2px solid white;
+            background: none;
+            border-radius: 50%;
+            color: white;
+            height: 34px;
+            width: 34px;
+        }
+    }
     .upper-nav-inner {
         display: flex;
         flex-direction: row;
@@ -15,39 +58,14 @@
         h1, h2 {
             color: white;
         }
-
         h1 {
             font-size: 16pt;
             margin-top: auto;
             margin-bottom: auto;
         }
     }
-
     .profile-btns {
         display: flex;
         align-items: center;
-    }
-    
-    .basic-menu {
-        width: 200px;
-        z-index: 110;
-        position: relative !important;
-    }
-
-    .user-icon-wrapper {
-        color: white;
-        border: 2px solid white;
-        border-radius: 50%;
-        padding: 6px;
-        cursor: pointer;
-        display: flex;
-    }
-
-    .logout-btn {
-        font-size: 12pt;
-        margin-top: auto;
-        margin-bottom: auto;
-        cursor: pointer;
-        margin-left: 20px;
     }
 }
