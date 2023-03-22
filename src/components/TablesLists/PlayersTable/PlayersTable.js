@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import './PlayersTable.scss'
+import { FaSearch } from 'react-icons/fa'
 
-const PlayersTable = ({ players }) => {
+const PlayersTable = ({ players, weekSearch, selectedWeek, selectedYear }) => {
 
   const [posFilter, setPosFilter] = useState("All")
   const [currPage, setCurrPage] = useState(0)
@@ -49,13 +50,19 @@ const PlayersTable = ({ players }) => {
             onClick={() => changeFilter("DST")}>DST
           </button>
         </div>
+        <div className="player-search">
+            <div>
+              <input type="text" placeholder="Search Player" className="search-input"></input>
+            </div>
+            <button className="search-btn" type="button" onClick={() => weekSearch(selectedWeek, selectedYear)}><FaSearch /></button>
+          </div>
       </div>
       <table className="lineups-table">
         {posFilter !== "DST" ? 
         <>
           <thead>
             <tr className="col-labels">
-              <th colspan="5"></th>
+              <th colspan="4"></th>
               <th className="col-label" colspan="3">Passing</th>
               <th className="col-label" colspan="2">Rushing</th>
               <th className="col-label" colspan="3">Recieving</th>
@@ -138,7 +145,7 @@ const PlayersTable = ({ players }) => {
       </table>
       { players[posFilter].length > (currPage + 1) * 50 &&
         <div>
-          <button className="load-more-btn" onClick={() => setCurrPage(currPage + 1)}>More</button>
+          <button className="load-more-btn" onClick={() => setCurrPage(currPage + 1)}>Show More</button>
         </div>
       }
     </div>

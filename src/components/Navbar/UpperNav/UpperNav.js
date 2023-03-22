@@ -35,6 +35,7 @@ const UpperNav = () => {
               <FaUserAlt className='user-icon dropbtn' />
               <div class={`${!showProfileDropdown ? "hidden" : "dropdown-content"}`}>
                 <a href="/profile">Profile</a>
+                <a href="/feedback">Feedback</a>
                 <a href="#" onClick={logout}>Logout</a>
               </div>
             </div>

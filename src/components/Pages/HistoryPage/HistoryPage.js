@@ -138,12 +138,6 @@ const ResearchPage = () => {
               <option value={"All"} key={"All"}>Season</option>
             </select>
           </div>
-          <div className="player-search">
-            <div>
-              <input type="text" placeholder="Search Player" className="search-input"></input>
-            </div>
-            <button className="search-btn" type="button" onClick={() => weekSearch(selectedWeek, selectedYear)}><FaSearch /></button>
-          </div>
         </div>
       </div>
 
@@ -154,9 +148,8 @@ const ResearchPage = () => {
       :
       <>
         {playerData["All"] &&
-          <div className="search-results">
-            <PlayersTable players={playerData} />
-          </div>
+            <PlayersTable players={playerData} weekSearch={weekSearch} 
+              selectedWeek={selectedWeek} selectedYear={selectedYear}/>
         }
       </>
       } 
