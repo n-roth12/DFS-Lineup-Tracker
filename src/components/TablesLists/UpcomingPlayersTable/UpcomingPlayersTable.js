@@ -7,7 +7,7 @@ import { capitalize } from '@material-ui/core'
 
 const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addPlayerToHidden, playerWrapper, 
     hiddenIds, removePlayerFromFavorites, removePlayerFromHidden, stateFilter, editingPos, addToLineup, favoritesIds,
-    changeStateFilter }) => {
+    changeStateFilter}) => {
 
   return (
     <table className='upcoming-players-table lineups-table'>

@@ -54,6 +54,7 @@ const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFil
           removePlayerFromFavorites={removePlayerFromFavorites}
           removePlayerFromHidden={removePlayerFromHidden}
           changeStateFilter={changeStateFilter}
+          editingPos={editingPos}
         />
       }
     </div>

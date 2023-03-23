@@ -348,6 +348,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const addToLineup = (pos, player) => {
+    console.log(pos, player)
     if (pos) {
       var lineupCopy = {...lineup}
       lineupCopy[pos] = player
@@ -716,6 +717,8 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
               canAddPos={canAddPos}
               canQuickAdd={canQuickAdd}
               changeStateFilter={changeStateFilter}
+              addToLineup={addToLineup}
+              editingPos={editingPos}
             />
           </div>
         : <h2>Loading Players...</h2>

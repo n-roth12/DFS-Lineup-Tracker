@@ -266,9 +266,11 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               </div>
               <div className='page-btn-wrapper'>
                   <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>
-                  {[...Array(numPages)].map((x, i) =>
-                    <span className={currPage === i ? 'page-btn-active' : 'page-btn'} onClick={() => setCurrPage(i)}>{i + 1}</span>
-                  )}
+                  <select>
+                    {[...Array(numPages)].map((x, i) =>
+                      <option className={currPage === i ? 'page-btn-active' : 'page-btn'} onClick={() => setCurrPage(i)}>{i + 1}</option>
+                    )}
+                  </select>
                   <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
               </div>
             </div>

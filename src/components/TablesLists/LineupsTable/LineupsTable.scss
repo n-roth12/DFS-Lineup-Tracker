@@ -273,6 +273,15 @@
 			border-radius: 3px;
 			user-select: None;
 		}
+		select {
+			color: var(--btn-blue);
+			border: 1px solid var(--blue-grey-4);
+			margin-left: 5px;
+			padding: 0px 4px 0px 4px;
+			border-radius: 3px;
+			user-select: None;
+			cursor: pointer;
+		}
 		.page-arrow-active {
 			color: var(--btn-blue);
 			border: 1px solid var(--blue-grey-4);
