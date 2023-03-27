@@ -67,11 +67,11 @@
 		thead {
 			position: sticky;
 			top: 0;
+			background-color: var(--grey-2);
+			border: 1px solid var(--grey-4);
 		}
 
 		.col-labels {
-			border-bottom: None;
-			background-color: var(--grey-4);
 
 			.col-label {
 				box-shadow: inset 1px 0px 0 var(--grey-8);
@@ -80,8 +80,6 @@
 		}
 
 		.table-header {
-			background-color: var(--grey-4);
-			border-top: none;
 		}
 
 		tbody {

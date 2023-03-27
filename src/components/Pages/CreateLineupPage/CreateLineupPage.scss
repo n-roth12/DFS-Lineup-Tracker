@@ -324,6 +324,7 @@
 				max-width: 50px;
 			}
 			tbody {
+				// .favorite-icon {filter:drop-shadow(0px 0px 1px var(--green-2))}
 				max-height: 70vh;
 				overflow-y: auto;
 				display: block;
@@ -338,57 +339,79 @@
 					cursor: pointer;
 				}
 				.add-icon-outer {
-					background-color: var(--btn-blue);
-					border-bottom: 1px solid var(--grey-5);
+					// background-color: var(--btn-blue);
+					.add-icon {
+						color: var(--btn-blue)
+					}
+					// border-bottom: 1px solid var(--grey-5);
 				}
 				.favorite-icon-outer {
-					background-color: var(--green);
-					border-bottom: 1px solid var(--grey-5);
+					// background-color: var(--green);
+					.favorite-icon {
+						color: var(--green);
+					}
+					// border-bottom: 1px solid var(--grey-5);
 				}
 				.favorite-icon-outer:hover {
 					cursor: pointer;
-					background-color: var(--green-2);
+					.favorite-icon {
+						color: var(--green-2)
+					}
+					// background-color: var(--green-2);
 				}
 				.undraftables-icon-outer {
-					background-color: var(--red);
-					border-bottom: 1px solid var(--grey-5);
+					// background-color: var(--red);
+					// border-bottom: 1px solid var(--grey-5);
+					.undraftables-icon {
+						color: var(--red);
+					}
 				}
 				.undraftables-icon-outer:hover {
 					cursor: pointer;
-					background-color: var(--red-2);
+					border-radius: 50%;
+					background-color: var(--grey-3);
+					.undraftables-icon {
+						color: var(--red-2);
+					}
+					// background-color: var(--red-2);
 				}
 				.favorite-icon-outer, .no-favorite-icon-outer {
 					height: 40px;
 					width: 50px;
-					border-right: 1px solid white;
+					// border-right: 1px solid white;
 					justify-content: center;
 					align-items: center;
 				}
 				.undraftables-icon-outer, .no-undraftables-icon-outer {
 					height: 40px;
 					width: 50px;
-					border-right: 1px solid white;
+					// border-right: 1px solid white;
 					justify-content: center;
 					align-items: center;
 				}
 				.add-icon-outer, .no-add-icon-outer {
 					height: 40px;
 					width: 50px;
-					border-right: 1px solid white;
+					// border-right: 1px solid white;
 					justify-content: center;
 					align-items: center;
 				}
-				.no-add-icon-outer {
-					background-color: var(--grey-5);
-				}
+				// .no-add-icon-outer {
+				// 	background-color: var(--grey-5);
+				// }
 				.add-icon, .no-add-icon, .favorite-icon, .no-favorite-icon, .undraftables-icon, .no-undraftables-icon {
-					color: white;
+					// color: white;
 					width: 15px;
 					height: 15px;
+					padding: 0;
+					margin: 0;
 				}
 				.add-icon-outer:hover {
 					cursor: pointer;
-					background-color: var(--btn-blue-2);
+					// background-color: var(--btn-blue-2);
+					.add-icon {
+						color: var(--btn-blue-2);
+					}
 				}
 			}
 			tbody td, thead th {

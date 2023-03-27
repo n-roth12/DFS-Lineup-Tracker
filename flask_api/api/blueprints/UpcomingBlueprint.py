@@ -179,3 +179,8 @@ def yahoo_upcoming():
 
 	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200
 
+@upcoming_blueprint.route('/fanduel/test', methods=["POST"])
+def fanduel_upcoming():
+	res = requests.get('https://api.fanduel.com/fixture-lists/88351/players?content_sources=NUMBERFIRE,ROTOWIRE,ROTOGRINDERS')
+	print(res)
+	return jsonify({"message": "success" }), 200 

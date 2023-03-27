@@ -322,10 +322,15 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                 )
               }
             </tbody>
-            :
-            <tbody>
+            : !sessionStorage.dfsTrackerToken ?
+              <tbody>
+                <tr>
+                  <td>You must login to save and view past lineups.</td>
+                </tr>
+              </tbody>
+            : <tbody>
               <tr>
-                <td>You must login to save and view past lineups.</td>
+                <td>No {stateFilter} Lineups</td>
               </tr>
             </tbody>
           }
