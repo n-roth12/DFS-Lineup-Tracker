@@ -41,10 +41,7 @@ const UpperNav = () => {
             </div>
             :
             <div>
-              {!sessionStorage.dfsTrackerToken ?
-                <h2 className='logout-btn' onClick={() => navigate("/login")}>Login</h2>
-                : <h2 className="logout-btn" onClick={logout}>Logout</h2>
-              }
+              <h2 className='logout-btn' onClick={() => navigate("/login")}>Login</h2>
             </div>
           }
         </div>

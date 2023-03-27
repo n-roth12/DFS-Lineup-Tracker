@@ -13,10 +13,11 @@ const LandingPage = ({ setToken }) => {
 	const [passwordCheck, setPasswordCheck] = useState('')
 	const [alert, setAlert] = useState('')
 	const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState('')
 
 	const onSubmit = async () => {
 		if (password === passwordCheck) {
-			const params = {'username': username, 'password': password}
+			const params = {'username': username, 'password': password, 'email': email}
 			await axios.post(`${api_url}/users/register`, params)
 			.then((res) => {
 				setToken(res.data.token)
@@ -51,14 +52,17 @@ const LandingPage = ({ setToken }) => {
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>
 		    	<div>
-		    		<label>Username</label>
-		    		<input className="form-control" type="text" placeholder="Enter Username" value={username}
+            <label>Enter Email</label>
+            <input className='form-control' type="text" placeholder="" value={email}
+              onChange={(e) => setEmail(e.target.value)} />
+		    		<label>Create Username</label>
+		    		<input className="form-control" type="text" placeholder="" value={username}
 		    			onChange={(e) => setUsername(e.target.value)} />
 		    		<label>Password</label>
-		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter Password" value={password}
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="" value={password}
 		    		onChange={(e) => setPassword(e.target.value)} />
 		    		<label>Re-enter Password</label>
-		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter Password" value={passwordCheck}
+		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="" value={passwordCheck}
 		    		onChange={(e) => setPasswordCheck(e.target.value)} />
 		    		<div className="show-password">
 		    			<input className="checkbox" type="checkbox" checked={showPassword} onClick={toggle} />

@@ -55,11 +55,11 @@ const LoginPage = ({ setToken, setUserId }) => {
 				<h1>Login</h1>
 				<form className="login-form" onSubmit={handleSubmit}>
 			    	<div>
-			    		<label>Username</label>
-			    		<input className="form-control" type="text" placeholder="Enter Username" value={username}
+			    		<label>Username or Email</label>
+			    		<input className="form-control" type="text" placeholder="" value={username}
 			    			onChange={(e) => setUsername(e.target.value)} />
 			    		<label>Password</label>
-			    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="Enter Password" value={password}
+			    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="" value={password}
 			    		onChange={(e) => setPassword(e.target.value)} />
 			    		<div className="show-password">
 			    			<input className="checkbox" type="checkbox" checked={showPassword} onClick={toggle} />
