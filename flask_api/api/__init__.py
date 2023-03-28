@@ -13,6 +13,8 @@ app.config['FFB_API_URL'] = config.ffb_api_url
 app.config['MONGODB_URI'] = config.dev_mongodb_uri
 
 bcrypt = Bcrypt(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 from .blueprints.LineupsBlueprint import lineups_blueprint
 from .blueprints.UsersBlueprint import users_blueprint
 from .blueprints.HistoryBlueprint import history_blueprint
