@@ -19,7 +19,7 @@ const LoginPage = ({ setToken, setUserId }) => {
 	}, [])
 
 	const loginUser = async (credentials) => {
-		await axios.post(`http://ec2-18-144-168-136.us-west-1.compute.amazonaws.com/users/login`, credentials)
+		await axios.post(`${api_url}/users/login`, credentials)
 		.then((res) => {
 			if (res.status === 200) {
 				setToken(res.data.token)
