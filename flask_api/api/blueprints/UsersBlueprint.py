@@ -12,7 +12,7 @@ from ..controllers.MongoController import MongoController
 users_blueprint = Blueprint('users_blueprint', __name__, url_prefix='/users')
 mongoController = MongoController()
 
-@cross_origin
+@cross_origin()
 @users_blueprint.route('/register', methods=['POST'])
 def register_user():
 	data = json.loads(request.data)
@@ -32,7 +32,7 @@ def register_user():
 
 	return jsonify({ 'token': token }), 200
 
-@cross_origin
+@cross_origin()
 @users_blueprint.route('/login', methods=['POST'])
 def login_user():
 	data = json.loads(request.data)
@@ -48,7 +48,7 @@ def login_user():
 
 	return jsonify({"Error": "User not found"}), 404
 
-@cross_origin
+@cross_origin()
 @users_blueprint.route('/lineups', methods=['GET'])
 @token_required
 def get_user_lineups(current_user):
@@ -56,7 +56,7 @@ def get_user_lineups(current_user):
 
 	return jsonify(json.loads(json_util.dumps(lineups))), 200
 
-
+@cross_origin()
 @users_blueprint.route('/lineups/draftGroup', methods=['GET'])
 @token_required
 def get_draftgroup_lineups(current_user):
@@ -65,6 +65,7 @@ def get_draftgroup_lineups(current_user):
 
 	return jsonify(json.loads(json_util.dumps(lineups))), 200
 
+@cross_origin()
 @users_blueprint.route('/feedback', methods=["POST"])
 def submit_feedback():
 	data = json.loads(request.data)
