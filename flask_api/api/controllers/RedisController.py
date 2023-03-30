@@ -7,13 +7,14 @@ from .MongoController import MongoController
 
 class RedisController:
     def __init__(self):
-        self.redis_client = redis.Redis(host='localhost', port=6379, db=0)
+        # self.redis_client = redis.Redis(host='localhost', port=6379, db=0)
         self.mongoController = MongoController()
 
 
     def get_players(self, year, week):
         key = f'players_{year}_{week}'
-        players = self.redis_client.get(key)
+        # players = self.redis_client.get(key)
+        players = None
         return json.loads(players) if players else None
 
 
@@ -43,7 +44,7 @@ class RedisController:
                 "DST": defenses_from_api 
             }
 
-            self.redis_client.set(key, json.dumps(result))
+            # self.redis_client.set(key, json.dumps(result))
 
             return result
 
@@ -54,7 +55,8 @@ class RedisController:
 
     def get_year(self, year):
         key = f'players_{year}'
-        players = self.redis_client.get(key)
+        # players = self.redis_client.get(key)
+        players = None
         return json.loads(players) if players else None
 
     def set_year(self, year):
@@ -81,13 +83,14 @@ class RedisController:
             "DST": defenses_from_api 
         }
         
-        self.redis_client.set(key, json.dumps(result))
+        # self.redis_client.set(key, json.dumps(result))
         return result
 
     
     def get_games(self, year, week):
         key = f'games_{year}_{week}'
-        games = self.redis_client.get(key)
+        # games = self.redis_client.get(key)
+        games = None
         return json.loads(games) if games else None
 
     
@@ -102,13 +105,14 @@ class RedisController:
                 if game not in games:
                     games.append(game)
         
-        self.redis_client.set(key, json.dumps(games))
+        # self.redis_client.set(key, json.dumps(games))
         return games
 
     
     def get_teams_info(self, year, week):
         key = f'team_info_{year}_{week}'
-        team_info = self.redis_client.get(key)
+        # team_info = self.redis_client.get(key)
+        team_info = None
         return json.loads(team_info) if team_info else None
 
     
@@ -126,7 +130,7 @@ class RedisController:
                     result.append(team_result)
 
             result = sorted(result, key=lambda x: x['points'], reverse=True)
-            self.redis_client.set(key, json.dumps(result))
+            # self.redis_client.set(key, json.dumps(result))
             return result
         except Exception as e:
             print(e)
@@ -135,13 +139,14 @@ class RedisController:
     
     def get_draft_groups(self):
         key = f'draftgroups'
-        draft_groups = self.redis_client.get(key)
+        # draft_groups = self.redis_client.get(key)
+        draft_groups = None
         return json.load(draft_groups) if draft_groups else None
 
     def set_draft_groups(self):
         key = f'draft_groups'
         draft_groups = self.mongoController.getDraftGroupsAll()
-        self.redis_client.set(key, json.dumps(draft_groups))
+        # self.redis_client.set(key, json.dumps(draft_groups))
         return draft_groups
 
     def flush_cache(self):

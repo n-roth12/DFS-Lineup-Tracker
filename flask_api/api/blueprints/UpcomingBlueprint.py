@@ -5,7 +5,7 @@ import certifi
 import json
 from bson import json_util
 import redis
-from flask_cors import cross_origin()
+from flask_cors import cross_origin
 import requests
 
 from .utilities import token_required
