@@ -5,6 +5,7 @@ import certifi
 import json
 from bson import json_util
 import redis
+from flask_cors import cross_origin()
 import requests
 
 from .utilities import token_required
@@ -24,6 +25,7 @@ draftKingsController = DraftKingsController()
 ownershipService = OwnershipService()
 yahooController = YahooController()
 
+@cross_origin()
 @upcoming_blueprint.route('/slates_new', methods=["GET"])
 def upcoming_slates():
 
@@ -47,7 +49,7 @@ def upcoming_slates():
 
 	return jsonify(draft_groups), 200
 
-
+@cross_origin()
 @upcoming_blueprint.route('/draftGroup', methods=["GET"])
 @token_required
 def upcoming_draftGroups(current_user):
@@ -59,7 +61,7 @@ def upcoming_draftGroups(current_user):
 
 	return jsonify(json.loads(json_util.dumps(draftGroup))), 200
 
-
+@cross_origin()
 @upcoming_blueprint.route('/games', methods=['GET'])
 @token_required
 def upcoming_games(current_user):
@@ -78,7 +80,7 @@ def upcoming_games(current_user):
 
 	return jsonify({'games': json.loads(games_from_cache)}), 200
 
-
+@cross_origin()
 @upcoming_blueprint.route('/players', methods=['GET'])
 @token_required
 def upcoming_players(current_user):
@@ -87,7 +89,7 @@ def upcoming_players(current_user):
 	
 	return jsonify(draftables["draftables"]), 200
 
-
+@cross_origin()
 @upcoming_blueprint.route('/ownership', methods=["GET"])
 @token_required
 def upcoming_projections(current_user):
@@ -95,7 +97,7 @@ def upcoming_projections(current_user):
 
 	return jsonify(projections), 200
 
-
+@cross_origin()
 @upcoming_blueprint.route('/slates', methods=['GET'])
 @token_required
 def get_slates(current_user):
@@ -118,7 +120,7 @@ def get_slates(current_user):
 	
 	return jsonify(slates), 200
 
-
+@cross_origin()
 @upcoming_blueprint.route('/draftables', methods=['GET'])
 def get_draftables():
 	draftGroupId = request.args.get("draftGroupId")
@@ -128,7 +130,7 @@ def get_draftables():
 
 	return jsonify(draftables["draftables"]), 200
 
-
+@cross_origin()
 @upcoming_blueprint.route('/ownership', methods=["POST"])
 def set_projections():
 
@@ -140,7 +142,7 @@ def set_projections():
 
 	return jsonify(projections), 200
 
-
+@cross_origin()
 # this is the code in lambda_function of DraftKingsController lambda function
 @upcoming_blueprint.route('/draftkings_draftgroups_and_draftables', methods=["POST"])
 def draftkings_upcoming():
@@ -162,6 +164,7 @@ def draftkings_upcoming():
 	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200
 
 
+@cross_origin()
 # this is the code in the lambda_function of YahooController lambda function
 @upcoming_blueprint.route('/yahoo_draftgroups_and_draftables', methods=['POST'])
 def yahoo_upcoming():
@@ -179,6 +182,7 @@ def yahoo_upcoming():
 
 	return jsonify({"draft_groups": len(draftGroups), "draftables": len(draftGroupsDraftables)}), 200
 
+@cross_origin()
 @upcoming_blueprint.route('/fanduel/test', methods=["POST"])
 def fanduel_upcoming():
 	res = requests.get('https://api.fanduel.com/fixture-lists/88351/players?content_sources=NUMBERFIRE,ROTOWIRE,ROTOGRINDERS')

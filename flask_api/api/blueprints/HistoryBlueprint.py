@@ -1,6 +1,7 @@
 from flask import jsonify, Blueprint, request
 from api import app
 import json
+from flask_cors import cross_origin
 import requests
 
 from .utilities import token_required, generate_stats_display
@@ -13,6 +14,7 @@ RedisController = RedisController()
 MongoController = MongoController()
 FFBApiController = FFBApiController()
 
+@cross_origin()
 @history_blueprint.route('/search/week', methods=['GET'])
 def research_search():
 	year = request.args.get('year')
@@ -41,7 +43,7 @@ def research_search():
 
 	return jsonify({ 'players': players, 'games': games}), 200
 
-
+@cross_origin()
 @history_blueprint.route('/search/year', methods=['GET'])
 def research_year():
 	year = request.args.get('year')
@@ -55,7 +57,7 @@ def research_year():
 
 	return jsonify({ 'players': players, 'games': [] }), 200
 
-
+@cross_origin()
 @history_blueprint.route('/search/top_searches', methods=['GET'])
 def top_searches():
 	players = ['Jonathan Taylor', 
@@ -64,7 +66,7 @@ def top_searches():
 		'Joe Burrow']
 	return jsonify({ 'names': players }), 200
 
-
+@cross_origin()
 @history_blueprint.route('/player', methods=['GET'])
 def research_player():
 	name = request.args.get('name')
@@ -99,6 +101,7 @@ def research_player():
 
 	return jsonify(year_data), 200
 
+@cross_origin()
 @history_blueprint.route('/draftGroups/test', methods=["POST"])
 def test_draftGroups():
 	data = json.loads(request.data)
@@ -110,6 +113,7 @@ def test_draftGroups():
 
 	return jsonify({ "Message": "Success" }), 200
 
+@cross_origin()
 @history_blueprint.route('/draftGroupsByWeek', methods=["GET"])
 def get_draftGroups_by_week():
 	year = request.args.get("year")
@@ -118,7 +122,7 @@ def get_draftGroups_by_week():
 	if not year or not week:
 		return jsonify({ "Error": "Missing year or week" }), 400
 
-
+@cross_origin()
 @history_blueprint.route('/draftGroupsByDateRange', methods=["GET"])
 def get_draftGroups_by_date_range():
 	startTime = request.args.get("startTime")
@@ -128,6 +132,7 @@ def get_draftGroups_by_date_range():
 		return jsonify({ "Error": "Missing startTime or endTime" }), 400
 
 
+@cross_origin()
 @history_blueprint.route('/playergamestats', methods=["GET"])
 def get_draftGroup_playergamestats():
 	draft_group_id = request.args.get("draftGroup")
@@ -145,7 +150,7 @@ def get_draftGroup_playergamestats():
 
 	return jsonify(result), 200
 
-
+@cross_origin()
 @history_blueprint.route('/updateDraftgroups', methods=['POST'])
 def update_draftgroups():
 	draft_groups = MongoController.getDraftGroupsAll()
@@ -159,7 +164,7 @@ def update_draftgroups():
 
 	return jsonify({ "Count": count }), 200
 
-
+@cross_origin()
 @history_blueprint.route('/updateDraftables', methods=['POST'])
 def update_draftables():
 	draftables = MongoController.getDraftablesAll()
@@ -177,7 +182,7 @@ def update_draftables():
 
 	return jsonify({ "complete": count1, "upcoming": count2 }), 200
 
-
+@cross_origin()
 @history_blueprint.route('deleteEmptyDraftables', methods=['POST'])
 def remove_empty_draftables():
 	draftables = MongoController.getDraftablesAll()

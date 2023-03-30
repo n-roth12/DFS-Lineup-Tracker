@@ -48,7 +48,7 @@ def login_user():
 
 	return jsonify({"Error": "User not found"}), 404
 
-@cross_origin()
+@cross_origin(allow_headers="x-access-token")
 @users_blueprint.route('/lineups', methods=['GET'])
 @token_required
 def get_user_lineups(current_user):
