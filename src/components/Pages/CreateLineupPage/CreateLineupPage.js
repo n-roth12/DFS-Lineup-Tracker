@@ -17,6 +17,7 @@ import GeneratedLineup from '../SingleLineupPage/GeneratedLineup/GeneratedLineup
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
 import PlayersTableWrapper from '../../TablesLists/PlayersTableWrapper/PlayersTableWrapper'
 import { useNavigate } from 'react-router-dom'
+import { api_url } from '../../../Constants'
 
 const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
@@ -163,7 +164,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const getDraftables = async () => {
-    const res = await fetch(`/upcoming/players?draftGroup=${draftGroupId}`, {
+    const res = await fetch(`${api_url}/upcoming/players?draftGroup=${draftGroupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -183,7 +184,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   const getLineup = async () => {
     if (lineupId) {
-      const res = await fetch(`/lineups/lineup?lineupId=${lineupId}`, {
+      const res = await fetch(`${api_url}/lineups/lineup?lineupId=${lineupId}`, {
         method: 'GET',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
@@ -209,7 +210,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const getAllTags = async () => {
-    const res = await fetch(`/lineups/allTags`, {
+    const res = await fetch(`${api_url}/lineups/allTags`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -221,7 +222,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   const getRecommendedTags = async () => {
     if (lineup && draftGroup) {
-      const res = await fetch(`/lineups/recommendedTags`, {
+      const res = await fetch(`${api_url}/lineups/recommendedTags`, {
         method: 'POST',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
@@ -237,7 +238,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const getDraftGroup = async () => {
-    const res = await fetch(`/upcoming/draftGroup?draftGroup=${draftGroupId}`, {
+    const res = await fetch(`${api_url}/upcoming/draftGroup?draftGroup=${draftGroupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -248,7 +249,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const getDraftGroupLineups = async () => {
-    const res = await fetch(`/users/lineups/draftGroup?draftGroup=${draftGroupId}`, {
+    const res = await fetch(`${api_url}/users/lineups/draftGroup?draftGroup=${draftGroupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -311,7 +312,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       return
     }
     const projectedPoints = getTeamProjPoints()
-    const res = await fetch(`/lineups/updateLineup`, {
+    const res = await fetch(`${api_url}/lineups/updateLineup`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -394,7 +395,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const addPlayerToFavorites = async (player) => {
     setFavoritesIds([...favoritesIds, player["playerSiteId"]])
     if (lineupId !== "null") {
-      const res = await fetch(`/lineups/favorite`, {
+      const res = await fetch(`${api_url}/lineups/favorite`, {
         method: 'POST',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
@@ -412,7 +413,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     setHiddenIds([...hiddenIds, player["playerSiteId"]])
     setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
     if (lineupId !== "null") {
-      const res = await fetch(`/lineups/hidden`, {
+      const res = await fetch(`${api_url}/lineups/hidden`, {
         method: 'POST',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
@@ -435,7 +436,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const exportLineup = async () => {
-    const res = await fetch(`/lineups/export`, {
+    const res = await fetch(`${api_url}/lineups/export`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -504,7 +505,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
    }
 
   const deleteLineup = async () => {
-    const res = await fetch('/lineups/delete', {
+    const res = await fetch(`${api_url}/lineups/delete`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -520,7 +521,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   const saveActiveTags = async (tags) => {
     if (lineupId !== "null") {
-      const res = await fetch(`/lineups/setTags`, {
+      const res = await fetch(`${api_url}/lineups/setTags`, {
         method: 'POST',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken

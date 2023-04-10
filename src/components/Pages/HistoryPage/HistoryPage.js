@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import PlayersTable from '../../TablesLists/PlayersTable/PlayersTable'
 import { FaSearch } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
+import { api_url } from '../../../Constants'
 const ResearchPage = () => {
 
   const years = [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021]
@@ -31,7 +32,7 @@ const ResearchPage = () => {
   }, [selectedWeek, selectedYear])
 
   const getTopSearches = async () => {
-    const res = await fetch(`/history/search/top_searches`, {
+    const res = await fetch(`${api_url}/history/search/top_searches`, {
       method: "GET",
       headers: {
         "x-access-token": sessionStorage.dfsTrackerToken
@@ -44,7 +45,7 @@ const ResearchPage = () => {
   const weekSearch = async (week, year) => {
     setLoading(true)
     if (week === "All") {
-      const res = await fetch(`/history/search/year?week=${week}&year=${year}`, {
+      const res = await fetch(`${api_url}/history/search/year?week=${week}&year=${year}`, {
         method: "GET",
         headers: {
           "x-access-token": sessionStorage.dfsTrackerToken
@@ -53,7 +54,7 @@ const ResearchPage = () => {
       const result = await res.json()
       setPlayerData(result["players"])
     } else {
-      const res = await fetch(`/history/search/week?week=${week}&year=${year}`, {
+      const res = await fetch(`${api_url}/history/search/week?week=${week}&year=${year}`, {
         method: "GET",
         headers: {
           "x-access-token": sessionStorage.dfsTrackerToken
@@ -78,7 +79,7 @@ const ResearchPage = () => {
 
   const playerSearch = async (name) => {
     setLoading(true)
-    const res = await fetch(`/history/player?name=${name}`, {
+    const res = await fetch(`${api_url}/history/player?name=${name}`, {
       method: "GET",
       headers: {
         "x-access-token": sessionStorage.dfsTrackerToken
@@ -97,7 +98,7 @@ const ResearchPage = () => {
   }
 
   const getTeams = async () => {
-    const res = await fetch(`/nfl/teams`, {
+    const res = await fetch(`${api_url}/nfl/teams`, {
       method: "GET",
       headers: {
         "x-access-token": sessionStorage.dfsTrackerToken

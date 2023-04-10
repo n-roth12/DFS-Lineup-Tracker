@@ -19,7 +19,6 @@ lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineup
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 MongoController = MongoController()
 
-@cross_origin()
 @lineups_blueprint.route('/favorite', methods=['POST'])
 @token_required
 def add_to_favorites(current_user):
@@ -28,7 +27,6 @@ def add_to_favorites(current_user):
 
 	return jsonify({ "Message": "Success" }), 200
 
-@cross_origin()
 @lineups_blueprint.route('/hidden', methods=['POST'])
 @token_required
 def add_to_hidden(current_user):
@@ -37,7 +35,6 @@ def add_to_hidden(current_user):
 
 	return jsonify({ "Message": "Success" }), 200
 
-@cross_origin()
 @lineups_blueprint.route('/updateLineup', methods=['POST'])
 @token_required
 def create_lineup_new(current_user):
@@ -49,7 +46,6 @@ def create_lineup_new(current_user):
 
 	return jsonify({ "message": "Success" }), 200
 
-@cross_origin()
 @lineups_blueprint.route('/createEmptyLineup', methods=['POST'])
 @token_required
 def create_emptpy_lineup(current_user):
@@ -80,7 +76,6 @@ def create_emptpy_lineup(current_user):
 	return jsonify({ "lineupId": data["lineupId"] }), 200
 
 
-@cross_origin()
 @lineups_blueprint.route('/delete', methods=['POST'])
 @token_required
 def delete_lineups(current_user):
@@ -89,7 +84,6 @@ def delete_lineups(current_user):
 
 	return jsonify(lineup_ids), 200
 
-@cross_origin()
 @lineups_blueprint.route('/addTag', methods=["POST"])
 @token_required
 def add_tag_to_lineup(current_user):
@@ -101,7 +95,6 @@ def add_tag_to_lineup(current_user):
 
 	return jsonify({ "Message": "Succes" }), 200
 
-@cross_origin()
 @lineups_blueprint.route('/setTags', methods=["POST"])
 @token_required
 def set_lineup_tags(current_user):
@@ -114,7 +107,6 @@ def set_lineup_tags(current_user):
 
 	return jsonify({ "Message": "Success" }), 200
 
-@cross_origin()
 @lineups_blueprint.route('/allTags', methods=["GET"])
 @token_required
 def get_all_tags(current_user):
@@ -192,7 +184,6 @@ def get_all_tags(current_user):
 
 	return jsonify(temp), 200
 
-@cross_origin()
 @lineups_blueprint.route("/recommendedTags", methods=["POST"])
 def get_recommended_tags():
 	data = json.loads(request.data)
@@ -246,7 +237,6 @@ def get_recommended_tags():
 
 # 	return jsonify(already_exists), 200
 
-@cross_origin()
 @lineups_blueprint.route('/export', methods=['POST'])
 @token_required
 def export_lineups(current_user):
@@ -273,7 +263,6 @@ def export_lineups(current_user):
 		mimetype="text/csv",
 		headers={"Content-disposition": "attachment; filename=myplot.csv"})
 
-@cross_origin()
 @lineups_blueprint.route('/lineup', methods=['GET'])
 @token_required
 def get_singe_lineup(current_user):
@@ -282,7 +271,6 @@ def get_singe_lineup(current_user):
 
 	return jsonify(json.loads(json_util.dumps(lineup))), 200
 
-@cross_origin()
 @lineups_blueprint.route('/generate', methods=['POST'])
 @token_required
 def generate_lineup(current_user):

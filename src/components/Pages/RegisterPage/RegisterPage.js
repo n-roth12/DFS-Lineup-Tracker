@@ -79,6 +79,9 @@ const LandingPage = ({ setToken }) => {
 		    		<Link to='/login' className="login-page-link">Login</Link>
 				</h4>
 		    </div>
+			<div><h4>Or 
+					<Link to='/upcoming' className='login-page-link'>Continue as Guest</Link></h4>
+			</div>
 		  </div>
 		</div>
 		</>

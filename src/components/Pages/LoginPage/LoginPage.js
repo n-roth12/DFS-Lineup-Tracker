@@ -77,6 +77,9 @@ const LoginPage = ({ setToken, setUserId }) => {
 			    	<h4>Don't have an account?
 			    	<Link to='/register' className="register-page-link">Register</Link></h4>
 			    </div>
+				<div><h4>Or 
+					<Link to='/upcoming' className='register-page-link'>Continue as Guest</Link></h4>
+				</div>
 			</div>
 		</div>
 		</>

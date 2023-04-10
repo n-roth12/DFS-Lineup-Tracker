@@ -9,6 +9,7 @@ import { BiImport } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { capitalize } from '@material-ui/core';
 import { FaSearch } from 'react-icons/fa';
+import { api_url } from '../../../Constants';
 
 const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor }) => {
 
@@ -47,11 +48,8 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
   }, [selectedSite])
 
   const getUpcomingSlates = async () => {
-    const res = await fetch('/upcoming/slates_new', {
-      method: 'GET',
-      headers: {
-        'x-access-token': sessionStorage.dfsTrackerToken
-      }
+    const res = await fetch(`${api_url}/upcoming/slates_new`, {
+      method: 'GET'
     })
     const data = await res.json()
 
@@ -62,7 +60,7 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
   const getDraftables = async () => {
     if (activeSlate && activeSlate["draftGroupId"] != null && selectedSite) {
       setLoadingDraftables(true)
-      const res = await fetch(`/upcoming/draftables?draftGroupId=${activeSlate["draftGroupId"]}&site=${selectedSite}`, {
+      const res = await fetch(`${api_url}/upcoming/draftables?draftGroupId=${activeSlate["draftGroupId"]}&site=${selectedSite}`, {
         method: 'GET',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
@@ -85,7 +83,7 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
   }
 
   const getPlayers = async () => {
-    const res = await fetch('/upcoming/ownership', {
+    const res = await fetch(`${api_url}/upcoming/ownership`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -110,7 +108,7 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
   }
 
   const createLineup = async (draftGroup) => {
-    const res = await fetch(`/lineups/createEmptyLineup`, {
+    const res = await fetch(`${api_url}/lineups/createEmptyLineup`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken

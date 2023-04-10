@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaTimes, FaAngleRight } from 'react-icons/fa';
 import { BiExport, BiTrash, BiDownload } from 'react-icons/bi'
 import { capitalize } from '@material-ui/core';
+import { api_url } from '../../../Constants';
 
 const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => {
   const [lineups, setLineups] = useState([])
@@ -25,7 +26,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
 
   const getLineups = async () => {
     setLineupsLoading(true)
-    const res = await fetch(`/users/lineups/draftGroup?draftGroup=${draftGroup["draftGroupId"]}`, {
+    const res = await fetch(`${api_url}/users/lineups/draftGroup?draftGroup=${draftGroup["draftGroupId"]}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -38,7 +39,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
 
   const exportLineups = async () => {
     const lineupsToExport = lineups.filter((lineup) => selectedLineups.includes(lineup["lineup-id"]))
-    const res = await fetch(`/lineups/export`, {
+    const res = await fetch(`${api_url}/lineups/export`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -80,7 +81,7 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
   }
 
   const createLineup = async () => {
-    const res = await fetch(`/lineups/createEmptyLineup`, {
+    const res = await fetch(`${api_url}/lineups/createEmptyLineup`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
