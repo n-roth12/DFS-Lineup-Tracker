@@ -4,6 +4,7 @@ import { FaTimes } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
 import './GenerateLineupDialog.scss'
 import GeneratedLineup from '../../Pages/SingleLineupPage/GeneratedLineup/GeneratedLineup'
+import { api_url } from '../../../Constants'
 
 const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId, games, onApply }) => {
 
@@ -24,7 +25,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
 
   const generateLineup = async () => {
     setLoadingLineup(true)
-    const res = await fetch(`/lineups/generate`, {
+    const res = await fetch(`${api_url}/lineups/generate`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken

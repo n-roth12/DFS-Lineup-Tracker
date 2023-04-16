@@ -2,6 +2,7 @@ import './PlayerPage.scss'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import PlayerSearch from '../HistoryPage/PlayerSearch/PlayerSearch'
+import { api_url } from '../../../Constants'
 
 const PlayerPage = () => {
 
@@ -15,7 +16,7 @@ const PlayerPage = () => {
   }, [])
 
   const getPlayerData = async (name) => {
-    const res = await fetch(`/history/player?name=${name}`, {
+    const res = await fetch(`${api_url}/history/player?name=${name}`, {
       method: "GET",
       headers: {
         "x-access-token": sessionStorage.dfsTrackerToken

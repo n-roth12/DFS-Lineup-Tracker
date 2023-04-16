@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, request
 from api import app, bcrypt
-from flask_cors import cross_origin
 import json
 import jwt
 import uuid
@@ -46,7 +45,6 @@ def login_user():
 
 	return jsonify({"Error": "User not found"}), 404
 
-# @cross_origin(allow_headers="*", expose_headers=["x-access-token"])
 @users_blueprint.route('/lineups', methods=['GET'])
 @token_required
 def get_user_lineups(current_user):

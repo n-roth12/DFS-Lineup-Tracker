@@ -46,22 +46,21 @@ const LandingPage = ({ setToken }) => {
 	return (
 		<>
 		<UpperNav />
-		<LowerNav />
 		<div className="register-page">
 			<div className="register-form-wrapper">
 				<h1>Register</h1>
 				<form className="register-form" onSubmit={onSubmit}>
 		    	<div>
-            <label>Enter Email</label>
+            <label>Enter Email Address</label>
             <input className='form-control' type="text" placeholder="" value={email}
               onChange={(e) => setEmail(e.target.value)} />
 		    		<label>Create Username</label>
 		    		<input className="form-control" type="text" placeholder="" value={username}
 		    			onChange={(e) => setUsername(e.target.value)} />
-		    		<label>Password</label>
+		    		<label>Create Password</label>
 		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="" value={password}
 		    		onChange={(e) => setPassword(e.target.value)} />
-		    		<label>Re-enter Password</label>
+		    		<label>Confirm Password</label>
 		    		<input className="form-control" type={showPassword ? "text" : "password"} placeholder="" value={passwordCheck}
 		    		onChange={(e) => setPasswordCheck(e.target.value)} />
 		    		<div className="show-password">

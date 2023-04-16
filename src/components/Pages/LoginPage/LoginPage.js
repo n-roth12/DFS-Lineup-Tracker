@@ -49,7 +49,6 @@ const LoginPage = ({ setToken, setUserId }) => {
 	return (
 		<>
 		<UpperNav />
-		<LowerNav />
 		<div className="login-page">
 			<div className="login-form-wrapper">
 				<h1>Login</h1>

@@ -8,8 +8,10 @@ const Navbar = ({ alertMessage, closeAlertMessage, alertColor }) => {
   return (
     <>
       <UpperNav />
-      <LowerNav alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
-      </>
+      {window.location.pathname !== "/login" && window.location.pathname !== "/register" && 
+        <LowerNav alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
+      }
+    </>
   )
 }
 

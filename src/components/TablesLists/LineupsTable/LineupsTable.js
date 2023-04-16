@@ -11,6 +11,7 @@ import { FaPlus, FaTimes } from 'react-icons/fa'
 import { BiDownload, BiTrash, BiExport, BiImport } from 'react-icons/bi'
 import { FiSquare, FiMinusSquare } from 'react-icons/fi'
 import { AiOutlineImport, AiOutlineExport } from 'react-icons/ai'
+import { api_url } from '../../../Constants'
 
 const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter, setShowImportLineupDialog }) => {
 
@@ -73,7 +74,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   }
 
   const exportLineups = async () => {
-    const res = await fetch(`/lineups/export`, {
+    const res = await fetch(`${api_url}/lineups/export`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken

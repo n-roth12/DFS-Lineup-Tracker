@@ -14,9 +14,7 @@ import CompareLineupsPage from './components/Pages/CompareLineupsPage/CompareLin
 import ProfilePage from './components/Pages/ProfilePage/ProfilePage';
 import FeedbackPage from './components/Pages/FeedbackPage/FeedbackPage';
 import Navbar from './components/Navbar/Navbar'
-import Footer from './components/Footer/Footer'
 import './App.css';
-import { FaAngleLeft } from 'react-icons/fa'
 import {ScrollToTop} from './ScrollToTop';
 function App() {
   

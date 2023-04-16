@@ -9,6 +9,7 @@ import { FaPlus } from 'react-icons/fa'
 import LineupMini from '../SingleLineupPage/Lineup/LineupMini/LineupMini'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
+import { api_url } from '../../../Constants'
 
 const CompareLineupsPage = ({ setAlertMessage }) => {
     
@@ -36,7 +37,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   }, [lineups])
 
   const getDraftGroup = async () => {
-    const res = await fetch(`/upcoming/draftGroup?draftGroup=${draftGroupId}`, {
+    const res = await fetch(`${api_url}/upcoming/draftGroup?draftGroup=${draftGroupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -48,7 +49,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
 
   const getLineups = async () => {
     if (draftGroupId) {
-      const res = await fetch(`/users/lineups/draftGroup?draftGroup=${draftGroupId}`, {
+      const res = await fetch(`${api_url}/users/lineups/draftGroup?draftGroup=${draftGroupId}`, {
         method: 'GET',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
@@ -64,7 +65,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   }
 
   const deleteLineup = async () => {
-    const res = await fetch('/lineups/delete', {
+    const res = await fetch(`${api_url}/lineups/delete`, {
       method: 'POST',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -79,7 +80,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   }
 
   const getDraftables = async () => {
-    const res = await fetch(`/upcoming/players?draftGroup=${draftGroupId}`, {
+    const res = await fetch(`${api_url}/upcoming/players?draftGroup=${draftGroupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken
@@ -129,7 +130,7 @@ const CompareLineupsPage = ({ setAlertMessage }) => {
   }
 
   const revertSingleLineup = async (lineupId) => {
-    const res = await fetch(`/lineups/lineup?lineupId=${lineupId}`, {
+    const res = await fetch(`${api_url}/lineups/lineup?lineupId=${lineupId}`, {
       method: 'GET',
       headers: {
         'x-access-token': sessionStorage.dfsTrackerToken

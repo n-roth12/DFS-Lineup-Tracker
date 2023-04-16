@@ -125,7 +125,6 @@ def get_draftGroups_by_date_range():
 		return jsonify({ "Error": "Missing startTime or endTime" }), 400
 
 
-@cross_origin()
 @history_blueprint.route('/playergamestats', methods=["GET"])
 def get_draftGroup_playergamestats():
 	draft_group_id = request.args.get("draftGroup")

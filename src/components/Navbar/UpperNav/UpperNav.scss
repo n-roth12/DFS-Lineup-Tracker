@@ -67,14 +67,15 @@
     .profile-btns {
         display: flex;
         align-items: center;
-        
-        .logout-btn {
+
+        .login-btn, .register-btn {
+            font-size: 12pt;
             margin: auto;
-            font-size: 14pt;
             cursor: pointer;
         }
-        .logout-btn:hover {
-            color: var(--grey-3);
+
+        .login-btn:hover, .register-btn:hover {
+            color: var(--grey-2);
         }
     }
 }
