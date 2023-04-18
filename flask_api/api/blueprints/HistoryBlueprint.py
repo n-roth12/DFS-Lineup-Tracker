@@ -8,6 +8,7 @@ from .utilities import token_required, generate_stats_display
 from ..controllers.RedisController import RedisController
 from ..controllers.MongoController import MongoController
 from ..controllers.FFBApiController import FFBApiController
+from ..controllers.rules.scoring_config import get_score
 
 history_blueprint = Blueprint('history_blueprint', __name__, url_prefix='/history')
 RedisController = RedisController()
@@ -137,6 +138,7 @@ def get_draftGroup_playergamestats():
 	for player in result:
 		try: 
 			player["statsDisplay"] = generate_stats_display(player["stats"]["stats"])
+			player["fantasy_points"] = get_score(draftables["site"], player["stats"]["stats"])
 		except KeyError:
 			pass
 
@@ -155,31 +157,31 @@ def update_draftgroups():
 
 	return jsonify({ "Count": count }), 200
 
-@history_blueprint.route('/updateDraftables', methods=['POST'])
-def update_draftables():
-	draftables = MongoController.getDraftablesAll()
+# @history_blueprint.route('/updateDraftables', methods=['POST'])
+# def update_draftables():
+# 	draftables = MongoController.getDraftablesAll()
 
-	count1 = 0
-	count2 = 0
-	for draftable in draftables:
-		if draftable.get("year") and draftable.get("week"):
-			if draftable["year"] <= 2022 and draftable["week"] < 18:
-				MongoController.updateDraftablesStatusByDraftGroupId(draftGroupId=draftable["draftGroupId"], status="complete")
-				count1 += 1
-			else:
-				MongoController.updateDraftablesStatusByDraftGroupId(draftGroupId=draftable["draftGroupId"], status="upcoming")
-				count2 += 1
+# 	count1 = 0
+# 	count2 = 0
+# 	for draftable in draftables:
+# 		if draftable.get("year") and draftable.get("week"):
+# 			if draftable["year"] <= 2022 and draftable["week"] < 18:
+# 				MongoController.updateDraftablesStatusByDraftGroupId(draftGroupId=draftable["draftGroupId"], status="complete")
+# 				count1 += 1
+# 			else:
+# 				MongoController.updateDraftablesStatusByDraftGroupId(draftGroupId=draftable["draftGroupId"], status="upcoming")
+# 				count2 += 1
 
-	return jsonify({ "complete": count1, "upcoming": count2 }), 200
+# 	return jsonify({ "complete": count1, "upcoming": count2 }), 200
 
-@history_blueprint.route('deleteEmptyDraftables', methods=['POST'])
-def remove_empty_draftables():
-	draftables = MongoController.getDraftablesAll()
+# @history_blueprint.route('deleteEmptyDraftables', methods=['POST'])
+# def remove_empty_draftables():
+# 	draftables = MongoController.getDraftablesAll()
 
-	count = 0
-	for draftable in draftables:
-		if len(draftable["draftables"]) < 1:
-			MongoController.deleteDraftableByDraftGroupId(draftable["draftGroupId"])
-			count += 1
+# 	count = 0
+# 	for draftable in draftables:
+# 		if len(draftable["draftables"]) < 1:
+# 			MongoController.deleteDraftableByDraftGroupId(draftable["draftGroupId"])
+# 			count += 1
 
-	return jsonify({ "Count": count }), 200
+# 	return jsonify({ "Count": count }), 200

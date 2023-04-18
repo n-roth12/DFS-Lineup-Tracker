@@ -32,6 +32,18 @@ class DraftKingsController:
             print("Error fetching DraftKings draft group ids.")
             return []
 
+    def getDraftKingsFantasyPoints(self, stats):
+        def get_rushing_bonus(stats):
+            if (stats["rushing_yards"] >= 100):
+                return 3
+            return 0
+        def get_rushing_points(stats):
+            return stats["rushing_yards"] * 0.1
+        point_list = [get_rushing_bonus, get_rushing_points]
+        points = 0
+        for x in point_list:
+            points += x(stats)
+        return points
     
     def getDraftKingsSlates(self):
         try:
