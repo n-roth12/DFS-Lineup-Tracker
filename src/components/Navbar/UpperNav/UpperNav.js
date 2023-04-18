@@ -28,7 +28,6 @@ const UpperNav = () => {
         <div>
           <h1>MainSlater</h1>
         </div>
-
         <div className='profile-btns'>
           {sessionStorage.dfsTrackerToken && window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" ?
             <div className='dropdown' onClick={() => setShowProfileDropdown(true)} onMouseLeave={() => setShowProfileDropdown(false)}>
@@ -36,7 +35,7 @@ const UpperNav = () => {
               <div className={`${!showProfileDropdown ? "hidden" : "dropdown-content"}`}>
                 <a href="/profile">Profile</a>
                 <a href="/feedback">Feedback</a>
-                <a href="#" onClick={logout}>Logout</a>
+                <a href="/login" onClick={logout}>Logout</a>
               </div>
             </div>
             :
