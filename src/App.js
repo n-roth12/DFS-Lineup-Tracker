@@ -8,7 +8,6 @@ import UpcomingPage from './components/Pages/UpcomingPage/UpcomingPage'
 import HistoryPage from './components/Pages/HistoryPage/HistoryPage'
 import ResearchPage from './components/Pages/ResearchPage/ResearchPage'
 import CreateLineupPage from './components/Pages/CreateLineupPage/CreateLineupPage'
-import PastLineupPage from './components/Pages/PastLineupPage/PastLineupPage';
 import PlayerPage from './components/Pages/PlayerPage/PlayerPage'
 import CompareLineupsPage from './components/Pages/CompareLineupsPage/CompareLineupsPage';
 import ProfilePage from './components/Pages/ProfilePage/ProfilePage';
@@ -103,18 +102,6 @@ function App() {
                   <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
                   <div className="page-wrapper-inner"> 
                     <CreateLineupPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
-                      setAlertTime={setAlertTime} />
-                  </div>
-                </div>
-              </>
-            } />
-
-            <Route path="lineup/:draftGroupId/:lineupId" element={
-              <>
-                <div className="page-wrapper">
-                  <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
-                  <div className="page-wrapper-inner"> 
-                    <PastLineupPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
                       setAlertTime={setAlertTime} />
                   </div>
                 </div>

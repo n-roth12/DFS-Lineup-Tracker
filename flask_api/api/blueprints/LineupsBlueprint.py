@@ -11,6 +11,7 @@ from bson import json_util
 
 from .utilities import token_required
 from ..controllers.MongoController import MongoController
+from ..controllers.FFBApiController import FFBApiController
 from ..controllers.LineupOptimizerControllerModule.LineupBuilder import LineupBuilder
 from ..controllers.LineupOptimizerControllerModule.allowed_positions import LINEUP_SLOTS
 from ..controllers.LineupOptimizerControllerModule.TagsController import TagsController
@@ -18,6 +19,7 @@ from ..controllers.LineupOptimizerControllerModule.Lineup import Lineup
 lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineups')
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 MongoController = MongoController()
+FFBApiController = FFBApiController()
 
 @lineups_blueprint.route('/favorite', methods=['POST'])
 @token_required
@@ -299,9 +301,6 @@ def convert_lineup_to_list(lineup: dict, site: str) -> list:
 # ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "DST"]
 # to =>
 # ["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"]
-# this should be an interview question
-# would be quicker to write and easier to understand with a hash map,
-# but not as efficient
 def convert_lineup_positions(positions_list):
 	result = []
 	if len(positions_list) < 1:

@@ -6,14 +6,14 @@ yahoo_scoring = {
             "interceptions": -1,
             "rushing_touchdowns": 6,
             "rushing_yards": 0.1,
-            "receiving_touchdowns": 6,
-            "receiving_yards": 0.1,
+            "recieving_touchdowns": 6,
+            "recieving_yards": 0.1,
             "receptions": 0.5,
             "return_touchdowns": 6,
             "fumbles_lost": -2,
             "passing_2point_conversions": 2,
             "rushing_2point_conversions": 2,
-            "receiving_2point_conversions": 2,
+            "recieving_2point_conversions": 2,
             "fumble_recovery_touchdown": 6 
         }
     },

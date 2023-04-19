@@ -72,8 +72,9 @@ class MongoController:
     def getDraftablesAll(self):
         cursor = self.draftables_collection.find({})
         draftables = [group for group in cursor]
-        for draftable in draftables:
-            del(draftable["_id"])
+        # for draftable in draftables:
+
+        #     # del(draftable["_id"])
         return draftables
 
     def getLineupsAll(self):

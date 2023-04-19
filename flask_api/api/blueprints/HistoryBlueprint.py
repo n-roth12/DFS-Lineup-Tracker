@@ -125,23 +125,23 @@ def get_draftGroups_by_date_range():
 	if not startTime or not endTime:
 		return jsonify({ "Error": "Missing startTime or endTime" }), 400
 
-
 @history_blueprint.route('/playergamestats', methods=["GET"])
 def get_draftGroup_playergamestats():
 	draft_group_id = request.args.get("draftGroup")
 
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId=int(draft_group_id))
 
-	result = FFBApiController.get_draftables_playergamestats(draftables=draftables["draftables"], 
+	res = FFBApiController.get_draftables_playergamestats(draftables=draftables["draftables"], 
 		week=draftables["week"], year=draftables["year"])
-
-	for player in result:
-		try: 
-			player["statsDisplay"] = generate_stats_display(player["stats"]["stats"])
-			player["fantasy_points"] = get_score(draftables["site"], player["stats"]["stats"])
-		except KeyError:
-			pass
-
+	result = []
+	for player in res:
+		if player["stats"] and player["stats"]["stats"]:
+			temp = player["stats"]["stats"]
+			del player["stats"]["stats"]
+			player["stats"] = temp
+			player["statsDisplay"] = generate_stats_display(temp)
+			player["stats"]["fantasy_points"] = get_score(draftables["site"], temp)
+			result.append(player)
 	return jsonify(result), 200
 
 @history_blueprint.route('/updateDraftgroups', methods=['POST'])

@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react'
-import PastPlayersTable from '../PastPlayersTable/PastPlayersTable'
 import UpcomingPlayersTable from '../UpcomingPlayersTable/UpcomingPlayersTable'
 
 const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFilter, posFilter, canAddPos, 

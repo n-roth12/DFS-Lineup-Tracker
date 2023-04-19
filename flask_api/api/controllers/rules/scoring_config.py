@@ -13,17 +13,19 @@ def get_score(site, stats):
     if not scoring:
         print("Invalid site for scoring.")
         return None
-    points = 0
+    points = 0.0
     # standard categories are scored as number of stats times score per stat 
-    for key, value in stats.get("standard", {}).items():
-        points += stats.get(key, 0) * value
-    # range categories are given a constant value depending on what range they fall into
-    for key, _ranges in stats.get("range", {}).items():
-        stat = stats.get(key, 0)
-        for _range in _ranges:
-            if is_in_range(stat, _range["lower"], _range["upper"]):
-                points += stat * _range["points"]
-    return points
+    for category in scoring.values():
+        for key, value in category.get("standard", {}).items():
+            if stats.get(key):
+                points += stats.get(key) * value
+        # range categories are given a constant value depending on what range they fall into
+        for key, _ranges in category.get("range", {}).items():
+            if stats.get(key):
+                for _range in _ranges:
+                    if is_in_range(stats.get(key), _range["lower"], _range["upper"]):
+                        points += _range["points"]
+    return round(points, 2)
 
 def is_in_range(stat: int, lower: int, upper: int) -> bool:
     if lower is None and upper is None:
