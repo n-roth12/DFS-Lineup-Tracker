@@ -1,12 +1,12 @@
 import React from 'react'
-import './LineupPlayerNewV2.scss'
+import './LineupPlayer.scss'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import { CgArrowsExchange } from 'react-icons/cg'
 
 function LineupPlayerNew({ player, position, beingEdited, onDelete, onAdd, onOpenDialog, toggleEditingPos, editingPos, setPlayerDialogContent }) {
 
   return (
-    <div className={`player lineupPlayerNewV2 ${beingEdited ? 'selected': ''}`}>
+    <div className={`player lineupPlayer ${beingEdited ? 'selected': ''}`}>
       <div className='playerImage'>
           <p>{position.toUpperCase()}</p>
       </div>

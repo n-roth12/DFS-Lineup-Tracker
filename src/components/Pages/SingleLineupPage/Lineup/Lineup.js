@@ -1,4 +1,4 @@
-import LineupPlayerNew from './LineupPlayerNewV2/LineupPlayerNewV2'
+import LineupPlayerNew from './LineupPlayer/LineupPlayer'
 import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
 import './Lineup.scss'
 import { useState, useEffect } from 'react'

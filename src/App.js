@@ -50,9 +50,9 @@ function App() {
               <>
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
-                    <Navbar />
+                    <Navbar alertMessage={alertMessage} alertColor={alertColor} closeAlertMessage={closeAlertMessage}/>
                     <div className="page-wrapper-inner"> 
-                      <LineupsPage />
+                      <LineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} setAlertTime={setAlertTime}/>
                     </div>
                   </div>
                 : 
