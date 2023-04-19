@@ -1,0 +1,16 @@
+.not-found {
+    min-height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+
+    p {
+        font-size: 14pt;
+    }
+    .not-found-links {
+        display: flex;
+        flex-direction: column;
+    }
+}

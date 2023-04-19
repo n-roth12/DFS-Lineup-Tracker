@@ -14,10 +14,11 @@ import ProfilePage from './components/Pages/ProfilePage/ProfilePage'
 import ContactPage from './components/Pages/ContactPage/ContactPage'
 import Navbar from './components/Navbar/Navbar'
 import './App.css'
-import {ScrollToTop} from './ScrollToTop'
+import { ScrollToTop } from './ScrollToTop'
 import Footer from './components/Footer/Footer'
+import NotFound from './components/Pages/NotFound/NotFound';
 function App() {
-  
+
   const [alertMessage, setAlertMessage] = useState()
   const [alertColor, setAlertColor] = useState()
   const [alertTime, setAlertTime] = useState(4000)
@@ -27,12 +28,12 @@ function App() {
   })
 
   useEffect(() => {
-      setTimeout(() => { if (alertMessage) { setAlertMessage() && setAlertTime(4000) }} , alertTime)
+    setTimeout(() => { if (alertMessage) { setAlertMessage() && setAlertTime(4000) } }, alertTime)
   }, [alertMessage])
 
   const setToken = (userToken) => {
     sessionStorage.setItem('dfsTrackerToken', JSON.stringify(userToken))
-  } 
+  }
 
   const setUserId = (userId) => {
     sessionStorage.setItem('dfsTrackerUserId', JSON.stringify(userId))
@@ -51,7 +52,7 @@ function App() {
               <>
                 {sessionStorage.dfsTrackerToken ?
                   <Navigate to={`/lineups`} />
-                : 
+                  :
                   <Navigate to={`/login`} />
                 }
               </>
@@ -68,10 +69,10 @@ function App() {
             <Route path="lineups">
               <Route index element={
                 <>
-                <ScrollToTop />
+                  <ScrollToTop />
                   <div className="page-wrapper">
                     <Navbar alertMessage={alertMessage} alertColor={alertColor} closeAlertMessage={closeAlertMessage} />
-                    <div className="page-wrapper-inner"> 
+                    <div className="page-wrapper-inner">
                       <LineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} setAlertTime={setAlertTime} />
                     </div>
                     <Footer />
@@ -85,9 +86,9 @@ function App() {
                 <ScrollToTop />
                 <div className="page-wrapper">
                   <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
-                  <div className="page-wrapper-inner"> 
-                    <UpcomingPage week={18} year={2021} setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
-                      setAlertTime={setAlertTime}/>
+                  <div className="page-wrapper-inner">
+                    <UpcomingPage week={18} year={2021} setAlertMessage={setAlertMessage} setAlertColor={setAlertColor}
+                      setAlertTime={setAlertTime} />
                   </div>
                 </div>
               </>
@@ -97,8 +98,8 @@ function App() {
               <>
                 <div className="page-wrapper">
                   <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
-                  <div className="page-wrapper-inner"> 
-                    <CreateLineupPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
+                  <div className="page-wrapper-inner">
+                    <CreateLineupPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor}
                       setAlertTime={setAlertTime} />
                   </div>
                 </div>
@@ -110,12 +111,12 @@ function App() {
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar alertMessage={alertMessage} closeAlertMessage={closeAlertMessage} alertColor={alertColor} />
-                    <div className="page-wrapper-inner"> 
-                      <CompareLineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} 
+                    <div className="page-wrapper-inner">
+                      <CompareLineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor}
                         setAlertTime={setAlertTime} />
                     </div>
                   </div>
-                : 
+                  :
                   <LoginPage setToken={setToken} />
                 }
               </>
@@ -126,11 +127,11 @@ function App() {
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar />
-                    <div className="page-wrapper-inner"> 
+                    <div className="page-wrapper-inner">
                       <ResearchPage />
                     </div>
                   </div>
-                : 
+                  :
                   <LoginPage setToken={setToken} />
                 }
               </>
@@ -138,10 +139,10 @@ function App() {
 
             <Route path="history" element={
               <>
-                <ScrollToTop/>
+                <ScrollToTop />
                 <div className="page-wrapper">
                   <Navbar />
-                  <div className="page-wrapper-inner"> 
+                  <div className="page-wrapper-inner">
                     <HistoryPage />
                   </div>
                 </div>
@@ -154,11 +155,11 @@ function App() {
                 {sessionStorage.dfsTrackerToken ?
                   <div className="page-wrapper">
                     <Navbar />
-                    <div className="page-wrapper-inner"> 
+                    <div className="page-wrapper-inner">
                       <PlayerPage />
                     </div>
                   </div>
-                : 
+                  :
                   <LoginPage setToken={setToken} />
                 }
               </>
@@ -189,6 +190,20 @@ function App() {
             } />
 
           </Route>
+
+          <Route path="*" element={
+            <>
+              <ScrollToTop />
+              <div className='page-wrapper'>
+                <Navbar alertMessage={alertMessage} alertColor={alertColor} closeAlertMessage={closeAlertMessage} />
+                <div className='page-wrapper-inner'>
+                  <NotFound />
+                </div>
+                <Footer />
+              </div>
+            </>
+          } />
+
         </Routes>
       </BrowserRouter>
     </div>
