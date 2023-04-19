@@ -1,19 +1,17 @@
-import './Footer.css'
-
+import './Footer.scss'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
     <div className="footer">
     	<div className="footer-inner">
-    		<p>Built by Nolan Roth, 2022</p>
-    		<div className="contact">
-    			<a href="https://www.linkedin.com/in/nolan-roth/">
-    				<img className="contact-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" />
-    			</a>
-    			<a href="https://github.com/n-roth12">
-    				<img className="contact-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
-    			</a>
-    		</div>	
+			<div>
+				<h3>Mainslater</h3>
+			</div>
+			<div className='footer-links'>
+				<Link className='player-link' to={`/terms`}>Terms</Link>
+				<Link className='player-link' to={`/feedback`}>Contact</Link>
+			</div>
     	</div>
     </div>
   )

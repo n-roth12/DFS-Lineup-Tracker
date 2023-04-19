@@ -9,12 +9,13 @@ import HistoryPage from './components/Pages/HistoryPage/HistoryPage'
 import ResearchPage from './components/Pages/ResearchPage/ResearchPage'
 import CreateLineupPage from './components/Pages/CreateLineupPage/CreateLineupPage'
 import PlayerPage from './components/Pages/PlayerPage/PlayerPage'
-import CompareLineupsPage from './components/Pages/CompareLineupsPage/CompareLineupsPage';
-import ProfilePage from './components/Pages/ProfilePage/ProfilePage';
-import FeedbackPage from './components/Pages/FeedbackPage/FeedbackPage';
+import CompareLineupsPage from './components/Pages/CompareLineupsPage/CompareLineupsPage'
+import ProfilePage from './components/Pages/ProfilePage/ProfilePage'
+import ContactPage from './components/Pages/ContactPage/ContactPage'
 import Navbar from './components/Navbar/Navbar'
-import './App.css';
-import {ScrollToTop} from './ScrollToTop';
+import './App.css'
+import {ScrollToTop} from './ScrollToTop'
+import Footer from './components/Footer/Footer'
 function App() {
   
   const [alertMessage, setAlertMessage] = useState()
@@ -73,6 +74,7 @@ function App() {
                     <div className="page-wrapper-inner"> 
                       <LineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} setAlertTime={setAlertTime} />
                     </div>
+                    <Footer />
                   </div>
                 </>
               } />
@@ -162,13 +164,13 @@ function App() {
               </>
             } />
 
-            <Route path="feedback" element={
+            <Route path="contact" element={
               <>
                 <ScrollToTop />
                 <div className='page-wrapper'>
                   <Navbar />
                   <div className='page-wrapper-inner'>
-                    <FeedbackPage />
+                    <ContactPage />
                   </div>
                 </div>
               </>

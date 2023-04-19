@@ -1,0 +1,26 @@
+.footer {
+	padding: 20px;
+	margin-top: 50px;
+	background-color: #d3d3d3;
+	width: 100%;
+
+	.footer-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		h3 {
+			font-size: 14pt;
+		}
+
+		.footer-links {
+			display: flex;
+			flex-direction: row;
+
+			.player-link {
+				margin: 10px;
+			}
+		}
+	}
+}

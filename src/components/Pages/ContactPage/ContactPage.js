@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react"
-import './FeedbackPage.scss'
+import { useState } from "react"
+import './ContactPage.scss'
 
-const FeedbackPage = () => {
+const ContactPage = () => {
 
   const [category, setCategory] = useState("feedback")
 
@@ -10,7 +10,7 @@ const FeedbackPage = () => {
   }
 
   return (
-    <div className="feedback-page">
+    <div className="contact-page">
       <form className="feedback-form">
         <div className='form-header'>
           <h1>Contact Mainslater</h1>
@@ -43,4 +43,4 @@ const FeedbackPage = () => {
   )
 }
 
-export default FeedbackPage
+export default ContactPage
