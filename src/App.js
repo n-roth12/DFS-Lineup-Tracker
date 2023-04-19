@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LineupsPage from './components/Pages/LineupsPage/LineupsPage'
 import LoginPage from './components/Pages/LoginPage/LoginPage'
 import RegisterPage from './components/Pages/RegisterPage/RegisterPage'
@@ -49,14 +49,9 @@ function App() {
             <Route index element={
               <>
                 {sessionStorage.dfsTrackerToken ?
-                  <div className="page-wrapper">
-                    <Navbar alertMessage={alertMessage} alertColor={alertColor} closeAlertMessage={closeAlertMessage}/>
-                    <div className="page-wrapper-inner"> 
-                      <LineupsPage setAlertMessage={setAlertMessage} setAlertColor={setAlertColor} setAlertTime={setAlertTime}/>
-                    </div>
-                  </div>
+                  <Navigate to={`/lineups`} />
                 : 
-                  <LoginPage setToken={setToken} />
+                  <Navigate to={`/login`} />
                 }
               </>
             } />
