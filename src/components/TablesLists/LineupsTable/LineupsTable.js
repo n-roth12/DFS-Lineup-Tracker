@@ -13,7 +13,7 @@ import { FiSquare, FiMinusSquare } from 'react-icons/fi'
 import { AiOutlineImport, AiOutlineExport } from 'react-icons/ai'
 import { api_url } from '../../../Constants'
 
-const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, stateFilter, setShowImportLineupDialog }) => {
+const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLineups, setShowImportLineupDialog }) => {
 
   const weeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 
@@ -174,7 +174,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
         <div className='table-header-wrapper'>
           <div className="pos-filter-wrapper">
             <div className='lineups-title'>
-              <h2>{capitalize(stateFilter)} Lineups</h2>
+              <h2>Upcoming Lineups</h2>
             </div>
             <div className="selectors">
               <select
@@ -246,21 +246,9 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                     <a className='download-btn' href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon' /></a>
                   )
                 }
-                {selectedLineups.length > 0 &&
-                  <Tooltip title="Delete">
-                    <button className='lineup-options-btn' onClick={() => setShowDeleteLineupsDialog(true)}><BiTrash className='trash-icon' /></button>
-                  </Tooltip>
-                }
-                {stateFilter === "upcoming" && 
-                  <Tooltip title="Create">
-                    <Link to='/upcoming' className='lineup-options-btn'><FaPlus className='add-icon' /></Link>
-                  </Tooltip>
-                }
-                {stateFilter === "past" && 
-                  <Tooltip title="Import">
-                    <button className='lineup-options-btn' onClick={() => setShowImportLineupDialog(true)}><AiOutlineImport className='icon' /></button>
-                  </Tooltip>
-                }
+                <Tooltip title="Create">
+                  <Link to='/upcoming' className='lineup-options-btn'><FaPlus className='add-icon' /></Link>
+                </Tooltip>
                 {selectedLineups.length > 0 &&
                   <span className="selected-counter">{selectedLineups.length} Selected</span>
                 }
@@ -283,10 +271,6 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               <th className='sortable-col' onClick={() => changeSortColumn("startTime")}>
                 Date {sortColumn === "startTime" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
               <th>Tags</th>
-              {/* <th className='sortable-col' onClick={() => changeSortColumn("salary")}>
-                Salary {sortColumn === "salary" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
-              <th className='sortable-col' onClick={() => changeSortColumn("projectedPoints")}>
-                Proj. Pts {sortColumn === "projectedPoints" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th> */}
             </tr>
           </thead>
           {lineups.length > 0 ?
@@ -303,9 +287,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                   <>
                     <tr>
                       <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
-                      <td>
-                        {stateFilter === "past" ? <Link to={`/lineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`} className="view-lineup-btn">View</Link>
-                          : <Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`} className="view-lineup-btn">Edit</Link>}</td>
+                      <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`} className="view-lineup-btn">Edit</Link></td>
                       <td>{capitalize(lineup["site"])}</td>
                       <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</td>
                       <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
@@ -331,7 +313,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               </tbody>
             : <tbody>
               <tr>
-                <td>No {stateFilter} Lineups</td>
+                <td>No Upcoming Lineups</td>
               </tr>
             </tbody>
           }

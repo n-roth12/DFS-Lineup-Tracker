@@ -1,0 +1,21 @@
+.please-login {
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .please-login-inner {
+        background-color: white;
+        border: 1px solid var(--grey-5);
+        box-shadow: var(--box-shadow-1);
+        max-width: 90vw;
+        padding: 30px 30px 30px 30px;
+        border-radius: 6px;
+
+        p {
+            text-align: center;
+            margin: auto;
+            font-size: 14pt
+        }
+    }
+}
