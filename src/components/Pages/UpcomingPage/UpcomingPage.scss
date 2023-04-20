@@ -130,25 +130,13 @@
 						border-right: 1px solid gray;
 					}
 				}
-				.header-labels th:hover {
-					cursor: pointer;
-					background-color: var(--grey-2);
-				}
-				th {
-					transition: all 0.1s;
-				}
-				.header-labels .selected {
-					background-color: var(--grey-2);
-					border: None;
-					outline: None;
-				}
 				.table-header {
 					background-color: #d3d3d3;
 					border-top: none;
 				}
 				tbody {
 					tr:hover {
-						background-color: #d5d8dc;
+						background-color: var(--cool-grey-2);
 					}
 					tr {
 						transition: all 0.1s;

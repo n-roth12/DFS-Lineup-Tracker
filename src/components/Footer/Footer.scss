@@ -1,7 +1,7 @@
 .footer {
 	padding: 20px;
 	margin-top: 50px;
-	background-color: #d3d3d3;
+	background-color: var(--cool-grey-8);
 	width: 100%;
 
 	.footer-inner {
@@ -12,6 +12,7 @@
 
 		h3 {
 			font-size: 14pt;
+			color: white;
 		}
 
 		.footer-links {
@@ -20,6 +21,10 @@
 
 			.player-link {
 				margin: 10px;
+				color: var(--cool-grey-2)
+			}
+			.player-link:hover {
+				text-decoration: underline;
 			}
 		}
 	}

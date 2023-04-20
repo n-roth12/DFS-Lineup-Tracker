@@ -68,7 +68,7 @@
 }
 
 .lineups-table tbody tr:nth-child(even) {
-	background-color: var(--grey-2);
+	background-color: var(--grey-1);
 }
 
 .lineups-table tr:first-child {
@@ -88,7 +88,6 @@
 	padding: 10px;
 	text-align: center;
 	font-size: 10pt;
-	// border-bottom: 1px solid var(--grey-4);
 }
 
 .graphs-wrapper {
