@@ -109,16 +109,16 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 				onClose={() => setShowCreateLineupDialog(false)} draftGroup={dialogDraftGroup} draftGroupLineups={dialogDraftGroupLineups} />
 			{isGuest ?
 				<PleaseLogin message={"save and edit lineups."} />
-			:
-			<>
-			{!loadingLineups && lineups ?
-				<div className='container'>
-					<ImportLineupsDialog showImportDialog={showImportDialog} onClose={closeImportDialog} />
+				:
+				<>
+					{!loadingLineups && lineups ?
+						<>
+							<ImportLineupsDialog showImportDialog={showImportDialog} onClose={closeImportDialog} />
 
-					<DeleteLineupsDialog showDeleteLineupsDialog={showDeleteLineupsDialog}
-						onClose={() => setShowDeleteLineupsDialog(false)}
-						lineupsToDelete={selectedLineups}
-						deleteLineups={() => deleteSelectedLineups(selectedLineups)} />
+							<DeleteLineupsDialog showDeleteLineupsDialog={showDeleteLineupsDialog}
+								onClose={() => setShowDeleteLineupsDialog(false)}
+								lineupsToDelete={selectedLineups}
+								deleteLineups={() => deleteSelectedLineups(selectedLineups)} />
 							<LineupsTable
 								selectedLineups={selectedLineups}
 								setSelectedLineups={setSelectedLineups}
@@ -127,14 +127,14 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 									return Date.parse(lineup["startTime"].split("T")[0]) > Date.parse(new Date("2022-12-30T06:00:00"))
 								}) : []}
 							/>
-				</div>
-				:
-				<div className="loading-screen">
-					<h3><Roller /></h3>
-				</div>
+						</>
+						:
+						<div className="loading-screen">
+							<h3><Roller /></h3>
+						</div>
+					}
+				</>
 			}
-			</>
-}
 		</div>
 	)
 }

@@ -226,7 +226,8 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
         </div>
         <table className="lineups-table">
           <thead>
-            <div className='lineup-wrapper-header'>
+            <tr className='lineup-wrapper-header'>
+              <th colSpan={5} className="options-row" >
               <div className='lineup-options-btns'>
                 {!selectedLineups.length > 0 ?
                   <Tooltip title="Select">
@@ -262,14 +263,13 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                   </select>
                   <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
               </div>
-            </div>
+              </th>
+            </tr>
             <tr>
               <th></th>
               <th></th>
               <th>Site</th>
               <th>Slate</th>
-              <th className='sortable-col' onClick={() => changeSortColumn("startTime")}>
-                Date {sortColumn === "startTime" && (reverseSort ? <FaAngleUp /> : <FaAngleDown />)}</th>
               <th>Tags</th>
             </tr>
           </thead>
@@ -289,10 +289,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                       <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
                       <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`} className="view-lineup-btn">Edit</Link></td>
                       <td>{capitalize(lineup["site"])}</td>
-                      <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"}</td>
-                      <td>{lineup["startTime"].split("T")[0]} @ {lineup["startTime"].split("T")[1].split(".")[0]}</td>
-                      {/* <td>${lineup["salary"] ? lineup["salary"] : 0}{lineup["salaryCap"] ? ` / ${lineup["salaryCap"]}` : ""}</td>
-                      <td>{lineup["projectedPoints"] ? lineup["projectedPoints"] : 0}</td> */}
+                      <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"} ({lineup["startTime"].split("T")[0]})</td>
                       <td className='tag-col'>
                         <div className='tags-wrapper'>
                           {lineup["tags"] && lineup["tags"].map((tag) =>
