@@ -3,7 +3,6 @@ import './Navbar.scss'
 import UpperNav from './UpperNav/UpperNav'
 import LowerNav from './LowerNav/LowerNav'
 import MobileNav from './MobileNav/MobileNav'
-import { fallDown as Menu } from "react-burger-menu"
 import { Link, useNavigate } from 'react-router-dom'
 
 const Navbar = ({ alertMessage, closeAlertMessage, alertColor }) => {

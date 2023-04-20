@@ -2,12 +2,18 @@
     .content {
         background-color: var(--grey-3);
         max-height: 400px;
+        display: flex;
+        justify-content: space-around;
+
         .content-inner {
             display: flex;
             flex-direction: row;
+            flex-wrap: wrap;
+
             .games {
                 width: fit-content;
-                margin-right: 20px;
+                margin: auto;
+
                 h3 {
                     padding-bottom: 10px;
                     padding-top: 10px;
@@ -36,7 +42,7 @@
                 }
             }
             .user-lineups {
-                width: fill;
+                margin: auto;
                 h3 {
                     padding: 10px;
                 }
