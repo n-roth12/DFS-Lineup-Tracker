@@ -1,8 +1,5 @@
-.nav-outer {
-	// position: fd;
-	// top: 0;
-	// width: 100%;
-	// z-index: 102;
-	// position: relative;
-	// height: 100%px;
+@media (max-width: 499px) {
+	.desktop-nav {
+		display: None;
+	}
 }

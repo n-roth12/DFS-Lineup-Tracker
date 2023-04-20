@@ -10,7 +10,7 @@ const Footer = () => {
 			</div>
 			<div className='footer-links'>
 				<Link className='player-link' to={`/terms`}>Terms</Link>
-				<Link className='player-link' to={`/feedback`}>Contact</Link>
+				<Link className='player-link' to={`/contact`}>Contact</Link>
 			</div>
     	</div>
     </div>

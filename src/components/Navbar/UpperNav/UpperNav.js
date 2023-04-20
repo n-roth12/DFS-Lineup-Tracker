@@ -35,7 +35,7 @@ const UpperNav = () => {
               <div className={`${!showProfileDropdown ? "hidden" : "dropdown-content"}`}>
                 <a href="/profile">Profile</a>
                 <a href="/feedback">Feedback</a>
-                <a href="/login" onClick={logout}>Logout</a>
+                <a href="" onClick={logout}>Logout</a>
               </div>
             </div>
             :
