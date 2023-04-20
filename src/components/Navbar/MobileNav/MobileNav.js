@@ -36,7 +36,7 @@ const MobileNav = () => {
         </div>
       </nav>
 
-      <div className={menuClass}>
+      <div className={menuClass} onClick={updateMenu}>
         <Link className='nav-link' to={`/lineups`}>Lineups <FaAngleRight /></Link>
         <Link className='nav-link' to={`/upcoming`}>Upcoming <FaAngleRight /></Link>
         <Link className='nav-link' to={`/history`}>Players <FaAngleRight /></Link>
