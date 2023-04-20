@@ -57,7 +57,7 @@ const PlayersTable = ({ players, weekSearch, selectedWeek, selectedYear }) => {
             <button className="search-btn" type="button" onClick={() => weekSearch(selectedWeek, selectedYear)}><FaSearch /></button>
           </div>
       </div>
-      <table className="lineups-table">
+      <table className="lineups-table players-table">
         {posFilter !== "DST" ? 
         <>
           <thead>
