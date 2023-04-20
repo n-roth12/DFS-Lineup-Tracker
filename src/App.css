@@ -13,7 +13,7 @@
 }
 
 body {
-  background-color: var(--white-1);
+  background-color: var(--cool-grey-8);
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
 }
@@ -92,6 +92,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: var(--white-1);
 }
 
 .page-wrapper-inner {
