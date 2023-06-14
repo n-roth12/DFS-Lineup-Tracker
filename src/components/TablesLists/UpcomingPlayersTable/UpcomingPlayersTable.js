@@ -16,7 +16,7 @@ const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addP
         <th></th>
         <th></th>
         <th>Pos</th>
-        <th>Name</th>
+        <th className='name-col'>Name</th>
         <th>Salary <FaArrowUp /></th>
         <th>Game</th>
         <th>OPRK</th>

@@ -2,8 +2,6 @@
     .content {
         background-color: var(--grey-3);
         max-height: 400px;
-        display: flex;
-        justify-content: space-around;
 
         .content-inner {
             display: flex;
@@ -11,7 +9,6 @@
             flex-wrap: wrap;
 
             .games {
-                width: fit-content;
                 margin: auto;
 
                 h3 {
@@ -42,14 +39,18 @@
                 }
             }
             .user-lineups {
-                margin: auto;
+                margin-left: auto;
+                margin-right: auto;
+                
                 h3 {
                     padding: 10px;
                 }
                 .lineups-table {
                     margin: 0;
+
                     thead {
                         font-size: 11pt;
+
                         th:first-child {
                             width: 30px;
                             margin: 0;
@@ -75,6 +76,7 @@
                     background-color: white;
                     margin-bottom: 5px;
                     width: 100%;
+
                     .lineup-link {
                         color: var(--btn-blue);
                         text-decoration: none;
@@ -135,6 +137,7 @@
             height: 100%;
             align-items: center;
             margin-right: 10px;
+
             .export-icon {
                 margin-left: 5px;
             }
@@ -148,6 +151,7 @@
             align-items: center;
             margin-right: 15px;
             margin-bottom: 0;
+
             .trash-icon {
                 margin-left: 5px;
             }
@@ -159,6 +163,7 @@
             align-items: center;
             margin-right: 10px;
             font-size: 12pt;
+
             .download-icon {
                 margin-left: 5px;
             }

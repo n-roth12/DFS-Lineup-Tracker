@@ -5,7 +5,6 @@ const EmptyPlayer = ({ position, beingEdited, toggleEditingPos }) => {
   return (
     <div className={`empty-player player ${beingEdited ? 'selected': ''}`} onClick={() => {toggleEditingPos(position)}}>
       <div className='playerImage'>
-        <p>{position.toUpperCase()}</p>
       </div>
       <div className='player-info'>
         <button className="add-player-btn"><FaPlus /> Add {position}</button>

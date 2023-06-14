@@ -143,9 +143,8 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
                     <tr>
                       <th><input type="checkbox" checked={selectedLineups.length === lineups.length} onChange={toggleSelectAllLineups} /></th>
                       <th></th>
-                      <th>Title</th>
                       <th>Salary</th>
-                      <th>Proj. Pts</th>
+                      <th>Projection</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -157,15 +156,13 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
                           <tr className='user-lineup'>
                             <input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input>
                             <td><Link className='lineup-link' to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`}>Edit <FaAngleRight /></Link></td>
-                            <td>Untitled</td>
-                            <td>{lineup["salary"]}</td>
-                            <td>{lineup["projectedPoints"]}</td>
+                            <td>${lineup["salary"]}</td>
+                            <td>{lineup["projectedPoints"]} PTS</td>
                           </tr>
                         )
                         :
                         <tr><td colSpan={5}><h3>No Lineups Created</h3></td></tr>
                     }
-
                   </tbody>
                 </table>
               </div>
@@ -181,7 +178,6 @@ const CreateLineupDialog = ({ showCreateLineupDialog, onClose, draftGroup }) => 
                 <button className='export-btn' onClick={exportLineups}>Export CSV <BiExport className='export-icon' /></button>
               </>
             }
-            <Link className='create-btn' to={`/compareLineups/${draftGroup["draftGroupId"]}`}>Compare</Link>
             <button className="create-btn" onClick={() => createLineupWrapper()}>New Lineup</button>
           </DialogActions>
         </>
