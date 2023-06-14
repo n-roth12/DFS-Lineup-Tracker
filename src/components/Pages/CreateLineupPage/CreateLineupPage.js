@@ -343,7 +343,6 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const addToLineup = (pos, player) => {
-    console.log(pos, player)
     if (pos) {
       var lineupCopy = { ...lineup }
       lineupCopy[pos] = player
@@ -488,7 +487,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const applyOptimizedLineup = (generatedLineup) => {
     var result = {}
     generatedLineup.map((player) => {
-      result[player["position"]] = Object.keys(player["player"]).length > 0 ? player["player"] : null
+      result[player["pos"].toLowerCase()] = Object.keys(player["player"]).length > 0 ? player["player"] : null
     })
     setLineup(result)
     setShowGenerateLineupDialog(false)
@@ -535,16 +534,12 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     <div className="createLineupPage page">
       {loading === false ? <>
         {draftGroup && draftGroup["games"] &&
-          <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog}
-            onClose={() => setShowCreateLineupDialog(false)}
-            draftGroup={draftGroup} draftGroupLineups={draftGroupLineups} />
-        }
-        {draftGroup && draftGroup["games"] &&
           <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog}
             onClose={() => setShowGenerateLineupDialog(false)}
             draftGroupId={draftGroupId}
             games={draftGroup["games"]}
-            onApply={applyOptimizedLineup} />
+            onApply={applyOptimizedLineup}
+            currentLineup={lineup} />
         }
         <PlayerDialog showPlayerDialog={showPlayerDialog}
           onClose={() => { setPlayerDialogContent({}); setShowPlayerDialog(false) }}
@@ -598,7 +593,6 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                 </div>
                 <div className='header-options'>
                   <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
-                  <button className="generate-btn" onClick={() => setShowCreateLineupDialog(true)}>Compare</button>
                   {file === null ?
                     <button className='generate-btn' onClick={exportLineup}>Export</button>
                     :

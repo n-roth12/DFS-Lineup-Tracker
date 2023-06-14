@@ -14,10 +14,6 @@ const UpperNav = () => {
     navigate(`/login`)
   }
 
-  const profile = () => {
-    navigate('/profile')
-  }
-
   const toggleDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown)
   }
@@ -33,7 +29,6 @@ const UpperNav = () => {
             <div className='dropdown' onClick={() => setShowProfileDropdown(true)} onMouseLeave={() => setShowProfileDropdown(false)}>
               <FaUserAlt className='user-icon dropbtn' />
               <div className={`${!showProfileDropdown ? "hidden" : "dropdown-content"}`}>
-                <a href="/profile">Profile</a>
                 <a href="/feedback">Feedback</a>
                 <a href="" onClick={logout}>Logout</a>
               </div>

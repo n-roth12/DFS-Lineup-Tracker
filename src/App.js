@@ -177,18 +177,6 @@ function App() {
               </>
             } />
 
-            <Route path="profile" element={
-              <>
-                <ScrollToTop />
-                <div className='page-wrapper'>
-                  <Navbar />
-                  <div className='page-wrapper-inner'>
-                    <ProfilePage />
-                  </div>
-                </div>
-              </>
-            } />
-
           </Route>
 
           <Route path="*" element={

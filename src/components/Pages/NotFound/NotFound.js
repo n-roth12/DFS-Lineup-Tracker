@@ -4,7 +4,8 @@ import './NotFound.scss'
 const NotFound = () => {
   return (
     <div className='not-found'>
-        <h1>Page not found!</h1>
+        <h1>404</h1>
+        <h2>Page not found!</h2>
         <p>Try these destinations:</p>
         <div className='not-found-links'>
             <Link className='player-link' to={`/login`}>Login</Link>

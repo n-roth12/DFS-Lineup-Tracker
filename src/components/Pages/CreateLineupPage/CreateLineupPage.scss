@@ -388,6 +388,11 @@
 					cursor: pointer;
 				}
 
+				tr {
+					display: flex;
+					flex-direction: row;
+				}
+
 				.add-icon-outer {
 
 					// background-color: var(--btn-blue);

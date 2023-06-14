@@ -6,9 +6,9 @@ import './GenerateLineupDialog.scss'
 import GeneratedLineup from '../../Pages/SingleLineupPage/GeneratedLineup/GeneratedLineup'
 import { api_url } from '../../../Constants'
 
-const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId, games, onApply }) => {
+const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId, games, onApply, currentLineup }) => {
 
-  const [generatedLineup, setGeneratedLineup] = useState()
+  const [generatedLineup, setGeneratedLineup] = useState([])
   const [eligibleFlexPositions, setEligibleFlexPositions] = useState(new Set(["RB", "WR", "TE"]))
   const [gameToStack, setGameToStack] = useState([])
   const [numberToStack, setNumberToStack] = useState()
@@ -17,11 +17,33 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
   const [replaceEntireLineup, setReplaceEntireLineup] = useState("full")
   const [includeHiddenPlayers, setIncludeHiddenPlayers] = useState(false)
   const [loadingLineup, setLoadingLineup] = useState(false)
+  const [lineupSalary, setLineupSalary] = useState()
+  const [lineupOrder, setLineupOrder] = useState(["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"])
   const [teams, setTeams] = useState([])
 
   useEffect(() => {
     getTeams()
+    getOrderedPositions()
   }, [])
+
+  useEffect(() => {
+    var salary = 0
+    if (generatedLineup?.length > 0) {
+      generatedLineup.map(player => {
+        salary += player?.player?.salary || 0
+      })
+    }
+    setLineupSalary(salary)
+  }, [generatedLineup])
+
+  const getOrderedPositions = () => {
+    var result = []
+    currentLineup && Object.keys(currentLineup).length > 0 && lineupOrder.length > 0 &&
+      lineupOrder.map(position => {
+        result.push({ "pos": position, "player": currentLineup[position.toLowerCase()] })
+      })
+    setGeneratedLineup(result)
+  }
 
   const generateLineup = async () => {
     setLoadingLineup(true)
@@ -95,11 +117,16 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
     setReplaceEntireLineup(e.target.value)
   }
 
+  const onCloseWrapper = () => {
+    onClose()
+    getOrderedPositions()
+  }
+
   return (
     <Dialog open={showGenerateLineupDialog} className="generate-lineup-dialog" maxWidth="md" >
       <DialogTitle className="title">
           <div className='title-inner'>
-            <h2>Optimize Lineup</h2> <FaTimes className='close-btn' onClick={onClose}/>
+            <h2>Optimize Lineup</h2> <FaTimes className='close-btn' onClick={onCloseWrapper}/>
           </div>
       </DialogTitle>
       <DialogContent className='content'>
@@ -192,8 +219,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
           <div className='generated-lineup-wrapper'>
             <h3>Lineup</h3>
             <div className='generated-lineup-details'>
-              <p>Salary: </p>
-              <p>Proj PTS</p>
+              <p>Salary: {lineupSalary}</p>
             </div>
             {!loadingLineup ?
               <GeneratedLineup lineup={generatedLineup} onDelete={deletePlayerFromLineup} />
