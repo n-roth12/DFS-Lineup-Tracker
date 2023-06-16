@@ -43,7 +43,7 @@ def login_user():
 
 		return jsonify({"Error": "Incorrect password"}), 403
 
-	return jsonify({"Error": "User not found"}), 404
+	return jsonify({"Error": "User not found"}), 400
 
 @users_blueprint.route('/lineups', methods=['GET'])
 @token_required

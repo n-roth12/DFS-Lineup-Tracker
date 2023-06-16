@@ -281,13 +281,14 @@ def generate_lineup(current_user):
 	existing_lineup = data.get("existingLineup") if data.get("existingLineup") else []
 	replace_entire_lineup = data.get("replaceEntireLineup")
 
-	if replace_entire_lineup == "full":
-		existing_lineup = []
-
 	draftables = MongoController.getDraftablesByDraftGroupId(draftGroupId)
 
-	lineup = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
-		site=draftables.get("site"), draftables=draftables.get("draftables")).build()
+	if replace_entire_lineup == "true":
+		lineup = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"], 
+			site=draftables.get("site"), draftables=draftables.get("draftables")).build()
+	else:
+		lineup = LineupBuilder(positions=["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"],
+			site=draftables.get("site"), draftables=draftables.get("draftables")).fill(Lineup(lineup=existing_lineup, site=draftables.get("site")))
 
 	result = convert_lineup_to_list(lineup=lineup.lineup, site=lineup.site)
 	return jsonify({ "lineup": result }), 200

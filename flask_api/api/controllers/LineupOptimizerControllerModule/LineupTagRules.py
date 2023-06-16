@@ -12,7 +12,7 @@ class LineupTagRules:
 
     def check_punt_rule(lineup: Lineup) -> tuple[bool, dict]:
         for player in lineup.lineup.values():
-            if player.get("salary") < DRAFTKINGS_PUNT_PRICE:
+            if player and player.get("salary") < DRAFTKINGS_PUNT_PRICE:
                 return True, player.get("position")
         return False, None
 
@@ -25,7 +25,7 @@ class LineupTagRules:
                 else:
                     position_count[player["position"]] = 1
         for position in composition.keys():
-            if composition[position] != position_count[position]:
+            if position not in position_count or composition[position] != position_count[position]:
                 return False
         return True
 
