@@ -29,15 +29,6 @@ const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFil
 
   return (
     <div>
-      {state === "past" &&
-        <PastPlayersTable 
-          players={applyFilters(players)}
-          canAddPos={canAddPos}
-          editingPos={editingPos}
-          playerWrapper={playerWrapper}
-          addToLineup={addToLineup}
-        />
-      }
       {state === "upcoming" &&
         <UpcomingPlayersTable 
           players={applyFilters(players)}

@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.25.0",
     "bootstrap": "^5.1.3",
+    "dotenv": "^16.1.4",
     "react": "^17.0.2",
     "react-awesome-spinners": "^1.3.1",
     "react-bootstrap": "^2.0.3",
@@ -24,6 +25,7 @@
     "recharts": "^2.1.8",
     "redis-cli": "^2.1.2",
     "sass": "^1.52.1",
+    "styled-components": "^6.0.0-rc.3",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -34,8 +36,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev-deploy": "aws s3 sync build/ s3://website-dfs-tracker",
-    "dev": "npm run build && npm run dev-deploy"
+    "dev": "aws s3 sync build/ s3://mainslater.com",
+    "dev-deploy": "npm run build && npm run dev"
   },
   "eslintConfig": {
     "extends": [

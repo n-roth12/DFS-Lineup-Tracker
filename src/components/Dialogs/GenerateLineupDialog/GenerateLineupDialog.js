@@ -14,7 +14,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
   const [numberToStack, setNumberToStack] = useState()
   const [teamToStack, setTeamToStack] = useState()
   const [activeStackOption, setActiveStackOption] = useState("team")
-  const [replaceEntireLineup, setReplaceEntireLineup] = useState("full")
+  const [replaceEntireLineup, setReplaceEntireLineup] = useState("true")
   const [includeHiddenPlayers, setIncludeHiddenPlayers] = useState(false)
   const [loadingLineup, setLoadingLineup] = useState(false)
   const [lineupSalary, setLineupSalary] = useState()
@@ -47,6 +47,10 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
 
   const generateLineup = async () => {
     setLoadingLineup(true)
+    var existingLineupDict = {}
+    generatedLineup.map(player => {
+      existingLineupDict[player["pos"]] = player["player"]
+    })
     const res = await fetch(`${api_url}/lineups/generate`, {
       method: 'POST',
       headers: {
@@ -54,7 +58,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
       },
       body: JSON.stringify({
         "draftGroupId": draftGroupId,
-        "existingLineup": generatedLineup,
+        "existingLineup": existingLineupDict,
         "eligibleFlexPositions": Array.from(eligibleFlexPositions),
         "replaceEntireLineup": replaceEntireLineup,
         "gameStack": Array.from(gameToStack),
@@ -152,10 +156,10 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
             </div>
             <div className='radios section'>
               <p>Replace:</p>
-              <input type="radio" checked={replaceEntireLineup === "full"} onChange={handleReplaceOptionChange} 
-                value="full" name="generate-option" /> Entire Lineup
-              <input type="radio" checked={replaceEntireLineup === "empty"} onChange={handleReplaceOptionChange} 
-                value="empty" name="generate-option" /> Empty Positions
+              <input type="radio" checked={replaceEntireLineup === "true"} onChange={handleReplaceOptionChange} 
+                value="true" name="generate-option" /> Entire Lineup
+              <input type="radio" checked={replaceEntireLineup === "false"} onChange={handleReplaceOptionChange} 
+                value="false" name="generate-option" /> Empty Positions
             </div>
             <div className='game-stacks section'>
               <p>Stack:</p>
