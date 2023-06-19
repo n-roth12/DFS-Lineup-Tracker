@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LineupsPage from './components/Pages/LineupsPage/LineupsPage'
@@ -13,7 +12,7 @@ import CompareLineupsPage from './components/Pages/CompareLineupsPage/CompareLin
 import ProfilePage from './components/Pages/ProfilePage/ProfilePage'
 import ContactPage from './components/Pages/ContactPage/ContactPage'
 import Navbar from './components/Navbar/Navbar'
-import './App.css'
+import './App.scss'
 import { ScrollToTop } from './ScrollToTop'
 import Footer from './components/Footer/Footer'
 import NotFound from './components/Pages/NotFound/NotFound';

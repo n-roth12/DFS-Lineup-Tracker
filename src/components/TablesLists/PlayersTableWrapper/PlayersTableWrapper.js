@@ -28,7 +28,7 @@ const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFil
   }
 
   return (
-    <div>
+    <>
       {state === "upcoming" &&
         <UpcomingPlayersTable 
           players={applyFilters(players)}
@@ -46,7 +46,7 @@ const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFil
           editingPos={editingPos}
         />
       }
-    </div>
+    </>
   )
 }
 

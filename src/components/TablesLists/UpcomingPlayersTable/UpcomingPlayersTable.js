@@ -2,15 +2,23 @@ import './UpcomingPlayersTable.scss'
 import { FaPlus, FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
 import { AiOutlineStar, AiOutlineMinusCircle } from 'react-icons/ai'
 import { BiBlock } from 'react-icons/bi'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import useResponsiveBreakpoints from '../../../useResponsiveBreakpoints'
 import { capitalize } from '@material-ui/core'
 
 const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addPlayerToHidden, playerWrapper, 
     hiddenIds, removePlayerFromFavorites, removePlayerFromHidden, stateFilter, editingPos, addToLineup, favoritesIds,
     changeStateFilter}) => {
 
+  const targetRef = useRef(null)
+  const size = useResponsiveBreakpoints(targetRef, [
+    { small: 600 },
+    { large: 800 }
+  ])
+  console.log(size)
+
   return (
-    <table className='upcoming-players-table lineups-table'>
+    <table className={`upcoming-players-table lineups-table ${size}`} ref={targetRef}>
       <thead>
         <th></th>
         <th></th>
@@ -19,8 +27,8 @@ const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addP
         <th className='name-col'>Name</th>
         <th>Salary <FaArrowUp /></th>
         <th>Game</th>
-        <th>OPRK</th>
-        <th>FPPG</th>
+        <th className='hide-small'>OPRK</th>
+        <th className='hide-small'>FPPG</th>
       </thead>
       <tbody>
         {players.length > 0 ? players.map((player, index) =>
@@ -70,14 +78,21 @@ const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addP
             <td>{player.position}</td>
             <td className='name-col player-name' onClick={() => playerWrapper(player)}>{player.displayName} {player.status !== "" && `(${player.status})`}</td>
             <td>${player.salary}</td>
-            <td><span className={player["team"] === player["game"]["homeTeam"] ? "bold" : ""}>{player["game"]["homeTeam"]}</span> @ <span className={player["team"] === player["game"]["awayTeam"] ? "bold" : ""}>{player["game"]["awayTeam"]}</span></td>
-            <td>{player["oprk"]}</td>
-            <td>{parseFloat(player["fppg"]).toFixed(2)}</td>
+            <td><span className={player["team"] === player["game"]["homeTeam"] ? "bold" : ""}>
+              {player["game"]["homeTeam"]}</span> @ <span className={player["team"] === player["game"]["awayTeam"] ? "bold" : ""}>
+              {player["game"]["awayTeam"]}</span>
+            </td>
+            <td className='hide-small'>{player["oprk"]}</td>
+            <td className='hide-small'>{parseFloat(player["fppg"]).toFixed(2)}</td>
           </tr>
         )
       :
         <tr className='empty-players-row'>
-          <td><button className='add-players-btn' onClick={() => changeStateFilter("all")}>Add Players to {capitalize(stateFilter)}</button></td>
+          <td>
+            <button className='add-players-btn' 
+              onClick={() => changeStateFilter("all")}>Add Players to {capitalize(stateFilter)}
+            </button>
+          </td>
         </tr>
       }
       </tbody>

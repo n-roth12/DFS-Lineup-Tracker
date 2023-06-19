@@ -1,12 +1,18 @@
 import LineupPlayerNew from './LineupPlayer/LineupPlayer'
 import EmptyPlayer from './EmptyPlayer/EmptyPlayer'
 import './Lineup.scss'
-import { useState, useEffect } from 'react'
+import useResponsiveBreakpoints from '../../../../useResponsiveBreakpoints'
+import { useState, useEffect, useRef } from 'react'
 
 const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, lineupWeek, lineupScore, onOpenDialog, toggleEditingPos, setPlayerDialogContent }) => {
   const [showPlayerDialog, setShowPlayerDialog] = useState(false)
   const [lineupOrder, setLineupOrder] = useState(["QB", "RB1", "RB2", "WR1", "WR2", "WR3", "TE", "FLEX", "DST"])
   const [orderedPositions, setOrderedPositions] = useState([])
+  const targetRef = useRef(null)
+  const size = useResponsiveBreakpoints(targetRef, [
+    { small: 400 },
+    { large: 600 }
+  ])
 
   useEffect(() => {
     if (lineup !== null && Object.keys(lineup).length > 0) {
@@ -21,7 +27,7 @@ const Lineup = ({ lineup, onDelete, onAdd, editingPos, cancelEdit, lineupYear, l
   }
 
   return (
-    <div className="lineup">
+    <div className={`lineup ${size}`} ref={targetRef}>
       {lineup && Object.keys(lineup).length > 0 && orderedPositions.length > 0 &&
         orderedPositions.map(position => 
           lineup[position] !== null ? 

@@ -1,19 +1,15 @@
 import { useState, useEffect } from 'react'
 import './CreateLineupPage.scss'
 import { useParams } from 'react-router-dom'
-import { FaPlus, FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
+import { FaSearch, FaTimes, FaArrowUp } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 import { BiDownload, BiBlock } from 'react-icons/bi'
-import { AiOutlineStar, AiFillStar, AiOutlineMinusCircle } from 'react-icons/ai'
-import PlayerLink from '../../Buttons/PlayerLink/PlayerLink'
 import Lineup from '../SingleLineupPage/Lineup/Lineup'
-import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
 import GenerateLineupDialog from '../../Dialogs/GenerateLineupDialog/GenerateLineupDialog'
 import RecommendedTagsDialog from '../../Dialogs/RecommendedTagsDialog/RecommendedTagsDialog'
 import PlayerDialog from '../../Dialogs/PlayerDialog/PlayerDialog'
 import { capitalize } from '@material-ui/core'
 import { Roller } from 'react-awesome-spinners'
-import GeneratedLineup from '../SingleLineupPage/GeneratedLineup/GeneratedLineup'
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
 import PlayersTableWrapper from '../../TablesLists/PlayersTableWrapper/PlayersTableWrapper'
 import { useNavigate } from 'react-router-dom'
@@ -23,13 +19,11 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   const { draftGroupId, lineupId } = useParams()
   const [draftables, setDraftables] = useState([])
-  const [activeOption, setActiveOption] = useState("custom")
   const [editingPos, setEditingPos] = useState()
   const [playerFilter, setPlayerFilter] = useState("")
   const [posFilter, setPosFilter] = useState(new Set())
   const [remainingSalary, setRemainingSalary] = useState()
   const [prevLineup, setPrevLineup] = useState({})
-  const [showCreateLineupDialog, setShowCreateLineupDialog] = useState(false)
   const [draftGroup, setDraftGroup] = useState()
   const [teamProjectedPoints, setTeamProjectedPoints] = useState(0)
   const [draftGroupLineups, setDraftGroupLineups] = useState([])
@@ -39,8 +33,6 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const [showGenerateLineupDialog, setShowGenerateLineupDialog] = useState(false)
   const [teamsFilter, setTeamsFilter] = useState([])
   const [loading, setLoading] = useState(true)
-  const [playerTableSort, setPlayerTableSort] = useState("salary")
-  const [isPlayerTableSortDesc, setIsPlayerTableSortDesc] = useState(true)
   const [hasChanges, setHasChanges] = useState(false)
   const [file, setFile] = useState(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -125,7 +117,6 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   useEffect(() => {
-    setShowCreateLineupDialog(false)
     getDraftables()
     getLineup()
     getDraftGroup()
@@ -561,22 +552,22 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
             <div className="header-inner">
               <div className='header-upper'>
                 <div className="header-label">
-                  <p className="site">{capitalize(draftGroup["site"])} Lineup</p>
+                  <h2 className="site">{capitalize(draftGroup["site"])} Lineup</h2>
                 </div>
               </div>
               <div className='header-lower'>
                 <div className='header-details'>
                   <div className='info-block'>
-                    <p className="date">Slate</p>
-                    <p><strong>{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}</strong></p>
+                    <p className="label">Slate</p>
+                    <p className='value'>{draftGroup["startTimeSuffix"].replace("(", " ").replace(")", "")}</p>
                   </div>
                   <div className='info-block'>
-                    <p>Games</p>
-                    <p><strong>{draftGroup["games"].length}</strong></p>
+                    <p className='label'>Games</p>
+                    <p className='value'>{draftGroup["games"].length}</p>
                   </div>
                   <div className='info-block'>
-                    <p>Start Time:</p>
-                    <p><strong>{new Date(`${draftGroup["startTime"]}`).toDateString()}</strong></p>
+                    <p className='label'>Start Time:</p>
+                    <p className='value'>{new Date(`${draftGroup["startTime"]}`).toDateString()}</p>
                   </div>
                   <div className='info-block'>
                     <p onClick={() => setShowRecommendedTagsDialog(true)} className='link'>Tags:</p>
@@ -587,18 +578,18 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                         )}
                       </div>
                       :
-                      <p><strong>None</strong></p>
+                      <p className='value'>None</p>
                     }
                   </div>
                 </div>
                 <div className='header-options'>
-                  <button onClick={() => setShowGenerateLineupDialog(true)} className="generate-btn">Optimize</button>
+                  <button onClick={() => setShowGenerateLineupDialog(true)} className="header-options-btn">Optimize</button>
                   {file === null ?
-                    <button className='generate-btn' onClick={exportLineup}>Export</button>
+                    <button className='header-options-btn' onClick={exportLineup}>Export</button>
                     :
-                    <a className='generate-btn' href={file} download={`lineups_${draftGroup["draftGroupId"]}.csv`}>Download<BiDownload className='download-icon' /></a>
+                    <a className='header-options-btn' href={file} download={`lineups_${draftGroup["draftGroupId"]}.csv`}>Download<BiDownload className='download-icon' /></a>
                   }
-                  <button className='generate-btn generate-btn-delete' onClick={() => setShowDeleteDialog(true)}>Delete</button>
+                  <button className='header-options-btn header-options-btn-red' onClick={() => setShowDeleteDialog(true)}>Delete</button>
                 </div>
               </div>
             </div>
@@ -607,7 +598,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
         <div className='createLineupPage-inner'>
           <div className='lineup-outer'>
             <div className='title'>
-              <h2>Lineup</h2>
+              <h3>Lineup</h3>
             </div>
             <Lineup
               lineup={lineup}
@@ -649,45 +640,38 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                 </div>
               }
               <div className='players-table-header'>
-                <div className='players-table-header-upper'>
-                  {/* <h2>Players</h2> */}
+                <div className="pos-filter-wrapper">
+                  <div className='pos-filter-wrapper-inner'>
+                    <button
+                      className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`}
+                      onClick={() => setPosFilter(new Set())}>All
+                    </button>
+                    <button
+                      className={`filter-btn${posFilter.has("qb") ? "-active" : ""}`}
+                      onClick={() => togglePosFilter("qb")}>QB
+                    </button>
+                    <button
+                      className={`filter-btn${posFilter.has("rb") ? "-active" : ""}`}
+                      onClick={() => togglePosFilter("rb")}>RB
+                    </button>
+                    <button
+                      className={`filter-btn${posFilter.has("wr") ? "-active" : ""}`}
+                      onClick={() => togglePosFilter("wr")}>WR
+                    </button>
+                    <button
+                      className={`filter-btn${posFilter.has("te") ? "-active" : ""}`}
+                      onClick={() => togglePosFilter("te")}>TE
+                    </button>
+                    <button
+                      className={`filter-btn${posFilter.has("dst") ? "-active" : ""}`}
+                      onClick={() => togglePosFilter("dst")}>DST
+                    </button>
+                  </div>
                 </div>
-                <div className='players-table-header-lower'>
-                  <div className="pos-filter-wrapper">
-                    <div className='pos-filter-wrapper-inner'>
-                      <button
-                        className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`}
-                        onClick={() => setPosFilter(new Set())}>All
-                      </button>
-                      <button
-                        className={`filter-btn${posFilter.has("qb") ? "-active" : ""}`}
-                        onClick={() => togglePosFilter("qb")}>QB
-                      </button>
-                      <button
-                        className={`filter-btn${posFilter.has("rb") ? "-active" : ""}`}
-                        onClick={() => togglePosFilter("rb")}>RB
-                      </button>
-                      <button
-                        className={`filter-btn${posFilter.has("wr") ? "-active" : ""}`}
-                        onClick={() => togglePosFilter("wr")}>WR
-                      </button>
-                      <button
-                        className={`filter-btn${posFilter.has("te") ? "-active" : ""}`}
-                        onClick={() => togglePosFilter("te")}>TE
-                      </button>
-                      <button
-                        className={`filter-btn${posFilter.has("dst") ? "-active" : ""}`}
-                        onClick={() => togglePosFilter("dst")}>DST
-                      </button>
-                    </div>
-                  </div>
-                  <div className="player-search">
-                    <div>
-                      <input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
-                        onChange={(e) => setPlayerFilter(e.target.value)}></input>
-                    </div>
-                    <button className="search-btn" type="button"><FaSearch /></button>
-                  </div>
+                <div className="player-search">
+                  <FaSearch />
+                  <input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
+                    onChange={(e) => setPlayerFilter(e.target.value)}></input>
                 </div>
               </div>
               <PlayersTableWrapper
@@ -715,18 +699,18 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
         </div>
         <div className='fixed-bottom-footer'>
           <div className='fixed-bottom-footer-inner'>
-            <div className='header-details'>
+            <div className='footer-details'>
               <div className='info-block'>
-                <p>Remaining Salary</p>
-                <p><strong>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</strong></p>
+                <p className='label'>Remaining Salary</p>
+                <p className='value'>{remainingSalary > 0 ? "$" + remainingSalary : "-$" + Math.abs(remainingSalary)}</p>
               </div>
               <div className='info-block'>
-                <p>Rem. Salary / Player </p>
-                <p><strong>{getRemainingSalaryPerPlayer()}</strong></p>
+                <p className='label'>Rem. Salary / Player </p>
+                <p className='value'>{getRemainingSalaryPerPlayer()}</p>
               </div>
               <div className='info-block'>
-                <p>Proj. Points</p>
-                <p><strong>{teamProjectedPoints}</strong></p>
+                <p className='label'>Proj. Points</p>
+                <p className='value'>{teamProjectedPoints}</p>
               </div>
             </div>
             <div className='lineup-btns'>

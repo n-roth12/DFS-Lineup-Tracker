@@ -3,16 +3,20 @@
     max-width: 450px;
     height: fit-content;
     border-radius: 8px;
-    margin: 4px;
+    margin: auto;
+
     .player:first-child {
         border-radius: 8px 8px 0px 0px;
     }
+
     .player:last-child {
         border-radius: 0px 0px 8px 8px;
     }
+
     :last-child {
         border: None;
     }
+
     .selected {
         outline: 2px solid var(--grey-5);
         border-bottom: 1px solid transparent;

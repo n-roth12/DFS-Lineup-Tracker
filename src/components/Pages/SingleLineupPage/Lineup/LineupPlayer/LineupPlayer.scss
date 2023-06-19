@@ -5,40 +5,21 @@
     display: flex;
     flex-direction: row;
     height: 80px;
+    min-width: 400px;
 
     .playerImage {
         align-self: center;
-        width: 50px;
         display: flex;
         flex-direction: column;
-        margin-right: 15px;
-        padding-top: 5px;
+        padding-top: 0.2rem;
+        flex: 1;
 
         p {
-            margin-left: 10px;
+            font-size: 0.8rem;
             margin-top: auto;
             margin-bottom: auto;
             text-align: center;
             font-weight: 600;
-            font-size: 10pt;
-        }
-    }
-
-    .positionAndNumber {
-        width: 60px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-
-        .playerPosition {
-            font-size: 12pt;
-            font-weight: 600;
-        }
-
-        .playerNumber {
-            font-size: 9pt;
         }
     }
 
@@ -47,18 +28,20 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        margin: 0px 0px 0px 15px;
-        width: 60px;
         user-select: None;
+        flex: 1;
 
         .add-icon {
+            margin-top: 0.2rem;
+            font-size: 1.5rem;
             color: var(--btn-blue);
-            font-size: 20pt;
             user-select: None;
         }
+
         .delete-icon {
+            margin-top: 0.2rem;
+            font-size: 1.3rem;
             color: red;
-            font-size: 15pt;
             user-select: None;
         }
     }
@@ -66,54 +49,100 @@
     .name-and-info {
         display: flex;
         flex-direction: column;
-        flex: 1;
+        flex: 4;
+    }
 
-        .playerInfo {
+    .playerInfo {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        height: 60%;
+    }
+
+    .infoBlock {
+        display: flex;
+        justify-content: center;
+
+        p {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-            height: 60%;
-    
-            .infoBlock {
-                display: flex;
-                justify-content: center;
-    
-                p {
-                    display: flex;
-                    flex-direction: column;
-                    height: 100%;
-                    justify-content: center;
-                    align-items: center;
-    
-                    .value {
-                        font-size: 10pt;
-                        font-weight: 500;
-                    }
-    
-                    .label {
-                        font-size: 8pt;
-                        color: gray;
-                    }
-                }
+            flex-direction: column;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+
+            .value {
+                font-weight: 500;
+                font-size: 0.8rem;
             }
-        }
 
-        .playerName {
-            display: flex;
-            height: 40%;
-            cursor: pointer;
-    
-            p {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                font-size: 11pt;
-                color: blue;
-                font-weight: 600;
-                font-family: var(--nunito);
+            .label {
+                font-size: 0.7rem;
+                color: gray;
             }
         }
     }
+
+    .playerName {
+        display: flex;
+        height: 40%;
+        cursor: pointer;
+
+        p {
+            font-size: 0.9rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            color: blue;
+            font-weight: 600;
+            font-family: var(--nunito);
+        }
+    }
 }
+
+// .lineup.small .lineupPlayer {
+
+//     .playerImage p {
+//         font-size: 9pt;
+//     }
+
+//     .playerName {
+//         display: flex;
+//         height: 40%;
+//         cursor: pointer;
+
+//         p {
+//             font-size: 11pt;
+//             height: 100%;
+//             display: flex;
+//             flex-direction: column;
+//             justify-content: flex-end;
+//             color: blue;
+//             font-weight: 600;
+//             font-family: var(--nunito);
+//         }
+//     }
+//     .infoBlock {
+//         display: flex;
+//         justify-content: center;
+
+//         p {
+//             display: flex;
+//             flex-direction: column;
+//             height: 100%;
+//             justify-content: center;
+//             align-items: center;
+
+//             .value {
+//                 font-weight: 500;
+//                 font-size: 8pt;
+//             }
+
+//             .label {
+//                 font-size: 7pt;
+//                 color: gray;
+//             }
+//         }
+//     }
+// }

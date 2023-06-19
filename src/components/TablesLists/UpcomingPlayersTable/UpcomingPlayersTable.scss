@@ -1,4 +1,171 @@
 .upcoming-players-table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+    border-radius: 6px 6px 6px 6px;
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    thead {
+        display: flex;
+        border-radius: 6px 6px 0px 0px;
+
+        .name-col {
+            flex: 5;
+        }
+    }
+
+    thead th,
+    tbody td {
+        padding: 0.7rem 0 0.7rem 0;
+        font-size: 0.8rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 3;
+    }
+
+    thead th {
+        font-weight: 600;
+    }
+
+    thead th:nth-child(1),
+    thead th:nth-child(2),
+    thead th:nth-child(3),
+    thead th:nth-child(4),
+    tbody td:nth-child(1),
+    tbody td:nth-child(2),
+    tbody td:nth-child(3),
+    tbody td:nth-child(4) {
+        flex: 1;
+    }
+
+    tbody {
+        // .favorite-icon {filter:drop-shadow(0px 0px 1px var(--green-2))}
+        max-height: 70vh;
+        overflow-y: auto;
+        display: block;
+        border-radius: 0px 0px 6px 6px;
+        border-collapse: separate;
+
+        .bold {
+            font-weight: 800;
+        }
+
+        .name-col {
+            text-align: left;
+            justify-content: flex-start;
+            padding-left: 10px;
+            font-weight: 600;
+            flex: 5;
+            color: blue;
+            cursor: pointer;
+        }
+
+        tr {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .add-icon-outer {
+
+            // background-color: var(--btn-blue);
+            .add-icon {
+                color: var(--btn-blue)
+            }
+
+            // border-bottom: 1px solid var(--grey-5);
+        }
+
+        .favorite-icon-outer {
+
+            // background-color: var(--green);
+            .favorite-icon {
+                color: var(--green);
+            }
+
+            // border-bottom: 1px solid var(--grey-5);
+        }
+
+        .favorite-icon-outer:hover {
+            cursor: pointer;
+
+            .favorite-icon {
+                color: var(--green-2)
+            }
+
+            // background-color: var(--green-2);
+        }
+
+        .undraftables-icon-outer {
+
+            // background-color: var(--red);
+            // border-bottom: 1px solid var(--grey-5);
+            .undraftables-icon {
+                color: var(--red);
+            }
+        }
+
+        .undraftables-icon-outer:hover {
+            cursor: pointer;
+            border-radius: 50%;
+            background-color: var(--grey-3);
+
+            .undraftables-icon {
+                color: var(--red-2);
+            }
+
+            // background-color: var(--red-2);
+        }
+
+        .favorite-icon-outer,
+        .no-favorite-icon-outer {
+            // border-right: 1px solid white;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .undraftables-icon-outer,
+        .no-undraftables-icon-outer {
+            // border-right: 1px solid white;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .add-icon-outer,
+        .no-add-icon-outer {
+            // border-right: 1px solid white;
+            justify-content: center;
+            align-items: center;
+        }
+
+        // .no-add-icon-outer {
+        // 	background-color: var(--grey-5);
+        // }
+        .add-icon,
+        .no-add-icon,
+        .favorite-icon,
+        .no-favorite-icon,
+        .undraftables-icon,
+        .no-undraftables-icon {
+            // color: white;
+            padding: 0;
+            margin: 0;
+        }
+
+        .add-icon-outer:hover {
+            cursor: pointer;
+
+            // background-color: var(--btn-blue-2);
+            .add-icon {
+                color: var(--btn-blue-2);
+            }
+        }
+    }
+
     .empty-players-row {
         .add-players-btn {
             background: None;
@@ -7,14 +174,16 @@
             font-weight: 600;
         }
     }
-    tbody {
-        font-weight: 400;
-        tr {
-            td {
-                .bold {
-                    font-weight: 800;
-                }
-            }
+}
+
+.upcoming-players-table.small {
+}
+
+@media (max-width: 599px) {
+    .upcoming-players-table {
+        .hide-small {
+            display: none;
         }
     }
 }
+

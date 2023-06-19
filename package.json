@@ -5,6 +5,7 @@
   "proxy": "http://ec2-18-144-168-136.us-west-1.compute.amazonaws.com",
   "dependencies": {
     "@material-ui/core": "^4.12.4",
+    "@react-hook/resize-observer": "^1.2.6",
     "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
