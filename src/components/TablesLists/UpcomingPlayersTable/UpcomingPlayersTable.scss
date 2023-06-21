@@ -177,13 +177,8 @@
 }
 
 .upcoming-players-table.small {
-}
-
-@media (max-width: 599px) {
-    .upcoming-players-table {
-        .hide-small {
-            display: none;
-        }
+    .hide-small {
+        display: none;
     }
 }
 

@@ -12,7 +12,7 @@ const UpcomingPlayersTable = ({ players, canQuickAdd, addPlayerToFavorites, addP
 
   const targetRef = useRef(null)
   const size = useResponsiveBreakpoints(targetRef, [
-    { small: 600 },
+    { small: 400 },
     { large: 800 }
   ])
   console.log(size)

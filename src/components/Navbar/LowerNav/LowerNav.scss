@@ -1,50 +1,26 @@
 .lower-nav {
-	// background-color: var(--grey-1);
-    // background-color: var(--blue-grey-10);
-
 	width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    // position: sticky;
-    // top: 0px;
+    background-color: #0069FF;
 
     .lower-nav-inner {
-        width: 100%;
-        height: fit-content;
+        width: 95%;
+        max-width: 1200px;
         display: flex;
         justify-content: center;
-        background-color: var(--blue-grey-10);
 
         .lower-nav-links {
-            max-width: 1200px;
-            width: 95%;
+            width: 100%;
             display: flex;
             flex-direction: row;
             list-style-type: none;
-            margin: 0;
-            padding: 0;
 
             .nav-link {
                 font-size: 12pt;
                 color: white;
-                padding: 10px 15px 10px 15px;
-                margin: 0;
-                // transition: all 0.2s;
-            }
-            :not(.active) {
-                .nav-link:hover {
-                    color: white;
-                    // background-color: var(--slate);
-                    background-color: var(--blue-grey-9);
-                    // border-radius: 0px 0px 13px 13px;
-                }
-            }
-
-            .active {
-                color: white;
-                background-color: var(--cool-grey-8);
-                // border-radius: 0px 0px 13px 13px;
+                padding: 0.4rem 1rem 0.4rem 1rem;
             }
         }
     }

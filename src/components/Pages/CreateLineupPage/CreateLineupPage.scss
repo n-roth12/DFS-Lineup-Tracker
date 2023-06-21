@@ -16,6 +16,7 @@
 		h2 {
 			padding-top: 0.8rem;
 			padding-bottom: 0.8rem;
+			font-size: 1.8rem;
 		}
 
 		.header-inner {
@@ -25,6 +26,8 @@
 			max-width: 1200px;
 
 			.header-options {
+				display: flex;
+				flex-direction: row;
 
 				.header-options-btn {
 					border: None;
@@ -63,7 +66,7 @@
 			flex-direction: row;
 
 			.info-block {
-				margin-right: 3rem;
+				margin-right: 2rem;
 
 				.label,
 				.link {
@@ -135,6 +138,7 @@
 				flex-direction: column;
 				justify-content: center;
 				align-items: center;
+				outline: 1px solid transparent;
 
 				p {
 					margin: 0;
@@ -145,18 +149,18 @@
 			}
 
 			.selected {
-				border: 1.5px solid var(--btn-blue);
-				outline: None;
+				outline: 2px solid var(--btn-blue);
+				border: 1px solid transparent;
 			}
 
 			.all {
 				align-items: center;
-				margin-left: 0;
+				margin-left: 2px;
 			}
 
 			:hover {
 				background-color: var(--grey-2);
-				transition: all 0.2s ease-out;
+				transition: background-color 0.2s ease-out;
 			}
 		}
 	}
@@ -172,8 +176,8 @@
 		flex-wrap: wrap;
 
 		.lineup-outer {
-			margin-left: 1.4rem;
-			margin-right: 1.4rem;
+			margin-left: 0.7rem;
+			margin-right: 0.7rem;
 			margin-top: 1rem;
 			flex: 1;
 
@@ -191,11 +195,12 @@
 		}
 
 		.players-table-wrapper {
-			flex: 2;
-			margin-right: 1.4rem;
+			flex: 2 1 500px;
+			margin-right: 0.7rem;
+			margin-left: 0.7rem;
 			margin-top: 1rem;
 			max-width: 900px;
-			min-width: 500px;
+			min-width: 300px;
 			margin-bottom: 1rem;
 
 			.filter-btn-wrapper {
@@ -329,8 +334,8 @@
 			display: flex;
 			flex-direction: row;
 			display: flex;
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
+			padding-top: 0.6rem;
+			padding-bottom: 0.6rem;
 			margin-right: -0.6rem;
 
 			.clear-btn {
@@ -346,10 +351,16 @@
 				border-radius: 6px;
 				padding: 0.4rem 1.2rem 0.4rem 1.2rem;
 				margin-right: 0.6rem;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+
+				.icon {
+					margin-left: 0.3rem;
+				}
 			}
 
 			.revert-btn {
-				background-color: var(--grey-3);
 				color: var(--btn-blue);
 				border: None;
 				background: None;

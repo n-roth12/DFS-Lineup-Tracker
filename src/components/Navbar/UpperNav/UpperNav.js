@@ -1,6 +1,6 @@
 import './UpperNav.scss'
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaUserAlt } from 'react-icons/fa'
 
 const UpperNav = () => {
@@ -22,7 +22,7 @@ const UpperNav = () => {
     <div className='upper-nav'>
       <div className='upper-nav-inner'>
         <div>
-          <h1>MainSlater</h1>
+          <Link className='logo' to='/lineups'>MainSlater</Link>
         </div>
         <div className='profile-btns'>
           {sessionStorage.dfsTrackerToken && window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" ?

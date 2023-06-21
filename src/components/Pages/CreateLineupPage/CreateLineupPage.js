@@ -566,11 +566,11 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                     <p className='value'>{draftGroup["games"].length}</p>
                   </div>
                   <div className='info-block'>
-                    <p className='label'>Start Time:</p>
+                    <p className='label'>Start Time</p>
                     <p className='value'>{new Date(`${draftGroup["startTime"]}`).toDateString()}</p>
                   </div>
                   <div className='info-block'>
-                    <p onClick={() => setShowRecommendedTagsDialog(true)} className='link'>Tags:</p>
+                    <p className='label'>Tags <span onClick={() => setShowRecommendedTagsDialog(true)} className='link'>(Edit)</span></p>
                     {activeTags && activeTags.length > 0 ?
                       <div className='tag-wrapper'>
                         {activeTags.map((tag) =>
@@ -714,8 +714,8 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
               </div>
             </div>
             <div className='lineup-btns'>
-              <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes /></button>
-              <button className={`revert-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && revertLineup}>Revert <GrRevert /></button>
+              <button className='clear-btn' onClick={clearLineup}>Clear <FaTimes className='icon' /></button>
+              <button className={`revert-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && revertLineup}>Cancel <GrRevert fill='#0069ed' className='icon' /></button>
               <button className={`save-btn ${!hasChanges ? "inactive" : ""}`} onClick={hasChanges && saveLineup}>Save</button>
             </div>
           </div>
