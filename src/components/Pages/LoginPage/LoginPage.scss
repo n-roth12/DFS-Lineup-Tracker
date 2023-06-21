@@ -1,4 +1,4 @@
-.login-page {
+.login-page, .register-page {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -6,7 +6,7 @@
 	width: 100vw;
 	background-color: var(--white-1);
 
-	.login-form-wrapper {
+	.form-wrapper {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -14,22 +14,27 @@
 		margin-top: calc(40px + 4vh);
 		
 		h1 {
-			font-size: 18pt;
 			width: 100%;
 			text-align: center;
 		}
 
 		label {
-			font-size: 11pt;
+			font-size: 0.9rem;
 			font-weight: 600;
-			margin-top: 20px;
-			margin-bottom: 7px;
+			margin-top: 1.5rem;
+			margin-bottom: 0.5rem;
 		}
+	}
+
+	.login-form, .register-form {
+		display: flex;
+		flex-direction: column;
 	}
 
 	input {
 		outline: 2px solid #e8e8e8;
-		padding: 10px;
+		padding: 0.7rem;
+		font-size: 0.9rem;
 	}
 
 	input:focus {
@@ -38,16 +43,21 @@
 	}
 
 	.form-submit-btn {
-		margin-top: 20px;
+		margin-top: 1.5rem;
 		width: 100%;
-		border-radius: 50px;
+		border-radius: 4px;
+		font-weight: 500;
+		padding-top: 0.7rem;
+		padding-bottom: 0.7rem;
+		font-size: 1rem;
+		cursor: pointer;
 	}
 
 	.form-control {
 		width: 350px;
 	}
 
-	.register-page-link-wrapper {
+	.register-page-link-wrapper, .login-page-link-wrapper {
 		margin-top: 40px;
 		width: 300px;
 		display: flex;
@@ -56,7 +66,7 @@
 		align-items: center;
 	}
 
-	.register-page-link {
+	.register-page-link, .login-page-link {
 		margin-left: 20px;
 		text-decoration: none;
 		color: blue;
@@ -70,25 +80,20 @@
 		padding: 0;
 	}
 
-	h1 {
-		color: #000000;
-		font-size: 16pt;
-	}
-
 	.show-password {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin-top: 20px;
-		margin-bottom: 10px;
+		margin-top: 1.5rem;
 	}
 
 	.show-password p {
 		margin: 0;
+		font-size: 0.9rem;
 	}
 
-	h4 {
-		font-weight: 400;
+	.register-page-link-wrapper p, .login-page-link-wrapper p {
+		font-size: 1rem;
 		.register-page-link {
 			font-weight: 600;
 		}

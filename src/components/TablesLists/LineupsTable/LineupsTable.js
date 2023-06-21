@@ -73,6 +73,19 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
     setFile(url)
   }
 
+  const deleteLineups = async () => {
+    console.log(selectedLineups)
+    // const res = await fetch(`${api_url}/lineups/delete`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'x-access-token': sessionStorage.dfsTrackerToken
+    //   },
+    //   body: selectedLineups
+    // })
+    // const data = await res.json()
+    // console.log(data)
+  }
+
   const exportLineups = async () => {
     const res = await fetch(`${api_url}/lineups/export`, {
       method: 'POST',
@@ -218,7 +231,9 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
           <div className='tag-filter-wrapper'>
             {tagFilter && tagFilter.map((tag) =>
               <div className='tag-filter'>
-                <FaTimes className='delete-icon' onClick={() => removeTagFilter(tag)} />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : ""}`}
+                <FaTimes
+                  className='delete-icon'
+                  onClick={() => removeTagFilter(tag)} />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : ""}`}
               </div>
             )}
           </div>
@@ -229,22 +244,27 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
               <th colSpan={5} className="options-row" >
                 <div className='lineup-options-btns'>
                   {!selectedLineups.length > 0 ?
-                    <Tooltip title="Select">
+                    <Tooltip title="Select All">
                       <button className='lineup-options-btn' onClick={selectAllLineups}><FiSquare className='icon' /></button>
                     </Tooltip>
                     :
-                    <Tooltip title="De-select">
+                    <Tooltip title="De-select All">
                       <button className='lineup-options-btn' onClick={deselectAllLineups} ><FiMinusSquare className='icon' /></button>
                     </Tooltip>
                   }
                   {selectedLineups.length > 0 &&
-                    (file === null ?
-                      <Tooltip title="Export">
-                        <button className='lineup-options-btn' onClick={exportLineups}><AiOutlineExport className='icon' /></button>
+                    <>
+                      {file === null ?
+                        <Tooltip title="Export">
+                          <button className='lineup-options-btn' onClick={exportLineups}><AiOutlineExport className='icon' /></button>
+                        </Tooltip>
+                        :
+                        <a className='download-btn' href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon' /></a>
+                      }
+                      <Tooltip title="Delete">
+                        <button className='lineup-options-btn' onClick={deleteLineups}><BiTrash className='icon' /></button>
                       </Tooltip>
-                      :
-                      <a className='download-btn' href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon' /></a>
-                    )
+                    </>
                   }
                   <Tooltip title="Create">
                     <Link to='/upcoming' className='lineup-options-btn'><FaPlus className='add-icon' /></Link>

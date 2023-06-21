@@ -22,7 +22,7 @@ const UpperNav = () => {
     <div className='upper-nav'>
       <div className='upper-nav-inner'>
         <div>
-          <Link className='logo' to='/lineups'>MainSlater</Link>
+          <Link className='logo' to='/upcoming'>MainSlater</Link>
         </div>
         <div className='profile-btns'>
           {sessionStorage.dfsTrackerToken && window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" ?

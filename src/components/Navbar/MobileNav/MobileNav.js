@@ -28,7 +28,7 @@ const MobileNav = () => {
   return (
     <div className='mobile-nav'>
       <nav>
-        <h1>Mainslater</h1>
+        <Link className='logo' to='/upcoming'>MainSlater</Link>
         <div className='burger-menu' onClick={updateMenu}>
           <div className={burgerClass}></div>
           <div className={burgerClass}></div>
