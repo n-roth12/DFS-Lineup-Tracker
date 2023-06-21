@@ -180,13 +180,11 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
           <div className='players-outer'>
             <div className='players-outer-header'>
               <h2>Players: <span className='slate-title'>{capitalize(selectedSite)} {activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
-              <div className='btn-wrapper'>
-                <button className='lineup-options-btn' onClick={() => createLineup(activeSlate)}><FaPlus className='icon'/> New Lineup</button>
-              </div>
+              <button className='new-lineup-btn' onClick={() => createLineup(activeSlate)}>New Lineup <FaPlus className='icon' /></button>
             </div>
             <div className='filters-outer'>
               <div className="pos-filter-wrapper">
-                <div className='pos-filter-wrapper-inner'>
+                <div className='filter-btn-wrapper'>
                   <button
                     className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`}
                     onClick={() => setPosFilter(new Set())}>All
@@ -239,7 +237,7 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
                 </thead>
                 <tbody>
                   {activeSlateDraftables.map((data) => (
-                    (playerFilter.length < 1 || data["displayName"].toLowerCase().startsWith(playerFilter.toLowerCase())) &&
+                    (playerFilter.length < 1 || data["displayName"].toLowerCase().includes(playerFilter.toLowerCase())) &&
                     (posFilter.size < 1 || posFilter.has(data.position.toLowerCase())) &&
                     <tr>
                       <td className='player-col'><strong><PlayerLink playerName={`${data["firstName"]} ${data["lastName"]}`} /></strong></td>

@@ -7,7 +7,7 @@ const PlayersTableWrapper = ({ state, players, hiddenIds, playerFilter, teamsFil
   const applyFilters = (playersList) => {
     return playersList.filter((player) => 
       (applyStateFilter(player)) &&
-      (playerFilter.length < 1 || player.displayName.toLowerCase().startsWith(playerFilter.toLowerCase())) &&
+      (playerFilter.length < 1 || player.displayName.toLowerCase().includes(playerFilter.toLowerCase())) &&
       (canAddPos(player)) &&
       (posFilter.size < 1 || posFilter.has(player.position.toLowerCase())) &&
       (teamsFilter.length < 1 || teamsFilter.includes(player["team"]))

@@ -614,7 +614,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
           {draftables.length > 0 ?
             <div className='players-table-wrapper'>
-              <div className='filter-btn-wrapper'>
+              <div className='underline-btn-wrapper'>
                 <button onClick={() => changeStateFilter("all")} className={`underline-btn${stateFilter === "all" ? " active" : ""}`}>Players</button>
                 <button onClick={() => changeStateFilter("favorites")} className={`underline-btn${stateFilter === "favorites" ? " active" : ""}`}>Favorites
                   <span className='length-indicator'>{favoritesIds.length}</span>
@@ -641,7 +641,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
               }
               <div className='players-table-header'>
                 <div className="pos-filter-wrapper">
-                  <div className='pos-filter-wrapper-inner'>
+                  <div className='filter-btn-wrapper'>
                     <button
                       className={`filter-btn${posFilter.size < 1 ? "-active" : ""}`}
                       onClick={() => setPosFilter(new Set())}>All

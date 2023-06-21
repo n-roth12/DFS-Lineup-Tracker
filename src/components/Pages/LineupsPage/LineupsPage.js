@@ -88,7 +88,6 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   }
 
   const deleteSelectedLineups = async (lineupsToDelete) => {
-    console.log(lineupsToDelete)
     const res = await fetch(`${api_url}/lineups/delete`, {
       method: 'POST',
       headers: {
@@ -99,7 +98,6 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
       })
     })
     const data = await res.json()
-    console.log(data)
     setShowDeleteLineupsDialog(false)
   }
 

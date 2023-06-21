@@ -3,55 +3,34 @@
 	max-width: 1100px;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 
-	.pos-filter-wrapper {
+	.filters-outer {
 		display: flex;
-		width: 100%;
-		flex-wrap: wrap-reverse;
+		flex-direction: row;
 		justify-content: space-between;
-		align-items: left;
-		margin-top: -10px;
-		margin-bottom: 10px;
+		flex-wrap: wrap-reverse;
+	}
 
-		.pos-filter-wrapper-inner {
-			margin-top: 10px;
-		}
+	.filter-btn-wrapper {
+		margin-bottom: 0.5rem;
+	}
 
-		.filter-btn, .filter-btn-active {
-			width: 50px;
-			padding: 3px 8px 3px 8px;
-			font-size: 11pt;
-		}
+	.player-search {
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 0.5rem;
+		padding: 0.5rem 1rem 0.5rem 1rem;
+		border: 1px solid var(--grey-5);
+		outline: none;
+		border-radius: 6px;
+		background-color: white;
+		align-items: center;
 
-		.player-search {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: center;
-			height: fit-content;
-			border-radius: 6px;
-			margin-top: 10px;
-
-			.search-input {
-				font-size: 11pt;
-				padding: 2px 20px 2px 8px;
-				margin: 0;
-				border: 1px solid var(--grey-6);
-				outline: none;
-				height: 35px;
-				border-radius: 6px 0px 0px 6px;
-			}
-			.search-btn {
-				font-size: 11pt;
-				border-radius: 2px;
-				padding-left: 15px;
-				padding-right: 15px;
-				margin: 0;
-				border-radius: 0px 6px 6px 0px;
-				height: 35px;
-			}
+		.search-input {
+			border: none;
+			padding-left: 0.5rem;
+			outline: none;
+			background: none;
 		}
 	}
 
@@ -66,9 +45,10 @@
 	}
 
 	.players-table {
-		font-size: 10pt;
+		font-size: 0.8rem;
 		width: 100%;
 		max-width: 1100px;
+		border-collapse: collapse;
 
 		thead {
 			position: sticky;
@@ -83,6 +63,11 @@
 
 			}
 		}
+		tbody td, thead th {
+			padding: 0.5rem;
+			font-size: 0.8rem;
+		}
+
 		tbody {
 			tr:hover {
 				background-color: var(--cool-grey-2);
@@ -91,14 +76,15 @@
 	}
 }
 
-@media (max-width: 700px) {
+@media (max-width: 750px) {
 	.players-table {
 		display: block;
 		overflow-x: auto;
-		td, th {
+		border-spacing: 0;
+
+		td {
 			font-weight: 400;
-			font-size: 9pt;
-			padding: 5px;
+			padding: 0.3rem;
 		}
 	}
 }

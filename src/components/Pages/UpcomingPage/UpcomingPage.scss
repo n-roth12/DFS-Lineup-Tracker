@@ -6,7 +6,7 @@
 
 	.players-outer {
 		width: 95%;
-		max-width: 1100px;
+		max-width: 800px;
 
 		.filters-outer {
 			display: flex;
@@ -25,13 +25,6 @@
 				align-items: center;
 				margin-top: 10px;
 				margin-bottom: 0.2rem;
-
-				.filter-btn,
-				.filter-btn-active {
-					padding: 0.5rem 1rem 0.5rem 1rem;
-					font-size: 0.8rem;
-					cursor: pointer;
-				}
 			}
 
 			.player-search {
@@ -56,36 +49,30 @@
 		}
 
 		.players-outer-header {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
 			padding-top: 10px;
 			padding-bottom: 10px;
 
-			.btn-wrapper {
+			.new-lineup-btn {
+				text-decoration: None;
+				background-color: var(--btn-blue);
+				border: None;
+				color: white;
+				padding: 0.5rem 1rem 0.5rem 1rem;
+				border-radius: 4px;
+				transition: all 0.3s;
+				font-size: 0.9rem;
+				cursor: pointer;
 				display: flex;
-				flex-direction: row;
+				align-items: center;
+				margin-top: 0.5rem;
 
-				.lineup-options-btn {
-					text-decoration: None;
-					background-color: var(--btn-blue);
-					border: None;
-					color: white;
-					padding: 4px 15px 4px 15px;
-					border-radius: 20px;
-					transition: all 0.3s;
-					height: fit-content;
-					font-size: 12pt;
-
-					.icon {
-						height: 15px;
-					}
+				.icon {
+					margin-left: 0.5rem;
 				}
+			}
 
-				.lineup-options-btn:hover {
-					background-color: var(--btn-blue-2);
-				}
+			.new-lineup-btn:hover {
+				background-color: var(--btn-blue-2);
 			}
 
 			h2 {
@@ -97,8 +84,8 @@
 				font-size: 1.5rem;
 
 				.slate-title {
-					color: var(--grey-9);
-					font-weight: 500;
+					color: var(--grey-10);
+					font-weight: 400;
 				}
 			}
 

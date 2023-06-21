@@ -11,22 +11,8 @@
 		flex-direction: column;
 		align-items: center;
 		background-color: inherit;
-		padding-top: 5px;
 		margin-bottom: 10px;
-
-		.header-label-wrapper {
-			display: flex;
-			align-items: left;
-			width: 100%;
-			margin-top: 10px;
-			margin-bottom: 10px;
-
-			.header-label {
-				font-size: 16pt;
-				margin: 0;
-				font-weight: 600;
-			}
-		}
+		
 		.header-inner {
 			width: 100%;
 			display: flex;
@@ -41,18 +27,17 @@
 			justify-content: center;
 			
 			select {
-				margin-right: 10px;
-				padding: 4px 16px 4px 8px;
-				font-size: 11pt;
-				border: 1px solid var(--grey-6);
+				margin-right: 0.5rem;
+				padding: 0.4rem 0.8rem 0.4rem 0.8rem;
+				font-size: 0.8rem;
+				border: 1px solid var(--grey-5);
+				border-radius: 4px;
 			}
 			.week-select {
-				width: 120px;
-				border-radius: 6px;
+				min-width: 120px;
 			}
 			.year-select {
-				width: 100px;
-				border-radius: 6px;
+				min-width: 100px;
 			}
 		}
 	}

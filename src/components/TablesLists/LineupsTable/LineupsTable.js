@@ -103,7 +103,8 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
       && (yearFilter === "all" || lineup["year"] === parseInt(yearFilter))
       && (weekFilter === "all" || lineup["week"] === parseInt(weekFilter))
     ).map((lineup) => {
-      result.push(lineup["lineupId"])})
+      result.push(lineup["lineupId"])
+    })
     setSelectedLineups(result)
   }
 
@@ -172,89 +173,87 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
         onClose={() => setShowCreateLineupDialog(false)} draftGroup={createLineupDialogContent} draftGroupLineups={dialogDraftGroupLineups} />
       <div className='lineups-table-wrapper-inner'>
         <div className='table-header-wrapper'>
-          <div className="pos-filter-wrapper">
-            <div className='lineups-title'>
-              <h2>Upcoming Lineups</h2>
-            </div>
-            <div className="selectors">
-              <select
-                className="year-select"
-                value={yearFilter}
-                onChange={(e) => changeYear(e.target.value)}>
-                <option value="all" key="All">All Years</option>
-                {years.map((year) =>
-                  <option value={year} key={year}>{year}</option>
-                )}
-              </select>
-              <select
-                className="week-select"
-                value={weekFilter}
-                onChange={(e) => setWeekFilter(e.target.value)}>
-                <option value="all" key="All">All Weeks</option>
-                {weeks.map((week) =>
-                  !(week > 17 && yearFilter < 2021) &&
-                  <option value={week} key={week}>Week {week}</option>
-                )}
-              </select>
-            </div>
-            <div className='pos-filter-wrapper-inner'>
-              <button
-                className={`filter-btn${!siteFilter ? "-active" : ""}`}
-                onClick={() => setSiteFilter()}>All
-              </button>
-              <button
-                className={`filter-btn${siteFilter === "draftkings" ? "-active" : ""}`}
-                onClick={() => changeFilter("draftkings")}>DraftKings
-              </button>
-              <button
-                className={`filter-btn${siteFilter === "yahoo" ? "-active" : ""}`}
-                onClick={() => changeFilter("yahoo")}>Yahoo
-              </button>
-              <button
-                className={`filter-btn${siteFilter === "fanduel" ? "-active" : ""}`}
-                onClick={() => changeFilter("fanduel")}>Fanduel
-              </button>
-            </div>
-            <div className='tag-filter-wrapper'>
-              {tagFilter && tagFilter.map((tag) =>
-                <div className='tag-filter'>
-                  <FaTimes className='delete-icon' onClick={() => removeTagFilter(tag)} />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : ""}`}
-                </div>
+          <div className='lineups-title'>
+            <h1>Upcoming Lineups</h1>
+          </div>
+          <div className="selectors">
+            <select
+              className="year-select"
+              value={yearFilter}
+              onChange={(e) => changeYear(e.target.value)}>
+              <option value="all" key="All">All Years</option>
+              {years.map((year) =>
+                <option value={year} key={year}>{year}</option>
               )}
-            </div>
+            </select>
+            <select
+              className="week-select"
+              value={weekFilter}
+              onChange={(e) => setWeekFilter(e.target.value)}>
+              <option value="all" key="All">All Weeks</option>
+              {weeks.map((week) =>
+                !(week > 17 && yearFilter < 2021) &&
+                <option value={week} key={week}>Week {week}</option>
+              )}
+            </select>
+          </div>
+          <div className='filter-btn-wrapper'>
+            <button
+              className={`filter-btn${!siteFilter ? "-active" : ""}`}
+              onClick={() => setSiteFilter()}>All
+            </button>
+            <button
+              className={`filter-btn${siteFilter === "draftkings" ? "-active" : ""}`}
+              onClick={() => changeFilter("draftkings")}>DraftKings
+            </button>
+            <button
+              className={`filter-btn${siteFilter === "yahoo" ? "-active" : ""}`}
+              onClick={() => changeFilter("yahoo")}>Yahoo
+            </button>
+            <button
+              className={`filter-btn${siteFilter === "fanduel" ? "-active" : ""}`}
+              onClick={() => changeFilter("fanduel")}>Fanduel
+            </button>
+          </div>
+          <div className='tag-filter-wrapper'>
+            {tagFilter && tagFilter.map((tag) =>
+              <div className='tag-filter'>
+                <FaTimes className='delete-icon' onClick={() => removeTagFilter(tag)} />{`${tag["category"]} ${tag["value"] ? `: ${tag["value"]}` : ""}`}
+              </div>
+            )}
           </div>
         </div>
         <table className="lineups-table">
           <thead>
             <tr className='lineup-wrapper-header'>
               <th colSpan={5} className="options-row" >
-              <div className='lineup-options-btns'>
-                {!selectedLineups.length > 0 ?
-                  <Tooltip title="Select">
-                    <button className='lineup-options-btn' onClick={selectAllLineups}><FiSquare className='icon' /></button>
-                  </Tooltip>
-                :
-                  <Tooltip title="De-select">
-                    <button className='lineup-options-btn' onClick={deselectAllLineups} ><FiMinusSquare className='icon' /></button>
-                  </Tooltip>
-                }
-                {selectedLineups.length > 0 &&
-                  (file === null ?
-                    <Tooltip title="Export">
-                      <button className='lineup-options-btn' onClick={exportLineups}><AiOutlineExport className='icon' /></button>
+                <div className='lineup-options-btns'>
+                  {!selectedLineups.length > 0 ?
+                    <Tooltip title="Select">
+                      <button className='lineup-options-btn' onClick={selectAllLineups}><FiSquare className='icon' /></button>
                     </Tooltip>
                     :
-                    <a className='download-btn' href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon' /></a>
-                  )
-                }
-                <Tooltip title="Create">
-                  <Link to='/upcoming' className='lineup-options-btn'><FaPlus className='add-icon' /></Link>
-                </Tooltip>
-                {selectedLineups.length > 0 &&
-                  <span className="selected-counter">{selectedLineups.length} Selected</span>
-                }
-              </div>
-              <div className='page-btn-wrapper'>
+                    <Tooltip title="De-select">
+                      <button className='lineup-options-btn' onClick={deselectAllLineups} ><FiMinusSquare className='icon' /></button>
+                    </Tooltip>
+                  }
+                  {selectedLineups.length > 0 &&
+                    (file === null ?
+                      <Tooltip title="Export">
+                        <button className='lineup-options-btn' onClick={exportLineups}><AiOutlineExport className='icon' /></button>
+                      </Tooltip>
+                      :
+                      <a className='download-btn' href={file} download={`lineups.csv`}>Download<BiDownload className='download-icon' /></a>
+                    )
+                  }
+                  <Tooltip title="Create">
+                    <Link to='/upcoming' className='lineup-options-btn'><FaPlus className='add-icon' /></Link>
+                  </Tooltip>
+                  {selectedLineups.length > 0 &&
+                    <span className="selected-counter">{selectedLineups.length} Selected</span>
+                  }
+                </div>
+                <div className='page-btn-wrapper'>
                   <span className={currPage > 0 ? "page-arrow-active" : "page-arrow"} onClick={prevPage}> <FaAngleLeft /></span>
                   <select>
                     {[...Array(numPages)].map((x, i) =>
@@ -262,7 +261,7 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                     )}
                   </select>
                   <span className={(currPage + 1) * lineupsPerPage < lineups.length ? "page-arrow-active" : "page-arrow"} onClick={nextPage}><FaAngleRight /></span>
-              </div>
+                </div>
               </th>
             </tr>
             <tr>
@@ -287,8 +286,8 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                   <>
                     <tr>
                       <td className='checkbox-wrapper'>
-                        <input className='checkbox' type="checkbox" 
-                          checked={selectedLineups.includes(lineup["lineupId"])} 
+                        <input className='checkbox' type="checkbox"
+                          checked={selectedLineups.includes(lineup["lineupId"])}
                           onClick={() => toggleSelectedLineup(lineup["lineupId"])}>
                         </input>
                       </td>
@@ -313,11 +312,11 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                   <td>You must login to save and view past lineups.</td>
                 </tr>
               </tbody>
-            : <tbody>
-              <tr>
-                <td>No Upcoming Lineups</td>
-              </tr>
-            </tbody>
+              : <tbody>
+                <tr>
+                  <td>No Upcoming Lineups</td>
+                </tr>
+              </tbody>
           }
         </table>
       </div>
