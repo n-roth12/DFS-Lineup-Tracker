@@ -179,7 +179,7 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
         {activeSlate && Object.keys(activeSlateDraftables).length > 0 &&
           <div className='players-outer'>
             <div className='players-outer-header'>
-              <h2><span>{capitalize(selectedSite)}</span> <span className='slate-title'>{activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
+              <h2>Players: <span className='slate-title'>{capitalize(selectedSite)} {activeSlate["startTimeSuffix"] ? activeSlate["startTimeSuffix"] : "(Main)"}</span></h2>
               <div className='btn-wrapper'>
                 <button className='lineup-options-btn' onClick={() => createLineup(activeSlate)}><FaPlus className='icon'/> New Lineup</button>
               </div>
@@ -214,17 +214,16 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
                 </div>
               </div>
               <div className="player-search">
+                <FaSearch />
                 <input type="text" placeholder="Search Player" className="search-input" value={playerFilter}
                   onChange={(e) => setPlayerFilter(e.target.value)}></input>
-                <button className="search-btn" type="button"><FaSearch /></button>
-
               </div>
             </div>
             <div className='players-inner'>
               <table className='lineups-table'>
                 <thead>
                   <tr className='header-labels'>
-                    <th className={sortColumn[1] === "name" ? "selected" : ""}
+                    <th className={`player-col ${sortColumn[1] === "name" ? "selected" : ""}`}
                       onClick={() => sortRows("", "name")}>Name</th>
                     <th className={sortColumn[1] === "position" ? "selected" : ""}
                       onClick={() => sortRows("fanduel", "position")}>Pos</th>

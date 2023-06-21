@@ -286,7 +286,12 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
                 .map((lineup) =>
                   <>
                     <tr>
-                      <td><input type="checkbox" checked={selectedLineups.includes(lineup["lineupId"])} onClick={() => toggleSelectedLineup(lineup["lineupId"])}></input></td>
+                      <td className='checkbox-wrapper'>
+                        <input className='checkbox' type="checkbox" 
+                          checked={selectedLineups.includes(lineup["lineupId"])} 
+                          onClick={() => toggleSelectedLineup(lineup["lineupId"])}>
+                        </input>
+                      </td>
                       <td><Link to={`/createLineup/${lineup["draftGroupId"]}/${lineup["lineupId"]}`} className="view-lineup-btn">Edit</Link></td>
                       <td>{capitalize(lineup["site"])}</td>
                       <td>{lineup["startTimeSuffix"] ? lineup["startTimeSuffix"].replace(")", "").replace("(", "") : "Main"} ({lineup["startTime"].split("T")[0]})</td>
