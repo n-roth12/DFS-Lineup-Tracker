@@ -198,10 +198,11 @@
 		align-items: center;
 
 		h3 {
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			align-items: center;
+			width: 100%;
+			text-align: left;
+			margin-left: 0.6rem;
+			margin-top: 0.6rem;
+			font-weight: 600;
 		}
 
 		.search-btn {
@@ -211,12 +212,12 @@
 		.slatesWrapper {
 			display: flex;
 			flex-direction: row;
-			margin: 0.5rem 1rem 0.5rem 1rem;
+			margin: 0 1rem 0.5rem 1rem;
 			width: 100%;
 			max-width: 1100px;
 			align-items: left;
 			overflow-x: auto;
-			padding: 6px;
+			padding: 0 0.5rem 0.5rem 0.5rem;
 
 			.slate {
 				margin: 0.4rem;

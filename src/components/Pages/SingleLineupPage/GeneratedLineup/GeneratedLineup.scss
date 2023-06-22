@@ -1,30 +1,35 @@
 .generated-lineup {
-    width: 300px;
+    width: 100%;
     margin-top: 0;
+
     .player:nth-child(1) {
         border-top: 1px solid var(--grey-2);
     }
+
     .player {
         background-color: white;
         display: flex;
         flex-direction: row;
-        width: 100%;
         border-bottom: 1px solid var(--grey-2);
         border-left: 1px solid var(--grey-2);
         border-right: 1px solid var(--grey-2);
         height: 35px;
+        font-size: 0.9rem;
+
         .position {
-           width: 50px;
-           margin-top: auto;
-           margin-bottom: auto;
-           padding-left: 6px;
-           flex: 2;
+            width: 50px;
+            margin-top: auto;
+            margin-bottom: auto;
+            padding-left: 6px;
+            flex: 2;
         }
+
         .name {
             margin-top: auto;
             margin-bottom: auto;
             flex: 6;
         }
+
         .delete-btn {
             margin-left: auto;
             margin-right: 6px;
@@ -34,6 +39,7 @@
             flex: 1;
             color: red;
         }
+
         .salary {
             flex: 2;
             margin-top: auto;

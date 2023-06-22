@@ -152,6 +152,7 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
         </div>
       </div>
       <div className='slatesWrapper-outer'>
+      <h3>Upcoming Slates</h3>
         {slates.length && activeSlate ?
           <>
             <div className="slatesWrapper">

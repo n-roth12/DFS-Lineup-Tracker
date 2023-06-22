@@ -9,7 +9,7 @@ const GeneratedLineup = ({ lineup, onDelete }) => {
           <div className="player">
             <p className='position'>{player["pos"].toUpperCase()}</p>
             <p className='name'>{player["player"]["firstName"]} {player["player"]["lastName"]}</p>
-            <p className='salary'>{player["player"]["salary"]}</p>
+            <p className='salary'>${player["player"]["salary"]}</p>
             <FaTimes className='delete-btn' onClick={() => onDelete(index)} />
           </div>
           :
