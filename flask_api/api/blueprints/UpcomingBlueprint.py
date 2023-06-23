@@ -4,7 +4,6 @@ from pymongo import MongoClient
 import certifi
 import json
 from bson import json_util
-import redis
 from flask_cors import cross_origin
 import requests
 
@@ -14,8 +13,6 @@ from ..controllers.MongoController import MongoController
 from ..controllers.RedisController import RedisController
 from ..controllers.DraftKingsController import DraftKingsController
 from ..controllers.YahooController import YahooController
-
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 upcoming_blueprint = Blueprint('upcoming_blueprint', __name__, url_prefix='/upcoming')
 
@@ -59,23 +56,23 @@ def upcoming_draftGroups(current_user):
 
 	return jsonify(json.loads(json_util.dumps(draftGroup))), 200
 
-@upcoming_blueprint.route('/games', methods=['GET'])
-@token_required
-def upcoming_games(current_user):
+# @upcoming_blueprint.route('/games', methods=['GET'])
+# @token_required
+# def upcoming_games(current_user):
 	
-	key = f'games_week_year'
-	games_from_cache = redis_client.get(key)
-	games_from_cache = None
+# 	key = f'games_week_year'
+# 	games_from_cache = redis_client.get(key)
+# 	games_from_cache = None
 
-	if games_from_cache is None:
-		data = requests.get(f'{app.config["FFB_API_URL"]}/api/upcoming_games').json()
-		games_from_api = data['games']
+# 	if games_from_cache is None:
+# 		data = requests.get(f'{app.config["FFB_API_URL"]}/api/upcoming_games').json()
+# 		games_from_api = data['games']
 
-		redis_client.set(key, json.dumps(games_from_api))
+# 		redis_client.set(key, json.dumps(games_from_api))
 
-		return jsonify({'games': games_from_api}), 200
+# 		return jsonify({'games': games_from_api}), 200
 
-	return jsonify({'games': json.loads(games_from_cache)}), 200
+# 	return jsonify({'games': json.loads(games_from_cache)}), 200
 
 @upcoming_blueprint.route('/players', methods=['GET'])
 @token_required
@@ -92,27 +89,27 @@ def upcoming_projections(current_user):
 
 	return jsonify(projections), 200
 
-@upcoming_blueprint.route('/slates', methods=['GET'])
-@token_required
-def get_slates(current_user):
+# @upcoming_blueprint.route('/slates', methods=['GET'])
+# @token_required
+# def get_slates(current_user):
 
-	key = f'current_slates'
-	slates_from_cache = redis_client.get(key)
-	if slates_from_cache is None:
-		client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
-		db = client["DFSDatabase"]
-		collection = db["draftGroups"]
-		result = []
+# 	key = f'current_slates'
+# 	slates_from_cache = redis_client.get(key)
+# 	if slates_from_cache is None:
+# 		client = MongoClient(f'{app.config["MONGODB_URI"]}', tlsCAFile=certifi.where())
+# 		db = client["DFSDatabase"]
+# 		collection = db["draftGroups"]
+# 		result = []
 		
-		for item in collection.find():
-			result.append(json.loads(json_util.dumps(item)))
+# 		for item in collection.find():
+# 			result.append(json.loads(json_util.dumps(item)))
 
-		redis_client.set(key, json.dumps(result))
-		slates = result
-	else:
-		slates = json.loads(slates_from_cache)
+# 		redis_client.set(key, json.dumps(result))
+# 		slates = result
+# 	else:
+# 		slates = json.loads(slates_from_cache)
 	
-	return jsonify(slates), 200
+# 	return jsonify(slates), 200
 
 @upcoming_blueprint.route('/draftables', methods=['GET'])
 def get_draftables():

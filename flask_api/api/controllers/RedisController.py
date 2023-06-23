@@ -1,5 +1,4 @@
 from api import app
-import redis
 import json
 import requests
 

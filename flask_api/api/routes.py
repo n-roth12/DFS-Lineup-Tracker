@@ -2,7 +2,6 @@ from api import app
 from flask import request, jsonify
 import json
 import requests
-import redis
 import jwt
 from functools import wraps
 from sqlalchemy import func
@@ -19,7 +18,6 @@ from .controllers.YahooController import YahooController
 # to start backend: $ npm run start-backend
 # starts the flask api and redis server
 
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
 RedisController = RedisController()
 MongoController = MongoController()
 YahooController = YahooController()

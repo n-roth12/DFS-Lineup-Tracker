@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request, send_file, Response
 import json
 import uuid
-import redis
 from flask_cors import cross_origin
 from pandas import read_csv
 import csv
@@ -17,7 +16,6 @@ from ..controllers.LineupOptimizerControllerModule.allowed_positions import LINE
 from ..controllers.LineupOptimizerControllerModule.TagsController import TagsController
 from ..controllers.LineupOptimizerControllerModule.Lineup import Lineup
 lineups_blueprint = Blueprint('lineups_blueprint', __name__, url_prefix='/lineups')
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
 MongoController = MongoController()
 FFBApiController = FFBApiController()
 
