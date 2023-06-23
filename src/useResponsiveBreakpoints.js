@@ -13,13 +13,12 @@ export default function useResponsiveBreakpoints(elRef, breakpoints) {
   );
 
   useEffect(() => {
+    const callbackFunction = (entries) => {
+      observer.current.unobserve(elRef.current);
+    };
     if (elRef.current) {
       observer.current.observe(elRef.current);
     }
-
-    return () => {
-      observer.current.unobserve(elRef.current);
-    };
   }, [elRef, observer]);
 
   return breakSize;

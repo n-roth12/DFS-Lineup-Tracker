@@ -393,6 +393,24 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     }
   }
 
+  const removePlayerFromFavorites = async (player) => {
+    setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
+    if (lineupId !== "null") {
+      const res = await fetch(`${api_url}/lineups/favorite`, {
+        method: 'DELETE',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        },
+        body: JSON.stringify({
+          "lineupId": lineupId,
+          "player": player
+        })
+      })
+      const data = await res.json()
+    }
+  }
+
+
   const addPlayerToHidden = async (player) => {
     setHiddenIds([...hiddenIds, player["playerSiteId"]])
     setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
@@ -411,12 +429,21 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
     }
   }
 
-  const removePlayerFromFavorites = (player) => {
-    setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
-  }
-
-  const removePlayerFromHidden = (player) => {
+  const removePlayerFromHidden = async (player) => {
     setHiddenIds(hiddenIds.filter((playerId) => playerId !== player["playerSiteId"]))
+    if (lineupId !== "null") {
+      const res = await fetch(`${api_url}/lineups/hidden`, {
+        method: 'DELETE',
+        headers: {
+          'x-access-token': sessionStorage.dfsTrackerToken
+        },
+        body: JSON.stringify({
+          "lineupId": lineupId,
+          "player": player
+        })
+      })
+      const data = await res.json()
+    }
   }
 
   const exportLineup = async () => {
@@ -628,6 +655,7 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
                   <div className='games-inner'>
                     <div className={`game all ${teamsFilter.length < 1 ? " selected" : ""}`} onClick={() => setTeamsFilter([])}>
                       <p>All</p>
+                      <p>Games</p>
                     </div>
                     {draftGroup && draftGroup["games"] && draftGroup["games"].length > 0 && draftGroup["games"].map((game) =>
                       <div className={`game ${teamsFilter.includes(game["awayTeam"]) && teamsFilter.includes(game["awayTeam"]) ? "selected" : ""}`}

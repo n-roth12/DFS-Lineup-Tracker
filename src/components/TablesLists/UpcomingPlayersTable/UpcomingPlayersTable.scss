@@ -20,7 +20,7 @@
 
     thead th,
     tbody td {
-        padding: 0.7rem 0 0.7rem 0;
+        padding: 0.8rem 0.2rem 0.8rem 0.2rem;
         font-size: 0.8rem;
         display: flex;
         justify-content: center;
@@ -32,14 +32,7 @@
         font-weight: 600;
     }
 
-    thead th:nth-child(1),
-    thead th:nth-child(2),
-    thead th:nth-child(3),
-    thead th:nth-child(4),
-    tbody td:nth-child(1),
-    tbody td:nth-child(2),
-    tbody td:nth-child(3),
-    tbody td:nth-child(4) {
+    .icon-col, .pos-col {
         flex: 1;
     }
 
@@ -70,81 +63,35 @@
             flex-direction: row;
         }
 
-        .add-icon-outer {
-
-            // background-color: var(--btn-blue);
-            .add-icon {
-                color: var(--btn-blue)
-            }
-
-            // border-bottom: 1px solid var(--grey-5);
-        }
-
-        .favorite-icon-outer {
-
-            // background-color: var(--green);
-            .favorite-icon {
-                color: var(--green);
-            }
-
-            // border-bottom: 1px solid var(--grey-5);
-        }
-
-        .favorite-icon-outer:hover {
-            cursor: pointer;
-
-            .favorite-icon {
-                color: var(--green-2)
-            }
-
-            // background-color: var(--green-2);
-        }
-
-        .undraftables-icon-outer {
-
-            // background-color: var(--red);
-            // border-bottom: 1px solid var(--grey-5);
-            .undraftables-icon {
-                color: var(--red);
-            }
-        }
-
-        .undraftables-icon-outer:hover {
-            cursor: pointer;
+        .add-icon {
+            color: var(--btn-blue);
+            border: 2px solid var(--btn-blue);
             border-radius: 50%;
-            background-color: var(--grey-3);
-
-            .undraftables-icon {
-                color: var(--red-2);
-            }
-
-            // background-color: var(--red-2);
+            cursor: pointer;
         }
 
-        .favorite-icon-outer,
-        .no-favorite-icon-outer {
-            // border-right: 1px solid white;
-            justify-content: center;
-            align-items: center;
+        .add-icon.inactive {
+            color: var(--grey-5);
+            border: 2px solid var(--grey-5);
+            cursor: default;
         }
 
-        .undraftables-icon-outer,
-        .no-undraftables-icon-outer {
-            // border-right: 1px solid white;
-            justify-content: center;
-            align-items: center;
+        .favorite-icon {
+            border: 1px solid var(--green-2);
+            border-radius: 50%;
+            color: var(--green);
+            cursor: pointer;
+            font-size: 1rem;
         }
 
-        .add-icon-outer,
-        .no-add-icon-outer {
-            // border-right: 1px solid white;
-            justify-content: center;
-            align-items: center;
+        .undraftables-icon {
+            color: var(--red);
+            border: 1px solid var(--red);
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
         }
 
-        // .no-add-icon-outer {
-        // 	background-color: var(--grey-5);
-        // }
         .add-icon,
         .no-add-icon,
         .favorite-icon,
@@ -152,17 +99,7 @@
         .undraftables-icon,
         .no-undraftables-icon {
             // color: white;
-            padding: 0;
-            margin: 0;
-        }
-
-        .add-icon-outer:hover {
-            cursor: pointer;
-
-            // background-color: var(--btn-blue-2);
-            .add-icon {
-                color: var(--btn-blue-2);
-            }
+            padding: 0.1rem;
         }
     }
 

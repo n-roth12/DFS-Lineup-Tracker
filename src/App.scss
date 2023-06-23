@@ -145,6 +145,10 @@ h1 {
   text-align: left;
 }
 
+h3 {
+  font-size: 1.1rem;
+}
+
 .filter-btn-wrapper {
   .filter-btn-active {
     border-left: 1px solid #0069ed;
@@ -166,6 +170,7 @@ h1 {
     font-size: 0.8rem;
     cursor: pointer;
     border-right: None;
+    font-family: 'Nunito';
   }
   :first-child {
     border-radius: 4px 0px 0px 4px;
@@ -305,4 +310,8 @@ hr {
 .website-title {
   font-family: 'Inconsolata';
   font-weight: 600;
+}
+
+button {
+  font-family: 'Nunito';
 }

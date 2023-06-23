@@ -7,7 +7,7 @@ const EmptyPlayer = ({ position, beingEdited, toggleEditingPos }) => {
       <div className='playerImage'>
       </div>
       <div className='player-info'>
-        <button className="add-player-btn"><FaPlus /> Add {position}</button>
+        <button className="add-player-btn"><FaPlus className='icon'/> Add {position}</button>
       </div>
     </div>
   )

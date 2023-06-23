@@ -74,16 +74,15 @@ const LineupsTable = ({ lineups, filteredYears, selectedLineups, setSelectedLine
   }
 
   const deleteLineups = async () => {
-    console.log(selectedLineups)
-    // const res = await fetch(`${api_url}/lineups/delete`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'x-access-token': sessionStorage.dfsTrackerToken
-    //   },
-    //   body: selectedLineups
-    // })
-    // const data = await res.json()
-    // console.log(data)
+    const res = await fetch(`${api_url}/lineups/delete`, {
+      method: 'POST',
+      headers: {
+        'x-access-token': sessionStorage.dfsTrackerToken
+      },
+      body: selectedLineups
+    })
+    const data = await res.json()
+    console.log(data)
   }
 
   const exportLineups = async () => {

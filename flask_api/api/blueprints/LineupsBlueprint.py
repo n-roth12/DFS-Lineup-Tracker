@@ -29,11 +29,27 @@ def add_to_favorites(current_user):
 
 	return jsonify({ "Message": "Success" }), 200
 
+@lineups_blueprint.route('/favorite', methods=['DELETE'])
+@token_required
+def remove_from_favorites(current_user):
+	data = json.loads(request.data)
+	MongoController.remove_player_from_lineup_favorites(lineupId=data["lineupId"], player=data["player"], userId=current_user["public_id"])
+
+	return jsonify({ "Message": "Success" }), 200
+
 @lineups_blueprint.route('/hidden', methods=['POST'])
+@token_required
+def remove_from_hidden(current_user):
+	data = json.loads(request.data)
+	MongoController.add_player_to_lineup_hidden(lineupId=data["lineupId"], player=data["player"], userId=current_user["public_id"])
+
+	return jsonify({ "Message": "Success" }), 200
+
+@lineups_blueprint.route('/hidden', methods=['DELETE'])
 @token_required
 def add_to_hidden(current_user):
 	data = json.loads(request.data)
-	MongoController.add_player_to_lineup_hidden(lineupId=data["lineupId"], player=data["player"], userId=current_user["public_id"])
+	MongoController.remove_player_from_lineup_hidden(lineupId=data["lineupId"], player=data["player"], userId=current_user["public_id"])
 
 	return jsonify({ "Message": "Success" }), 200
 

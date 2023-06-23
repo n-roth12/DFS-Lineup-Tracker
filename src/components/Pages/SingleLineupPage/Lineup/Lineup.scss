@@ -1,20 +1,16 @@
 .lineup {
     box-shadow: var(--box-shadow-1);
-    max-width: 450px;
     height: fit-content;
     border-radius: 8px;
     margin: auto;
+    margin-bottom: 1rem;
 
     .player:first-child {
         border-radius: 8px 8px 0px 0px;
     }
 
-    .player:last-child {
+    .player:last-child, .empty-player:last-child {
         border-radius: 0px 0px 8px 8px;
-    }
-
-    :last-child {
-        border: None;
     }
 
     .selected {

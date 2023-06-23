@@ -5,7 +5,6 @@
     display: flex;
     flex-direction: row;
     height: 80px;
-    min-width: 400px;
 
     .playerImage {
         align-self: center;
@@ -33,16 +32,21 @@
 
         .add-icon {
             margin-top: 0.2rem;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--btn-blue);
             user-select: None;
+            border: 2px solid var(--btn-blue);
+            border-radius: 50%;
         }
 
         .delete-icon {
             margin-top: 0.2rem;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
+            padding: 2px;
             color: red;
             user-select: None;
+            border: 2px solid red;
+            border-radius: 50%;
         }
     }
 

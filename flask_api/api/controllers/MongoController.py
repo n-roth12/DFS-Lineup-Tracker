@@ -134,5 +134,11 @@ class MongoController:
     def add_player_to_lineup_favorites(self, lineupId, player, userId):
         self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$push": {"favorites": player}})
 
+    def remove_player_from_lineup_favorites(self, lineupId, player, userId):
+        self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$pull": {"favorites": player}})
+
     def add_player_to_lineup_hidden(self, lineupId, player, userId):
         self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$push": {"hidden": player}})
+
+    def remove_player_from_lineup_hidden(self, lineupId, player, userId):
+        self.lineups_collection.update_one({ "lineupId": lineupId, "userPublicId": userId }, {"$pull": {"hidden": player}})
