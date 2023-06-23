@@ -156,7 +156,7 @@ const GenerateLineupDialog = ({ showGenerateLineupDialog, onClose, draftGroupId,
               <div className='section'>
                 <input type="checkbox" checked={includeHiddenPlayers} id="hidden-option" onChange={() => setIncludeHiddenPlayers(!includeHiddenPlayers)}
                   value="full" name="hidden-option" />
-                <label for="hidden-option">Include hidden players: </label>
+                <label for="hidden-option">Include hidden players</label>
               </div>
               <hr />
               <div className='radios section'>

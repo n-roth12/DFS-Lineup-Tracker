@@ -6,11 +6,21 @@
     flex-direction: column;
     width: 100%;
 
+    .not-found-inner {
+        max-width: 500px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
     p {
+        text-align: center;
         font-size: 14pt;
     }
     .not-found-links {
         display: flex;
+        text-align: center;
         flex-direction: column;
     }
 }

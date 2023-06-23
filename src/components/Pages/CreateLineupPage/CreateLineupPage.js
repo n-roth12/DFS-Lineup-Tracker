@@ -396,8 +396,8 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const removePlayerFromFavorites = async (player) => {
     setFavoritesIds(favoritesIds.filter((playerId) => playerId !== player["playerSiteId"]))
     if (lineupId !== "null") {
-      const res = await fetch(`${api_url}/lineups/favorite`, {
-        method: 'DELETE',
+      const res = await fetch(`${api_url}/lineups/favorite/delete`, {
+        method: 'POST',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
         },
@@ -432,8 +432,8 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
   const removePlayerFromHidden = async (player) => {
     setHiddenIds(hiddenIds.filter((playerId) => playerId !== player["playerSiteId"]))
     if (lineupId !== "null") {
-      const res = await fetch(`${api_url}/lineups/hidden`, {
-        method: 'DELETE',
+      const res = await fetch(`${api_url}/lineups/hidden/delete`, {
+        method: 'POST',
         headers: {
           'x-access-token': sessionStorage.dfsTrackerToken
         },

@@ -29,7 +29,7 @@ def add_to_favorites(current_user):
 
 	return jsonify({ "Message": "Success" }), 200
 
-@lineups_blueprint.route('/favorite', methods=['DELETE'])
+@lineups_blueprint.route('/favorite/delete', methods=['POST'])
 @token_required
 def remove_from_favorites(current_user):
 	data = json.loads(request.data)
@@ -45,7 +45,7 @@ def remove_from_hidden(current_user):
 
 	return jsonify({ "Message": "Success" }), 200
 
-@lineups_blueprint.route('/hidden', methods=['DELETE'])
+@lineups_blueprint.route('/hidden/delete', methods=['POST'])
 @token_required
 def add_to_hidden(current_user):
 	data = json.loads(request.data)

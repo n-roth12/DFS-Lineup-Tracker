@@ -37,10 +37,14 @@ const MobileNav = () => {
       </nav>
 
       <div className={menuClass} onClick={updateMenu}>
-        <Link className='mobile-nav-link' to={`/lineups`}>Lineups <FaAngleRight /></Link>
         <Link className='mobile-nav-link' to={`/upcoming`}>Upcoming <FaAngleRight /></Link>
+        <Link className='mobile-nav-link' to={`/lineups`}>Lineups <FaAngleRight /></Link>
         <Link className='mobile-nav-link' to={`/history`}>Players <FaAngleRight /></Link>
-        <Link className='mobile-nav-link' to={'/login'} onClick={logout}>Logout <FaAngleRight /></Link>
+        {sessionStorage.dfsTrackerToken ?
+          <Link className='mobile-nav-link' to={'/login'} onClick={logout}>Logout <FaAngleRight /></Link>
+        :
+          <Link className='mobile-nav-link' to={'/login'}>Login <FaAngleRight /></Link>
+        }
       </div>
     </div>
   )
