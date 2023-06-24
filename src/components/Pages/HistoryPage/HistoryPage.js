@@ -1,9 +1,9 @@
 import './HistoryPage.scss'
 import { useState, useEffect, useRef } from 'react'
 import PlayersTable from '../../TablesLists/PlayersTable/PlayersTable'
-import { FaSearch } from 'react-icons/fa'
 import { Roller } from 'react-awesome-spinners'
 import { api_url } from '../../../Constants'
+import Helmet from 'react-helmet'
 const ResearchPage = () => {
 
   const years = [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
@@ -102,6 +102,12 @@ const ResearchPage = () => {
 
   return (
     <div className="history-page page">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>NFL Fantasy Stats | Mainslater</title>
+        <meta name='description' content="Past NFL Fantasy Football player stats." />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+      </Helmet>
       <div className="header">
         <h1>Past Fantasy Football Stats</h1>
         <div className="header-inner">

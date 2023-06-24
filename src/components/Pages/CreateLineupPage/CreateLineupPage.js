@@ -13,6 +13,7 @@ import { Roller } from 'react-awesome-spinners'
 import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineupsDialog'
 import PlayersTableWrapper from '../../TablesLists/PlayersTableWrapper/PlayersTableWrapper'
 import { useNavigate } from 'react-router-dom'
+import Helmet from 'react-helmet'
 import { api_url } from '../../../Constants'
 
 const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
@@ -550,6 +551,12 @@ const CreateLineupPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   return (
     <div className="createLineupPage page">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Create Lineup | Mainslater</title>
+        <meta name='description' content="Create and optimize your DFS Fantasy Football lineups for DraftKings, Yahoo, and Fanduel." />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+      </Helmet>
       {loading === false ? <>
         {draftGroup && draftGroup["games"] &&
           <GenerateLineupDialog showGenerateLineupDialog={showGenerateLineupDialog}

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import './LoginPage.scss'
 import UpperNav from '../../Navbar/UpperNav/UpperNav'
-import LowerNav from '../../Navbar/LowerNav/LowerNav'
+import Helmet from 'react-helmet'
 import { api_url } from '../../../Constants'
 
 const LoginPage = ({ setToken, setUserId }) => {
@@ -44,6 +44,11 @@ const LoginPage = ({ setToken, setUserId }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Login | Mainslater</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+      </Helmet>
       <UpperNav />
       <div className="login-page">
         <div className="form-wrapper">

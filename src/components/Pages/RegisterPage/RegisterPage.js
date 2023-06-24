@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import '../LoginPage/LoginPage.scss'
 import UpperNav from '../../Navbar/UpperNav/UpperNav'
-import LowerNav from '../../Navbar/LowerNav/LowerNav'
+import Helmet from 'react-helmet'
 import { api_url } from '../../../Constants'
 
 const LandingPage = ({ setToken }) => {
@@ -45,6 +45,11 @@ const LandingPage = ({ setToken }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Register | Mainslater</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+      </Helmet>
       <UpperNav />
       <div className="register-page">
         <div className="form-wrapper">

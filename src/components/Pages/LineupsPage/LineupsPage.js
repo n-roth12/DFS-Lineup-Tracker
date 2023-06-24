@@ -7,6 +7,7 @@ import DeleteLineupsDialog from '../../Dialogs/DeleteLineupsDialog/DeleteLineups
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog'
 import PleaseLogin from './PleaseLogin/PleaseLogin'
 import { Roller } from 'react-awesome-spinners'
+import Helmet from 'react-helmet'
 import { api_url } from '../../../Constants'
 
 const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
@@ -103,6 +104,12 @@ const LineupsPage = ({ setAlertMessage, setAlertColor, setAlertTime }) => {
 
   return (
     <div className="lineups-page page">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>DFS Lineups | Mainslater</title>
+        <meta name='description' content="View and edit your DFS Fantasy Football lineups for DraftKings, Yahoo, 
+          and Fanduel." />
+      </Helmet>
       <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog}
         onClose={() => setShowCreateLineupDialog(false)} draftGroup={dialogDraftGroup} draftGroupLineups={dialogDraftGroupLineups} />
       {isGuest ?

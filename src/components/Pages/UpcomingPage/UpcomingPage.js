@@ -5,10 +5,10 @@ import PlayerLink from '../../Buttons/PlayerLink/PlayerLink';
 import CreateLineupDialog from '../../Dialogs/CreateLineupDialog/CreateLineupDialog';
 import { Roller } from 'react-awesome-spinners';
 import { FaAngleRight, FaPlus } from 'react-icons/fa';
-import { BiImport } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { capitalize } from '@material-ui/core';
 import { FaSearch } from 'react-icons/fa';
+import Helmet from 'react-helmet'
 import { api_url } from '../../../Constants';
 
 const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor }) => {
@@ -139,6 +139,13 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
 
   return (
     <div className="upcoming-page page">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>DFS Slates | Mainslater</title>
+        <meta name='description' content="Player salaries and stats for upcoming DFS Fantasy Football slates. Choose a slate
+          to create and optimize lineups." />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+      </Helmet>
       <CreateLineupDialog showCreateLineupDialog={showCreateLineupDialog}
         onClose={closeDialogWrapper} draftGroup={createLineupDialogContent} />
       <div className='site-filter-wrapper'>
@@ -152,7 +159,7 @@ const UpcomingPage = ({ week, year, setAlertMessage, setAlertTime, setAlertColor
         </div>
       </div>
       <div className='slatesWrapper-outer'>
-      <h3>Upcoming Slates</h3>
+        <h3>Upcoming Slates</h3>
         {slates.length && activeSlate ?
           <>
             <div className="slatesWrapper">
