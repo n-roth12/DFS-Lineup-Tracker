@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request, send_file, Response
 import json
 import uuid
-from flask_cors import cross_origin
 from pandas import read_csv
 import csv
 from io import StringIO

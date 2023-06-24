@@ -37,7 +37,6 @@ def login_user():
 	attempted_user = mongoController.getUserByUsername(data["username"])
 	if attempted_user:
 		if bcrypt.check_password_hash(attempted_user["password_hash"], data["password"]):
-			print(attempted_user["username"])
 			token = jwt.encode({ 'public_id': attempted_user["public_id"] }, app.config['SECRET_KEY'], algorithm='HS256')
 			return jsonify({ "token": token }), 200
 

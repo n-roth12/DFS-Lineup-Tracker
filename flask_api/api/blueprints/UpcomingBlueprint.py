@@ -4,7 +4,6 @@ from pymongo import MongoClient
 import certifi
 import json
 from bson import json_util
-from flask_cors import cross_origin
 import requests
 
 from .utilities import token_required
