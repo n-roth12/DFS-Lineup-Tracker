@@ -5,8 +5,6 @@ import { useState, useEffect } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { GrRevert } from 'react-icons/gr'
 
-import { postLineupUpdate } from '../../../../../FetchFunctions'
-
 const LineupMini = ({ lineup, onAdd, editingPos, cancelEdit, onOpenDialog, toggleEditingPos, setSwapPlayer, playerDialogWrapper, draftGroup, setAlertMessage, onSave, onDelete, onRevert, isEdited }) => {
 
   const [lineupSalary, setLineupSalary] = useState()
