@@ -4,6 +4,12 @@
     background-color: var(--dark-blue);
     min-height: 50px;
 
+    .logo {
+        height: 1.2rem;
+        cursor: pointer;
+        padding: 0;
+    }
+
     .dropdown {
         position: relative;
         display: inline-block;

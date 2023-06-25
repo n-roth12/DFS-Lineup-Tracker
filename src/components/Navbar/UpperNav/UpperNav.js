@@ -22,7 +22,7 @@ const UpperNav = () => {
     <div className='upper-nav'>
       <div className='upper-nav-inner'>
         <div>
-          <Link className='logo' to='/upcoming'>MainSlater</Link>
+          <img className='logo' onClick={() => navigate('/upcoming')} src="mainslater_word.svg" alt="mainslater logo" />
         </div>
         <div className='profile-btns'>
           {sessionStorage.dfsTrackerToken && window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" ?
