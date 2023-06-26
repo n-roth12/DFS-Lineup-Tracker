@@ -34,6 +34,21 @@ def handle_refresh_token():
 	except Exception:
 		return jsonify({ 'Error': 'Invalid refresh token' }), 403
 
+@users_blueprint.route('/logout', methods=['POST'])
+def logout_user():
+	if not 'refresh_token' in request.cookies:
+		return "", 401
+	refresh_token = request.cookies.get('refresh_token')
+	try:
+		public_id = jwt.decode(refresh_token, app.config['SECRET_KEY'], algorithms='HS256')
+		attempted_user = mongoController.getUserByPublicId(public_id.get('public_id'))
+		mongoController.update_refresh_token(attempted_user["username"], '')
+		res = jsonify()
+		res.delete_cookie("refresh_token")
+		return res
+
+	except Exception:
+		return jsonify({ 'Error': 'Invalid refresh token' }), 403
 
 @users_blueprint.route('/register', methods=['POST'])
 def register_user():
