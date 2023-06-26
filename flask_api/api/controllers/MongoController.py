@@ -19,9 +19,16 @@ class MongoController:
         self.db3 = self.client["Users"]
         self.users_collection = self.db3["users"]
 
+    def update_refresh_token(self, username, refresh_token):
+        self.users_collection.update_one({ 'username': username }, {'$set': { 'refresh_token': refresh_token }})
+
     def getLineupById(self, lineupId, userPublicId):
         lineup = self.lineups_collection.find_one({"lineupId": lineupId, "userPublicId": userPublicId})
         return lineup
+
+    def get_user_by_refresh_token(self, refresh_token):
+        user = self.users_collection.find_one({ "refresh_token": refresh_token })
+        return user
 
     def getUserByUsername(self, username):
         user = self.users_collection.find_one({"username": username})

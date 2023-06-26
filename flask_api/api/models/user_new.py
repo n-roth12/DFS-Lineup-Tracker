@@ -7,3 +7,5 @@ class User(Document):
     username = StringField(max_length=60)
     password_hash = StringField(max_length=100)
     created = DateTimeField(default=datetime.utcnow)
+    refresh_token = StringField()
+    

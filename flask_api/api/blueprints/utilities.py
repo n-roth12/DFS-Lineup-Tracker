@@ -13,18 +13,18 @@ def token_required(f):
 	"""
 	@wraps(f)
 	def decorated(*args, **kwargs):
-		token = None
-		if 'x-access-token' in request.headers:
-			token = request.headers['x-access-token'].replace('"', '')
-		if not token or token == "undefined":
-			print('no token')
+		auth_header = request.headers.get('Authorization')
+		if auth_header:
+			auth_token = auth_header.split(" ")[1]
+		else:
+			auth_token = None
+		if not auth_token:
 			return f(None, *args, **kwargs)
 		try:
-			data = jwt.decode(token, app.config['SECRET_KEY'], algorithms='HS256')
+			data = jwt.decode(auth_token, app.config['SECRET_KEY'], algorithms='HS256')
 			current_user = mongoController.getUserByPublicId(data["public_id"])
 		except:
-			print('token invalid')
-			return jsonify({ 'Error': 'Token is invalid.' }), 401
+			return "", 401
 		return f(current_user, *args, **kwargs)
 	return decorated
 
